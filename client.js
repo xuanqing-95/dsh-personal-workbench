@@ -157,15 +157,6 @@ window.__ModuleLoader__.load({
       const offset=(first.getUTCDay()+6)%7,start=new Date(first);start.setUTCDate(start.getUTCDate()-offset);
       return Array.from({length:mode==='month'?42:7},(_,i)=>{const value=new Date(start);value.setUTCDate(value.getUTCDate()+i);return value.toISOString().slice(0,10);});
     }
-    function dayDigest(plan,today) {
-      if(!plan||plan.date!==today||!['connected','empty'].includes(plan.availability))return '';
-      const items=list(plan.items);
-      if(!items.length)return '今天还没有安排。';
-      const next=items.filter(item=>!item.checked).map(item=>taskText(item.title||item.text).title).filter(Boolean).slice(0,2);
-      if(!next.length)return items.every(item=>item.checked)?'今天的计划都已完成。':'今天有待办，详情见今日计划。';
-      const label=title=>'「'+(title.length>26?title.slice(0,26)+'…':title)+'」';
-      return '今天先做'+label(next[0])+(next[1]?'，接着是'+label(next[1]):'')+'。';
-    }
     function assistantOverview(monitor,now=Date.now()){
       const synced=monitor?.availability==='connected'&&(!monitor.checkedAt||now-Date.parse(monitor.checkedAt)<45000),runs=list(monitor?.items).filter(run=>recent(run.updated_at,now)).sort((a,b)=>Number(activeStatus(b.status))-Number(activeStatus(a.status))||Date.parse(b.updated_at)-Date.parse(a.updated_at)).slice(0,5);
       const clean=value=>text(value).replace(/(?:sk-|Bearer\s+)[A-Za-z0-9_-]{10,}/g,'[已隐藏]').slice(0,180);
@@ -555,8 +546,8 @@ html[data-platform="darwin"] .pwb .pw-head {
 
 .pwb .pw-head-title {flex:1;min-width:0}
 .pwb .pw-head-actions {flex:0 0 auto}
-.pwb .pw-today-brief {
-  color:var(--pw-ink);
+.pwb .pw-plugin-name {
+  color:var(--pw-muted);
   font-size:14px;
   line-height:20px;
   margin-top:4px;
@@ -825,7 +816,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const mergedData=data;
         const checkedFor=task=>checks.get(task.id)??Boolean(task.checked);
         const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor),reader=feedURL;
-        const digest=dayDigest(data?.plan&&{...data.plan,items:list(data.plan.items).map(task=>({...task,checked:checkedFor(task)}))},today),assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
+        const assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
         const planConnected=plan?.availability==='connected',planEmpty=plan?.availability==='empty';
         const activityUnavailable=!data || ['unavailable','partial'].includes(data.ai?.availability) || list(data.ai?.items).some(s=>s.running===null && !pending(s.pendingInput)) || ['unavailable','partial'].includes(data.automations?.availability) || monitor?.availability==='unavailable';
         function empty(title,description,icon='clock'){return h('div',{className:'pw-empty'},h(Icon,{name:icon,size:27}),h('strong',null,title),h('p',null,description));}
@@ -1070,7 +1061,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
-          h('header',{className:'pw-head'},h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing?h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'):h('p',{className:'pw-today-brief',title:digest||undefined},digest||(loading?'正在读取今日安排…':'今日安排暂不可用'))),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
+          h('header',{className:'pw-head'},h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing?h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'):h('p',{className:'pw-plugin-name'},'dsh-personal-workbench')),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
           h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas',style:grid.canvasStyle},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'news'}),h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
