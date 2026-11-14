@@ -545,6 +545,7 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-plan h2 {font-size:18px}
 }
 
+.pwb .pw-head:has(.pw-attention[open]) {z-index:5}
 .pwb .pw-head-title {flex:1;min-width:0}
 .pwb .pw-head-actions {flex:0 0 auto}
 .pwb .pw-plugin-name {
