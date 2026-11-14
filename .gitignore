@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+.dsh/
+.runtime/
+*.tgz
+*.log
+.DS_Store
+coverage/
+validation/
