@@ -74,7 +74,6 @@ window.__ModuleLoader__.load({
     const inputLabel = value => list(value).includes('approval')?'等你确认':list(value).includes('question')?'等你回复':'等待输入';
     const runLabel = run => run.action_id==='xhs.original.image.generate'?'内容配图':run.action_id==='xhs.original.text.generate'?'原创内容':run.action_id==='xhs.rewrite.pipeline'?'内容仿写':'内容制作';
     const localDay = () => new Intl.DateTimeFormat('en-CA',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-    const clock = value => {const date = new Date(value);return value && Number.isFinite(date.getTime()) ? new Intl.DateTimeFormat('zh-CN',{hour:'2-digit',minute:'2-digit'}).format(date) : '';};
     const actualPattern = /^(.*?)(（实际\s+(.+?)｜(专注|合计)\s+(\d+h(?:\d+m)?(?:\d+s)?|\d+m(?:\d+s)?|\d+s)）)$/u;
     function taskText(value) {
       const raw = text(value).trim(), match = raw.match(actualPattern);
@@ -246,7 +245,6 @@ window.__ModuleLoader__.load({
 .pwb .pw-partial{padding:0 24px 8px;font-size:10px;color:var(--pw-orange)}.pwb .pw-empty{height:100%;min-height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px;padding:18px;color:var(--pw-muted)}.pwb .pw-empty>svg{opacity:.55;margin-bottom:5px}.pwb .pw-empty strong{font-size:13px;font-weight:500;color:var(--pw-ink)}.pwb .pw-empty p{font-size:11px;line-height:1.65;max-width:240px}.pwb .pw-footer{min-height:35px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;color:var(--pw-muted)}.pwb .pw-footer-message{color:var(--pw-orange);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pwb .pw-loading{background:linear-gradient(90deg,var(--pw-line),transparent,var(--pw-line));height:9px;border-radius:4px;margin:16px 24px;max-width:70%}.pwb .pw-loading:nth-child(2){max-width:90%}.pwb .pw-loading:nth-child(3){max-width:45%}
 .pwb .pw-head-title{flex-shrink:0}.pwb .pw-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;min-width:0;flex:1}.pwb .pw-attention{position:relative;min-width:0;max-width:360px}.pwb .pw-attention summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:9px 13px;border:1px solid color-mix(in srgb,var(--pw-orange) 15%,transparent);border-radius:12px;background:color-mix(in srgb,var(--pw-orange) 6%,var(--pw-paper));-webkit-app-region:no-drag}.pwb .pw-attention summary::-webkit-details-marker{display:none}.pwb .pw-attention summary:focus-visible{outline:3px solid var(--pw-blue);outline-offset:3px}.pwb .pw-attention-label{font-size:12px;font-weight:600;color:var(--pw-orange);white-space:nowrap}.pwb .pw-attention summary>svg{color:var(--pw-orange);transform:rotate(90deg)}.pwb .pw-attention[open] summary>svg{transform:rotate(-90deg)}.pwb .pw-attention-popover{position:absolute;right:0;top:calc(100% + 9px);width:360px;max-width:calc(100cqw - 24px);max-height:min(440px,65vh);overflow:auto;padding:8px 17px;background:var(--pw-paper);border:1px solid var(--pw-line);border-radius:15px;box-shadow:0 12px 40px rgba(0,0,0,.17);z-index:10}.pwb .pw-attention-item{padding:12px 0;border-top:1px solid var(--pw-line)}.pwb .pw-attention-item:first-child{border-top:0}.pwb .pw-attention-item-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.pwb .pw-attention-item strong{font-size:12px;font-weight:550}.pwb .pw-attention-item p{font-size:11px;line-height:1.6;color:var(--pw-muted);margin-top:5px}.pwb .pw-attention-item .pw-quiet-link{color:var(--pw-blue);margin-top:5px}.pwb .pw-attention-tag{font-size:10px;white-space:nowrap;color:var(--pw-orange)}
 .pwb .pw-progress-sections{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) minmax(0,1fr);padding:0 24px 5px}.pwb .pw-progress-section{min-height:0;display:flex;flex-direction:column}.pwb .pw-progress-section+.pw-progress-section{border-top:1px solid var(--pw-line);padding-top:8px;margin-top:3px}.pwb .pw-section-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-shrink:0}.pwb .pw-section-heading h3{font-size:11px;font-weight:550;color:var(--pw-muted)}.pwb .pw-section-heading span{font-size:10px;color:var(--pw-muted)}.pwb .pw-progress-section .pw-card-body{padding:0}.pwb .pw-progress-section .pw-activity-list{padding:0}.pwb .pw-progress-section .pw-activity-row{padding:6px 0;gap:9px;min-height:42px}.pwb .pw-progress-section .pw-activity-icon{width:27px;height:27px}.pwb .pw-progress-section .pw-activity-status{margin-top:1px}.pwb .pw-section-empty{font-size:11px;line-height:1.6;color:var(--pw-muted);padding:9px 0}.pwb .pw-result-row:hover .pw-activity-title{color:var(--pw-blue)}.pwb .pw-activity-icon.is-result{color:var(--pw-olive);background:color-mix(in srgb,var(--pw-olive) 10%,transparent)}
-html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var(--dsh-frame-leading-clearance,0px) - var(--pw-gutter) - max(0px,calc((100cqw - 1380px)/2))))}
 @container pw-root (max-width:1050px){.pwb .pw-shell{--pw-gutter:22px}.pwb .pw-homeboard{gap:16px;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr)}.pwb .pw-card-head{padding:18px 19px 11px}.pwb .pw-news-list,.pwb .pw-activity-list{padding-inline:19px}.pwb .pw-card-foot{margin-inline:19px}.pwb .pw-plan .pw-card-head{padding:23px 23px 12px}.pwb .pw-plan .pw-card-body{padding-inline:23px}.pwb .pw-progress{padding-inline:23px}.pwb .pw-plan .pw-card-foot{margin-inline:23px}}
 @container pw-root (max-width:720px){.pwb .pw-shell{--pw-gutter:16px}.pwb .pw-head{min-height:78px}.pwb .pw-head h1{font-size:20px}.pwb .pw-homeboard{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1.25fr) minmax(0,1fr) minmax(0,.85fr);gap:12px}.pwb .pw-plan,.pwb .pw-news,.pwb .pw-activity{grid-column:1;grid-row:auto}.pwb .pw-card{border-radius:15px}.pwb .pw-card-head,.pwb .pw-plan .pw-card-head{padding:12px 17px 7px}.pwb .pw-card-title h2{font-size:15px}.pwb .pw-plan h2{font-size:23px}.pwb .pw-progress{padding:3px 17px 8px;gap:9px;font-size:10px}.pwb .pw-plan .pw-card-body{padding:0 17px 3px}.pwb .pw-plan-row{padding:5px 0}.pwb .pw-plan-text{font-size:12px}.pwb .pw-plan-check{width:14px;height:14px}.pwb .pw-group-title{font-size:10px}.pwb .pw-plan-note{font-size:10px}.pwb .pw-card-foot,.pwb .pw-plan .pw-card-foot{margin-inline:17px;padding:5px 0 6px;font-size:10px}.pwb .pw-card-link{font-size:10px}.pwb .pw-news-list,.pwb .pw-activity-list{padding-inline:17px}.pwb .pw-news-entry{padding:6px 0}.pwb .is-lead .pw-news-title{font-size:13px}.pwb .pw-news-summary{-webkit-line-clamp:1;font-size:10px}.pwb .pw-news-entry.is-lead{padding:8px 10px}.pwb .pw-activity-row{padding:7px 0}.pwb .pw-activity-icon{width:25px;height:25px}.pwb .pw-activity-title{font-size:11px}.pwb .pw-empty{padding:10px;gap:3px}.pwb .pw-empty>svg{display:none}.pwb .pw-empty strong{font-size:12px}.pwb .pw-empty p{font-size:10px}.pwb .pw-footer{min-height:28px}.pwb .pw-activity .pw-card-foot{display:none}}
 @container pw-root (max-width:430px){.pwb .pw-shell{--pw-gutter:12px}.pwb .pw-head h1{font-size:17px;letter-spacing:-.4px}.pwb .pw-head{gap:6px}.pwb .pw-refresh{width:28px;height:28px}.pwb .pw-card-title h2{font-size:14px}}
@@ -427,9 +425,6 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 
 /* Shared component dimensions and visual treatments. See DESIGN.md. */
 .pwb .pw-shell {--pw-gutter:32px;max-width:none}
-html[data-platform="darwin"] .pwb .pw-head {
-  padding-inline-start:max(0px,calc(var(--dsh-frame-leading-clearance,0px) - var(--pw-gutter)));
-}
 .pwb .pw-head {min-height:88px;gap:16px}
 .pwb .pw-head-title {padding-inline-start:16px}
 .pwb .pw-head-title h1 {font-size:clamp(32px,4cqw,48px);font-weight:700;line-height:1}
@@ -607,6 +602,48 @@ html[data-platform="darwin"] .pwb .pw-head {
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+
+
+.pwb .pw-shell { padding-block-end: 12px; }
+.pwb .pw-footer.pw-footer-message { padding-block: 6px; white-space: normal; overflow-wrap: anywhere; }
+.pwb .pw-head {
+  --pw-window-offset: 0px;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  grid-template-areas: "plugin tools" "title title";
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+  min-height: 0;
+  padding-block: 12px;
+}
+html[data-platform="darwin"] .pwb .pw-head {
+  --pw-window-offset: max(0px,calc(var(--dsh-frame-leading-clearance,0px) - var(--pw-gutter)));
+}
+.pwb .pw-head .pw-plugin-name {
+  grid-area: plugin;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: min(32px,var(--pw-window-offset));
+  margin: 0;
+  padding-inline-start: var(--pw-window-offset);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: .04em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.pwb .pw-head .pw-head-title { grid-area: title; padding-inline-start: 0; }
+.pwb .pw-head .pw-head-title h1 { font-size: clamp(24px,3.1cqw,32px); line-height: 1.2; font-weight: 500; }
+.pwb .pw-head .pw-head-actions { grid-area: tools; justify-self: end; width: auto; }
+@container pw-root (max-width: 560px) {
+  .pwb .pw-head {
+    grid-template-columns: minmax(0,1fr);
+    grid-template-areas: "plugin" "title" "tools";
+  }
+  .pwb .pw-head .pw-attention { position: static; }
 }
 
 `;
@@ -1143,7 +1180,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
-          h('header',{className:'pw-head'},h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing?h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'):h('p',{className:'pw-plugin-name'},'dsh-personal-workbench')),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
+          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing&&h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小')),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
           h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas',style:grid.canvasStyle},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'news'}),h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
@@ -1163,7 +1200,7 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
                 h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
-          h('footer',{className:'pw-footer'},h('span',{className:readError||error?'pw-footer-message':'',role:readError||error?'status':undefined,title:readError||error||undefined},readError || error || grid.notice || (loading?'正在更新…':data?'更新于 '+clock(data.checkedAt):'等待同步')),h('span',null,grid.editing?'自动对齐网格':'进度自动更新')),h('span',{className:'pw-layout-live',role:'status','aria-live':'polite'},grid.notice)),projectDialog(),projectDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
+          h('div',{className:readError||error||grid.notice?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(Icon,{name:'grid',size:20})));
       ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'personal-workbench'},Panel));
