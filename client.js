@@ -169,7 +169,17 @@ window.__ModuleLoader__.load({
       const operation=runs.map(run=>({id:run.id,title:runLabel(run),state:!synced?'unknown':activeStatus(run.status)?'active':['error','failed','interrupted'].includes(run.status)?'failed':run.status==='done'?'done':'unknown',label:!synced?'待同步':run.status==='done'?'执行完成':run.status==='error'||run.status==='failed'?'失败':run.status==='interrupted'?'已中断':['queued','pending'].includes(run.status)?'排队中':activeStatus(run.status)?'进行中':'待确认',detail:clean(run.error_message||run.message)||(!synced?'暂时无法核对最新状态':'等待下一次进展'),updatedAt:run.updated_at}));
       return {operation,synced};
     }
-    function projectShortcuts(value){return list(value).slice(0,20).filter(item=>item&&typeof item.title==='string'&&item.title.trim()&&sessionId.test(item.threadId||'')&&item.source==='harness').map(item=>({id:uuid.test(item.id||'')?item.id:item.threadId,title:item.title.trim().slice(0,50),version:text(item.version).slice(0,40),threadId:item.threadId.toLowerCase(),source:item.source,icon:['app','code','design','writing'].includes(item.icon)?item.icon:'app'}));}
+    const PROJECT_SHORTCUTS_KEY='dsh-personal-workbench:project-shortcuts:v1';
+    const PROJECT_NOTES_KEY='dsh-personal-workbench:project-notes:v1';
+    function projectShortcuts(value){return list(value).slice(0,20).filter(item=>item&&typeof item.title==='string'&&item.title.trim()&&sessionId.test(item.threadId||'')&&item.source==='harness').map(item=>({id:uuid.test(item.id||'')?item.id:item.threadId,title:item.title.trim().slice(0,50),version:text(item.version).slice(0,40),progress:text(item.progress).trim().slice(0,120),threadId:item.threadId.toLowerCase(),source:item.source,icon:['app','code','design','writing'].includes(item.icon)?item.icon:'app'}));}
+    function projectNotes(value) {
+      if(!value||typeof value!=='object')return {};
+      return Object.fromEntries(Object.entries(value).filter(([id,note])=>/^[\w-]{1,80}$/.test(id)&&note&&typeof note==='object').map(([id,note])=>[id,{
+        progress:text(note.progress).trim().slice(0,120),
+        requirements:list(note.requirements).slice(0,100).filter(item=>item&&uuid.test(item.id||'')&&text(item.title).trim())
+          .map(item=>({id:item.id,title:item.title.trim().slice(0,400),done:item.done===true})),
+      }]));
+    }
     /* GRID_GEOMETRY_START */
     // Geometry stays independent of DOM pixels. Persisted values are untrusted;
     // only known cards and bounded integer grid coordinates are accepted.
@@ -366,45 +376,7 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-news-banner .pw-news-entry:not(.is-lead) .pw-news-title {color:var(--pw-muted)}
 .pwb .pw-news-banner .pw-news-entry a:hover .pw-news-title {color:var(--pw-blue)}
 .pwb .pw-news-banner :is(a,button):focus-visible {outline-color:var(--pw-blue);outline-offset:-2px}
-.pwb .pw-news-art {
-  display:none;
-  z-index:-1;
-  position:absolute;
-  right:clamp(24px,6cqw,54px);
-  top:43px;
-  width:104px;
-  height:96px;
-  pointer-events:none;
-}
-.pwb .pw-news-art span {
-  position:absolute;
-  inset:6px 18px 9px 17px;
-  border:1px solid color-mix(in srgb,var(--pw-blue) 34%,transparent);
-  background:color-mix(in srgb,var(--pw-blue) 8%,transparent);
-  border-radius:14px;
-  transform:rotate(-21deg) translateX(-15px);
-}
-.pwb .pw-news-art span+span {
-  transform:rotate(-4deg);
-  background:repeating-linear-gradient(color-mix(in srgb,var(--pw-blue) 35%,transparent) 0 2px,transparent 2px 9px) center 30px / 32px 18px no-repeat,
-    linear-gradient(155deg,#ffffff89,transparent);
-  box-shadow:0 8px 25px #032f3a40;
-}
-.pwb .pw-news-art::after {
-  content:'';
-  position:absolute;
-  top:7px;
-  right:0;
-  width:21px;
-  height:21px;
-  border-radius:50%;
-  background:var(--pw-gold);
-  box-shadow:0 0 24px #ffcb5450;
-}
-@container pw-card (min-width:460px) {
-  .pwb .pw-news-banner[data-folded=false] .pw-news-art {display:block}
-  .pwb .pw-news-banner .pw-news-entry.is-lead {padding-right:132px}
-}
+.pwb .pw-news-actions {display:flex;align-items:center;gap:clamp(6px,2cqw,16px);flex-shrink:0}
 
 .pwb .pw-pet {
   background:transparent;
@@ -449,6 +421,19 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-project-open:focus-visible {outline-offset:-3px}
 .pwb .pw-project-open>svg {color:var(--pw-blue)}
 .pwb .pw-project-icon {width:33px;height:33px}
+.pwb .pw-project-copy .pw-project-progress {white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pwb .pw-project-dialog.pw-project-detail {width:min(100%,540px);max-height:calc(100% - 24px);overflow:auto}
+.pwb .pw-project-detail header {display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pwb .pw-project-detail header button,.pwb .pw-requirement-controls button {min-width:28px;min-height:28px;border:1px solid var(--pw-line);border-radius:7px}
+.pwb .pw-project-detail :is(ol,ul) {list-style:none;margin:0;padding:0}
+.pwb .pw-project-detail form {display:grid;gap:8px}
+.pwb .pw-project-detail textarea {resize:vertical;min-height:56px;width:100%;padding:8px;border:1px solid var(--pw-line);border-radius:8px;color:inherit;background:var(--pw-bg);font:inherit}
+.pwb .pw-project-detail .pw-requirement-row {display:flex;justify-content:space-between;align-items:flex-start;gap:8px;border-top:1px solid var(--pw-line);padding-block:8px;font-size:13px;overflow-wrap:anywhere}
+.pwb .pw-requirement-row>span {white-space:pre-wrap;flex:1}
+.pwb .pw-requirement-controls {display:flex;gap:4px;flex-shrink:0}
+.pwb .pw-project-detail :disabled {opacity:.5;cursor:default}
+.pwb .pw-project-detail footer {flex-wrap:wrap}
+
 @container pw-card (min-width:500px) {
   .pwb .pw-project-list,.pwb .pw-assistant-list {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
   .pwb .pw-project-list>:first-child:not(.pw-project-row),.pwb .pw-assistant-more {grid-column:1/-1}
@@ -676,18 +661,23 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
         const [assistantDock,setAssistantDock]=React.useState(null);
         const [taskTitle,setTaskTitle]=React.useState('');
         const [savingTask,setSavingTask]=React.useState(false);
+        const [checks,setChecks]=React.useState(new Map()),pendingChecks=React.useRef(new Map()),planVersion=React.useRef(0);
         const [feedURL,setFeedURL]=React.useState(()=>safeReadingLink(storedValue('dsh-personal-workbench:reading-link',''))||'');
         const [editingFeed,setEditingFeed]=React.useState(false);
         const [feedDraft,setFeedDraft]=React.useState('');
         React.useSyncExternalStore(fn=>ctx.locale.subscribe(fn),()=>ctx.locale.getSnapshot());
         const [foldedDay,setFoldedDay]=React.useState(()=>storedValue('dsh-personal-workbench:brief-folded-day',''));
         const [data,setData]=React.useState(null),[monitor,setMonitor]=React.useState(null),[loading,setLoading]=React.useState(true),[tick,setTick]=React.useState(0),[error,setError]=React.useState(''),[readError,setReadError]=React.useState('');
-        const [selectedDate,setSelectedDate]=React.useState(''),[calendarMode,setCalendarMode]=React.useState('day'),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[monthData,setMonthData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue('dsh-personal-workbench:project-shortcuts:v1',[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
+        const [selectedDate,setSelectedDate]=React.useState(''),[calendarMode,setCalendarMode]=React.useState('day'),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[monthData,setMonthData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
         const grid=useWorkbenchGrid(newsFolded);
         const root=React.useRef(null),reading=React.useRef(false),alive=React.useRef(true),openingLock=React.useRef(false);
+        const [notes,setNotes]=React.useState(()=>projectNotes(storedValue(PROJECT_NOTES_KEY,{})));
+        const [activeProjectId,setActiveProjectId]=React.useState(''),[progressDraft,setProgressDraft]=React.useState(''),[requirementDraft,setRequirementDraft]=React.useState('');
+        const [projectNotice,setProjectNotice]=React.useState(''),[handingOff,setHandingOff]=React.useState(false);
+        const projectTrigger=React.useRef(null);
         React.useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
-        React.useEffect(()=>{if(viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);setDayPlan(null);api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick]);
+        React.useEffect(()=>{if(viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick]);
         React.useEffect(()=>{if(calendarMode==='day')return;const abort=new AbortController();setMonthData(null);api('calendar',abort.signal,{month:monthKey}).then(value=>{if(!abort.signal.aborted)setMonthData(value);}).catch(()=>{if(!abort.signal.aborted)setMonthData({month:monthKey,availability:'unavailable',days:{}});});return()=>abort.abort();},[monthKey,calendarMode,tick]);
         React.useEffect(()=>{
           let stopped=false,busy=false,abort;
@@ -704,8 +694,8 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
         },[]);
         React.useEffect(()=>{const interval=setInterval(()=>{if(!document.hidden && root.current?.getClientRects().length && !reading.current)setTick(v=>v+1);},60000);return()=>clearInterval(interval);},[]);
         React.useEffect(()=>{
-          const abort=new AbortController();reading.current=true;setLoading(true);
-          Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(next);setMonitor(business);setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
+          const abort=new AbortController(),version=planVersion.current;reading.current=true;setLoading(true);
+          Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(previous=>version!==planVersion.current&&previous?.plan&&previous.plan.date===next.plan?.date?{...next,plan:previous.plan}:next);setMonitor(business);setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
           return()=>{abort.abort();};
         },[tick]);
         async function saveTask(action,input) {
@@ -740,20 +730,47 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
               if(sessions.phase==='pending'||workspaces.phase==='pending')throw new Error('对话正在加载，请稍后重试。');
               if(list(workspaces.archivedSessionIds).includes(destination.session))throw new Error('这段对话已经归档，请到历史对话中查看。');
               if(!list(sessions.ids).includes(destination.session))throw new Error('暂时找不到这段对话，请刷新后再试。');
-              nav.uiWorkspace.openSession(destination.session);
-            } else Promise.resolve(ctx.layout.selectPanel(destination.panel??null)).catch(()=>{if(alive.current)setError('暂时无法打开，请从侧栏进入。');});
-          } catch(err){setError(text(err.message)||'暂时无法打开。');}
+              await nav.uiWorkspace.openSession(destination.session);
+            } else await ctx.layout.selectPanel(destination.panel??null);
+            return true;
+          } catch(err){setError(text(err.message)||'暂时无法打开。');return false;}
         }
         const mergedData=data;
-        const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(i=>i.checked).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor),reader=feedURL;
-        const digest=dayDigest(data?.plan,today),assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
+        const checkedFor=task=>checks.get(task.id)??Boolean(task.checked);
+        const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor),reader=feedURL;
+        const digest=dayDigest(data?.plan&&{...data.plan,items:list(data.plan.items).map(task=>({...task,checked:checkedFor(task)}))},today),assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
         const planConnected=plan?.availability==='connected',planEmpty=plan?.availability==='empty';
         const activityUnavailable=!data || ['unavailable','partial'].includes(data.ai?.availability) || list(data.ai?.items).some(s=>s.running===null && !pending(s.pendingInput)) || ['unavailable','partial'].includes(data.automations?.availability) || monitor?.availability==='unavailable';
         function empty(title,description,icon='clock'){return h('div',{className:'pw-empty'},h(Icon,{name:icon,size:27}),h('strong',null,title),h('p',null,description));}
         function skeleton(){return h('div',{'aria-label':'正在读取'},[1,2,3].map(i=>h('div',{key:i,className:'pw-loading'})));}
+        async function checkTask(task) {
+          if(pendingChecks.current.has(task.id))return;
+          const checked=!task.checked;
+          pendingChecks.current.set(task.id,checked);
+          planVersion.current++;
+          setChecks(new Map(pendingChecks.current));
+          setError('');
+          try {
+            const item=await api('checkPlanTask',undefined,{id:task.id,revision:task.revision,checked});
+            if(item?.id!==task.id||item.status!==(checked?'done':'todo'))throw new Error('待办状态暂未确认，请刷新后重试。');
+            if(alive.current){
+              const update=plan=>plan?.date===item.dueDate?{...plan,items:list(plan.items).map(row=>row.id===item.id?{...row,checked,revision:item.revision}:row)}:plan;
+              setData(previous=>previous?{...previous,plan:update(previous.plan)}:previous);
+              setDayPlan(update);
+            }
+          } catch(error) {
+            if(alive.current)setError(text(error.message)||'无法保存，请刷新查看。');
+          } finally {
+            pendingChecks.current.delete(task.id);
+            planVersion.current++;
+            if(alive.current){setChecks(new Map(pendingChecks.current));setTick(value=>value+1);}
+          }
+        }
         function planRow(task,key) {
-          const content=taskText(task.text||task.title);
-          return h('div',{key,className:'pw-plan-row'+(task.checked?' is-done':'')},h('button',{className:'pw-plan-check',type:'button','aria-label':(task.checked?'重新打开：':'完成：')+content.title,'aria-pressed':Boolean(task.checked),disabled:savingTask,onClick:()=>saveTask('checkPlanTask',{id:task.id,revision:task.revision,checked:!task.checked})},task.checked&&h(Icon,{name:'check',size:13})),h('div',{className:'pw-plan-copy'},h('p',{className:'pw-plan-text',title:content.title},content.title),content.note&&h('p',{className:'pw-plan-meta'},content.note)));
+          const content=taskText(task.text||task.title),checked=checkedFor(task),saving=checks.has(task.id);
+          return h('div',{key,className:'pw-plan-row'+(checked?' is-done':'')},
+            h('button',{className:'pw-plan-check',type:'button',role:'checkbox','aria-label':content.title,'aria-checked':checked,'aria-busy':saving,'aria-disabled':saving,onClick:()=>void checkTask(task)},checked&&h(Icon,{name:'check',size:13})),
+            h('div',{className:'pw-plan-copy'},h('p',{className:'pw-plan-text',title:content.title},content.title),content.note&&h('p',{className:'pw-plan-meta'},content.note)));
         }
         function planNodes(items,depth=0) {
           if(depth>10)return null;
@@ -777,8 +794,7 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
           if(editingFeed)return h('form',{className:'pw-release-form',onSubmit:saveReadingLink},
             h('label',null,'日报链接',h('input',{type:'url',value:feedDraft,maxLength:2048,placeholder:'https://…',onChange:event=>setFeedDraft(event.target.value)})),
             h('div',null,h('button',{type:'button',onClick:()=>setEditingFeed(false)},'取消'),h('button',{type:'submit'},'保存')));
-          if(!reader)return empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
-          return h('div',{className:'pw-news-list'},h('a',{className:'pw-release-reading-link',href:reader,target:'_blank',rel:'noopener noreferrer'},'打开我的 AI 日报',h(Icon,{name:'arrow',size:15})),h('p',{className:'pw-news-summary'},new URL(reader).hostname));
+          return reader?null:empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
         }
         function activityBody() {
           if(!data&&loading)return skeleton();
@@ -818,20 +834,133 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
             h('section',{className:'pw-assistant-group'},h('div',{className:'pw-assistant-heading'},h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),h('strong',null,'Harness 助手'),h('span',{className:'pw-state','data-state':rows.length?'active':'unknown'},rows.length?rows.length+' 项近期进展':'暂时没有进展')),h('p',{className:'pw-assistant-detail'},'查看下方进展进入原对话。')),
             (rows.length>0||completed.length>0||assistants.operation.length>1)&&h('details',{className:'pw-assistant-more'},h('summary',null,'其他进展与成果 · 点击展开'),assistants.operation.slice(1).map(row=>h('button',{key:row.id,className:'pw-assistant-task',onClick:()=>navigate({panel:'redflow-workbench'}),title:row.detail},h('div',null,h('span',null,row.title),h('span',{className:'pw-state','data-state':row.state},row.label)),h('p',null,row.detail))),rows.length>0&&activityBody(),completed.length>0&&h('div',{className:'pw-assistant-results'},resultsBody())));
         }
-        function projectBody(){return h('div',{className:'pw-project-list'},allProjects.length?allProjects.map(project=>h('div',{className:'pw-project-row',key:project.id},h('button',{className:'pw-project-open',onClick:()=>navigate({session:project.threadId}),'aria-label':'打开项目对话：'+project.title,title:project.threadTitle||project.title},project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':'grid',size:21})),h('span',{className:'pw-project-copy'},h('strong',null,project.title),h('small',null,project.version?(project.versionLabel||'记录版本')+' · v'+project.version:'版本待补充')),h(Icon,{name:'arrow',size:13})),project.source&&h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>{const next=customProjects.filter(item=>item.id!==project.id);try{localStorage.setItem('dsh-personal-workbench:project-shortcuts:v1',JSON.stringify(next));setCustomProjects(next);}catch{setError('项目入口暂时无法保存');}}},'×'))):empty('把项目放在手边','添加项目后，可以直接回到它的开发对话。','grid'));}
-        function saveProject(event){event.preventDefault();const selected=threadOptions.find(item=>item.source+':'+item.id===projectForm.target);if(!selected||!projectForm.title.trim()){setProjectError('填写项目名称，并选择一个已有对话。');return;}if(customProjects.length>=20){setProjectError('最多保存 20 个自定义项目入口。');return;}const next=projectShortcuts([...customProjects,{id:crypto.randomUUID(),title:projectForm.title,version:projectForm.version,icon:projectForm.icon,source:selected.source,threadId:selected.id}]);try{localStorage.setItem('dsh-personal-workbench:project-shortcuts:v1',JSON.stringify(next));setCustomProjects(next);setAddingProject(false);setProjectError('');}catch{setProjectError('保存失败，请稍后再试。');}}
-        function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
+        const activeProject=allProjects.find(project=>project.id===activeProjectId);
+        function projectDestination(project) {
+          return {session:project.threadId};
+        }
+        function projectProgress(project) {
+          return notes[project.id]?.progress??project.progress??'';
+        }
+        function openProject(project,event) {
+          projectTrigger.current=event.currentTarget;
+          setActiveProjectId(project.id);
+          setProgressDraft(projectProgress(project));
+          setRequirementDraft('');
+          setProjectNotice('');
+        }
+        function closeProject() {
+          setActiveProjectId('');
+          requestAnimationFrame(()=>projectTrigger.current?.focus());
+        }
+        function saveProjectNotes(patch) {
+          const next=projectNotes({...notes,[activeProject.id]:{progress:projectProgress(activeProject),requirements:[],...notes[activeProject.id],...patch}});
+          try {
+            localStorage.setItem(PROJECT_NOTES_KEY,JSON.stringify(next));
+            setNotes(next);
+            setProjectNotice('');
+            return true;
+          } catch {
+            setProjectNotice('保存失败，内容仍在输入框里。');
+            return false;
+          }
+        }
+        async function handoff(project,requirements) {
+          if(handingOff)return;
+          setHandingOff(true);
+          setProjectNotice('');
+          try {
+            const progress=projectProgress(project);
+            const message=[
+              '继续开发「'+project.title+'」'+(project.version?'（v'+project.version+'）':'')+'。',
+              progress&&'当前进展：'+progress,
+              '按下列顺序推进。先从第 1 项开始，其余保留为后续任务。',
+              ...requirements.map((item,index)=>(index+1)+'. '+item.title),
+            ].filter(Boolean).join('\n');
+            await navigator.clipboard.writeText(message);
+            if(await navigate(projectDestination(project)))closeProject();
+            else if(alive.current)setProjectNotice('已复制需求，请手动打开开发对话并粘贴。');
+          } catch {
+            if(alive.current)setProjectNotice('暂时无法复制，请选中文字手动复制。');
+          } finally {
+            if(alive.current)setHandingOff(false);
+          }
+        }
+        function projectDetail() {
+          if(!activeProject)return null;
+          const requirements=list(notes[activeProject.id]?.requirements),pending=requirements.filter(item=>!item.done),finished=requirements.filter(item=>item.done);
+          const update=(id,done)=>saveProjectNotes({requirements:requirements.map(item=>item.id===id?{...item,done}:item)});
+          function move(index,offset) {
+            const next=[...pending],target=index+offset;
+            if(target<0||target>=next.length)return;
+            [next[index],next[target]]=[next[target],next[index]];
+            saveProjectNotes({requirements:[...next,...finished]});
+          }
+          function addRequirement(event) {
+            event.preventDefault();
+            const title=requirementDraft.trim();
+            if(!title)return;
+            if(requirements.length>=100){setProjectNotice('需求清单已满，请先移除不再需要的条目。');return;}
+            if(saveProjectNotes({requirements:[...requirements,{id:crypto.randomUUID(),title,done:false}]}))setRequirementDraft('');
+          }
+          return h('div',{className:'pw-modal-backdrop'},
+            h('section',{className:'pw-project-dialog pw-project-detail',role:'dialog','aria-modal':true,'aria-labelledby':'pw-project-detail-title',onKeyDown:event=>{if(event.key==='Escape')closeProject();}},
+              h('header',null,h('h2',{id:'pw-project-detail-title'},activeProject.title),h('button',{type:'button','aria-label':'关闭项目',onClick:closeProject},'×')),
+              h('form',{onSubmit:event=>{event.preventDefault();if(saveProjectNotes({progress:progressDraft.trim()}))setProjectNotice('进展已保存。');}},
+                h('label',null,'当前进展',h('input',{maxLength:120,value:progressDraft,onChange:event=>setProgressDraft(event.target.value),placeholder:'一句话记下做到哪了'})),
+                h('button',{type:'submit',className:'pw-layout-button',disabled:progressDraft.trim()===projectProgress(activeProject)},'保存进展')),
+              h('form',{onSubmit:addRequirement},
+                h('label',null,'待开发需求',h('textarea',{autoFocus:true,value:requirementDraft,maxLength:400,onChange:event=>setRequirementDraft(event.target.value),placeholder:'记下想新增或修改的功能'})),
+                h('button',{type:'submit',className:'pw-layout-button',disabled:!requirementDraft.trim()},'记下需求')),
+              pending.length>0&&h('ol',{'aria-label':'按开发顺序排列的需求'},pending.map((item,index)=>h('li',{key:item.id,className:'pw-requirement-row'},
+                h('span',null,(index+1)+'. '+item.title),h('div',{className:'pw-requirement-controls'},
+                  h('button',{type:'button',disabled:index===0,'aria-label':'上移：'+item.title,onClick:()=>move(index,-1)},'↑'),
+                  h('button',{type:'button',disabled:index===pending.length-1,'aria-label':'下移：'+item.title,onClick:()=>move(index,1)},'↓'),
+                  h('button',{type:'button','aria-label':'标记已完成：'+item.title,onClick:()=>update(item.id,true)},'✓'))))),
+              finished.length>0&&h('details',null,h('summary',null,'已完成 · '+finished.length),h('ul',null,finished.map(item=>h('li',{key:item.id,className:'pw-requirement-row'},h('span',null,item.title),h('div',{className:'pw-requirement-controls'},
+                h('button',{type:'button',onClick:()=>update(item.id,false)},'恢复'),
+                h('button',{type:'button','aria-label':'移除：'+item.title,onClick:()=>saveProjectNotes({requirements:requirements.filter(row=>row.id!==item.id)})},'×')))))),
+              projectNotice&&h('p',{role:'status',className:'pw-footer-message'},projectNotice),
+              h('footer',null,
+                h('button',{type:'button',className:'pw-layout-button',onClick:async()=>{if(await navigate(projectDestination(activeProject)))closeProject();else setProjectNotice('暂时无法打开关联对话。');}},'打开开发对话'),
+                pending.length>0&&h('button',{type:'button',className:'pw-layout-button is-primary',disabled:handingOff,onClick:()=>void handoff(activeProject,pending)},'复制待办并打开对话'))));
+        }
+        function projectBody() {
+          if(!allProjects.length)return empty('把项目放在手边','添加项目后，可以直接回到它的开发对话。','grid');
+          return h('div',{className:'pw-project-list'},allProjects.map(project=>{
+            const count=list(notes[project.id]?.requirements).filter(item=>!item.done).length,progress=projectProgress(project);
+            return h('div',{className:'pw-project-row',key:project.id},
+              h('button',{className:'pw-project-open',onClick:event=>openProject(project,event),'aria-label':'查看项目：'+project.title},
+                project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':'grid',size:21})),
+                h('span',{className:'pw-project-copy'},h('strong',null,project.title),
+                  (project.version||count>0)&&h('small',null,[project.version?'v'+project.version:'',count?count+' 项待开发':''].filter(Boolean).join(' · ')),
+                  progress&&h('small',{className:'pw-project-progress',title:progress},progress)),
+                h(Icon,{name:'chevron',size:13})),
+              project.source&&h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×'));
+          }));
+        }
+        function removeProject(project) {
+          if(notes[project.id]?.requirements.length&&!confirm('这个项目有已记录的需求。确定移除项目入口？'))return;
+          const next=customProjects.filter(item=>item.id!==project.id);
+          try {
+            localStorage.setItem(PROJECT_SHORTCUTS_KEY,JSON.stringify(next));
+            setCustomProjects(next);
+          } catch {setError('项目入口暂时无法保存');}
+        }
+        function saveProject(event){event.preventDefault();const selected=threadOptions.find(item=>item.source+':'+item.id===projectForm.target);if(!selected||!projectForm.title.trim()){setProjectError('填写项目名称，并选择一个已有对话。');return;}if(customProjects.length>=20){setProjectError('最多保存 20 个自定义项目入口。');return;}const next=projectShortcuts([...customProjects,{id:crypto.randomUUID(),title:projectForm.title,version:projectForm.version,progress:projectForm.progress,icon:projectForm.icon,source:selected.source,threadId:selected.id}]);try{localStorage.setItem(PROJECT_SHORTCUTS_KEY,JSON.stringify(next));setCustomProjects(next);setAddingProject(false);setProjectError('');}catch{setProjectError('保存失败，请稍后再试。');}}
+        function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
-        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject);}},
+        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
           h('header',{className:'pw-head'},h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing?h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'):h('p',{className:'pw-date'},dateLabel(today))),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
           h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas',style:grid.canvasStyle},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
-              h('span',{className:'pw-news-art','aria-hidden':true},h('span'),h('span')),
-              h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'news'}),h('h2',null,'每日 AI 日报'),newsFolded&&!grid.editing&&h('span',{className:'pw-folded-summary'},reader?'随时再看':'尚未添加链接')),h('button',{className:'pw-card-link',onClick:toggleBrief,'aria-expanded':!newsFolded,'aria-label':newsFolded?'展开日报':'收起日报'},newsFolded?'展开':'收起',h('span',{'aria-hidden':true},newsFolded?'⌄':'⌃'))),
-              h('div',{className:'pw-card-body'},newsBody()),h('footer',{className:'pw-card-foot'},h('span',null,'我的阅读入口'),h('button',{className:'pw-card-link',onClick:()=>{setFeedDraft(reader);setEditingFeed(true);}},reader?'修改链接':'添加链接')))),
+              h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'news'}),h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
+                reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'原文',h(Icon,{name:'arrow',size:11})),
+                h('button',{className:'pw-card-link',onClick:()=>{setFeedDraft(reader);setEditingFeed(true);if(newsFolded)toggleBrief();}},reader?'修改链接':'添加链接'),
+                h('button',{className:'pw-card-link',onClick:toggleBrief,'aria-expanded':!newsFolded,'aria-label':newsFolded?'展开日报':'收起日报'},newsFolded?'展开':'收起',h('span',{'aria-hidden':true},newsFolded?'⌄':'⌃')))),
+              h('div',{className:'pw-card-body'},newsBody()))),
             h('section',{...grid.card('pet'),className:'pw-card pw-pet','aria-label':'猫咪个人助手'},grid.handles('pet','猫咪助手'),h('div',contentProps,h('div',{className:'pw-pet-main'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中')),h('div',{className:'pw-pet-copy'},h('span',{className:'pw-eyebrow'},'你的小管家'),h('h2',null,digest.headline),h('p',null,digest.body),h('p',{className:'pw-pet-goal'},h('span',null,'今天的方向'),digest.goal))),h('footer',{className:'pw-card-foot'},h('span',null,'根据今日计划整理'),h('span',null,'点猫咪，继续聊')))),
             h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'activity'}),h('h2',null,'AI 助手')),h('span',{className:'pw-count'},'帮你盯着进度')),h('div',{className:'pw-card-body'},assistantBody()),h('footer',{className:'pw-card-foot'},h('span',null,'近期内容任务与 Harness 对话'),h('span',null,assistants.synced?'同步于 '+clock(monitor?.checkedAt):'内容平台未连接或暂不可用')))),
-            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'grid'}),h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
+            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'grid'}),h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',progress:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
             h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},viewDate===today?'今日计划':'每日计划'),h('span',{className:'pw-count'},'我的待办')),
               h('div',{className:'pw-plan-view','data-mode':calendarMode},calendarHeader(),
@@ -840,7 +969,7 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
                 h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
-          h('footer',{className:'pw-footer'},h('span',{className:readError||error?'pw-footer-message':'',role:readError||error?'status':undefined,title:readError||error||undefined},readError || error || grid.notice || (loading?'正在更新…':data?'更新于 '+clock(data.checkedAt):'等待同步')),h('span',null,grid.editing?'自动对齐网格':'进度自动更新')),h('span',{className:'pw-layout-live',role:'status','aria-live':'polite'},grid.notice)),projectDialog()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
+          h('footer',{className:'pw-footer'},h('span',{className:readError||error?'pw-footer-message':'',role:readError||error?'status':undefined,title:readError||error||undefined},readError || error || grid.notice || (loading?'正在更新…':data?'更新于 '+clock(data.checkedAt):'等待同步')),h('span',null,grid.editing?'自动对齐网格':'进度自动更新')),h('span',{className:'pw-layout-live',role:'status','aria-live':'polite'},grid.notice)),projectDialog(),projectDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(Icon,{name:'grid',size:20})));
       ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'personal-workbench'},Panel));
