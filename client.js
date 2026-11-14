@@ -571,11 +571,29 @@ html[data-platform="darwin"] .pwb .pw-head {
 
 /* Compact cards keep their useful content visible within the saved grid. */
 .pwb .pw-operations-icon {width:24px;height:24px;object-fit:contain;flex:none}
-.pwb .pw-assistant-group .pw-assistant-heading {flex-wrap:wrap;gap:4px 8px}
-.pwb .pw-assistant-group .pw-assistant-heading .pw-quiet-link {margin-inline-start:auto}
-.pwb .pw-assistant-actions {display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;margin-top:4px}
-.pwb .pw-assistant-actions .pw-quiet-link {color:var(--pw-blue);max-width:100%}
-.pwb .pw-assistant-result-name {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-inline-size:24ch}
+.pwb .pw-assistant-compact .pw-assistant-group {
+  display:grid;
+  grid-template-rows:24px minmax(20px,auto) 20px 24px;
+  row-gap:4px;
+  align-items:center;
+}
+.pwb .pw-assistant-compact .pw-assistant-heading {gap:8px;flex-wrap:nowrap;min-width:0}
+.pwb .pw-assistant-compact .pw-assistant-heading strong {white-space:nowrap}
+.pwb .pw-assistant-compact .pw-assistant-heading .pw-quiet-link {flex:none}
+.pwb .pw-assistant-status {display:flex;align-items:center;align-content:flex-start;align-self:stretch;gap:4px;flex-wrap:wrap;min-width:0}
+.pwb .pw-assistant-content {min-width:0;align-self:center}
+.pwb .pw-assistant-content .pw-assistant-content-title {
+  display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  text-align:start;font-size:13px;line-height:20px;
+}
+.pwb .pw-assistant-content button:hover {color:var(--pw-blue)}
+.pwb .pw-assistant-review {display:flex;align-items:center;min-width:0}
+.pwb .pw-assistant-review .pw-quiet-link {max-width:100%;min-width:0;color:var(--pw-blue);white-space:nowrap}
+.pwb .pw-assistant-result-name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pwb .pw-assistant-review-empty {color:var(--pw-muted);font-size:11px}
+@container pw-card (min-width:500px) {
+  .pwb .pw-assistant-compact .pw-assistant-group {grid-row:span 4;grid-template-rows:subgrid}
+}
 .pwb .pw-assistant-compact .pw-assistant-task {padding:4px 0;margin-top:4px}
 .pwb .pw-assistant-compact .pw-assistant-task>div {gap:8px}
 .pwb .pw-assistant-compact .pw-assistant-results {margin:4px 0 0}
@@ -962,33 +980,48 @@ html[data-platform="darwin"] .pwb .pw-head {
               activeMonth?'月份标记暂未同步，仍可点击日期查看':'正在读取本月安排…'));
         }
         function assistantBody() {
-          const badge=(state,label)=>h('span',{className:'pw-state','data-state':state},label);
+          const badge=(state,label)=>h('span',{key:label,className:'pw-state','data-state':state},label);
           const operations=assistants.operation;
           const results=completed.filter(row=>row.key?.startsWith('original:')||row.key?.startsWith('rewrite:'));
-          const task=row=>h('button',{key:row.id,className:'pw-assistant-task',onClick:()=>navigate({panel:'redflow-workbench'}),title:row.state==='failed'?row.detail:undefined},
+          const openOperations=()=>navigate({panel:'redflow-workbench'});
+          const caption=(value,open)=>value&&h(open?'button':'span',{
+            className:'pw-assistant-content-title',title:value,onClick:open,type:open?'button':undefined
+          },value);
+          const review=(url,title)=>url&&h('a',{
+            className:'pw-quiet-link',href:url,target:'_blank',rel:'noopener noreferrer',
+            title,'aria-label':'验收结果：'+title
+          },'验收结果',h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11}));
+          function assistantCard({name,icon,status,content,result,open}) {
+            return h('section',{className:'pw-assistant-group','aria-label':name},
+              h('div',{className:'pw-assistant-heading'},icon,h('strong',null,name),
+                open&&h('button',{className:'pw-quiet-link',type:'button','aria-label':'打开'+name,onClick:open},'打开',h(Icon,{name:'arrow',size:11}))),
+              h('div',{className:'pw-assistant-status','aria-label':'状态'},status),
+              h('div',{className:'pw-assistant-content','aria-label':'内容'},content),
+              h('div',{className:'pw-assistant-review','aria-label':'验收'},
+                result||h('span',{className:'pw-assistant-review-empty'},'暂无验收结果')));
+          }
+          const primary=operations[0],latest=results[0];
+          const operation=assistantCard({
+            name:'运营助手',icon:h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),
+            status:primary?badge(primary.state,primary.label):
+              badge('unknown',assistants.synced?'暂无任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
+            content:caption(primary?.title||latest?.title,primary?openOperations:undefined),
+            result:latest&&review(latest.url,latest.title),open:openOperations
+          });
+          const task=row=>h('button',{key:row.id,className:'pw-assistant-task',onClick:openOperations,title:row.state==='failed'?row.detail:undefined},
             h('div',null,h('span',null,row.title),badge(row.state,row.label)));
-          const primary=operations[0];
-          const operation=h('section',{className:'pw-assistant-group','aria-label':'运营助手'},
-            h('div',{className:'pw-assistant-heading'},
-              h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),
-              h('strong',null,'运营助手'),
-              !primary&&badge('unknown',assistants.synced?'暂无任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
-              h('button',{className:'pw-quiet-link',onClick:()=>navigate({panel:'redflow-workbench'})},'打开',h(Icon,{name:'arrow',size:11}))),
-            primary&&task(primary),
-            results.length>0&&h('div',{className:'pw-assistant-actions'},results.slice(0,1).map(row=>
-              h('a',{key:row.key,className:'pw-quiet-link',href:row.url,target:'_blank',rel:'noopener noreferrer',title:row.title,'aria-label':'验收结果：'+row.title},
-                '验收结果',h('span',{className:'pw-assistant-result-name'},row.title),h(Icon,{name:'arrow',size:11})))));
-
-          const daily = rows.length>0&&h('section',{className:'pw-assistant-group','aria-label':'Harness 助手'},
-            h('div',{className:'pw-assistant-heading'},
-              h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),
-              h('strong',null,'Harness 助手'),badge('active',rows.length+' 项进展')),
-            activityBody());
-          return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,daily,
-            (operations.length>1||results.length>1)&&h('details',{className:'pw-assistant-more'},
+          const current=rows[0];
+          const secondary=rows.length>0&&assistantCard({
+            name:'Harness 助手',icon:h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),
+            status:badge('active',rows.length+' 项进展'),
+            content:caption(current.title,current.destination?()=>navigate(current.destination):undefined)
+          });
+          return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,secondary,
+            (operations.length>1||results.length>1||rows.length>0)&&h('details',{className:'pw-assistant-more'},
               h('summary',null,'更多任务与结果'),
               operations.slice(1).map(task),
-              results.length>1&&h('div',{className:'pw-assistant-results'},resultsBody(results.slice(1)))));
+              results.length>1&&h('div',{className:'pw-assistant-results'},resultsBody(results.slice(1))),
+              rows.length>0&&activityBody()));
         }
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
         function projectDestination(project) {
