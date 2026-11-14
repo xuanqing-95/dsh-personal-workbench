@@ -481,7 +481,6 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-news-entry:not(.is-lead) .pw-news-title {font-size:13px;line-height:20px}
 .pwb .pw-news-actions {display:flex;align-items:center;gap:12px;flex-shrink:0}
 .pwb .pw-news-banner .pw-news-lead {display:flex;align-items:center;gap:16px}
-.pwb .pw-news-image {width:clamp(72px,20cqw,128px);height:clamp(64px,16cqw,88px);object-position:center}
 .pwb .pw-pet {border-color:transparent;background:transparent;backdrop-filter:none}
 .pwb .pw-pet .pw-pet-main {padding:8px var(--pw-card-inset);gap:16px}
 .pwb .pw-pet-art {
