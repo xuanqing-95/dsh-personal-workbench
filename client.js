@@ -358,7 +358,7 @@ window.__ModuleLoader__.load({
 .pwb .pw-head{min-height:82px}.pwb .pw-card-head{padding:17px 21px 10px}.pwb .pw-card-title h2{font-size:16px}.pwb .pw-card-foot{margin-inline:21px;padding:6px 0 9px;font-size:10px}.pwb .pw-card{box-shadow:0 3px 16px rgba(30,40,60,.035)}
 .pwb .pw-news-banner{background:linear-gradient(125deg,var(--pw-news),var(--pw-paper) 85%)}.pwb .pw-news-banner .pw-card-title h2{font-size:20px;letter-spacing:-.5px}.pwb .pw-news-banner .pw-news-list{padding-inline:21px}.pwb .pw-news-banner .pw-news-entry{padding:6px 0}.pwb .pw-news-banner .pw-news-entry.is-lead{background:transparent;padding:0 0 9px}.pwb .pw-news-banner .is-lead .pw-news-title{font-size:16px;line-height:1.4}.pwb .pw-news-banner .pw-news-summary{-webkit-line-clamp:1;margin-top:4px}.pwb .pw-news-banner .pw-news-date{font-size:10px}.pwb .pw-news-banner[data-folded=true] .pw-card-head{padding:4px 18px;min-height:100%;gap:9px}.pwb .pw-news-banner[data-folded=true] .pw-card-title h2{font-size:13px;white-space:nowrap}.pwb .pw-news-banner[data-folded=true] .pw-card-body,.pwb .pw-news-banner[data-folded=true] .pw-card-foot{display:none}.pwb .pw-folded-summary{font-size:10px;color:var(--pw-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pwb .pw-pet{background:linear-gradient(135deg,var(--pw-paper),color-mix(in srgb,var(--pw-plan) 80%,var(--pw-paper)))}.pwb .pw-pet-main{display:flex;align-items:center;gap:10px;padding:14px 18px 6px;flex:1;min-height:0;overflow:auto}.pwb .pw-pet-art{flex:0 0 104px;align-self:center}.pwb .pw-pet .hbc-launcher{width:104px!important;background:transparent;border:0;padding:0!important;color:var(--pw-muted)}.pwb .pw-pet .hbc-launcher svg{width:100px;height:100px}.pwb .pw-pet .hbc-launcher span{font-size:10px}.pwb .pw-pet-copy{min-width:0;flex:1}.pwb .pw-eyebrow{font-size:10px;letter-spacing:.5px;color:var(--pw-muted)}.pwb .pw-pet-copy h2{font-size:17px;letter-spacing:-.4px;line-height:1.5;margin:4px 0 5px}.pwb .pw-pet-copy p{font-size:11px;line-height:1.7;color:var(--pw-muted);overflow-wrap:anywhere}.pwb .pw-pet-copy .pw-pet-goal{color:var(--pw-plan-ink);font-size:10px;margin-top:8px}.pwb .pw-pet-goal span{font-weight:600;display:block;color:var(--pw-olive);margin-bottom:2px}.pwb .pw-pet-placeholder{font-size:10px;color:var(--pw-muted)}
-.pwb .pw-assistant-list{padding:0 21px 8px}.pwb .pw-assistant-group+.pw-assistant-group{border-top:1px solid var(--pw-line);padding-top:10px;margin-top:9px}.pwb .pw-assistant-heading{display:flex;align-items:center;gap:8px}.pwb .pw-assistant-heading strong{font-size:12px;font-weight:600}.pwb .pw-assistant-heading .pw-quiet-link{margin-left:auto;font-size:10px}.pwb .pw-assistant-avatar{width:25px;height:25px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--pw-news);color:var(--pw-blue);flex-shrink:0}.pwb .pw-assistant-avatar.is-news{color:var(--pw-olive);background:var(--pw-plan)}.pwb .pw-mini-meta{font-size:9px;color:var(--pw-muted)}.pwb button.pw-assistant-task{display:block;width:100%;text-align:left;padding:5px 0 2px 33px}.pwb .pw-assistant-task>div{display:flex;align-items:center;gap:8px;font-size:11px}.pwb .pw-assistant-task p,.pwb .pw-assistant-detail,.pwb .pw-assistant-empty{font-size:10px;color:var(--pw-muted);line-height:1.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pwb .pw-assistant-detail,.pwb .pw-assistant-empty{padding-left:33px;margin-top:3px}.pwb .pw-state{font-size:9px;line-height:1.5;border-radius:5px;padding:1px 5px;background:var(--pw-line);color:var(--pw-muted);white-space:nowrap}.pwb .pw-state[data-state=active]{color:var(--pw-blue);background:color-mix(in srgb,var(--pw-blue) 9%,transparent)}.pwb .pw-state[data-state=done]{color:var(--pw-olive);background:color-mix(in srgb,var(--pw-olive) 12%,transparent)}.pwb .pw-state[data-state=failed],.pwb .pw-state[data-state=attention]{color:var(--pw-orange);background:color-mix(in srgb,var(--pw-orange) 10%,transparent)}.pwb .pw-assistant-more{margin-top:10px;font-size:10px;color:var(--pw-muted)}.pwb .pw-assistant-more summary{cursor:pointer;padding:3px 0}.pwb .pw-assistant-more .pw-activity-list{padding:5px 0}.pwb .pw-assistant-results{padding-top:5px;border-top:1px solid var(--pw-line)}.pwb .pw-assistants .pw-card-foot{display:flex}
+.pwb .pw-assistant-list{padding:0 21px 8px}.pwb .pw-assistant-group+.pw-assistant-group{border-top:1px solid var(--pw-line);padding-top:10px;margin-top:9px}.pwb .pw-assistant-heading{display:flex;align-items:center;gap:8px}.pwb .pw-assistant-heading strong{font-size:12px;font-weight:600}.pwb .pw-assistant-heading .pw-quiet-link{margin-left:auto;font-size:10px}.pwb .pw-assistant-avatar{width:25px;height:25px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--pw-news);color:var(--pw-blue);flex-shrink:0}.pwb .pw-assistant-avatar.is-news{color:var(--pw-olive);background:var(--pw-plan)}.pwb .pw-mini-meta{font-size:9px;color:var(--pw-muted)}.pwb .pw-assistant-detail,.pwb .pw-assistant-empty{padding-left:33px;margin-top:3px}.pwb .pw-state{font-size:9px;line-height:1.5;border-radius:5px;padding:1px 5px;background:var(--pw-line);color:var(--pw-muted);white-space:nowrap}.pwb .pw-state[data-state=active]{color:var(--pw-blue);background:color-mix(in srgb,var(--pw-blue) 9%,transparent)}.pwb .pw-state[data-state=done]{color:var(--pw-olive);background:color-mix(in srgb,var(--pw-olive) 12%,transparent)}.pwb .pw-state[data-state=failed],.pwb .pw-state[data-state=attention]{color:var(--pw-orange);background:color-mix(in srgb,var(--pw-orange) 10%,transparent)}.pwb .pw-assistants .pw-card-foot{display:flex}
 .pwb .pw-project-list{padding:0 21px}
 .pwb .pw-project-row{border-top:1px solid var(--pw-line)}
 .pwb .pw-project-row:first-child{border-top:0}
@@ -443,7 +443,6 @@ window.__ModuleLoader__.load({
 .pwb .pw-assistant-avatar.is-news {color:var(--pw-orange);background:color-mix(in srgb,var(--pw-gold) 24%,var(--pw-paper))}
 .pwb .pw-assistant-heading .pw-quiet-link {padding-inline:3px;color:var(--pw-blue);white-space:nowrap}
 .pwb .pw-state[data-state=failed] {background:rgba(216,26,29,.17);color:var(--pw-blue)}
-.pwb .pw-assistant-more {margin-top:0}
 
 .pwb .pw-project-row:focus-within,.pwb .pw-project-row:hover {background:var(--pw-hover)}
 .pwb .pw-project-open:focus-visible {outline-offset:-3px}
@@ -461,7 +460,7 @@ window.__ModuleLoader__.load({
 
 @container pw-card (min-width:500px) {
   .pwb .pw-project-list,.pwb .pw-assistant-list {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .pwb .pw-project-list>:first-child:not(.pw-project-row),.pwb .pw-assistant-more {grid-column:1/-1}
+  .pwb .pw-project-list>:first-child:not(.pw-project-row) {grid-column:1/-1}
 }
 
 .pwb .pw-plan-view {display:flex;flex:1;min-height:0;flex-direction:column}
@@ -683,10 +682,6 @@ window.__ModuleLoader__.load({
 @container pw-card (min-width:500px) {
   .pwb .pw-assistant-compact .pw-assistant-group {grid-row:span 3;grid-template-rows:subgrid}
 }
-.pwb .pw-assistant-compact .pw-assistant-task {padding:4px 0;margin-top:4px}
-.pwb .pw-assistant-compact .pw-assistant-task>div {gap:8px}
-.pwb .pw-assistant-compact .pw-assistant-results {margin:4px 0 0}
-.pwb .pw-assistant-compact .pw-assistant-results .pw-activity-row {padding:4px 0;min-height:28px}
 .pwb .pw-project-row { display: grid; position: relative; align-items: stretch; }
 .pwb .pw-project-open { display: grid; align-content: start; align-items: start; padding: 10px 12px; gap: 0; }
 .pwb .pw-project-heading {
@@ -1140,7 +1135,6 @@ html[data-platform="darwin"] .pwb .pw-head {
           };
         },[hasAttention]);
         const planConnected=plan?.availability==='connected',planEmpty=plan?.availability==='empty';
-        const activityUnavailable=!data || ['unavailable','partial'].includes(data.ai?.availability) || list(data.ai?.items).some(s=>s.running===null && !pending(s.pendingInput)) || ['unavailable','partial'].includes(data.automations?.availability) || monitor?.availability==='unavailable';
         function empty(title,description,icon='clock'){return h('div',{className:'pw-empty'},h(Icon,{name:icon,size:27}),h('strong',null,title),h('p',null,description));}
         function skeleton(){return h('div',{'aria-label':'正在读取'},[1,2,3].map(i=>h('div',{key:i,className:'pw-loading'})));}
         async function checkTask(task) {
@@ -1195,11 +1189,6 @@ html[data-platform="darwin"] .pwb .pw-head {
             h('label',null,'日报链接',h('input',{type:'url',value:feedDraft,maxLength:2048,placeholder:'https://…',onChange:event=>setFeedDraft(event.target.value)})),
             h('div',null,h('button',{type:'button',onClick:()=>setEditingFeed(false)},'取消'),h('button',{type:'submit'},'保存')));
           return reader?null:empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
-        }
-        function activityBody() {
-          if(!data&&loading)return skeleton();
-          if(!rows.length)return h('p',{className:'pw-section-empty'},activityUnavailable?'进展尚未全部同步':attention.length?'等待处理的事项已列在上方':'暂时没有正在进行的事');
-          return h('div',{className:'pw-activity-list'},rows.map(row=>h(row.destination?'button':'div',{key:row.key,className:'pw-activity-row',onClick:row.destination?()=>navigate(row.destination):undefined,'aria-label':row.destination?row.title+'，'+(row.destination.session?'打开对话':row.destination.panel==='redflow-workbench'?'打开内容工作台':'打开自动化任务'):undefined},h('span',{className:'pw-activity-icon'+(row.waiting?' is-waiting':'')},h(Icon,{name:row.waiting?'chat':'activity',size:15})),h('div',{className:'pw-activity-copy'},h('p',{className:'pw-activity-title',title:row.title},row.title),h('p',{className:'pw-activity-status'},h('span',{className:'pw-activity-owner'},row.owner),h('span',{className:row.waiting?'is-waiting':row.unknown?'is-unknown':'pw-running'},row.status))),row.destination&&h(Icon,{name:'chevron',size:12}))));
         }
         function attentionSummary() {
           if(!attention.length)return null;
@@ -1287,14 +1276,14 @@ html[data-platform="darwin"] .pwb .pw-head {
           const badge=(state,label)=>h('span',{key:label,className:'pw-state','data-state':state},label);
           const operations=assistants.operation;
           const openOperations=()=>navigate({panel:'redflow-workbench'});
-          function receipt(row,mark,done=false) {
+          function receipt(row,mark) {
             const {title,url,key}=row, when=row.deliveredAt||row.updatedAt;
             const date=assistantDate(when||row.date,assistants.today,Boolean(when));
-            const state=[date?date+(when?' 交付':' 刊期'):'',done?'已验收':'待验收'].filter(Boolean).join(' · ');
+            const state=[date?date+(when?' 交付':' 刊期'):'','待验收'].filter(Boolean).join(' · ');
             return h('div',{className:'pw-assistant-receipt',key},
               h('a',{className:'pw-quiet-link',href:safeHTTPS(url),target:'_blank',rel:'noopener noreferrer',title,
                 'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11})),
-              !done&&mark&&h('button',{type:'button',className:'pw-assistant-reviewed',onClick:()=>mark(key),
+              mark&&h('button',{type:'button',className:'pw-assistant-reviewed',onClick:()=>mark(key),
                 title:'标记已验收','aria-label':'标记已验收：'+title},h(Icon,{name:'check',size:13})),
               h('small',null,state));
           }
@@ -1319,24 +1308,13 @@ html[data-platform="darwin"] .pwb .pw-head {
               badge('unknown',assistants.synced?'暂无新任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
             reviews:{...operationReviews,unavailable:monitor?.resultsUnavailable||monitor?.availability==='unavailable'},open:openOperations
           });
-          const task=row=>h('button',{key:row.id,className:'pw-assistant-task',onClick:openOperations,title:row.state==='failed'?row.detail:undefined},
-            h('div',null,h('span',null,[row.title,row.timing].filter(Boolean).join(' · ')),badge(row.state,row.label)));
           const current=rows[0];
           const secondary=current&&assistantCard({
             name:'Harness 助手',icon:h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),
             status:h(React.Fragment,null,badge('active',rows.length+' 项进展'),h('span',{className:'pw-assistant-context'},current.title)),
             reviews:{pending:[]},open:current.destination?()=>navigate(current.destination):null
           });
-          const queuedReviews=operationReviews.pending.slice(1).map(row=>receipt(row,operationReviews.mark));
-          const history=operationReviews.history.map(row=>receipt(row,null,true));
-          return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,secondary,
-            (operations.length>1||queuedReviews.length>0||history.length>0||rows.length>0)&&h('details',{className:'pw-assistant-more'},
-              h('summary',null,'更多任务与结果'),
-              operations.slice(1).map(task),
-              queuedReviews.length>0&&h('div',{className:'pw-assistant-review pw-assistant-results'},queuedReviews),
-              history.length>0&&h('details',null,h('summary',null,'验收历史'),
-                h('div',{className:'pw-assistant-review pw-assistant-results'},history)),
-              rows.length>0&&activityBody()));
+          return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,secondary);
         }
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
         function projectDestination(project) {
