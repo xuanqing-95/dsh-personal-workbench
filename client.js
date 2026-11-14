@@ -298,8 +298,8 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb,.pwb[data-appearance=dark] {
   --pw-bg:#f2f0e8;
   --pw-paper:#fbfaf6;
-  --pw-glass:rgba(255,255,255,.62);
-  --pw-glass-edge:rgba(255,255,255,.82);
+  --pw-glass:rgba(235,230,219,.90);
+  --pw-glass-edge:rgba(255,255,255,.78);
   --pw-ink:#111;
   --pw-muted:#625d54;
   --pw-line:rgba(17,17,17,.15);
@@ -332,19 +332,7 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
   background:var(--pw-accent);
 }
 .pwb .pw-date {font-size:12px;font-weight:500;font-variant-numeric:tabular-nums}
-.pwb .pw-card {
-  border-radius:16px;
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.045),transparent 55%),
-    var(--pw-glass);
-  border-color:var(--pw-glass-edge);
-  box-shadow:0 8px 24px rgba(30,25,15,.065);
-  backdrop-filter:blur(12px);
-}
-.pwb .pw-card-title h2 {font-size:18px;font-weight:680}
 .pwb .pw-card-title>svg {color:var(--pw-blue)}
-.pwb .pw-card-foot {font-size:11px}
-.pwb .pw-layout-button {border-radius:6px;font-weight:600}
 .pwb .pw-layout-button.is-primary {background:var(--pw-accent);border-color:var(--pw-accent);color:var(--pw-on-accent)}
 .pwb .pw-layout-button.is-primary:hover {background:#c71619}
 .pwb .pw-assistant-avatar,.pwb .pw-attention summary,.pwb .pw-segmented,.pwb .pw-calendar-grid button {border-radius:6px}
@@ -358,19 +346,13 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 }
 
 .pwb .pw-news-banner .pw-card-content {position:relative;isolation:isolate}
-.pwb .pw-news-banner .pw-card-title h2 {font-size:16px;font-weight:650}
 .pwb .pw-news-banner .pw-card-title>svg {width:16px;height:16px;color:var(--pw-blue)}
 .pwb .pw-news-banner .pw-card-link {color:var(--pw-ink)}
 .pwb .pw-news-banner .pw-card-link:hover {color:var(--pw-blue)}
 .pwb .pw-news-banner .pw-news-copy {min-width:0}
-.pwb .pw-news-banner .pw-news-entry.is-lead {margin-bottom:3px;padding-bottom:7px}
-.pwb .pw-news-banner .is-lead .pw-news-title {font-size:clamp(17px,4.2cqw,25px);font-weight:690;line-height:1.35}
-.pwb .pw-news-banner .pw-news-summary {font-size:12px}
-.pwb .pw-news-banner .pw-news-entry:not(.is-lead) {padding-block:5px}
 .pwb .pw-news-banner .pw-news-entry:not(.is-lead) .pw-news-title {color:var(--pw-muted)}
 .pwb .pw-news-banner .pw-news-entry a:hover .pw-news-title {color:var(--pw-blue)}
 .pwb .pw-news-banner :is(a,button):focus-visible {outline-color:var(--pw-blue);outline-offset:-2px}
-.pwb .pw-news-actions {display:flex;align-items:center;gap:clamp(6px,2cqw,16px);flex-shrink:0}
 
 .pwb .pw-pet {
   background:transparent;
@@ -384,36 +366,14 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
   border:1px dashed color-mix(in srgb,var(--pw-blue) 55%,transparent);
   box-shadow:none;
 }
-.pwb .pw-pet-copy h2 {font-size:19px;line-height:1.3}
-.pwb .pw-pet-copy p {font-size:12px;line-height:1.55}
-.pwb .pw-pet-copy .pw-pet-goal {font-size:11px;line-height:1.45}
-.pwb .pw-assistant-list {display:grid;gap:6px}
-.pwb .pw-assistant-group {
-  min-width:0;
-  padding:7px 10px;
-  border:1px solid var(--pw-line);
-  border-radius:6px;
-  background:var(--pw-tile);
-}
-.pwb .pw-assistant-group+.pw-assistant-group {margin-top:0;padding-top:7px}
 .pwb .pw-assistant-avatar.is-news {color:var(--pw-orange);background:color-mix(in srgb,var(--pw-gold) 24%,var(--pw-paper))}
 .pwb .pw-assistant-heading .pw-quiet-link {padding-inline:3px;color:var(--pw-blue);white-space:nowrap}
-.pwb .pw-state {border-radius:99px;padding:2px 6px;font-size:10px}
 .pwb .pw-state[data-state=failed] {background:rgba(216,26,29,.17);color:var(--pw-blue)}
 .pwb .pw-assistant-more {margin-top:0}
 
-.pwb .pw-project-list {display:grid;gap:7px;padding-bottom:5px}
-.pwb .pw-project-row,.pwb .pw-project-row:first-child {
-  min-width:0;
-  border:1px solid var(--pw-line);
-  border-radius:6px;
-  background:var(--pw-tile);
-}
 .pwb .pw-project-row:focus-within,.pwb .pw-project-row:hover {background:var(--pw-hover)}
-.pwb .pw-project-open {padding:8px 10px;gap:9px}
 .pwb .pw-project-open:focus-visible {outline-offset:-3px}
 .pwb .pw-project-open>svg {color:var(--pw-blue)}
-.pwb .pw-project-icon {width:33px;height:33px}
 .pwb .pw-project-copy .pw-project-progress {white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pwb .pw-project-dialog.pw-project-detail {width:min(100%,540px);max-height:calc(100% - 24px);overflow:auto}
 .pwb .pw-project-detail header {display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -428,18 +388,14 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-project-detail footer {flex-wrap:wrap}
 
 @container pw-card (min-width:500px) {
-  .pwb .pw-project-list,.pwb .pw-assistant-list {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .pwb .pw-project-list,.pwb .pw-assistant-list {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .pwb .pw-project-list>:first-child:not(.pw-project-row),.pwb .pw-assistant-more {grid-column:1/-1}
-  .pwb .pw-project-open {min-height:76px;padding:12px}
-  .pwb .pw-project-icon {width:39px;height:39px}
 }
 
-.pwb .pw-plan h2 {font:700 25px/1.2 var(--pw-display);letter-spacing:-.5px}
-.pwb .pw-plan .pw-card-link {color:var(--pw-blue)}
 .pwb .pw-plan-view {display:flex;flex:1;min-height:0;flex-direction:column}
 .pwb .pw-plan-view[data-mode=month] {overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent}
 .pwb .pw-plan-view[data-mode=month]>.pw-card-body {flex:0 0 auto;overflow:visible}
-.pwb .pw-segmented {background:var(--pw-tile);border:1px solid var(--pw-line);border-radius:10px}
+.pwb .pw-segmented {background:var(--pw-tile);border:1px solid var(--pw-line)}
 .pwb .pw-segmented button {min-height:24px}
 .pwb .pw-segmented button[aria-pressed=true] {background:var(--pw-accent);color:var(--pw-on-accent);box-shadow:none}
 .pwb .pw-date-nav>span {color:var(--pw-ink);font-weight:650;white-space:nowrap}
@@ -454,7 +410,6 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-calendar-grid button[aria-pressed=true] i.has-plan {background:var(--pw-blue)}
 .pwb .pw-calendar-grid button.is-outside {color:var(--pw-muted);opacity:.72}
 .pwb .pw-week-label {font-size:10px;font-weight:600}
-.pwb .pw-plan .pw-progress {padding-block:8px 10px}
 .pwb .pw-progress-value {background:var(--pw-olive)}
 .pwb .pw-plan-row.is-done .pw-plan-check {color:var(--pw-on-accent)}
 .pwb .pw-group-title {color:var(--pw-muted);font-weight:650}
@@ -463,13 +418,8 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
   .pwb .pw-head-title h1 {font-size:21px}
 }
 @container pw-card (max-width:399px) {
-  .pwb .pw-plan h2 {font-size:21px}
-  .pwb .pw-pet-copy h2 {font-size:16px}
-  .pwb .pw-pet-copy p {font-size:11px}
   .pwb .pw-assistant-heading {gap:5px;flex-wrap:wrap}
   .pwb .pw-date-nav button {min-width:19px}
-  .pwb .pw-news-banner .pw-card-head {padding-inline:17px}
-  .pwb .pw-news-banner .pw-news-list {padding-inline:17px}
 }
 .pwb .pw-task-form {gap:8px;padding-block:9px}
 .pwb .pw-task-form input,.pwb .pw-release-form input {width:100%;min-width:0;border:1px solid var(--pw-line);border-radius:9px;background:var(--pw-tile);color:var(--pw-ink);padding:7px 9px;font:inherit}
@@ -483,6 +433,105 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-release-reading-link {display:inline-flex;align-items:center;gap:8px;text-decoration:underline;font-size:18px;font-weight:650}
 .pwb .pw-footer .pw-footer-message {font-size:12px}
 
+/* Shared component dimensions and visual treatments. See DESIGN.md. */
+.pwb .pw-shell {--pw-gutter:32px;max-width:none}
+html[data-platform="darwin"] .pwb .pw-head {
+  padding-inline-start:max(0px,calc(var(--dsh-frame-leading-clearance,0px) - var(--pw-gutter)));
+}
+.pwb .pw-head {min-height:88px;gap:16px}
+.pwb .pw-head-title {padding-inline-start:16px}
+.pwb .pw-head-title h1 {font-size:clamp(32px,4cqw,48px);font-weight:700;line-height:1}
+.pwb .pw-date {margin-top:4px;font-size:12px;line-height:16px}
+.pwb .pw-card {
+  --pw-card-inset:24px;
+  border:1px solid var(--pw-glass-edge);
+  border-radius:16px;
+  background:var(--pw-glass);
+  box-shadow:none;
+  backdrop-filter:blur(12px);
+}
+.pwb .pw-news-banner[data-folded=false] {
+  border-color:transparent;
+}
+.pwb .pw-news-banner[data-folded=false]::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:2px;
+  border-radius:inherit;
+  background:linear-gradient(140deg,#fff,rgba(255,255,255,.30) 52%,rgba(17,17,17,.20));
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  pointer-events:none;
+}
+@container pw-root (min-width:1000px) {
+  .pwb .pw-news-banner[data-folded=false] {border-radius:40px}
+}
+.pwb .pw-card-head,.pwb .pw-plan .pw-card-head {padding:16px var(--pw-card-inset) 8px;gap:8px}
+.pwb .pw-card-title {gap:8px}
+.pwb .pw-card-head .pw-card-title h2 {font-size:18px;font-weight:600;line-height:28px}
+.pwb .pw-card-title>svg {width:16px;height:16px}
+.pwb .pw-card-foot,.pwb .pw-plan .pw-card-foot {margin-inline:var(--pw-card-inset);padding:8px 0;font-size:11px;line-height:16px}
+.pwb .pw-news-banner .pw-news-list,.pwb .pw-assistant-list,.pwb .pw-project-list,
+.pwb .pw-plan .pw-card-body,.pwb .pw-calendar,.pwb .pw-plan .pw-progress {padding-inline:var(--pw-card-inset)}
+.pwb .pw-news-banner .pw-news-entry.is-lead {padding:0 0 8px;margin-bottom:4px}
+.pwb .pw-news-banner .is-lead .pw-news-title {font:700 clamp(20px,4cqw,28px)/1.15 var(--pw-display);letter-spacing:-.025em}
+.pwb .pw-news-banner .pw-news-summary {font-size:14px;line-height:20px;margin-top:8px}
+.pwb .pw-news-banner .pw-news-entry:not(.is-lead) {padding-block:4px}
+.pwb .pw-news-entry:not(.is-lead) .pw-news-title {font-size:13px;line-height:20px}
+.pwb .pw-news-actions {display:flex;align-items:center;gap:12px;flex-shrink:0}
+.pwb .pw-news-banner .pw-news-lead {display:flex;align-items:center;gap:16px}
+.pwb .pw-news-image {width:clamp(72px,20cqw,128px);height:clamp(64px,16cqw,88px);object-position:center}
+.pwb .pw-pet {border-color:transparent;background:transparent;backdrop-filter:none}
+.pwb .pw-pet .pw-pet-main {padding:8px var(--pw-card-inset);gap:16px}
+.pwb .pw-pet-art {
+  background:radial-gradient(circle closest-side at 50% 43%,var(--pw-accent) 99%,transparent) center top / min(100%,136px) 112px no-repeat;
+}
+.pwb .pw-pet-copy h2 {font:700 24px/28px var(--pw-display)}
+.pwb .pw-pet-copy p {font-size:14px;line-height:20px}
+.pwb .pw-pet-copy .pw-pet-goal {font-size:12px;line-height:16px}
+.pwb .pw-assistant-list,.pwb .pw-project-list {display:grid;gap:8px;padding-bottom:8px}
+.pwb .pw-assistant-group,.pwb .pw-project-row,.pwb .pw-project-row:first-child {
+  min-width:0;border:0;border-top:1px solid var(--pw-line);border-radius:6px;background:var(--pw-tile);
+}
+.pwb .pw-assistant-group,.pwb .pw-assistant-group+.pw-assistant-group {margin-top:0;padding:8px}
+.pwb .pw-project-open {min-height:72px;padding:8px;gap:12px}
+.pwb .pw-project-icon {width:36px;height:36px;border-radius:6px}
+.pwb .pw-project-copy strong,.pwb .pw-assistant-heading strong {font-size:14px;font-weight:600;line-height:20px}
+.pwb .pw-project-copy small,.pwb .pw-assistant-detail {font-size:12px;line-height:16px}
+.pwb .pw-plan h2 {font:700 32px/1.05 var(--pw-display);letter-spacing:-.025em}
+.pwb .pw-plan .pw-progress {padding-block:8px 12px}
+.pwb .pw-plan-text,.pwb .pw-plan[data-density=compact] .pw-plan-text {font-size:14px;line-height:20px}
+.pwb .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row {gap:8px;padding-block:4px}
+.pwb .pw-layout-button,.pwb .pw-card-link,.pwb .pw-quiet-link {border-radius:0;min-height:28px;font-size:12px;font-weight:600}
+.pwb .pw-layout-button {min-height:32px;padding:4px 12px}
+.pwb .pw-layout-button.is-primary {border:0}
+.pwb .pw-card-link,.pwb .pw-plan .pw-card-link,.pwb .pw-assistant-heading .pw-quiet-link {color:var(--pw-ink)}
+.pwb .pw-card-link:hover,.pwb .pw-plan .pw-card-link:hover,.pwb .pw-quiet-link:hover {color:var(--pw-blue)}
+.pwb .pw-state {border-radius:9999px;padding:2px 6px;font-size:10px}
+.pwb .pw-segmented,.pwb .pw-calendar-grid button {border-radius:6px}
+.pwb button.pw-plan-check {border-radius:2px}
+.pwb .pw-progress-track {height:4px;border-radius:9999px}
+.pwb .pw-project-detail header button,.pwb .pw-requirement-controls button,.pwb .pw-project-detail textarea {border-radius:6px}
+@container pw-root (max-width:1050px) {
+  .pwb .pw-shell {--pw-gutter:24px}
+}
+@container pw-root (max-width:640px) {
+  .pwb .pw-shell {--pw-gutter:16px}
+  .pwb .pw-head {min-height:80px;gap:8px}
+  .pwb .pw-head-title {padding-inline-start:8px}
+  .pwb .pw-head-title h1 {font-size:24px}
+}
+@container pw-card (max-width:399px) {
+  .pwb .pw-card-content {--pw-card-inset:16px}
+  .pwb .pw-card-head,.pwb .pw-plan .pw-card-head {padding-block:12px 8px}
+  .pwb .pw-plan h2 {font-size:24px}
+  .pwb .pw-pet-copy h2 {font-size:18px;line-height:24px}
+  .pwb .pw-pet-copy p {font-size:12px;line-height:16px}
+  .pwb .pw-news-banner .pw-news-lead {gap:8px}
+  .pwb .pw-news-actions {gap:8px}
+}
+
 `;
     const gridStorageKey='dsh-personal-workbench:layout:v2';
     function gridReadPreferences() {
@@ -492,7 +541,7 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
       const viewport=React.useRef(null),gesture=React.useRef(null),current=React.useRef(null);
       const [saved,setSaved]=React.useState(gridReadPreferences),[draft,setDraft]=React.useState({}),[editing,setEditing]=React.useState(false),[active,setActive]=React.useState(null),[notice,setNotice]=React.useState('');
       const [size,setSize]=React.useState({width:0,height:0});
-      const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?12:16,row=Math.max(24,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
+      const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?12:profile.key==='medium'?16:24,row=Math.max(24,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
       const layout=gridNormalize((editing?draft:saved)[profile.key],profile);
       current.current={profile,gap,row,column,layout,editing};
       function stopGesture(cancel=false) {
