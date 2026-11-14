@@ -86,6 +86,84 @@ window.__ModuleLoader__.load({
       if(!response.ok || result.error) throw new Error(text(result.error) || '暂时无法读取，请稍后再试。');
       return Object.prototype.hasOwnProperty.call(result,'value') ? result.value : result;
     }
+    const dateInShanghai = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'});
+    const timeInShanghai = new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+    function assistantDate(value,today,includeTime=false) {
+      if(!value||!Number.isFinite(Date.parse(value)))return '';
+      const date=/^\d{4}-\d{2}-\d{2}$/.test(value)?value:dateInShanghai.format(new Date(value));
+      const yesterday=new Date(Date.parse(today)-86400000).toISOString().slice(0,10);
+      const tomorrow=new Date(Date.parse(today)+86400000).toISOString().slice(0,10);
+      const label=date===today?'今天':date===yesterday?'昨天':date===tomorrow?'明天':date.slice(0,4)===today.slice(0,4)?date.slice(5).replace('-','/'):date;
+      return includeTime?label+' '+timeInShanghai.format(new Date(value)):label;
+    }
+    const assistantReviewKey = 'dsh-personal-workbench:assistant-reviews:v1';
+    const failedRun = status => ['error','failed','interrupted'].includes(status);
+    const runTarget = run => run.original_id||run.topic_id||run.result_id;
+    function assistantOperations(monitor,today,now) {
+      const synced=monitor?.availability==='connected'&&(!monitor.checkedAt||now-Date.parse(monitor.checkedAt)<45000);
+      const runs=list(monitor?.items).filter(run=>activeStatus(run.status)||recent(run.updated_at,now)||failedRun(run.status))
+        .sort((a,b)=>Date.parse(b.updated_at)-Date.parse(a.updated_at));
+      const relevant=runs.filter(run=>!failedRun(run.status)||!runTarget(run)||!runs.some(next=>
+        next.status==='done'&&next.action_id===run.action_id&&runTarget(next)===runTarget(run)&&Date.parse(next.updated_at)>Date.parse(run.updated_at)));
+      const visible=[...relevant.filter(run=>activeStatus(run.status)),...relevant.filter(run=>failedRun(run.status)),
+        ...relevant.filter(run=>!activeStatus(run.status)&&!failedRun(run.status)&&dateInShanghai.format(new Date(run.updated_at))===today)];
+      const operation=visible.slice(0,5).map(run=>{
+        const queued=['queued','pending'].includes(run.status),active=activeStatus(run.status);
+        const date=assistantDate(active?run.started_at||run.created_at:run.updated_at,today,run.status==='done');
+        const timing=!date?'':active?date==='今天'?'':date+(queued?'排队':run.started_at?'开始':'提交'):date;
+        const state=!synced?'unknown':active?'active':failedRun(run.status)?'failed':run.status==='done'?'done':'unknown';
+        const label=!synced?'待同步':queued?'排队中':active?'进行中':run.status==='interrupted'?'已中断':failedRun(run.status)?'失败':run.status==='done'?'执行完成':'待确认';
+        const detail=text(run.error_message||run.message).replace(/(?:sk-|Bearer\s+)[A-Za-z0-9_-]{10,}/g,'[已隐藏]').slice(0,180);
+        return {id:run.id,title:runLabel(run),state,label,detail,timing:synced?timing:'',updatedAt:run.updated_at};
+      });
+      return {operation,synced};
+    }
+    function assistantReviewRows(results,reviewed) {
+      const known=new Map();
+      for(const row of results) {
+        if(typeof row?.key!=='string'||typeof row.title!=='string'||!safeHTTPS(row.url)||known.has(row.key))continue;
+        known.set(row.key,row);
+      }
+      const sorted=[...known.values()].sort((a,b)=>String(b.deliveredAt||b.updatedAt||b.date||'').localeCompare(String(a.deliveredAt||a.updatedAt||a.date||'')));
+      return {pending:sorted.filter(row=>!Object.hasOwn(reviewed,row.key)),history:sorted.filter(row=>Object.hasOwn(reviewed,row.key))};
+    }
+    function useAssistantReviews(scope,results) {
+      const storageKey=scope?assistantReviewKey+':'+scope:null;
+      const [revision,setRevision]=React.useState(0);
+      const [error,setError]=React.useState('');
+      function read() {
+        try { return storageKey?JSON.parse(localStorage.getItem(storageKey)||'{}'):{}; } catch {return {};}
+      }
+      const raw=read();
+      const rows=assistantReviewRows([...results,...list(raw?.results)],raw?.reviewed||{});
+      function save(marked) {
+        if(!storageKey)return false;
+        const current=read();
+        const reviewed={...current?.reviewed,...(marked?{[marked]:true}:{})};
+        const nextRows=assistantReviewRows([...results,...list(current?.results)],reviewed);
+        const history=nextRows.history.slice(0,30);
+        const next=JSON.stringify({results:[...nextRows.pending,...history],reviewed});
+        try {
+          if(localStorage.getItem(storageKey)!==next)localStorage.setItem(storageKey,next);
+          return true;
+        } catch {return false;}
+      }
+      React.useEffect(()=>{
+        if(rows.pending.length||rows.history.length)save();
+      },[storageKey,results,revision]);
+      React.useEffect(()=>{
+        function refresh(event){if(event.key===storageKey)setRevision(value=>value+1);}
+        window.addEventListener('storage',refresh);
+        return ()=>window.removeEventListener('storage',refresh);
+      },[storageKey]);
+      function mark(key) {
+        if(save(key)){
+          setRevision(value=>value+1);
+          setError('');
+        }else setError('本次验收未保存，请重试。');
+      }
+      return {...rows,mark:storageKey?mark:null,error};
+    }
     const productionCache=new Map();
     async function production(signal) {
       async function read(args) {
@@ -110,10 +188,11 @@ window.__ModuleLoader__.load({
             const record=cache&&Date.now()-cache.at<60000?cache.record:await read({action:'detail',kind:source[0],id:run.result_id});
             if(!record||text(record.id).toLowerCase()!==run.result_id.toLowerCase())return null;
             productionCache.set(key+':'+run.updated_at,{at:Date.now(),record});if(productionCache.size>30)productionCache.delete(productionCache.keys().next().value);
-            return {key,title:text(record.title).trim().slice(0,150)||'已生成内容',status:'已生成',updatedAt:run.updated_at,url:'https://www.pipeline.xin/workspace/task-pool/'+source[1]+'/'+run.result_id.toLowerCase()};
+            return {key:key+':'+run.id,title:text(record.title).trim().slice(0,150)||'已生成内容',status:'已生成',updatedAt:run.updated_at,url:'https://www.pipeline.xin/workspace/task-pool/'+source[1]+'/'+run.result_id.toLowerCase()};
           } catch(error){if(signal.aborted)throw error;resultsUnavailable=true;return null;}
         }))).filter(Boolean);
-        return {availability:'connected',items,results,resultsUnavailable,checkedAt:new Date().toISOString()};
+        return {availability:'connected',items,results,resultsUnavailable,checkedAt:new Date().toISOString(),
+          accountId:uuid.test(status.account?.id||'')?status.account.id.toLowerCase():null};
       } catch(error) {if(signal.aborted) throw error;return {availability:'unavailable',items:[]};}
     }
     function activityItems(data, monitor) {
@@ -158,10 +237,8 @@ window.__ModuleLoader__.load({
       return Array.from({length:mode==='month'?42:7},(_,i)=>{const value=new Date(start);value.setUTCDate(value.getUTCDate()+i);return value.toISOString().slice(0,10);});
     }
     function assistantOverview(monitor,now=Date.now()){
-      const synced=monitor?.availability==='connected'&&(!monitor.checkedAt||now-Date.parse(monitor.checkedAt)<45000),runs=list(monitor?.items).filter(run=>recent(run.updated_at,now)).sort((a,b)=>Number(activeStatus(b.status))-Number(activeStatus(a.status))||Date.parse(b.updated_at)-Date.parse(a.updated_at)).slice(0,5);
-      const clean=value=>text(value).replace(/(?:sk-|Bearer\s+)[A-Za-z0-9_-]{10,}/g,'[已隐藏]').slice(0,180);
-      const operation=runs.map(run=>({id:run.id,title:runLabel(run),state:!synced?'unknown':activeStatus(run.status)?'active':['error','failed','interrupted'].includes(run.status)?'failed':run.status==='done'?'done':'unknown',label:!synced?'待同步':run.status==='done'?'执行完成':run.status==='error'||run.status==='failed'?'失败':run.status==='interrupted'?'已中断':['queued','pending'].includes(run.status)?'排队中':activeStatus(run.status)?'进行中':'待确认',detail:clean(run.error_message||run.message)||(!synced?'暂时无法核对最新状态':'等待下一次进展'),updatedAt:run.updated_at}));
-      return {operation,synced};
+      const today=dateInShanghai.format(new Date(now));
+      return {...assistantOperations(monitor,today,now),today};
     }
     const PROJECT_SHORTCUTS_KEY='dsh-personal-workbench:project-shortcuts:v1';
     const PROJECT_NOTES_KEY='dsh-personal-workbench:project-notes:v1';
@@ -585,28 +662,26 @@ window.__ModuleLoader__.load({
 
 /* Compact cards keep their useful content visible within the saved grid. */
 .pwb .pw-operations-icon {width:24px;height:24px;object-fit:contain;flex:none}
-.pwb .pw-assistant-compact .pw-assistant-group {
-  display:grid;
-  grid-template-rows:24px minmax(20px,auto) 20px 24px;
-  row-gap:4px;
-  align-items:center;
-}
+.pwb .pw-assistant-compact .pw-assistant-group {display:grid;grid-template-rows:24px auto auto;row-gap:4px;align-items:start}
 .pwb .pw-assistant-compact .pw-assistant-heading {gap:8px;flex-wrap:nowrap;min-width:0}
 .pwb .pw-assistant-compact .pw-assistant-heading strong {white-space:nowrap}
 .pwb .pw-assistant-compact .pw-assistant-heading .pw-quiet-link {flex:none}
-.pwb .pw-assistant-status {display:flex;align-items:center;align-content:flex-start;align-self:stretch;gap:4px;flex-wrap:wrap;min-width:0}
-.pwb .pw-assistant-content {min-width:0;align-self:center}
-.pwb .pw-assistant-content .pw-assistant-content-title {
-  display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  text-align:start;font-size:13px;line-height:20px;
-}
-.pwb .pw-assistant-content button:hover {color:var(--pw-blue)}
-.pwb .pw-assistant-review {display:flex;align-items:center;min-width:0}
+.pwb .pw-assistant-field {display:grid;grid-template-columns:4em minmax(0,1fr);gap:8px;align-items:start;font-size:11px;line-height:20px;min-width:0}
+.pwb .pw-assistant-label,.pwb .pw-assistant-context,.pwb .pw-assistant-warning {color:var(--pw-muted)}
+.pwb .pw-assistant-status {display:flex;align-items:center;gap:3px 6px;flex-wrap:wrap;min-width:0}
+.pwb .pw-assistant-context,.pwb .pw-assistant-warning {overflow-wrap:anywhere}
+.pwb .pw-assistant-warning {color:var(--pw-orange)}
+.pwb .pw-assistant-review {display:grid;gap:4px;min-width:0}
+.pwb .pw-assistant-receipt {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 4px;min-width:0}
 .pwb .pw-assistant-review .pw-quiet-link {max-width:100%;min-width:0;color:var(--pw-blue);white-space:nowrap}
 .pwb .pw-assistant-result-name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pwb .pw-assistant-review .pw-assistant-receipt .pw-quiet-link {font-size:12px}
+.pwb .pw-assistant-receipt > small {grid-column:1/-1;line-height:15px;color:var(--pw-muted);overflow-wrap:anywhere}
+.pwb .pw-assistant-reviewed {display:grid;place-items:center;width:24px;height:24px;border:1px solid var(--pw-line);color:var(--pw-blue)}
+.pwb .pw-assistant-reviewed:hover {background:var(--pw-hover)}
 .pwb .pw-assistant-review-empty {color:var(--pw-muted);font-size:11px}
 @container pw-card (min-width:500px) {
-  .pwb .pw-assistant-compact .pw-assistant-group {grid-row:span 4;grid-template-rows:subgrid}
+  .pwb .pw-assistant-compact .pw-assistant-group {grid-row:span 3;grid-template-rows:subgrid}
 }
 .pwb .pw-assistant-compact .pw-assistant-task {padding:4px 0;margin-top:4px}
 .pwb .pw-assistant-compact .pw-assistant-task>div {gap:8px}
@@ -994,7 +1069,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         React.useEffect(()=>{const interval=setInterval(()=>{if(!document.hidden && root.current?.getClientRects().length && !reading.current)setTick(v=>v+1);},60000);return()=>clearInterval(interval);},[]);
         React.useEffect(()=>{
           const abort=new AbortController(),version=planVersion.current;reading.current=true;setLoading(true);
-          Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(previous=>version!==planVersion.current&&previous?.plan&&previous.plan.date===next.plan?.date?{...next,plan:previous.plan}:next);setMonitor(business);setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
+          Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(previous=>version!==planVersion.current&&previous?.plan&&previous.plan.date===next.plan?.date?{...next,plan:previous.plan}:next);setMonitor(previous=>business.availability==='unavailable'?{...previous,availability:'unavailable'}:business);setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
           return()=>{abort.abort();};
         },[tick]);
         async function saveTask(action,input) {
@@ -1038,6 +1113,8 @@ html[data-platform="darwin"] .pwb .pw-head {
         const checkedFor=task=>checks.get(task.id)??Boolean(task.checked);
         const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor),reader=feedURL;
         const assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
+        const operationReviews=useAssistantReviews(monitor?.accountId?'operations:'+monitor.accountId:null,
+          completed.filter(row=>row.key?.startsWith('original:')||row.key?.startsWith('rewrite:')));
         const hasAttention=attention.length>0&&!grid.editing;
         React.useLayoutEffect(()=>{
           const details=attentionRef.current, panel=root.current;
@@ -1124,11 +1201,6 @@ html[data-platform="darwin"] .pwb .pw-head {
           if(!rows.length)return h('p',{className:'pw-section-empty'},activityUnavailable?'进展尚未全部同步':attention.length?'等待处理的事项已列在上方':'暂时没有正在进行的事');
           return h('div',{className:'pw-activity-list'},rows.map(row=>h(row.destination?'button':'div',{key:row.key,className:'pw-activity-row',onClick:row.destination?()=>navigate(row.destination):undefined,'aria-label':row.destination?row.title+'，'+(row.destination.session?'打开对话':row.destination.panel==='redflow-workbench'?'打开内容工作台':'打开自动化任务'):undefined},h('span',{className:'pw-activity-icon'+(row.waiting?' is-waiting':'')},h(Icon,{name:row.waiting?'chat':'activity',size:15})),h('div',{className:'pw-activity-copy'},h('p',{className:'pw-activity-title',title:row.title},row.title),h('p',{className:'pw-activity-status'},h('span',{className:'pw-activity-owner'},row.owner),h('span',{className:row.waiting?'is-waiting':row.unknown?'is-unknown':'pw-running'},row.status))),row.destination&&h(Icon,{name:'chevron',size:12}))));
         }
-        function resultsBody(results) {
-          if(!data&&loading)return skeleton();
-          if(!results.length)return h('p',{className:'pw-section-empty'},monitor?.resultsUnavailable||monitor?.availability==='unavailable'?'成果暂时未能全部同步':'有可查看的成果时，会出现在这里');
-          return results.map(row=>h('a',{key:row.key,className:'pw-activity-row pw-result-row',href:row.url,target:'_blank',rel:'noopener noreferrer','aria-label':'查看成果：'+row.title},h('span',{className:'pw-activity-icon is-result'},h(Icon,{name:'check',size:14})),h('div',{className:'pw-activity-copy'},h('p',{className:'pw-activity-title',title:row.title},row.title),h('p',{className:'pw-activity-status'},row.status)),h(Icon,{name:'arrow',size:12})));
-        }
         function attentionSummary() {
           if(!attention.length)return null;
           return h('details',{className:'pw-attention',ref:attentionRef,onKeyDown:event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}},h('summary',{'aria-label':'需要你处理，'+attention.length+' 件事'},h('span',{className:'pw-attention-label'},'需要你处理 · '+attention.length),h(Icon,{name:'chevron',size:12})),h('div',{className:'pw-attention-popover'},attention.map(row=>h('article',{className:'pw-attention-item',key:row.key},h('div',{className:'pw-attention-item-top'},h('strong',null,row.title),h('span',{className:'pw-attention-tag'},row.status)),row.note&&h('p',null,row.note),row.destination?h('button',{className:'pw-quiet-link',onClick:event=>{event.currentTarget.closest('details').open=false;navigate(row.destination);}},row.action,h(Icon,{name:'arrow',size:11})):row.url?h('a',{className:'pw-quiet-link',href:row.url,target:'_blank',rel:'noopener noreferrer'},row.action,h(Icon,{name:'arrow',size:11})):null))));
@@ -1214,45 +1286,56 @@ html[data-platform="darwin"] .pwb .pw-head {
         function assistantBody() {
           const badge=(state,label)=>h('span',{key:label,className:'pw-state','data-state':state},label);
           const operations=assistants.operation;
-          const results=completed.filter(row=>row.key?.startsWith('original:')||row.key?.startsWith('rewrite:'));
           const openOperations=()=>navigate({panel:'redflow-workbench'});
-          const caption=(value,open)=>value&&h(open?'button':'span',{
-            className:'pw-assistant-content-title',title:value,onClick:open,type:open?'button':undefined
-          },value);
-          const review=(url,title)=>url&&h('a',{
-            className:'pw-quiet-link',href:url,target:'_blank',rel:'noopener noreferrer',
-            title,'aria-label':'验收结果：'+title
-          },'验收结果',h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11}));
-          function assistantCard({name,icon,status,content,result,open}) {
+          function receipt(row,mark,done=false) {
+            const {title,url,key}=row, when=row.deliveredAt||row.updatedAt;
+            const date=assistantDate(when||row.date,assistants.today,Boolean(when));
+            const state=[date?date+(when?' 交付':' 刊期'):'',done?'已验收':'待验收'].filter(Boolean).join(' · ');
+            return h('div',{className:'pw-assistant-receipt',key},
+              h('a',{className:'pw-quiet-link',href:safeHTTPS(url),target:'_blank',rel:'noopener noreferrer',title,
+                'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11})),
+              !done&&mark&&h('button',{type:'button',className:'pw-assistant-reviewed',onClick:()=>mark(key),
+                title:'标记已验收','aria-label':'标记已验收：'+title},h(Icon,{name:'check',size:13})),
+              h('small',null,state));
+          }
+          function assistantCard({name,icon,status,reviews,open}) {
+            const result=reviews.pending[0];
             return h('section',{className:'pw-assistant-group','aria-label':name},
               h('div',{className:'pw-assistant-heading'},icon,h('strong',null,name),
                 open&&h('button',{className:'pw-quiet-link',type:'button','aria-label':'打开'+name,onClick:open},'打开',h(Icon,{name:'arrow',size:11}))),
-              h('div',{className:'pw-assistant-status','aria-label':'状态'},status),
-              h('div',{className:'pw-assistant-content','aria-label':'内容'},content),
-              h('div',{className:'pw-assistant-review','aria-label':'验收'},
-                result||h('span',{className:'pw-assistant-review-empty'},'暂无验收结果')));
+              h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'当前状态'),
+                h('div',{className:'pw-assistant-status'},status)),
+              h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'验收结果'),
+                h('div',{className:'pw-assistant-review'},
+                  result?receipt(result,reviews.mark):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无待验收'),
+                  reviews.error&&h('span',{role:'status',className:'pw-assistant-warning'},reviews.error))));
           }
-          const primary=operations[0],latest=results[0];
+          const primary=operations[0];
           const operation=assistantCard({
             name:'运营助手',icon:h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),
-            status:primary?badge(primary.state,primary.label):
-              badge('unknown',assistants.synced?'暂无任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
-            content:caption(primary?.title||latest?.title,primary?openOperations:undefined),
-            result:latest&&review(latest.url,latest.title),open:openOperations
+            status:primary?h(React.Fragment,null,badge(primary.state,primary.label),
+              h('span',{className:'pw-assistant-context',title:primary.state==='failed'?primary.detail:undefined},
+                [primary.title,primary.timing].filter(Boolean).join(' · '))):
+              badge('unknown',assistants.synced?'暂无新任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
+            reviews:{...operationReviews,unavailable:monitor?.resultsUnavailable||monitor?.availability==='unavailable'},open:openOperations
           });
           const task=row=>h('button',{key:row.id,className:'pw-assistant-task',onClick:openOperations,title:row.state==='failed'?row.detail:undefined},
-            h('div',null,h('span',null,row.title),badge(row.state,row.label)));
+            h('div',null,h('span',null,[row.title,row.timing].filter(Boolean).join(' · ')),badge(row.state,row.label)));
           const current=rows[0];
-          const secondary=rows.length>0&&assistantCard({
+          const secondary=current&&assistantCard({
             name:'Harness 助手',icon:h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),
-            status:badge('active',rows.length+' 项进展'),
-            content:caption(current.title,current.destination?()=>navigate(current.destination):undefined)
+            status:h(React.Fragment,null,badge('active',rows.length+' 项进展'),h('span',{className:'pw-assistant-context'},current.title)),
+            reviews:{pending:[]},open:current.destination?()=>navigate(current.destination):null
           });
+          const queuedReviews=operationReviews.pending.slice(1).map(row=>receipt(row,operationReviews.mark));
+          const history=operationReviews.history.map(row=>receipt(row,null,true));
           return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,secondary,
-            (operations.length>1||results.length>1||rows.length>0)&&h('details',{className:'pw-assistant-more'},
+            (operations.length>1||queuedReviews.length>0||history.length>0||rows.length>0)&&h('details',{className:'pw-assistant-more'},
               h('summary',null,'更多任务与结果'),
               operations.slice(1).map(task),
-              results.length>1&&h('div',{className:'pw-assistant-results'},resultsBody(results.slice(1))),
+              queuedReviews.length>0&&h('div',{className:'pw-assistant-review pw-assistant-results'},queuedReviews),
+              history.length>0&&h('details',null,h('summary',null,'验收历史'),
+                h('div',{className:'pw-assistant-review pw-assistant-results'},history)),
               rows.length>0&&activityBody()));
         }
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
