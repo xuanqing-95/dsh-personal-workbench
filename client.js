@@ -125,7 +125,10 @@ window.__ModuleLoader__.load({
         known.set(row.key,row);
       }
       const sorted=[...known.values()].sort((a,b)=>String(b.deliveredAt||b.updatedAt||b.date||'').localeCompare(String(a.deliveredAt||a.updatedAt||a.date||'')));
-      return {pending:sorted.filter(row=>!Object.hasOwn(reviewed,row.key)),history:sorted.filter(row=>Object.hasOwn(reviewed,row.key))};
+      const wasReviewed=row=>Object.hasOwn(reviewed,row.key);
+      const latest=sorted[0];
+      return {latest:latest?{...latest,reviewed:wasReviewed(latest)}:null,
+        pending:sorted.filter(row=>!wasReviewed(row)),history:sorted.filter(wasReviewed)};
     }
     function useAssistantReviews(scope,results) {
       const storageKey=scope?assistantReviewKey+':'+scope:null;
@@ -162,7 +165,7 @@ window.__ModuleLoader__.load({
           setError('');
         }else setError('本次验收未保存，请重试。');
       }
-      return {...rows,mark:storageKey?mark:null,error};
+      return {latest:rows.latest,mark:storageKey?mark:null,error};
     }
     const productionCache=new Map();
     async function production(signal) {
@@ -668,7 +671,7 @@ window.__ModuleLoader__.load({
 .pwb .pw-assistant-field {display:grid;grid-template-columns:4em minmax(0,1fr);gap:8px;align-items:start;font-size:11px;line-height:20px;min-width:0}
 .pwb .pw-assistant-label,.pwb .pw-assistant-context,.pwb .pw-assistant-warning {color:var(--pw-muted)}
 .pwb .pw-assistant-status {display:flex;align-items:center;gap:3px 6px;flex-wrap:wrap;min-width:0}
-.pwb .pw-assistant-context,.pwb .pw-assistant-warning {overflow-wrap:anywhere}
+.pwb .pw-assistant-context,.pwb .pw-assistant-warning {overflow-wrap:anywhere;font-size:12px}
 .pwb .pw-assistant-warning {color:var(--pw-orange)}
 .pwb .pw-assistant-review {display:grid;gap:4px;min-width:0}
 .pwb .pw-assistant-receipt {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 4px;min-width:0}
@@ -1273,30 +1276,30 @@ html[data-platform="darwin"] .pwb .pw-head {
               activeMonth?'本月安排暂未同步，可点日期单独查看':'正在读取本月安排…'));
         }
         function assistantBody() {
-          const badge=(state,label)=>h('span',{key:label,className:'pw-state','data-state':state},label);
+          const badge=(state,label,title)=>h('span',{className:'pw-state','data-state':state,title},label);
           const operations=assistants.operation;
           const openOperations=()=>navigate({panel:'redflow-workbench'});
           function receipt(row,mark) {
-            const {title,url,key}=row, when=row.deliveredAt||row.updatedAt;
+            const {title,url,key,reviewed}=row, when=row.deliveredAt||row.updatedAt;
             const date=assistantDate(when||row.date,assistants.today,Boolean(when));
-            const state=[date?date+(when?' 交付':' 刊期'):'','待验收'].filter(Boolean).join(' · ');
+            const state=[date?date+(when?' 交付':' 刊期'):'',reviewed?'已验收':'待验收'].filter(Boolean).join(' · ');
             return h('div',{className:'pw-assistant-receipt',key},
               h('a',{className:'pw-quiet-link',href:safeHTTPS(url),target:'_blank',rel:'noopener noreferrer',title,
                 'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11})),
-              mark&&h('button',{type:'button',className:'pw-assistant-reviewed',onClick:()=>mark(key),
+              !reviewed&&mark&&h('button',{type:'button',className:'pw-assistant-reviewed',onClick:()=>mark(key),
                 title:'标记已验收','aria-label':'标记已验收：'+title},h(Icon,{name:'check',size:13})),
               h('small',null,state));
           }
           function assistantCard({name,icon,status,reviews,open}) {
-            const result=reviews.pending[0];
+            const result=reviews.latest;
             return h('section',{className:'pw-assistant-group','aria-label':name},
               h('div',{className:'pw-assistant-heading'},icon,h('strong',null,name),
                 open&&h('button',{className:'pw-quiet-link',type:'button','aria-label':'打开'+name,onClick:open},'打开',h(Icon,{name:'arrow',size:11}))),
               h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'当前状态'),
                 h('div',{className:'pw-assistant-status'},status)),
-              h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'验收结果'),
+              h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),
                 h('div',{className:'pw-assistant-review'},
-                  result?receipt(result,reviews.mark):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无待验收'),
+                  result?receipt(result,reviews.mark):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无结果'),
                   reviews.error&&h('span',{role:'status',className:'pw-assistant-warning'},reviews.error))));
           }
           const primary=operations[0];
@@ -1312,7 +1315,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           const secondary=current&&assistantCard({
             name:'Harness 助手',icon:h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),
             status:h(React.Fragment,null,badge('active',rows.length+' 项进展'),h('span',{className:'pw-assistant-context'},current.title)),
-            reviews:{pending:[]},open:current.destination?()=>navigate(current.destination):null
+            reviews:{},open:current.destination?()=>navigate(current.destination):null
           });
           return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,secondary);
         }
