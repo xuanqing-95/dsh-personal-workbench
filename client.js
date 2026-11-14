@@ -282,10 +282,16 @@ window.__ModuleLoader__.load({
 .pwb .pw-news-banner{background:linear-gradient(125deg,var(--pw-news),var(--pw-paper) 85%)}.pwb .pw-news-banner .pw-card-title h2{font-size:20px;letter-spacing:-.5px}.pwb .pw-news-banner .pw-news-list{padding-inline:21px}.pwb .pw-news-banner .pw-news-entry{padding:6px 0}.pwb .pw-news-banner .pw-news-entry.is-lead{background:transparent;padding:0 0 9px}.pwb .pw-news-banner .is-lead .pw-news-title{font-size:16px;line-height:1.4}.pwb .pw-news-banner .pw-news-summary{-webkit-line-clamp:1;margin-top:4px}.pwb .pw-news-banner .pw-news-date{font-size:10px}.pwb .pw-news-banner[data-folded=true] .pw-card-head{padding:4px 18px;min-height:100%;gap:9px}.pwb .pw-news-banner[data-folded=true] .pw-card-title h2{font-size:13px;white-space:nowrap}.pwb .pw-news-banner[data-folded=true] .pw-card-body,.pwb .pw-news-banner[data-folded=true] .pw-card-foot{display:none}.pwb .pw-folded-summary{font-size:10px;color:var(--pw-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pwb .pw-pet{background:linear-gradient(135deg,var(--pw-paper),color-mix(in srgb,var(--pw-plan) 80%,var(--pw-paper)))}.pwb .pw-pet-main{display:flex;align-items:center;gap:10px;padding:14px 18px 6px;flex:1;min-height:0;overflow:auto}.pwb .pw-pet-art{flex:0 0 104px;align-self:center}.pwb .pw-pet .hbc-launcher{width:104px!important;background:transparent;border:0;padding:0!important;color:var(--pw-muted)}.pwb .pw-pet .hbc-launcher svg{width:100px;height:100px}.pwb .pw-pet .hbc-launcher span{font-size:10px}.pwb .pw-pet-copy{min-width:0;flex:1}.pwb .pw-eyebrow{font-size:10px;letter-spacing:.5px;color:var(--pw-muted)}.pwb .pw-pet-copy h2{font-size:17px;letter-spacing:-.4px;line-height:1.5;margin:4px 0 5px}.pwb .pw-pet-copy p{font-size:11px;line-height:1.7;color:var(--pw-muted);overflow-wrap:anywhere}.pwb .pw-pet-copy .pw-pet-goal{color:var(--pw-plan-ink);font-size:10px;margin-top:8px}.pwb .pw-pet-goal span{font-weight:600;display:block;color:var(--pw-olive);margin-bottom:2px}.pwb .pw-pet-placeholder{font-size:10px;color:var(--pw-muted)}
 .pwb .pw-assistant-list{padding:0 21px 8px}.pwb .pw-assistant-group+.pw-assistant-group{border-top:1px solid var(--pw-line);padding-top:10px;margin-top:9px}.pwb .pw-assistant-heading{display:flex;align-items:center;gap:8px}.pwb .pw-assistant-heading strong{font-size:12px;font-weight:600}.pwb .pw-assistant-heading .pw-quiet-link{margin-left:auto;font-size:10px}.pwb .pw-assistant-avatar{width:25px;height:25px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--pw-news);color:var(--pw-blue);flex-shrink:0}.pwb .pw-assistant-avatar.is-news{color:var(--pw-olive);background:var(--pw-plan)}.pwb .pw-mini-meta{font-size:9px;color:var(--pw-muted)}.pwb button.pw-assistant-task{display:block;width:100%;text-align:left;padding:5px 0 2px 33px}.pwb .pw-assistant-task>div{display:flex;align-items:center;gap:8px;font-size:11px}.pwb .pw-assistant-task p,.pwb .pw-assistant-detail,.pwb .pw-assistant-empty{font-size:10px;color:var(--pw-muted);line-height:1.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pwb .pw-assistant-detail,.pwb .pw-assistant-empty{padding-left:33px;margin-top:3px}.pwb .pw-state{font-size:9px;line-height:1.5;border-radius:5px;padding:1px 5px;background:var(--pw-line);color:var(--pw-muted);white-space:nowrap}.pwb .pw-state[data-state=active]{color:var(--pw-blue);background:color-mix(in srgb,var(--pw-blue) 9%,transparent)}.pwb .pw-state[data-state=done]{color:var(--pw-olive);background:color-mix(in srgb,var(--pw-olive) 12%,transparent)}.pwb .pw-state[data-state=failed],.pwb .pw-state[data-state=attention]{color:var(--pw-orange);background:color-mix(in srgb,var(--pw-orange) 10%,transparent)}.pwb .pw-assistant-more{margin-top:10px;font-size:10px;color:var(--pw-muted)}.pwb .pw-assistant-more summary{cursor:pointer;padding:3px 0}.pwb .pw-assistant-more .pw-activity-list{padding:5px 0}.pwb .pw-assistant-results{padding-top:5px;border-top:1px solid var(--pw-line)}.pwb .pw-assistants .pw-card-foot{display:flex}
-.pwb .pw-project-list{padding:0 21px}.pwb .pw-project-row{display:flex;align-items:center;border-top:1px solid var(--pw-line)}.pwb .pw-project-row:first-child{border-top:0}.pwb .pw-project-open{display:flex;align-items:center;gap:12px;width:100%;min-width:0;text-align:left;padding:10px 0}.pwb .pw-project-icon{width:37px;height:37px;object-fit:contain;flex-shrink:0;border-radius:10px}.pwb .pw-project-icon.is-placeholder{display:flex;align-items:center;justify-content:center;color:var(--pw-blue);background:var(--pw-news)}.pwb .pw-project-copy{flex:1;min-width:0}.pwb .pw-project-copy strong{font-weight:550;font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pwb .pw-project-copy small{color:var(--pw-muted);font-size:10px;display:block;margin-top:3px}.pwb .pw-project-open>svg{color:var(--pw-muted)}.pwb .pw-project-remove{padding:8px;color:var(--pw-muted)}
+.pwb .pw-project-list{padding:0 21px}
+.pwb .pw-project-row{border-top:1px solid var(--pw-line)}
+.pwb .pw-project-row:first-child{border-top:0}
+.pwb .pw-project-open{width:100%;min-width:0;text-align:left}
+.pwb .pw-project-icon{object-fit:contain}
+.pwb .pw-project-icon.is-placeholder{display:flex;align-items:center;justify-content:center;color:var(--pw-blue);background:var(--pw-news)}
+.pwb .pw-project-remove{padding:8px;color:var(--pw-muted)}
 .pwb .pw-plan .pw-card-head{padding:20px 23px 10px}.pwb .pw-plan h2{font-size:27px}.pwb .pw-plan .pw-card-body{padding-inline:23px}.pwb .pw-plan .pw-progress{padding:9px 23px 13px}.pwb .pw-plan .pw-card-foot{margin-inline:23px}.pwb .pw-calendar{padding:0 23px;flex-shrink:0}.pwb .pw-calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px}.pwb .pw-segmented{display:flex;padding:2px;border-radius:8px;background:var(--pw-plan-line);gap:1px}.pwb .pw-segmented button{font-size:11px;min-width:27px;padding:3px 6px;border-radius:6px;color:var(--pw-plan-muted)}.pwb .pw-segmented button[aria-pressed=true]{background:var(--pw-paper);color:var(--pw-ink);box-shadow:0 1px 3px #0001}.pwb .pw-date-nav{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--pw-plan-muted)}.pwb .pw-date-nav button{min-width:23px;min-height:26px;border-radius:6px;font-size:18px}.pwb .pw-date-nav button:hover{background:var(--pw-plan-line)}.pwb .pw-date-nav .pw-today{font-size:10px}.pwb .pw-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin-top:9px}.pwb .pw-week-label{text-align:center;color:var(--pw-plan-muted);font-size:9px;padding-bottom:3px}.pwb .pw-calendar-grid button{border-radius:7px;min-height:25px;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}.pwb .pw-calendar-grid button i{width:3px;height:3px;border-radius:50%;background:transparent}.pwb .pw-calendar-grid button i.has-plan{background:var(--pw-olive)}.pwb .pw-calendar-grid button.is-today{color:var(--pw-blue);font-weight:650}.pwb .pw-calendar-grid button.is-outside{opacity:.4}.pwb .pw-calendar-grid button[aria-pressed=true]{background:var(--pw-olive);color:var(--pw-paper)}.pwb .pw-calendar-grid button[aria-pressed=true] i.has-plan{background:var(--pw-paper)}.pwb .pw-calendar-status{font-size:9px;color:var(--pw-plan-muted);padding-top:5px}
 .pwb .pw-modal-backdrop{position:absolute;inset:0;z-index:30;background:#0005;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px}.pwb .pw-project-dialog{background:var(--pw-paper);border:1px solid var(--pw-line);border-radius:20px;padding:24px;width:390px;max-width:100%;max-height:95%;overflow:auto;box-shadow:0 20px 70px #0003}.pwb .pw-project-dialog h2{font-size:20px}.pwb .pw-project-dialog>p{font-size:12px;color:var(--pw-muted);margin:7px 0 18px}.pwb .pw-project-dialog label{display:block;font-size:12px;margin-top:13px}.pwb .pw-project-dialog input,.pwb .pw-project-dialog select{display:block;width:100%;margin-top:6px;padding:9px 10px;background:var(--pw-bg);border:1px solid var(--pw-line);border-radius:8px;color:var(--pw-ink);font:inherit}.pwb .pw-project-dialog footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
-@container pw-card (max-width:400px){.pwb .pw-calendar{padding-inline:16px}.pwb .pw-date-nav{gap:3px;font-size:10px}.pwb .pw-pet-main{padding:12px;gap:4px}.pwb .pw-pet-art{flex-basis:80px}.pwb .pw-pet .hbc-launcher{width:80px!important}.pwb .pw-pet .hbc-launcher svg{width:78px;height:78px}.pwb .pw-pet-copy h2{font-size:15px}.pwb .pw-card .pw-card-title h2{font-size:15px}.pwb .pw-news-banner .pw-folded-summary{display:none}.pwb .pw-assistant-list,.pwb .pw-project-list{padding-inline:16px}.pwb .pw-project-copy strong{font-size:12px}}
+@container pw-card (max-width:400px){.pwb .pw-calendar{padding-inline:16px}.pwb .pw-date-nav{gap:3px;font-size:10px}.pwb .pw-pet-main{padding:12px;gap:4px}.pwb .pw-pet-art{flex-basis:80px}.pwb .pw-pet .hbc-launcher{width:80px!important}.pwb .pw-pet .hbc-launcher svg{width:78px;height:78px}.pwb .pw-pet-copy h2{font-size:15px}.pwb .pw-card .pw-card-title h2{font-size:15px}.pwb .pw-news-banner .pw-folded-summary{display:none}.pwb .pw-assistant-list,.pwb .pw-project-list{padding-inline:16px}}
 
 /* Match the warm paper background in the HOSHI ONE reference. */
 .pwb,.pwb[data-appearance=dark] {
@@ -364,8 +370,6 @@ window.__ModuleLoader__.load({
 
 .pwb .pw-project-row:focus-within,.pwb .pw-project-row:hover {background:var(--pw-hover)}
 .pwb .pw-project-open:focus-visible {outline-offset:-3px}
-.pwb .pw-project-open>svg {color:var(--pw-blue)}
-.pwb .pw-project-copy .pw-project-progress {white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pwb .pw-project-dialog.pw-project-detail {width:min(100%,540px);max-height:calc(100% - 24px);overflow:auto}
 .pwb .pw-project-detail header {display:flex;justify-content:space-between;align-items:center;gap:8px}
 .pwb .pw-project-detail header button,.pwb .pw-requirement-controls button {min-width:28px;min-height:28px;border:1px solid var(--pw-line);border-radius:7px}
@@ -477,10 +481,9 @@ window.__ModuleLoader__.load({
   min-width:0;border:0;border-top:1px solid var(--pw-line);border-radius:6px;background:var(--pw-tile);
 }
 .pwb .pw-assistant-group,.pwb .pw-assistant-group+.pw-assistant-group {margin-top:0;padding:8px}
-.pwb .pw-project-open {min-height:72px;padding:8px;gap:12px}
 .pwb .pw-project-icon {width:36px;height:36px;border-radius:6px}
-.pwb .pw-project-copy strong,.pwb .pw-assistant-heading strong {font-size:14px;font-weight:600;line-height:20px}
-.pwb .pw-project-copy small,.pwb .pw-assistant-detail {font-size:12px;line-height:16px}
+.pwb .pw-assistant-heading strong {font-size:14px;font-weight:600;line-height:20px}
+.pwb .pw-assistant-detail {font-size:12px;line-height:16px}
 .pwb .pw-plan .pw-progress {padding-block:8px 12px}
 .pwb .pw-plan-text,.pwb .pw-plan[data-density=compact] .pw-plan-text {font-size:14px;line-height:20px}
 .pwb .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row {gap:8px;padding-block:4px}
@@ -594,14 +597,54 @@ window.__ModuleLoader__.load({
 .pwb .pw-assistant-compact .pw-assistant-task>div {gap:8px}
 .pwb .pw-assistant-compact .pw-assistant-results {margin:4px 0 0}
 .pwb .pw-assistant-compact .pw-assistant-results .pw-activity-row {padding:4px 0;min-height:28px}
-.pwb .pw-project-copy .pw-project-requirement {
-  margin-top:6px;
-  padding-inline-start:8px;
-  border-inline-start:2px solid var(--pw-accent);
-  color:var(--pw-ink);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.pwb .pw-project-row { display: grid; position: relative; align-items: stretch; }
+.pwb .pw-project-open { display: grid; align-content: start; align-items: start; padding: 10px 12px; gap: 0; }
+.pwb .pw-project-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding-block-end: 5px;
+}
+.pwb .pw-project-heading .pw-project-icon { width: 28px; height: 28px; }
+.pwb .pw-project-heading strong {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+.pwb .pw-project-heading > svg { color: var(--pw-blue); }
+.pwb .pw-project-row:has(> .pw-project-remove) .pw-project-heading { padding-inline-end: 28px; }
+.pwb .pw-project-row > .pw-project-remove {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-end: 5px;
+  width: 30px;
+  height: 30px;
+}
+.pwb .pw-project-field {
+  display: grid;
+  grid-template-columns: 4em minmax(0,1fr);
+  align-items: start;
+  gap: 8px;
+  padding-block: 2px;
+  font-size: 12px;
+  line-height: 17px;
+}
+.pwb .pw-project-field-label { color: var(--pw-muted); }
+.pwb .pw-project-field-value { min-width: 0; overflow-wrap: anywhere; }
+.pwb .pw-project-field:is([data-field=progress],[data-field=requirements]) .pw-project-field-value {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pwb .pw-project-field[hidden] { display: none; }
+@container pw-card (min-width:500px) {
+  .pwb .pw-project-list { row-gap: 0; }
+  .pwb .pw-project-row,.pwb .pw-project-open { grid-template-rows: subgrid; grid-row: span 4; }
+  .pwb .pw-project-row { margin-block-end: 8px; }
+  .pwb .pw-project-field[hidden] { display: block; visibility: hidden; padding: 0; }
 }
 
 
@@ -1281,18 +1324,22 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         function projectBody() {
           if(!allProjects.length)return empty('把项目放在手边','添加项目后，可以直接回到它的开发对话。','grid');
+          const field=(key,label,value)=>h('span',{className:'pw-project-field','data-field':key,hidden:!value},
+            value&&h(React.Fragment,null,
+              h('span',{className:'pw-project-field-label'},label),
+              h('span',{className:'pw-project-field-value',title:value},value)));
           return h('div',{className:'pw-project-list'},allProjects.map(project=>{
             const pending=list(notes[project.id]?.requirements).filter(item=>!item.done);
             const latest=pending.reduce((last,item)=>!last||item.createdAt>=last.createdAt?item:last,null);
-            const count=pending.length,progress=projectProgress(project);
+            const progress=projectProgress(project);
             return h('div',{className:'pw-project-row',key:project.id},
               h('button',{className:'pw-project-open',onClick:event=>openProject(project,event),'aria-label':'查看项目：'+project.title},
-                project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':'grid',size:21})),
-                h('span',{className:'pw-project-copy'},h('strong',null,project.title),
-                  (project.version||count>0)&&h('small',null,[project.version?'v'+project.version:'',count?count+' 项待开发':''].filter(Boolean).join(' · ')),
-                  progress&&h('small',{className:'pw-project-progress',title:progress},progress),
-                  latest&&h('small',{className:'pw-project-requirement',title:latest.title},latest.title)),
-                h(Icon,{name:'chevron',size:13})),
+                h('span',{className:'pw-project-heading'},
+                  project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':'grid',size:21})),
+                  h('strong',null,project.title),h(Icon,{name:'chevron',size:13})),
+                field('version','版本',project.version&&'v'+project.version),
+                field('progress','最近进展',progress),
+                field('requirements','待开发',latest&&(pending.length>1?pending.length+' 项 · ':'')+latest.title)),
               project.source&&h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×'));
           }));
         }
