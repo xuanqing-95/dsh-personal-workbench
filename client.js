@@ -294,35 +294,32 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-modal-backdrop{position:absolute;inset:0;z-index:30;background:#0005;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px}.pwb .pw-project-dialog{background:var(--pw-paper);border:1px solid var(--pw-line);border-radius:20px;padding:24px;width:390px;max-width:100%;max-height:95%;overflow:auto;box-shadow:0 20px 70px #0003}.pwb .pw-project-dialog h2{font-size:20px}.pwb .pw-project-dialog>p{font-size:12px;color:var(--pw-muted);margin:7px 0 18px}.pwb .pw-project-dialog label{display:block;font-size:12px;margin-top:13px}.pwb .pw-project-dialog input,.pwb .pw-project-dialog select{display:block;width:100%;margin-top:6px;padding:9px 10px;background:var(--pw-bg);border:1px solid var(--pw-line);border-radius:8px;color:var(--pw-ink);font:inherit}.pwb .pw-project-dialog footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
 @container pw-card (max-width:400px){.pwb .pw-calendar{padding-inline:16px}.pwb .pw-date-nav{gap:3px;font-size:10px}.pwb .pw-pet-main{padding:12px;gap:4px}.pwb .pw-pet-art{flex-basis:80px}.pwb .pw-pet .hbc-launcher{width:80px!important}.pwb .pw-pet .hbc-launcher svg{width:78px;height:78px}.pwb .pw-pet-copy h2{font-size:15px}.pwb .pw-card .pw-card-title h2{font-size:15px}.pwb .pw-news-banner .pw-folded-summary{display:none}.pwb .pw-assistant-list,.pwb .pw-project-list{padding-inline:16px}.pwb .pw-project-copy strong{font-size:12px}}
 
-/* HOSHI ONE palette and glass treatment, adapted to the dashboard grid. */
+/* Match the warm paper background in the HOSHI ONE reference. */
 .pwb,.pwb[data-appearance=dark] {
-  --pw-bg:#000;
-  --pw-paper:#19191b;
-  --pw-glass:rgba(255,255,255,.085);
-  --pw-glass-edge:rgba(255,255,255,.17);
-  --pw-ink:#faf9f7;
-  --pw-muted:#c0bbba;
-  --pw-line:rgba(255,255,255,.14);
-  --pw-accent:#d81a1d;
-  --pw-blue:#ff8889;
-  --pw-hover:rgba(255,255,255,.075);
+  --pw-bg:#f2f0e8;
+  --pw-paper:#fbfaf6;
+  --pw-glass:rgba(255,255,255,.62);
+  --pw-glass-edge:rgba(255,255,255,.82);
+  --pw-ink:#111;
+  --pw-muted:#625d54;
+  --pw-line:rgba(17,17,17,.15);
+  --pw-accent:#d81b1e;
+  --pw-blue:#b31719;
+  --pw-hover:rgba(17,17,17,.055);
   --pw-plan:var(--pw-glass);
   --pw-plan-ink:var(--pw-ink);
   --pw-plan-muted:var(--pw-muted);
   --pw-plan-line:var(--pw-line);
   --pw-olive:var(--pw-accent);
-  --pw-news:rgba(255,255,255,.05);
-  --pw-orange:#f3bd50;
+  --pw-news:rgba(17,17,17,.045);
+  --pw-orange:#7c4a04;
   --pw-gold:#e9a514;
-  --pw-tile:rgba(255,255,255,.045);
+  --pw-tile:rgba(255,255,255,.30);
   --pw-on-accent:#fff;
   --pw-display:"Oswald","Arial Narrow","PingFang SC",-apple-system,sans-serif;
-  color-scheme:dark;
+  color-scheme:light;
   font-family:"Inter","PingFang SC",-apple-system,BlinkMacSystemFont,sans-serif;
-  background:
-    radial-gradient(ellipse at 80% 0%,#282629 0%,transparent 50%),
-    radial-gradient(ellipse at 9% 105%,#2b0c0d 0%,transparent 49%),
-    var(--pw-bg);
+  background:var(--pw-bg);
 }
 .pwb .pw-head-title h1 {font-family:var(--pw-display);font-size:34px;font-weight:700;line-height:1.1;letter-spacing:-.025em}
 .pwb .pw-head-title {position:relative;padding-inline-start:14px}
@@ -341,7 +338,7 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
     linear-gradient(145deg,rgba(255,255,255,.045),transparent 55%),
     var(--pw-glass);
   border-color:var(--pw-glass-edge);
-  box-shadow:0 16px 32px rgba(0,0,0,.2);
+  box-shadow:0 8px 24px rgba(30,25,15,.065);
   backdrop-filter:blur(12px);
 }
 .pwb .pw-card-title h2 {font-size:18px;font-weight:680}
@@ -353,9 +350,6 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-assistant-avatar,.pwb .pw-attention summary,.pwb .pw-segmented,.pwb .pw-calendar-grid button {border-radius:6px}
 .pwb .pw-project-dialog,.pwb .pw-attention-popover {border-radius:16px}
 .pwb .pw-project-dialog :is(input,select,textarea) {border-radius:6px}
-.pwb .pw-pet-art {
-  background:radial-gradient(ellipse at center,rgba(255,255,255,.22),transparent 68%);
-}
 .pwb .pw-card-link,.pwb .pw-layout-button,.pwb .pw-quiet-link {
   transition:color 150ms ease,background-color 150ms ease,border-color 150ms ease;
 }
