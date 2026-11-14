@@ -294,77 +294,77 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-modal-backdrop{position:absolute;inset:0;z-index:30;background:#0005;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px}.pwb .pw-project-dialog{background:var(--pw-paper);border:1px solid var(--pw-line);border-radius:20px;padding:24px;width:390px;max-width:100%;max-height:95%;overflow:auto;box-shadow:0 20px 70px #0003}.pwb .pw-project-dialog h2{font-size:20px}.pwb .pw-project-dialog>p{font-size:12px;color:var(--pw-muted);margin:7px 0 18px}.pwb .pw-project-dialog label{display:block;font-size:12px;margin-top:13px}.pwb .pw-project-dialog input,.pwb .pw-project-dialog select{display:block;width:100%;margin-top:6px;padding:9px 10px;background:var(--pw-bg);border:1px solid var(--pw-line);border-radius:8px;color:var(--pw-ink);font:inherit}.pwb .pw-project-dialog footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
 @container pw-card (max-width:400px){.pwb .pw-calendar{padding-inline:16px}.pwb .pw-date-nav{gap:3px;font-size:10px}.pwb .pw-pet-main{padding:12px;gap:4px}.pwb .pw-pet-art{flex-basis:80px}.pwb .pw-pet .hbc-launcher{width:80px!important}.pwb .pw-pet .hbc-launcher svg{width:78px;height:78px}.pwb .pw-pet-copy h2{font-size:15px}.pwb .pw-card .pw-card-title h2{font-size:15px}.pwb .pw-news-banner .pw-folded-summary{display:none}.pwb .pw-assistant-list,.pwb .pw-project-list{padding-inline:16px}.pwb .pw-project-copy strong{font-size:12px}}
 
-/* Neutral frosted surfaces over the mint backdrop. */
-.pwb {
-  --pw-bg:#eaf4f2;
-  --pw-paper:#f6f6f6;
-  --pw-glass:rgba(255,255,255,.80);
-  --pw-glass-edge:rgba(255,255,255,.88);
-  --pw-ambient:rgba(145,202,186,.36);
-  --pw-glow:rgba(223,239,209,.53);
-  --pw-ink:#142b2a;
-  --pw-muted:#536a68;
-  --pw-line:rgba(47,53,52,.14);
-  --pw-blue:#076e68;
-  --pw-hover:#e5f3ef;
+/* HOSHI ONE palette and glass treatment, adapted to the dashboard grid. */
+.pwb,.pwb[data-appearance=dark] {
+  --pw-bg:#000;
+  --pw-paper:#19191b;
+  --pw-glass:rgba(255,255,255,.085);
+  --pw-glass-edge:rgba(255,255,255,.17);
+  --pw-ink:#faf9f7;
+  --pw-muted:#c0bbba;
+  --pw-line:rgba(255,255,255,.14);
+  --pw-accent:#d81a1d;
+  --pw-blue:#ff8889;
+  --pw-hover:rgba(255,255,255,.075);
   --pw-plan:var(--pw-glass);
   --pw-plan-ink:var(--pw-ink);
   --pw-plan-muted:var(--pw-muted);
   --pw-plan-line:var(--pw-line);
-  --pw-olive:#08746a;
-  --pw-news:#e2f3ef;
-  --pw-orange:#865316;
-  --pw-gold:#ffcb54;
-  --pw-tile:rgba(255,255,255,.42);
+  --pw-olive:var(--pw-accent);
+  --pw-news:rgba(255,255,255,.05);
+  --pw-orange:#f3bd50;
+  --pw-gold:#e9a514;
+  --pw-tile:rgba(255,255,255,.045);
   --pw-on-accent:#fff;
-  --pw-shadow:0 5px 18px #164b4113;
+  --pw-display:"Oswald","Arial Narrow","PingFang SC",-apple-system,sans-serif;
+  color-scheme:dark;
+  font-family:"Inter","PingFang SC",-apple-system,BlinkMacSystemFont,sans-serif;
   background:
-    radial-gradient(ellipse at 93% 13%,var(--pw-glow),transparent 47%),
-    radial-gradient(ellipse at 15% 38%,var(--pw-ambient),transparent 61%),
-    radial-gradient(ellipse at 85% 96%,var(--pw-ambient),transparent 58%),
+    radial-gradient(ellipse at 80% 0%,#282629 0%,transparent 50%),
+    radial-gradient(ellipse at 9% 105%,#2b0c0d 0%,transparent 49%),
     var(--pw-bg);
 }
-.pwb[data-appearance=dark] {
-  --pw-bg:#122220;
-  --pw-paper:#2e2e2e;
-  --pw-glass:rgba(255,255,255,.13);
-  --pw-glass-edge:rgba(255,255,255,.20);
-  --pw-ambient:rgba(65,128,108,.26);
-  --pw-glow:rgba(125,131,77,.14);
-  --pw-ink:#eef8f5;
-  --pw-muted:#aec6be;
-  --pw-line:rgba(255,255,255,.17);
-  --pw-blue:#88dec9;
-  --pw-hover:#25443c;
-  --pw-plan:var(--pw-glass);
-  --pw-plan-ink:var(--pw-ink);
-  --pw-plan-muted:var(--pw-muted);
-  --pw-plan-line:var(--pw-line);
-  --pw-olive:#88dec9;
-  --pw-news:#284a41;
-  --pw-orange:#ffcc85;
-  --pw-gold:#ffd577;
-  --pw-tile:rgba(255,255,255,.07);
-  --pw-on-accent:#102e26;
-  --pw-shadow:0 5px 20px #0003;
+.pwb .pw-head-title h1 {font-family:var(--pw-display);font-size:34px;font-weight:700;line-height:1.1;letter-spacing:-.025em}
+.pwb .pw-head-title {position:relative;padding-inline-start:14px}
+.pwb .pw-head-title::before {
+  content:"";
+  position:absolute;
+  inset:3px auto 3px 0;
+  width:3px;
+  border-radius:2px;
+  background:var(--pw-accent);
 }
-.pwb .pw-head h1 {font-size:29px;font-weight:700;letter-spacing:-.9px}
-.pwb .pw-date {font-size:12px;font-weight:500}
+.pwb .pw-date {font-size:12px;font-weight:500;font-variant-numeric:tabular-nums}
 .pwb .pw-card {
-  border-radius:0;
-  background:var(--pw-glass);
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.045),transparent 55%),
+    var(--pw-glass);
   border-color:var(--pw-glass-edge);
-  box-shadow:var(--pw-shadow);
-  backdrop-filter:blur(18px) saturate(74%);
+  box-shadow:0 16px 32px rgba(0,0,0,.2);
+  backdrop-filter:blur(12px);
 }
 .pwb .pw-card-title h2 {font-size:18px;font-weight:680}
 .pwb .pw-card-title>svg {color:var(--pw-blue)}
 .pwb .pw-card-foot {font-size:11px}
-.pwb .pw-layout-button {border-radius:11px;font-weight:550}
-.pwb .pw-layout-button.is-primary {color:var(--pw-on-accent)}
+.pwb .pw-layout-button {border-radius:6px;font-weight:600}
+.pwb .pw-layout-button.is-primary {background:var(--pw-accent);border-color:var(--pw-accent);color:var(--pw-on-accent)}
+.pwb .pw-layout-button.is-primary:hover {background:#c71619}
+.pwb .pw-assistant-avatar,.pwb .pw-attention summary,.pwb .pw-segmented,.pwb .pw-calendar-grid button {border-radius:6px}
+.pwb .pw-project-dialog,.pwb .pw-attention-popover {border-radius:16px}
+.pwb .pw-project-dialog :is(input,select,textarea) {border-radius:6px}
+.pwb .pw-pet-art {
+  background:radial-gradient(ellipse at center,rgba(255,255,255,.22),transparent 68%);
+}
+.pwb .pw-card-link,.pwb .pw-layout-button,.pwb .pw-quiet-link {
+  transition:color 150ms ease,background-color 150ms ease,border-color 150ms ease;
+}
+@media(prefers-reduced-motion:reduce) {
+  .pwb .pw-card-link,.pwb .pw-layout-button,.pwb .pw-quiet-link {transition:none}
+}
 
 .pwb .pw-news-banner .pw-card-content {position:relative;isolation:isolate}
-.pwb .pw-news-banner .pw-card-title h2 {font-size:14px;letter-spacing:.1px}
+.pwb .pw-news-banner .pw-card-title h2 {font-size:16px;font-weight:650}
 .pwb .pw-news-banner .pw-card-title>svg {width:16px;height:16px;color:var(--pw-blue)}
 .pwb .pw-news-banner .pw-card-link {color:var(--pw-ink)}
 .pwb .pw-news-banner .pw-card-link:hover {color:var(--pw-blue)}
@@ -398,22 +398,21 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
   min-width:0;
   padding:7px 10px;
   border:1px solid var(--pw-line);
-  border-radius:0;
+  border-radius:6px;
   background:var(--pw-tile);
 }
 .pwb .pw-assistant-group+.pw-assistant-group {margin-top:0;padding-top:7px}
 .pwb .pw-assistant-avatar.is-news {color:var(--pw-orange);background:color-mix(in srgb,var(--pw-gold) 24%,var(--pw-paper))}
 .pwb .pw-assistant-heading .pw-quiet-link {padding-inline:3px;color:var(--pw-blue);white-space:nowrap}
 .pwb .pw-state {border-radius:99px;padding:2px 6px;font-size:10px}
-.pwb .pw-state[data-state=failed] {background:#c8513420;color:#a33725}
-.pwb[data-appearance=dark] .pw-state[data-state=failed] {color:#ffb9a5}
+.pwb .pw-state[data-state=failed] {background:rgba(216,26,29,.17);color:var(--pw-blue)}
 .pwb .pw-assistant-more {margin-top:0}
 
 .pwb .pw-project-list {display:grid;gap:7px;padding-bottom:5px}
 .pwb .pw-project-row,.pwb .pw-project-row:first-child {
   min-width:0;
   border:1px solid var(--pw-line);
-  border-radius:0;
+  border-radius:6px;
   background:var(--pw-tile);
 }
 .pwb .pw-project-row:focus-within,.pwb .pw-project-row:hover {background:var(--pw-hover)}
@@ -441,14 +440,14 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
   .pwb .pw-project-icon {width:39px;height:39px}
 }
 
-.pwb .pw-plan h2 {font:700 25px/1.2 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;letter-spacing:-.5px}
+.pwb .pw-plan h2 {font:700 25px/1.2 var(--pw-display);letter-spacing:-.5px}
 .pwb .pw-plan .pw-card-link {color:var(--pw-blue)}
 .pwb .pw-plan-view {display:flex;flex:1;min-height:0;flex-direction:column}
 .pwb .pw-plan-view[data-mode=month] {overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent}
 .pwb .pw-plan-view[data-mode=month]>.pw-card-body {flex:0 0 auto;overflow:visible}
 .pwb .pw-segmented {background:var(--pw-tile);border:1px solid var(--pw-line);border-radius:10px}
 .pwb .pw-segmented button {min-height:24px}
-.pwb .pw-segmented button[aria-pressed=true] {background:var(--pw-blue);color:var(--pw-on-accent);box-shadow:none}
+.pwb .pw-segmented button[aria-pressed=true] {background:var(--pw-accent);color:var(--pw-on-accent);box-shadow:none}
 .pwb .pw-date-nav>span {color:var(--pw-ink);font-weight:650;white-space:nowrap}
 .pwb .pw-date-nav .pw-today {padding:0 5px;color:var(--pw-blue)}
 .pwb .pw-calendar-grid {row-gap:4px}
@@ -457,17 +456,17 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-calendar-grid button:hover {background:var(--pw-hover)}
 .pwb .pw-calendar-grid button[aria-pressed=true] {background:transparent;color:var(--pw-ink);font-weight:700}
 .pwb .pw-calendar-grid button[aria-pressed=true] > span {background:var(--pw-olive);color:var(--pw-on-accent)}
-.pwb .pw-calendar-grid button.is-today:not([aria-pressed=true]) > span {background:var(--pw-gold);color:#372a12}
-.pwb .pw-calendar-grid button[aria-pressed=true] i.has-plan {background:var(--pw-olive)}
+.pwb .pw-calendar-grid button.is-today:not([aria-pressed=true]) > span {background:var(--pw-gold);color:#111}
+.pwb .pw-calendar-grid button[aria-pressed=true] i.has-plan {background:var(--pw-blue)}
 .pwb .pw-calendar-grid button.is-outside {color:var(--pw-muted);opacity:.72}
 .pwb .pw-week-label {font-size:10px;font-weight:600}
 .pwb .pw-plan .pw-progress {padding-block:8px 10px}
 .pwb .pw-progress-value {background:var(--pw-olive)}
 .pwb .pw-plan-row.is-done .pw-plan-check {color:var(--pw-on-accent)}
-.pwb .pw-group-title {color:var(--pw-blue);font-weight:650}
+.pwb .pw-group-title {color:var(--pw-muted);font-weight:650}
 .pwb .pw-plan-note.quote {background:var(--pw-tile);border-radius:0 6px 6px 0;padding-block:3px}
 @container pw-root (max-width:520px) {
-  .pwb .pw-head h1 {font-size:19px}
+  .pwb .pw-head-title h1 {font-size:21px}
 }
 @container pw-card (max-width:399px) {
   .pwb .pw-plan h2 {font-size:21px}
