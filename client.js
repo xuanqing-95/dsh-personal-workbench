@@ -407,7 +407,6 @@ html[data-platform="darwin"] .pwb .pw-head{padding-inline-start:max(0px,calc(var
 .pwb .pw-calendar-grid button[aria-pressed=true] {background:transparent;color:var(--pw-ink);font-weight:700}
 .pwb .pw-calendar-grid button[aria-pressed=true] > span {background:var(--pw-olive);color:var(--pw-on-accent)}
 .pwb .pw-calendar-grid button.is-today:not([aria-pressed=true]) > span {background:var(--pw-gold);color:#111}
-.pwb .pw-calendar-grid button[aria-pressed=true] i.has-plan {background:var(--pw-blue)}
 .pwb .pw-calendar-grid button.is-outside {color:var(--pw-muted);opacity:.72}
 .pwb .pw-week-label {font-size:10px;font-weight:600}
 .pwb .pw-progress-value {background:var(--pw-olive)}
@@ -498,7 +497,6 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-project-icon {width:36px;height:36px;border-radius:6px}
 .pwb .pw-project-copy strong,.pwb .pw-assistant-heading strong {font-size:14px;font-weight:600;line-height:20px}
 .pwb .pw-project-copy small,.pwb .pw-assistant-detail {font-size:12px;line-height:16px}
-.pwb .pw-plan h2 {font:700 32px/1.05 var(--pw-display);letter-spacing:-.025em}
 .pwb .pw-plan .pw-progress {padding-block:8px 12px}
 .pwb .pw-plan-text,.pwb .pw-plan[data-density=compact] .pw-plan-text {font-size:14px;line-height:20px}
 .pwb .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row {gap:8px;padding-block:4px}
@@ -524,11 +522,40 @@ html[data-platform="darwin"] .pwb .pw-head {
 @container pw-card (max-width:399px) {
   .pwb .pw-card-content {--pw-card-inset:16px}
   .pwb .pw-card-head,.pwb .pw-plan .pw-card-head {padding-block:12px 8px}
-  .pwb .pw-plan h2 {font-size:24px}
   .pwb .pw-pet-copy h2 {font-size:18px;line-height:24px}
   .pwb .pw-pet-copy p {font-size:12px;line-height:16px}
   .pwb .pw-news-banner .pw-news-lead {gap:8px}
   .pwb .pw-news-actions {gap:8px}
+}
+
+.pwb .pw-plan .pw-card-head {align-items:center}
+.pwb .pw-plan h2 {font:600 18px/28px var(--pw-display);letter-spacing:0}
+.pwb .pw-plan .pw-card-head .pw-segmented {flex-shrink:0}
+.pwb .pw-calendar .pw-date-nav {justify-content:flex-start;margin-bottom:8px;gap:4px}
+.pwb .pw-calendar .pw-date-nav .pw-today {margin-inline-start:auto}
+.pwb .pw-calendar-grid[data-mode=month] {gap:0}
+.pwb .pw-calendar-grid[data-mode=month] .pw-week-label {padding-block:4px}
+.pwb .pw-calendar-grid[data-mode=month] button {
+  min-width:0;
+  min-height:40px;
+  align-items:flex-start;
+  justify-content:flex-start;
+  padding:2px 4px;
+  border:1px solid var(--pw-line);
+  border-inline-end:0;
+  border-bottom:0;
+  border-radius:0;
+}
+.pwb .pw-calendar-grid[data-mode=month] button:nth-child(7n) {border-inline-end:1px solid var(--pw-line)}
+.pwb .pw-calendar-grid[data-mode=month] button:nth-last-child(-n+7) {border-bottom:1px solid var(--pw-line)}
+.pwb .pw-calendar-grid[data-mode=month] button[aria-pressed=true] {background:var(--pw-hover);box-shadow:inset 0 0 0 1px var(--pw-accent)}
+.pwb .pw-calendar-grid .pw-calendar-number {min-width:20px;line-height:16px}
+.pwb .pw-calendar-marker {color:var(--pw-blue);font-size:9px;line-height:11px;white-space:nowrap}
+.pwb .pw-plan .pw-selected-plan {margin:12px var(--pw-card-inset) 0;font-size:13px;font-weight:600}
+.pwb .pw-plan .pw-progress-count {white-space:nowrap}
+.pwb .pw-plan-view[data-mode=day] .pw-progress-count {order:-1;color:var(--pw-ink);font-weight:600}
+@container pw-card (max-width:399px) {
+  .pwb .pw-plan h2 {font-size:18px}
 }
 
 `;
@@ -719,7 +746,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const projectTrigger=React.useRef(null);
         React.useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
         React.useEffect(()=>{if(viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick]);
-        React.useEffect(()=>{if(calendarMode==='day')return;const abort=new AbortController();setMonthData(null);api('calendar',abort.signal,{month:monthKey}).then(value=>{if(!abort.signal.aborted)setMonthData(value);}).catch(()=>{if(!abort.signal.aborted)setMonthData({month:monthKey,availability:'unavailable',days:{}});});return()=>abort.abort();},[monthKey,calendarMode,tick]);
+        React.useEffect(()=>{if(calendarMode!=='month')return;const abort=new AbortController();api('calendar',abort.signal,{month:monthKey}).then(value=>{if(!abort.signal.aborted)setMonthData(value);}).catch(()=>{if(!abort.signal.aborted)setMonthData({month:monthKey,availability:'unavailable',days:{}});});return()=>abort.abort();},[monthKey,calendarMode,tick]);
         React.useEffect(()=>{
           let stopped=false,busy=false,abort;
           async function refreshAssistants(){if(stopped||busy||document.hidden||!root.current?.getClientRects().length||reading.current)return;busy=true;abort=new AbortController();
@@ -852,22 +879,55 @@ html[data-platform="darwin"] .pwb .pw-head {
           return h('details',{className:'pw-attention',onKeyDown:event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}},h('summary',{'aria-label':'需要你处理，'+attention.length+' 件事'},h('span',{className:'pw-attention-label'},'需要你处理 · '+attention.length),h('span',{className:'pw-attention-preview'},attention[0].title),h(Icon,{name:'chevron',size:12})),h('div',{className:'pw-attention-popover'},attention.map(row=>h('article',{className:'pw-attention-item',key:row.key},h('div',{className:'pw-attention-item-top'},h('strong',null,row.title),h('span',{className:'pw-attention-tag'},row.status)),row.note&&h('p',null,row.note),row.destination?h('button',{className:'pw-quiet-link',onClick:event=>{event.currentTarget.closest('details').open=false;navigate(row.destination);}},row.action,h(Icon,{name:'arrow',size:11})):row.url?h('a',{className:'pw-quiet-link',href:row.url,target:'_blank',rel:'noopener noreferrer'},row.action,h(Icon,{name:'arrow',size:11})):null))));
         }
         function toggleBrief(){const next=newsFolded?'':today;setFoldedDay(next);try{localStorage.setItem('dsh-personal-workbench:brief-folded-day',JSON.stringify(next));}catch{setError('收起状态仅在本次打开时保留');}}
-        function shiftDate(direction){const date=new Date(viewDate+'T12:00:00Z');if(calendarMode==='month'){date.setUTCDate(1);date.setUTCMonth(date.getUTCMonth()+direction);}else date.setUTCDate(date.getUTCDate()+direction*(calendarMode==='week'?7:1));const value=date.toISOString().slice(0,10);if(/^20/.test(value))setSelectedDate(value);}
-        function calendarHeader(){
-          const days=calendarDates(viewDate,calendarMode),known=monthData?.month===monthKey&&monthData.availability==='connected';
+        function planViewSelector() {
+          return h('div',{className:'pw-segmented',role:'group','aria-label':'计划视图'},
+            [['day','日'],['week','周'],['month','月']].map(([value,label])=>h('button',{
+              key:value,type:'button','aria-pressed':calendarMode===value,onClick:()=>{
+                if(value==='day')setSelectedDate('');
+                setCalendarMode(value);
+              }
+            },label)));
+        }
+        function shiftCalendar(direction) {
+          const date=new Date(viewDate+'T12:00:00Z');
+          if(calendarMode==='month'){
+            date.setUTCDate(1);
+            date.setUTCMonth(date.getUTCMonth()+direction);
+          }else date.setUTCDate(date.getUTCDate()+direction*7);
+          const value=date.toISOString().slice(0,10);
+          if(/^20/.test(value))setSelectedDate(value);
+        }
+        function calendarHeader() {
+          if(calendarMode==='day')return null;
+          const days=calendarDates(viewDate,calendarMode),monthView=calendarMode==='month',unit=monthView?'月':'周';
+          const activeMonth=monthData?.month===monthKey?monthData:null;
+          const monthTitle=Number(monthKey.slice(0,4))+' 年 '+Number(monthKey.slice(5))+' 月';
+          const shortDate=date=>Number(date.slice(5,7))+' 月 '+Number(date.slice(8))+' 日';
+          const range=monthView?monthTitle:shortDate(days[0])+' – '+shortDate(days[6]);
           return h('div',{className:'pw-calendar'},
-            h('div',{className:'pw-calendar-toolbar'},h('div',{className:'pw-segmented','aria-label':'计划视图'},[['day','日'],['week','周'],['month','月']].map(([value,label])=>h('button',{key:value,'aria-pressed':calendarMode===value,onClick:()=>setCalendarMode(value)},label))),h('div',{className:'pw-date-nav'},h('button',{onClick:()=>shiftDate(-1),'aria-label':'上一'+(calendarMode==='month'?'月':calendarMode==='week'?'周':'天')},'‹'),h('span',null,calendarMode==='month'?monthKey.replace('-',' 年 ')+' 月':viewDate.slice(5).replace('-','月')+'日'),h('button',{onClick:()=>shiftDate(1),'aria-label':'下一'+(calendarMode==='month'?'月':calendarMode==='week'?'周':'天')},'›'),h('button',{className:'pw-today',onClick:()=>setSelectedDate('')},'今天'))),
-            h('div',{className:'pw-calendar-grid','data-mode':calendarMode},
-              ['一','二','三','四','五','六','日'].map(value=>h('span',{key:value,className:'pw-week-label'},value)),
+            h('div',{className:'pw-date-nav'},
+              h('button',{type:'button',onClick:()=>shiftCalendar(-1),'aria-label':'上一'+unit},'‹'),
+              h('span',{'aria-live':'polite'},range),
+              h('button',{type:'button',onClick:()=>shiftCalendar(1),'aria-label':'下一'+unit},'›'),
+              h('button',{type:'button',className:'pw-today',onClick:()=>setSelectedDate('')},'今天')),
+            h('div',{className:'pw-calendar-grid','data-mode':calendarMode,role:'group','aria-label':monthView?'月历':'本周日期'},
+              ['一','二','三','四','五','六','日'].map(value=>h('span',{key:value,className:'pw-week-label','aria-hidden':true},value)),
               days.map(date=>{
-                const hasPlan=calendarMode!=='day'&&known&&monthData.days?.[date]?.status==='available';
+                const selected=date===viewDate,outside=monthView&&date.slice(0,7)!==monthKey;
+                const record=outside||!monthView?null:activeMonth?.days?.[date];
+                const count=selected&&(planConnected||planEmpty)?planItems.length:record?.count;
+                const hasPlan=Number.isInteger(count)?count>0:record?.status==='available';
+                const marker=hasPlan&&(Number.isInteger(count)?count+' 项':'·');
                 return h('button',{
-                  key:date,'aria-label':date+(hasPlan?'，有计划':''),'aria-pressed':date===viewDate,
-                  className:(date.slice(0,7)!==monthKey?'is-outside ':'')+(date===today?'is-today':''),
-                  onClick:()=>setSelectedDate(date),title:hasPlan?'有计划，点击查看':'查看这天的计划'
-                },h('span',null,Number(date.slice(8))),h('i',{className:hasPlan?'has-plan':''}));
+                  key:date,type:'button','aria-label':date+(hasPlan?Number.isInteger(count)?'，'+count+' 项待办':'，有计划':''),
+                  'aria-pressed':selected,'aria-current':date===today?'date':undefined,
+                  className:(outside?'is-outside ':'')+(date===today?'is-today':''),
+                  onClick:()=>setSelectedDate(date)
+                },h('span',{className:'pw-calendar-number'},Number(date.slice(8))),
+                  monthView&&marker&&h('small',{className:'pw-calendar-marker','aria-hidden':true},marker));
               })),
-            calendarMode!=='day'&&h('p',{className:'pw-calendar-status'},!monthData?'正在读取月份安排…':!known?'月份标记暂未同步，仍可逐日查看':'圆点表示当天有待办'));
+            monthView&&activeMonth?.availability!=='connected'&&h('p',{className:'pw-calendar-status',role:'status'},
+              activeMonth?'月份标记暂未同步，仍可点击日期查看':'正在读取本月安排…'));
         }
         function assistantBody(){
           return h('div',{className:'pw-assistant-list'},
@@ -1003,9 +1063,10 @@ html[data-platform="darwin"] .pwb .pw-head {
             h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'activity'}),h('h2',null,'AI 助手')),h('span',{className:'pw-count'},'帮你盯着进度')),h('div',{className:'pw-card-body'},assistantBody()),h('footer',{className:'pw-card-foot'},h('span',null,'近期内容任务与 Harness 对话'),h('span',null,assistants.synced?'同步于 '+clock(monitor?.checkedAt):'内容平台未连接或暂不可用')))),
             h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'grid'}),h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',progress:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
             h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
-              h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},viewDate===today?'今日计划':'每日计划'),h('span',{className:'pw-count'},'我的待办')),
+              h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},'今日计划'),planViewSelector()),
               h('div',{className:'pw-plan-view','data-mode':calendarMode},calendarHeader(),
-                h('div',{className:'pw-progress'},h('div',{className:'pw-progress-track',role:'progressbar','aria-label':'计划完成进度','aria-valuemin':0,'aria-valuemax':Math.max(planItems.length,1),'aria-valuenow':done},h('div',{className:'pw-progress-value',style:{width:planItems.length?Math.round(done/planItems.length*100)+'%':'0%'}})),h('span',null,planConnected||planEmpty?done+' / '+planItems.length:'—')),
+                calendarMode==='month'&&h('h3',{className:'pw-selected-plan'},viewDate===today?'今天的安排':Number(viewDate.slice(5,7))+' 月 '+Number(viewDate.slice(8))+' 日的安排'),
+                h('div',{className:'pw-progress'},h('div',{className:'pw-progress-track',role:'progressbar','aria-label':'计划完成进度','aria-valuemin':0,'aria-valuemax':Math.max(planItems.length,1),'aria-valuenow':done},h('div',{className:'pw-progress-value',style:{width:planItems.length?Math.round(done/planItems.length*100)+'%':'0%'}})),h('span',{className:'pw-progress-count'},planConnected||planEmpty?calendarMode==='day'?(planItems.length-done)+' 项待办':done+' / '+planItems.length:'—')),
                 h('div',{className:'pw-card-body'},planBody())),
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
