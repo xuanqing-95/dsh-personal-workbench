@@ -646,6 +646,61 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-head .pw-attention { position: static; }
 }
 
+
+.pwb .pw-calendar-grid[data-mode=week] button {
+  min-height: 48px;
+  justify-content: flex-start;
+  padding: 4px 1px;
+}
+.pwb .pw-calendar-grid[data-mode=week] button[data-period=past],
+.pwb .pw-calendar-grid[data-mode=month] button[data-has-record=true] {
+  background: var(--pw-tile);
+}
+.pwb .pw-calendar-grid[data-mode=week] button[data-period=future] {
+  border: 1px dashed var(--pw-line);
+}
+.pwb .pw-calendar-grid[data-mode=week] button[aria-pressed=true],
+.pwb .pw-calendar-grid[data-mode=month] button[aria-pressed=true] {
+  box-shadow: inset 0 0 0 1px var(--pw-accent);
+  background: var(--pw-hover);
+}
+.pwb .pw-calendar-grid[data-mode=month] button {
+  min-height: 60px;
+  overflow: hidden;
+}
+.pwb .pw-calendar-grid[data-mode=month] .pw-calendar-marker {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pwb .pw-calendar-grid[data-mode=month] .pw-calendar-preview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  text-align: start;
+  color: var(--pw-ink);
+  font-size: 10px;
+  line-height: 12px;
+}
+.pwb .pw-calendar-grid[data-mode=month] .pw-calendar-preview[data-checked=true] {
+  color: var(--pw-muted);
+  text-decoration: line-through;
+}
+.pwb .pw-calendar-week-status {
+  color: var(--pw-muted);
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 500;
+  text-align: center;
+  max-width: 100%;
+}
+.pwb .pw-calendar-grid button[data-period=today] .pw-calendar-week-status { color: var(--pw-ink); font-weight: 650; }
+@container pw-card (max-width:400px) {
+  .pwb .pw-calendar-grid[data-mode=month] button { padding-inline: 2px; }
+}
+
 `;
     const gridStorageKey='dsh-personal-workbench:layout:v2';
     function gridReadPreferences() {
@@ -824,7 +879,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         React.useSyncExternalStore(fn=>ctx.locale.subscribe(fn),()=>ctx.locale.getSnapshot());
         const [foldedDay,setFoldedDay]=React.useState(()=>storedValue('dsh-personal-workbench:brief-folded-day',''));
         const [data,setData]=React.useState(null),[monitor,setMonitor]=React.useState(null),[loading,setLoading]=React.useState(true),[tick,setTick]=React.useState(0),[error,setError]=React.useState(''),[readError,setReadError]=React.useState('');
-        const [selectedDate,setSelectedDate]=React.useState(''),[calendarMode,setCalendarMode]=React.useState('day'),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[monthData,setMonthData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
+        const [selectedDate,setSelectedDate]=React.useState(''),[calendarMode,setCalendarMode]=React.useState('day'),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
         const grid=useWorkbenchGrid(newsFolded);
         const root=React.useRef(null),reading=React.useRef(false),alive=React.useRef(true),openingLock=React.useRef(false);
@@ -834,7 +889,23 @@ html[data-platform="darwin"] .pwb .pw-head {
         const projectTrigger=React.useRef(null);
         React.useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
         React.useEffect(()=>{if(viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick]);
-        React.useEffect(()=>{if(calendarMode!=='month')return;const abort=new AbortController();api('calendar',abort.signal,{month:monthKey}).then(value=>{if(!abort.signal.aborted)setMonthData(value);}).catch(()=>{if(!abort.signal.aborted)setMonthData({month:monthKey,availability:'unavailable',days:{}});});return()=>abort.abort();},[monthKey,calendarMode,tick]);
+        const weekStart=calendarMode==='week'?calendarDates(viewDate,'week')[0]:'';
+        const calendarKey=weekStart||monthKey;
+        React.useEffect(()=>{
+          if(calendarMode==='day')return;
+          const abort=new AbortController();
+          const months=weekStart?[...new Set(calendarDates(weekStart,'week').map(date=>date.slice(0,7)))]:[calendarKey];
+          for(const month of months){
+            api('calendar',abort.signal,{month,...(weekStart?{week:weekStart}:{})})
+              .catch(()=>({month,availability:'unavailable',days:{}}))
+              .then(value=>{
+                if(!abort.signal.aborted)setCalendarData(previous=>({
+                  key:calendarKey,months:{...(previous?.key===calendarKey?previous.months:{}),[month]:value}
+                }));
+              });
+          }
+          return()=>abort.abort();
+        },[calendarKey,calendarMode,tick]);
         React.useEffect(()=>{
           let stopped=false,busy=false,abort;
           async function refreshAssistants(){if(stopped||busy||document.hidden||!root.current?.getClientRects().length||reading.current)return;busy=true;abort=new AbortController();
@@ -988,7 +1059,8 @@ html[data-platform="darwin"] .pwb .pw-head {
         function calendarHeader() {
           if(calendarMode==='day')return null;
           const days=calendarDates(viewDate,calendarMode),monthView=calendarMode==='month',unit=monthView?'月':'周';
-          const activeMonth=monthData?.month===monthKey?monthData:null;
+          const months=calendarData?.key===calendarKey?calendarData.months:{};
+          const activeMonth=months[monthKey];
           const monthTitle=Number(monthKey.slice(0,4))+' 年 '+Number(monthKey.slice(5))+' 月';
           const shortDate=date=>Number(date.slice(5,7))+' 月 '+Number(date.slice(8))+' 日';
           const range=monthView?monthTitle:shortDate(days[0])+' – '+shortDate(days[6]);
@@ -1001,21 +1073,39 @@ html[data-platform="darwin"] .pwb .pw-head {
             h('div',{className:'pw-calendar-grid','data-mode':calendarMode,role:'group','aria-label':monthView?'月历':'本周日期'},
               ['一','二','三','四','五','六','日'].map(value=>h('span',{key:value,className:'pw-week-label','aria-hidden':true},value)),
               days.map(date=>{
-                const selected=date===viewDate,outside=monthView&&date.slice(0,7)!==monthKey;
-                const record=outside||!monthView?null:activeMonth?.days?.[date];
-                const count=selected&&(planConnected||planEmpty)?planItems.length:record?.count;
-                const hasPlan=Number.isInteger(count)?count>0:record?.status==='available';
-                const marker=hasPlan&&(Number.isInteger(count)?count+' 项':'·');
+                const selected=date===viewDate,isToday=date===today,past=date<today,dateMonth=date.slice(0,7);
+                const outside=monthView&&dateMonth!==monthKey,month=months[dateMonth];
+                let record=outside?null:month?.days?.[date];
+                if(selected&&(planConnected||planEmpty)&&!plan?.coverage?.truncated){
+                  record={count:planItems.length,done,first:planItems[0]&&{title:planItems[0].title,checked:checkedFor(planItems[0])}};
+                }else if(isToday&&['connected','empty'].includes(data?.plan?.availability)&&!data.plan.coverage?.truncated){
+                  const items=list(data.plan.items);
+                  record={count:items.length,done:items.filter(item=>item.checked).length,first:items[0]};
+                }
+                const counted=Number.isInteger(record?.count);
+                const knownEmpty=counted?record.count===0:!record&&month?.availability==='connected';
+                const number=Number(date.slice(8));
+                const title=taskText(record?.first?.title).title;
+                const summary=counted&&record.count>0
+                  ? (past||isToday?'完成 '+record.done+'/'+record.count:'已安排 '+record.count+' 项')
+                  :knownEmpty?(past?'无记录':'未安排'):record?'有计划，详情待同步':'待同步';
+                const weekStatus=isToday?'今天':summary;
+                const state=isToday?'today':past?'past':'future';
                 return h('button',{
-                  key:date,type:'button','aria-label':date+(hasPlan?Number.isInteger(count)?'，'+count+' 项待办':'，有计划':''),
-                  'aria-pressed':selected,'aria-current':date===today?'date':undefined,
-                  className:(outside?'is-outside ':'')+(date===today?'is-today':''),
+                  key:date,type:'button','aria-label':date+(isToday?'，今天':'')+(outside?'，相邻月份':'，'+summary)+(title?'，'+title:''),
+                  'aria-pressed':selected,'aria-current':isToday?'date':undefined,
+                  className:(outside?'is-outside ':'')+(isToday?'is-today':''),
+                  'data-period':state,'data-has-record':String(!outside&&Boolean(record)&&!knownEmpty),
+                  title:outside?undefined:title?title+' · '+summary:summary,
                   onClick:()=>setSelectedDate(date)
-                },h('span',{className:'pw-calendar-number'},Number(date.slice(8))),
-                  monthView&&marker&&h('small',{className:'pw-calendar-marker','aria-hidden':true},marker));
+                },h('span',{className:'pw-calendar-number'},number),
+                  monthView
+                    ? !outside&&h(React.Fragment,null,title&&h('small',{className:'pw-calendar-preview','data-checked':String(record.first.checked)},title),
+                      record&&!knownEmpty&&h('small',{className:'pw-calendar-marker'},counted?'共 '+record.count+' 项':'有计划'))
+                    : h('small',{className:'pw-calendar-week-status'},weekStatus));
               })),
             monthView&&activeMonth?.availability!=='connected'&&h('p',{className:'pw-calendar-status',role:'status'},
-              activeMonth?'月份标记暂未同步，仍可点击日期查看':'正在读取本月安排…'));
+              activeMonth?'本月安排暂未同步，可点日期单独查看':'正在读取本月安排…'));
         }
         function assistantBody() {
           const badge=(state,label)=>h('span',{key:label,className:'pw-state','data-state':state},label);
@@ -1194,7 +1284,7 @@ html[data-platform="darwin"] .pwb .pw-head {
             h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},'今日计划'),planViewSelector()),
               h('div',{className:'pw-plan-view','data-mode':calendarMode},calendarHeader(),
-                calendarMode==='month'&&h('h3',{className:'pw-selected-plan'},viewDate===today?'今天的安排':Number(viewDate.slice(5,7))+' 月 '+Number(viewDate.slice(8))+' 日的安排'),
+                calendarMode!=='day'&&h('h3',{className:'pw-selected-plan'},viewDate===today?'今天的安排':Number(viewDate.slice(5,7))+' 月 '+Number(viewDate.slice(8))+' 日'+(viewDate<today?' · 计划记录':' · 计划安排')),
                 h('div',{className:'pw-progress'},h('div',{className:'pw-progress-track',role:'progressbar','aria-label':'计划完成进度','aria-valuemin':0,'aria-valuemax':Math.max(planItems.length,1),'aria-valuenow':done},h('div',{className:'pw-progress-value',style:{width:planItems.length?Math.round(done/planItems.length*100)+'%':'0%'}})),h('span',{className:'pw-progress-count'},planConnected||planEmpty?calendarMode==='day'?(planItems.length-done)+' 项待办':done+' / '+planItems.length:'—')),
                 h('div',{className:'pw-card-body'},planBody())),
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},

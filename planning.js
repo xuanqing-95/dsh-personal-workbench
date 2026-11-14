@@ -20,7 +20,10 @@ export function calendarMonth(records, month) {
   const days = {};
   for (const task of records) {
     if (task.archived || !dates.day(task.dueDate) || task.dueDate.slice(0,7) !== month) continue;
-    days[task.dueDate] = {status:'available'};
+    const checked=task.status==='done';
+    const summary=days[task.dueDate] ||= {status:'available',count:0,done:0,first:{title:task.title,checked}};
+    summary.count++;
+    if(checked)summary.done++;
   }
   return {month,source:'profile',availability:'connected',days};
 }
