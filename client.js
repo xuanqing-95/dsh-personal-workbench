@@ -643,7 +643,6 @@ html[data-platform="darwin"] .pwb .pw-head {
     grid-template-columns: minmax(0,1fr);
     grid-template-areas: "plugin" "title" "tools";
   }
-  .pwb .pw-head .pw-attention { position: static; }
 }
 
 
@@ -699,6 +698,20 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-calendar-grid button[data-period=today] .pw-calendar-week-status { color: var(--pw-ink); font-weight: 650; }
 @container pw-card (max-width:400px) {
   .pwb .pw-calendar-grid[data-mode=month] button { padding-inline: 2px; }
+}
+
+
+.pwb .pw-head .pw-attention { position: relative; }
+.pwb .pw-head .pw-attention:has(> summary) { flex: 0 0 auto; }
+.pwb .pw-head .pw-attention .pw-attention-popover {
+  inset: calc(100% + 6px) 0 auto auto;
+  width: var(--pw-attention-width, 360px);
+  max-width: calc(100cqw - 24px);
+  box-sizing: border-box;
+}
+.pwb .pw-head .pw-attention[data-align=left] .pw-attention-popover { inset-inline: 0 auto; }
+@container pw-root (max-width: 560px) {
+  .pwb .pw-head .pw-attention .pw-attention-popover { max-height: 36dvh; padding-inline: 12px; }
 }
 
 `;
@@ -882,6 +895,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [selectedDate,setSelectedDate]=React.useState(''),[calendarMode,setCalendarMode]=React.useState('day'),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
         const grid=useWorkbenchGrid(newsFolded);
+        const attentionRef=React.useRef(null);
         const root=React.useRef(null),reading=React.useRef(false),alive=React.useRef(true),openingLock=React.useRef(false);
         const [notes,setNotes]=React.useState(()=>projectNotes(storedValue(PROJECT_NOTES_KEY,{})));
         const [activeProjectId,setActiveProjectId]=React.useState(''),[progressDraft,setProgressDraft]=React.useState(''),[requirementDraft,setRequirementDraft]=React.useState('');
@@ -966,6 +980,30 @@ html[data-platform="darwin"] .pwb .pw-head {
         const checkedFor=task=>checks.get(task.id)??Boolean(task.checked);
         const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor),reader=feedURL;
         const assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
+        const hasAttention=attention.length>0&&!grid.editing;
+        React.useLayoutEffect(()=>{
+          const details=attentionRef.current, panel=root.current;
+          const button=details?.querySelector('summary');
+          if(!hasAttention||!button||!panel)return;
+          function alignPopover(){
+            const bounds=panel.getBoundingClientRect(), trigger=button.getBoundingClientRect();
+            const towardLeft=trigger.right-bounds.left-12;
+            const towardRight=bounds.right-trigger.left-12;
+            const rightAligned=towardLeft>=360||towardLeft>=towardRight;
+            details.dataset.align=rightAligned?'right':'left';
+            details.style.setProperty('--pw-attention-width',Math.max(0,Math.min(360,rightAligned?towardLeft:towardRight))+'px');
+          }
+          alignPopover();
+          const observer=new ResizeObserver(alignPopover);
+          observer.observe(panel);
+          observer.observe(button);
+          observer.observe(details.parentElement);
+          details.addEventListener('toggle',alignPopover);
+          return()=>{
+            observer.disconnect();
+            details.removeEventListener('toggle',alignPopover);
+          };
+        },[hasAttention]);
         const planConnected=plan?.availability==='connected',planEmpty=plan?.availability==='empty';
         const activityUnavailable=!data || ['unavailable','partial'].includes(data.ai?.availability) || list(data.ai?.items).some(s=>s.running===null && !pending(s.pendingInput)) || ['unavailable','partial'].includes(data.automations?.availability) || monitor?.availability==='unavailable';
         function empty(title,description,icon='clock'){return h('div',{className:'pw-empty'},h(Icon,{name:icon,size:27}),h('strong',null,title),h('p',null,description));}
@@ -1035,7 +1073,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         function attentionSummary() {
           if(!attention.length)return null;
-          return h('details',{className:'pw-attention',onKeyDown:event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}},h('summary',{'aria-label':'需要你处理，'+attention.length+' 件事'},h('span',{className:'pw-attention-label'},'需要你处理 · '+attention.length),h(Icon,{name:'chevron',size:12})),h('div',{className:'pw-attention-popover'},attention.map(row=>h('article',{className:'pw-attention-item',key:row.key},h('div',{className:'pw-attention-item-top'},h('strong',null,row.title),h('span',{className:'pw-attention-tag'},row.status)),row.note&&h('p',null,row.note),row.destination?h('button',{className:'pw-quiet-link',onClick:event=>{event.currentTarget.closest('details').open=false;navigate(row.destination);}},row.action,h(Icon,{name:'arrow',size:11})):row.url?h('a',{className:'pw-quiet-link',href:row.url,target:'_blank',rel:'noopener noreferrer'},row.action,h(Icon,{name:'arrow',size:11})):null))));
+          return h('details',{className:'pw-attention',ref:attentionRef,onKeyDown:event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}},h('summary',{'aria-label':'需要你处理，'+attention.length+' 件事'},h('span',{className:'pw-attention-label'},'需要你处理 · '+attention.length),h(Icon,{name:'chevron',size:12})),h('div',{className:'pw-attention-popover'},attention.map(row=>h('article',{className:'pw-attention-item',key:row.key},h('div',{className:'pw-attention-item-top'},h('strong',null,row.title),h('span',{className:'pw-attention-tag'},row.status)),row.note&&h('p',null,row.note),row.destination?h('button',{className:'pw-quiet-link',onClick:event=>{event.currentTarget.closest('details').open=false;navigate(row.destination);}},row.action,h(Icon,{name:'arrow',size:11})):row.url?h('a',{className:'pw-quiet-link',href:row.url,target:'_blank',rel:'noopener noreferrer'},row.action,h(Icon,{name:'arrow',size:11})):null))));
         }
         function toggleBrief(){const next=newsFolded?'':today;setFoldedDay(next);try{localStorage.setItem('dsh-personal-workbench:brief-folded-day',JSON.stringify(next));}catch{setError('收起状态仅在本次打开时保留');}}
         function planViewSelector() {
