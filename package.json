@@ -21,7 +21,14 @@
     "client.js",
     "cordis.patch.yml",
     "locale/*.json",
-    "icon.svg"
+    "icon.svg",
+    "project-shortcuts.js",
+    "project-repository.js",
+    "project-github.js",
+    "project-tracking.js",
+    "project-tools.js",
+    "project-service.js",
+    "project-navigation.js"
   ],
   "dependencies": {
     "zod": "4.4.3"
@@ -52,5 +59,8 @@
     "deepseek-harness",
     "dashboard",
     "planner"
-  ]
+  ],
+  "scripts": {
+    "test": "node --test *.test.js"
+  }
 }

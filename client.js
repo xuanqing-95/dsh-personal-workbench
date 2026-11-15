@@ -80,7 +80,7 @@ window.__ModuleLoader__.load({
       return match ? {title:match[1].trimEnd(),note:'实际 '+match[3]+' · 专注 '+match[5]} : {title:raw,note:''};
     }
     async function api(action, signal, input={}) {
-      const opening = ['addPlanTask','checkPlanTask'].includes(action);
+      const opening = ['addPlanTask','checkPlanTask','projectShortcuts','openCodexThread'].includes(action);
       const response = await fetch('/api/dsh-personal-workbench'+(opening?'':'?'+new URLSearchParams({action,...input})),{method:opening?'POST':'GET',credentials:'same-origin',cache:'no-store',signal,headers:opening?{'Content-Type':'application/json','X-Personal-UI':'1'}:undefined,body:opening?JSON.stringify({action,input}):undefined});
       const result = await response.json();
       if(!response.ok || result.error) throw new Error(text(result.error) || '暂时无法读取，请稍后再试。');
@@ -1348,6 +1348,16 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [projectNotice,setProjectNotice]=React.useState(''),[handingOff,setHandingOff]=React.useState(false);
         const projectTrigger=React.useRef(null);
         React.useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
+        React.useEffect(()=>{
+          const abort=new AbortController();
+          (async()=>{
+            let result=await api('projects',abort.signal);
+            const legacy=projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]));
+            if(legacy.length){await api('projectShortcuts',abort.signal,{action:'import',items:legacy});result=await api('projects',abort.signal);localStorage.removeItem(PROJECT_SHORTCUTS_KEY);}
+            if(!abort.signal.aborted)setCustomProjects(list(result.shortcuts));
+          })().catch(()=>{if(!abort.signal.aborted)setReadError('项目暂时未同步，已保留上次内容');});
+          return()=>abort.abort();
+        },[tick]);
         React.useEffect(()=>{if(viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick]);
         const weekStart=calendarMode==='week'?calendarDates(viewDate,'week')[0]:'';
         const calendarKey=weekStart||monthKey;
@@ -1410,7 +1420,8 @@ html[data-platform="darwin"] .pwb .pw-head {
         async function navigate(destination) {
           try {
             setError('');
-            if(destination.session) {
+            if(destination.codex) {await api('openCodexThread',undefined,{id:destination.codex,hostId:'local'});}
+            else if(destination.session) {
               const nav=sessionNav;if(!nav)throw new Error('对话入口暂未准备好，请稍后再试。');
               const sessions=nav.sessions.list.getSnapshot(),workspaces=nav.workspaces.list.getSnapshot();
               if(workspaces.state==='error')throw new Error('对话列表暂时无法读取。');
@@ -1640,7 +1651,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
         function projectDestination(project) {
-          return {session:project.threadId};
+          return project.source==='codex'?{codex:project.threadId}:{session:project.threadId};
         }
         function projectProgress(project) {
           return notes[project.id]?.progress??project.progress??'';
@@ -1736,12 +1747,14 @@ html[data-platform="darwin"] .pwb .pw-head {
           return h('div',{className:'pw-project-list pw-project-tiles'},allProjects.map(project=>{
             const pending=list(notes[project.id]?.requirements).filter(item=>!item.done);
             const latest=pending.reduce((last,item)=>!last||item.createdAt>=last.createdAt?item:last,null);
-            const progress=projectProgress(project),version=project.version?['v'+project.version]:[];
+            const event=list(project.github?.value?.history)[0],pull=project.github?.value?.pull;
+            const progress=event?.label||pull?.label||projectProgress(project),version=project.version?['v'+project.version]:[];
+            const phase=pull?.state||event?.state||(project.repositoryState==='ambiguous'?'待确认仓库':'进展待同步');
             return h('article',{className:'pw-project-row',key:project.id},
               h('div',{className:'pw-project-heading'},
                 project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':project.id==='today-plan'?'calendar':'grid',size:21})),
                 h('div',null,h('h3',null,project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
-                h('div',{className:'pw-project-meta'},badge('unknown',progress?'有进展记录':'进展待同步'))),
+                h('div',{className:'pw-project-meta'},badge(phase.includes('发布')?'done':'unknown',phase))),
               h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
                 'aria-label':'进入项目：'+project.title},'进入项目',h(Icon,{name:'arrow',size:13})),
               h('dl',{className:'pw-project-facts'},
@@ -1749,15 +1762,13 @@ html[data-platform="darwin"] .pwb .pw-head {
                 latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)));
           }));
         }
-        function removeProject(project) {
-          if(notes[project.id]?.requirements.length&&!confirm('这个项目有已记录的需求。确定移除项目入口？'))return;
-          const next=customProjects.filter(item=>item.id!==project.id);
-          try {
-            localStorage.setItem(PROJECT_SHORTCUTS_KEY,JSON.stringify(next));
-            setCustomProjects(next);
-          } catch {setError('项目入口暂时无法保存');}
+        async function saveProject(event){
+          event.preventDefault();const selected=threadOptions.find(item=>item.source+':'+item.id===projectForm.target);
+          if(!selected||!projectForm.title.trim()){setProjectError('填写项目名称，并选择一个已有对话。');return;}
+          try{await api('projectShortcuts',undefined,{action:'create',title:projectForm.title,version:projectForm.version,progress:projectForm.progress,icon:projectForm.icon,source:selected.source,threadId:selected.id});
+            setCustomProjects(list((await api('projects')).shortcuts));setAddingProject(false);setProjectError('');
+          }catch{setProjectError('保存失败，请稍后再试。');}
         }
-        function saveProject(event){event.preventDefault();const selected=threadOptions.find(item=>item.source+':'+item.id===projectForm.target);if(!selected||!projectForm.title.trim()){setProjectError('填写项目名称，并选择一个已有对话。');return;}if(customProjects.length>=20){setProjectError('最多保存 20 个自定义项目入口。');return;}const next=projectShortcuts([...customProjects,{id:crypto.randomUUID(),title:projectForm.title,version:projectForm.version,progress:projectForm.progress,icon:projectForm.icon,source:selected.source,threadId:selected.id}]);try{localStorage.setItem(PROJECT_SHORTCUTS_KEY,JSON.stringify(next));setCustomProjects(next);setAddingProject(false);setProjectError('');}catch{setProjectError('保存失败，请稍后再试。');}}
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},

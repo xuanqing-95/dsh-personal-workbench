@@ -1,3 +1,5 @@
+import {createCodexThreadOpener} from './project-navigation.js';
+import {attachProjects} from './project-service.js';
 import { z } from 'zod';
 import { createTasks } from './tasks.js';
 import { createHarnessAdapter } from './harness.js';
@@ -9,6 +11,8 @@ export const inject = ['connection', 'storageDomain', 'tools'];
 const title = '个人主控台';
 
 export function apply(ctx) {
+  const projects=attachProjects(ctx);
+  const openCodexThread=createCodexThreadOpener();
   let pendingStore;
   function store() {
     if (!pendingStore) {
@@ -72,11 +76,13 @@ export function apply(ctx) {
         if (request.method === 'POST') {
           if (!validUIWrite(request)) return reply({error:'请从主控台内操作。'},403);
           const raw = await request.text();
-          if (raw.length > 4096) return reply({error:'任务内容过长。'},413);
-          return reply({value:await change(JSON.parse(raw))});
+          if (raw.length > 16384) return reply({error:'任务内容过长。'},413);
+          const body=JSON.parse(raw);
+          return reply({value:body.action==='projectShortcuts'?await projects.change(body.input):body.action==='openCodexThread'?await openCodexThread(body.input):await change(body)});
         }
         const query = new URL(request.url).searchParams;
         switch (query.get('action')) {
+          case 'projects': return reply({value:await projects.read()});
           case 'dashboard': return reply({value:await dashboard()});
           case 'assistants': return reply({value:await assistants()});
           case 'plan': return reply({value:planDay((await tasks.list()).items,query.get('date'))});
@@ -92,10 +98,11 @@ export function apply(ctx) {
   }));
   ctx.effect(() => ctx.tools.register({
     name:'personal_home',description:'读取此 Harness 配置中的个人主控台、指定日期的计划或月份安排。只读。',
-    parameters:{type:'object',properties:{view:{enum:['today','plan','calendar']},date:{type:'string'},month:{type:'string'}},required:['view'],additionalProperties:false},
+    parameters:{type:'object',properties:{view:{enum:['today','plan','calendar','projects']},date:{type:'string'},month:{type:'string'}},required:['view'],additionalProperties:false},
     output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
     async execute(args) {
       if (args.view === 'today') return dashboard();
+      if (args.view === 'projects') return projects.read();
       const {items} = await tasks.list();
       if (args.view === 'plan') return planDay(items,args.date);
       if (args.view === 'calendar') return calendarMonth(items,args.month);
