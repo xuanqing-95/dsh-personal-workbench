@@ -99,6 +99,10 @@ window.__ModuleLoader__.load({
     const assistantReviewKey = 'dsh-personal-workbench:assistant-reviews:v1';
     const failedRun = status => ['error','failed','interrupted'].includes(status);
     const runTarget = run => run.original_id||run.topic_id||run.result_id;
+    function runIsFresh(run,now) {
+      const at=Date.parse(run.heartbeat_at||run.updated_at||run.started_at||run.created_at||'');
+      return Number.isFinite(at)&&at<=now+5000&&at>=now-15*60000;
+    }
     function assistantOperations(monitor,today,now) {
       const synced=monitor?.availability==='connected'&&(!monitor.checkedAt||now-Date.parse(monitor.checkedAt)<45000);
       const runs=list(monitor?.items).filter(run=>activeStatus(run.status)||recent(run.updated_at,now)||failedRun(run.status))
@@ -107,14 +111,15 @@ window.__ModuleLoader__.load({
         next.status==='done'&&next.action_id===run.action_id&&runTarget(next)===runTarget(run)&&Date.parse(next.updated_at)>Date.parse(run.updated_at)));
       const visible=[...relevant.filter(run=>activeStatus(run.status)),...relevant.filter(run=>failedRun(run.status)),
         ...relevant.filter(run=>!activeStatus(run.status)&&!failedRun(run.status)&&dateInShanghai.format(new Date(run.updated_at))===today)];
-      const operation=visible.slice(0,5).map(run=>{
+      const operation=visible.sort((a,b)=>Number(activeStatus(b.status)&&runIsFresh(b,now))-Number(activeStatus(a.status)&&runIsFresh(a,now))).slice(0,5).map(run=>{
         const queued=['queued','pending'].includes(run.status),active=activeStatus(run.status);
+        const stale=active&&!runIsFresh(run,now);
         const date=assistantDate(active?run.started_at||run.created_at:run.updated_at,today,run.status==='done');
         const timing=!date?'':active?date==='今天'?'':date+(queued?'排队':run.started_at?'开始':'提交'):date;
-        const state=!synced?'unknown':active?'active':failedRun(run.status)?'failed':run.status==='done'?'done':'unknown';
-        const label=!synced?'待同步':queued?'排队中':active?'进行中':run.status==='interrupted'?'已中断':failedRun(run.status)?'失败':run.status==='done'?'执行完成':'待确认';
+        const state=!synced||stale?'unknown':active?'active':failedRun(run.status)?'failed':run.status==='done'?'done':'unknown';
+        const label=!synced?'待同步':stale?'状态待更新':queued?'排队中':active?'进行中':run.status==='interrupted'?'已中断':failedRun(run.status)?'失败':run.status==='done'?'执行完成':'待确认';
         const detail=text(run.error_message||run.message).replace(/(?:sk-|Bearer\s+)[A-Za-z0-9_-]{10,}/g,'[已隐藏]').slice(0,180);
-        return {id:run.id,title:runLabel(run),state,label,detail,timing:synced?timing:'',updatedAt:run.updated_at};
+        return {id:run.id,title:runLabel(run),state,label,detail,timing:synced?timing:'',stale,updatedAt:run.updated_at};
       });
       return {operation,synced};
     }
@@ -181,7 +186,7 @@ window.__ModuleLoader__.load({
         const items=result.items.slice(0,30),candidates=new Map();
         for(const run of [...items].sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at))) {
           const source=resultSources[run.action_id];
-          if(run.status!=='done'||!source||!uuid.test(run.result_id||'')||!recent(run.updated_at))continue;
+          if(run.status!=='done'||!source||!uuid.test(run.result_id||'')||!Number.isFinite(Date.parse(run.updated_at))||Date.parse(run.updated_at)>Date.now()+300000)continue;
           const key=source[1]+':'+run.result_id.toLowerCase();if(!candidates.has(key))candidates.set(key,{run,source,key});
         }
         let resultsUnavailable=false;
@@ -908,7 +913,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb [data-fit-content=true] > :is(.pw-news,.pw-assistants) .pw-card-head {padding-block:12px 8px}
 .pwb [data-fit-content=true] > .pw-news[data-folded=true] .pw-card-head {min-height:42px;padding-block:4px}
 .pwb [data-fit-content=true] .pw-brief-layout {padding-block:0 12px}
-.pwb [data-fit-content=true] .pw-brief-layout .pw-news-quick li > :is(a,span) {min-height:29px;padding-block:4px}
+.pwb [data-fit-content=true] .pw-brief-layout .pw-news-quick li > :is(a,span) {min-height:24px;padding-block:2px}
 .pwb [data-fit-content=true] .pw-assistant-feed {padding-bottom:10px}
 .pwb [data-fit-content=true] .pw-assistant-feed .pw-assistant-group {padding-block:7px}
 .pwb [data-fit-content=true] .pw-assistant-copy {row-gap:3px}
@@ -1024,11 +1029,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick {display:grid;align-content:start;min-width:0;padding:0;border:0}
 .pwb .pw-brief-layout .pw-news-quick li {border-color:var(--pw-line)}
 .pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
-  display:grid;grid-template-columns:24px minmax(0,1fr) 12px;align-items:start;gap:8px;min-height:34px;padding:6px 0;text-decoration:none
+  display:grid;grid-template-columns:16px minmax(0,1fr) 12px;align-items:first baseline;gap:6px;min-height:24px;padding:2px 0;text-decoration:none
 }
-.pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:24px minmax(0,1fr)}
-.pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:700 20px/1.2 var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
-.pwb .pw-brief-layout .pw-news-quick li > a > svg {margin-top:3px}
+.pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:16px minmax(0,1fr)}
+.pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:600 13px/1.45 var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
+.pwb .pw-brief-layout .pw-news-quick li > a > svg {align-self:start;margin-top:3px}
 .pwb .pw-brief-layout .pw-news-quick li > a:hover {background:var(--pw-hover)}
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-title {font:500 13px/1.45 var(--pw-body)}
@@ -1087,6 +1092,99 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 @container pw-card (min-width:700px) {
   .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* Shared card rhythm: one source for spacing and heading size in every state. */
+.pwb {--pw-card-padding:20px;--pw-card-title-size:18px;--pw-card-title-leading:24px;--pw-card-content-gap:8px;--pw-card-bottom:12px}
+.pwb .pw-grid-canvas .pw-card,
+.pwb .pw-grid-canvas .pw-card .pw-card-content {--pw-card-inset:var(--pw-card-padding)}
+.pwb .pw-grid-canvas .pw-card .pw-card-content > .pw-card-head {
+  flex:0 0 auto;min-height:44px;padding:12px var(--pw-card-inset) var(--pw-card-content-gap);gap:8px;align-items:center;flex-wrap:wrap
+}
+.pwb .pw-grid-canvas .pw-card .pw-card-head .pw-card-title h2,
+.pwb .pw-grid-canvas .pw-plan .pw-card-head > h2 {
+  margin:0;font:600 var(--pw-card-title-size)/var(--pw-card-title-leading) var(--pw-body);letter-spacing:normal
+}
+.pwb .pw-grid-canvas .pw-card .pw-card-head .pw-card-title {min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-content > .pw-card-head {padding-block:12px;min-height:48px}
+.pwb .pw-grid-canvas .pw-news .pw-card-body,
+.pwb .pw-grid-canvas :is(.pw-assistants,.pw-projects) > .pw-card-content > .pw-card-body {padding:0}
+.pwb .pw-grid-canvas .pw-card :is(.pw-brief-layout,.pw-assistant-feed,.pw-project-tiles) {padding:0 var(--pw-card-inset) var(--pw-card-bottom)}
+.pwb .pw-grid-canvas .pw-plan .pw-card-body {padding:0 var(--pw-card-inset) var(--pw-card-bottom)}
+.pwb .pw-grid-canvas .pw-card .pw-card-foot {margin-inline:var(--pw-card-inset)}
+.pwb .pw-grid-canvas .pw-news .pw-brief-date {
+  width:auto;max-width:100%;min-height:26px;margin:0;padding:2px 4px;border:1px solid transparent;
+  background:transparent;color:var(--pw-muted);font:400 12px/18px var(--pw-body)
+}
+.pwb .pw-grid-canvas .pw-news .pw-brief-date:hover {background:var(--pw-hover);color:var(--pw-ink)}
+.pwb .pw-grid-canvas .pw-news .pw-brief-date:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+@container pw-root (max-width:560px) {
+  .pwb .pw-grid-canvas {--pw-card-padding:12px;--pw-card-title-size:16px}
+}
+
+/* Transparent glass material: typography and spacing remain shared above. */
+.pwb {
+  --pw-glass:rgba(255,255,255,.26);
+  --pw-glass-blur:blur(24px) saturate(1.12);
+  --pw-glass-radius:28px;
+  --pw-glass-shadow:inset 0 1px 1px rgba(255,255,255,.88),inset 0 -1px 1px rgba(255,255,255,.36),0 8px 24px -12px rgba(35,56,61,.20);
+  --pw-line:rgba(68,94,98,.14);
+  --pw-divider:rgba(68,94,98,.10);
+  --pw-muted:#4d6466;
+}
+.pwb .pw-grid-canvas > .pw-card:not(.pw-pet) {
+  border:1px solid rgba(255,255,255,.66);
+  border-radius:var(--pw-glass-radius);
+  background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.10) 46%,rgba(255,255,255,.22)),var(--pw-glass);
+  box-shadow:var(--pw-glass-shadow);
+  -webkit-backdrop-filter:var(--pw-glass-blur);backdrop-filter:var(--pw-glass-blur);
+}
+.pwb .pw-grid-canvas > .pw-card:not(.pw-pet)::before {content:none}
+.pwb .pw-grid-canvas > .pw-card > .pw-card-content {border-radius:inherit}
+.pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-assistant-group+.pw-assistant-group,.pw-project-row,.pw-project-row:first-child) {
+  border:1px solid rgba(255,255,255,.52);border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,255,255,.30),rgba(255,255,255,.12));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.50);
+}
+.pwb .pw-grid-canvas .pw-project-row:hover {background:rgba(255,255,255,.40)}
+.pwb .pw-grid-canvas :is(.pw-dashboard-action,.pw-brief-date,.pw-view-switch,.pw-calendar-nav button) {border-radius:10px}
+.pwb .pw-grid-canvas :is(.pw-project-icon,.pw-assistant-avatar) {border-radius:10px}
+.pwb .pw-grid-canvas .pw-news-image {border-radius:10px}
+.pwb .pw-grid-canvas .pw-project-enter {background:rgba(255,255,255,.36)}
+.pwb .pw-grid-canvas .pw-pet {background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+.pwb[data-editing=true] .pw-grid-canvas > .pw-card {border:1px dashed #40898b}
+@supports not (backdrop-filter:blur(1px)) {
+  .pwb .pw-grid-canvas > .pw-card:not(.pw-pet) {background:rgba(245,250,249,.94)}
+}
+@media (prefers-reduced-transparency:reduce) {
+  .pwb .pw-grid-canvas > .pw-card:not(.pw-pet) {background:#edf5f3;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+
+/* Compact project entry and comfortable plan navigation. */
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter {width:32px;min-width:32px;height:32px;padding:0;gap:0}
+.pwb .pw-grid-canvas .pw-plan .pw-card-content > .pw-card-head {display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:8px}
+.pwb .pw-grid-canvas .pw-plan .pw-date-nav {justify-self:start;justify-content:flex-start;margin:0;order:0;flex-basis:auto}
+.pwb .pw-grid-canvas .pw-plan .pw-segmented {justify-self:end;gap:3px;padding:3px;border-radius:12px;background:rgba(255,255,255,.24);border-color:var(--pw-line)}
+.pwb .pw-grid-canvas .pw-plan .pw-segmented button {min-width:40px;min-height:36px;padding:6px 10px;font-size:13px;border-radius:9px}
+.pwb .pw-grid-canvas .pw-plan .pw-date-nav button {min-width:28px;min-height:32px;border-radius:8px}
+.pwb .pw-grid-canvas .pw-assistant-receipt {grid-template-columns:minmax(0,1fr)}
+@container pw-card (max-width:430px) {
+ .pwb .pw-grid-canvas .pw-plan .pw-card-content > .pw-card-head {grid-template-columns:minmax(0,1fr) auto}
+ .pwb .pw-grid-canvas .pw-plan .pw-segmented {grid-column:2;grid-row:1}
+ .pwb .pw-grid-canvas .pw-plan .pw-date-nav {grid-column:1/-1;grid-row:2}
+ .pwb .pw-grid-canvas .pw-plan .pw-segmented button {min-width:44px;min-height:40px}
+}
+
+
+/* A collapsed brief keeps its lead story subordinate to the section heading. */
+.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-content > .pw-card-head {display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:3px}
+.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-title {grid-column:1;grid-row:1}
+.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-news-actions {grid-column:2;grid-row:1/3;align-self:center}
+.pwb .pw-grid-canvas .pw-news .pw-brief-folded-headline {grid-column:1;grid-row:2;margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 13px/20px var(--pw-body);color:var(--pw-muted)}
+@container pw-card (max-width:430px) {
+ .pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-head .pw-card-title {gap:4px}
+ .pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-news-actions .pw-card-link:has([aria-hidden]) {padding-inline:0}
 }
 
 `;
@@ -1610,28 +1708,25 @@ html[data-platform="darwin"] .pwb .pw-head {
         function assistantBody() {
           const operations=assistants.operation;
           const openOperations=()=>navigate({panel:'redflow-workbench'});
-          function receipt(row,mark) {
-            const {title,url,key,reviewed}=row, when=row.deliveredAt||row.updatedAt;
+          function receipt(row) {
+            const {title,url,key}=row, when=row.deliveredAt||row.updatedAt;
             const date=assistantDate(when||row.date,assistants.today,Boolean(when));
-            const state=[date?date+(when?' 交付':' 刊期'):'',reviewed?'已验收':'待验收'].filter(Boolean).join(' · ');
             return h('div',{className:'pw-assistant-receipt',key},
               h('a',{className:'pw-quiet-link',href:safeHTTPS(url),target:'_blank',rel:'noopener noreferrer',title,
                 'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11})),
-              !reviewed&&mark&&h('button',{type:'button',className:'pw-assistant-reviewed',onClick:()=>mark(key),
-                title:'标记已验收','aria-label':'标记已验收：'+title},h(Icon,{name:'check',size:13})),
-              h('small',null,state));
+              date&&h('small',null,date));
           }
-          function assistantCard({name,icon,status,detail,reviews,open,action='打开'}) {
+          function assistantCard({name,icon,status,detail,next,reviews,open,action='打开'}) {
             const result=reviews.latest;
             return h('section',{className:'pw-assistant-group','aria-label':name},
               h('span',{className:'pw-assistant-avatar','aria-hidden':true},icon),
               h('div',{className:'pw-assistant-copy'},
                 h('div',{className:'pw-assistant-heading'},h('h3',null,name),status),
                 detail&&h('p',{className:'pw-assistant-context',title:detail.hint},h('span',null,detail.label+'：'),detail.text),
+                next&&h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'下一次'),h('span',null,next)),
                 h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),
                   h('div',{className:'pw-assistant-review'},
-                    result?receipt(result,reviews.mark):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无结果'),
-                    reviews.error&&h('span',{role:'status',className:'pw-assistant-warning'},reviews.error)))),
+                    result?receipt(result):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无结果')))),
               open&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':'打开'+name,onClick:open},action,h(Icon,{name:'chevron',size:11})));
           }
           const primary=operations[0];
@@ -1639,7 +1734,7 @@ html[data-platform="darwin"] .pwb .pw-head {
             name:'运营助手',icon:h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),
             status:primary?badge(primary.state,primary.label,primary.state==='failed'?primary.detail:undefined):
               badge('unknown',assistants.synced?'暂无新任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
-            detail:primary&&{label:primary.state==='failed'?'原因':'当前任务',
+            detail:primary&&!primary.stale&&primary.state!=='done'&&{label:primary.state==='failed'?'原因':'当前任务',
               text:primary.state==='failed'&&primary.detail?primary.detail:[primary.title,primary.timing].filter(Boolean).join(' · '),
               hint:primary.detail||primary.title},
             reviews:{...operationReviews,unavailable:monitor?.resultsUnavailable||monitor?.availability==='unavailable'},open:openOperations,action:'查看'
@@ -1759,7 +1854,7 @@ html[data-platform="darwin"] .pwb .pw-head {
                 h('div',null,h('h3',null,project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
                 h('div',{className:'pw-project-meta'},badge(phase.includes('发布')?'done':'unknown',phase))),
               h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
-                'aria-label':'进入项目：'+project.title},'进入项目',h(Icon,{name:'arrow',size:13})),
+                'aria-label':'进入项目：'+project.title,title:'进入项目：'+project.title},h(Icon,{name:'arrow',size:17})),
               h('dl',{className:'pw-project-facts'},
                 field('progress','最近进展',progress||'尚未同步开发进展'),
                 latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)));
@@ -1783,8 +1878,8 @@ html[data-platform="darwin"] .pwb .pw-head {
                 h('button',{className:'pw-card-link',onClick:()=>{setFeedDraft(reader);setEditingFeed(true);if(newsFolded)toggleBrief();}},reader?'修改链接':'添加链接'),
                 h('button',{className:'pw-card-link',onClick:toggleBrief,'aria-expanded':!newsFolded,'aria-label':newsFolded?'展开日报':'收起日报'},newsFolded?'展开':'收起',h('span',{'aria-hidden':true},newsFolded?'⌄':'⌃')))),
               !newsFolded||grid.editing?h('div',{className:'pw-card-body'},newsBody()):null)),
-            h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'activity'}),h('h2',null,'助手动态'))),h('div',{className:'pw-card-body'},assistantBody()))),
-            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'grid'}),h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',progress:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
+            h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'AI Agents'))),h('div',{className:'pw-card-body'},assistantBody()))),
+            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',progress:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
             h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},'今日计划'),planDateNav(),planViewSelector()),
               h('div',{className:'pw-plan-view','data-mode':calendarMode},calendarBody(),
