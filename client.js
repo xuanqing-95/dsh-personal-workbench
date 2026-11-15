@@ -121,6 +121,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .hbc-mini{position:fixed;right:16px;bottom:180px;z-index:40;width:42px;height:42px;padding:3px;border-radius:50%}
 @keyframes hbc-breathe{50%{transform:scale(1.015,.982)}}@keyframes hbc-tail{50%{transform:rotate(6deg)}}@keyframes hbc-blink{0%,43%,47%,100%{transform:scaleY(1)}45%{transform:scaleY(.08)}}@keyframes hbc-purr{to{transform:translateY(-1px) rotate(.6deg)}}
 @media(prefers-reduced-motion:reduce){.hbc-body,.hbc-tail,.hbc-eyes{animation:none}}
+
 `;
     function CatArt({ loved }) {
       const uid = React.useId().replace(/[^a-zA-Z0-9_-]/g, '');
@@ -458,6 +459,15 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return base.map(card=>placed.find(row=>row.id===card.id));
     }
     /* GRID_GEOMETRY_END */
+    function PlanInlineLink({href,label}) {
+      const [copyState,setCopyState]=React.useState('');
+      React.useEffect(()=>{if(!copyState)return;const timer=setTimeout(()=>setCopyState(''),2500);return()=>clearTimeout(timer);},[copyState]);
+      return h('span',{className:'pw-plan-inline-link'},
+        h('a',{href,target:'_blank',rel:'noopener noreferrer',title:href},label,h(Icon,{name:'arrow',size:11})),
+        h('button',{type:'button',title:'复制链接','aria-label':'复制链接：'+label,onClick:async()=>{
+          try{await navigator.clipboard.writeText(href);setCopyState('已复制');}catch{setCopyState('未能复制，请右键链接复制');}
+        }},'复制'),h('span',{className:'pw-link-copy-status',role:'status','aria-live':'polite'},copyState));
+    }
     function Icon({name='grid',size=18}) {
       const paths={grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
       return h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true},h('path',{d:paths[name]||paths.grid}));
@@ -625,11 +635,11 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-date-nav .pw-today {padding:0 5px;color:var(--pw-blue)}
 .pwb .pw-calendar-grid {row-gap:4px}
 .pwb .pw-calendar-grid button {gap:1px;border-radius:8px;min-height:26px}
-.pwb .pw-calendar-grid button > span {min-width:23px;padding:2px;text-align:center;border-radius:50%}
+.pwb .pw-calendar-grid button > .pw-calendar-number {min-width:23px;padding:2px;text-align:center;border-radius:50%}
 .pwb .pw-calendar-grid button:hover {background:var(--pw-hover)}
 .pwb .pw-calendar-grid button[aria-pressed=true] {background:transparent;color:var(--pw-ink);font-weight:700}
-.pwb .pw-calendar-grid button[aria-pressed=true] > span {background:var(--pw-olive);color:var(--pw-on-accent)}
-.pwb .pw-calendar-grid button.is-today:not([aria-pressed=true]) > span {background:var(--pw-gold);color:#111}
+.pwb .pw-calendar-grid button[aria-pressed=true] > .pw-calendar-number {background:var(--pw-olive);color:var(--pw-on-accent)}
+.pwb .pw-calendar-grid button.is-today:not([aria-pressed=true]) > .pw-calendar-number {background:var(--pw-gold);color:#111}
 .pwb .pw-calendar-grid button.is-outside {color:var(--pw-muted);opacity:.72}
 .pwb .pw-week-label {font-size:10px;font-weight:600}
 .pwb .pw-progress-value {background:var(--pw-olive)}
@@ -1112,7 +1122,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-news-banner .pw-card-link:hover,.pwb .pw-news-banner .pw-news-title:hover {color:var(--pw-blue)}
 .pwb .pw-news-banner :is(button,a,select):focus-visible {outline-color:var(--pw-accent)}
 .pwb .pw-brief-layout {display:grid;flex:1;min-height:0;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:14px;padding:4px var(--pw-card-inset) 12px}
-.pwb .pw-brief-lead {display:flex;align-items:stretch;gap:clamp(10px,2.4cqw,24px);min-width:0}
+.pwb .pw-brief-lead {display:flex;align-items:stretch;gap:12px;min-width:0}
 .pwb .pw-brief-copy {display:grid;align-self:center;align-content:start;justify-items:start;gap:8px;flex:1;min-width:0}
 .pwb .pw-brief-copy h3 {font-size:clamp(18px,2.5cqw,24px);line-height:1.28}
 .pwb .pw-brief-layout .pw-news-title {display:block;color:var(--pw-ink);text-transform:none;text-decoration:none;letter-spacing:normal;overflow-wrap:anywhere}
@@ -1123,7 +1133,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 .pwb .pw-brief-media {position:relative;flex:0 1 42%;min-width:0;min-height:132px;align-self:stretch}
 .pwb .pw-brief-media[hidden] {display:none}
-.pwb .pw-brief-media > .pw-news-image {position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:center}
+.pwb .pw-brief-media > .pw-news-image {position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:right center}
 
 .pwb .pw-brief-layout .pw-news-quick {display:grid;align-content:start;min-width:0;padding:0;border:0}
 .pwb .pw-brief-layout .pw-news-quick li {border-color:var(--pw-line)}
@@ -1137,7 +1147,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-title {font:500 13px/1.45 var(--pw-body)}
 @container pw-card (min-width:650px) {
-  .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+  .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}
   .pwb .pw-brief-layout .pw-news-quick {padding-inline-start:14px;border-inline-start:1px solid var(--pw-line)}
 }
 @container pw-card (max-width:649px) {
@@ -1285,6 +1295,56 @@ html[data-platform="darwin"] .pwb .pw-head {
  .pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-head .pw-card-title {gap:4px}
  .pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-news-actions .pw-card-link:has([aria-hidden]) {padding-inline:0}
 }
+/* Shared quiet controls and whole-cell calendar selection. */
+.pwb .pw-head :is(.pw-attention summary,.pw-layout-button,.pw-layout-button.is-primary,.pw-refresh) {
+  min-height:36px;border:1px solid var(--pw-line);border-radius:10px;
+  background:linear-gradient(135deg,rgba(255,255,255,.38),rgba(255,255,255,.18));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65);color:var(--pw-ink);
+  font:500 12px/18px var(--pw-body);letter-spacing:normal;text-transform:none;
+}
+.pwb .pw-head :is(.pw-attention summary,.pw-layout-button,.pw-layout-button.is-primary,.pw-refresh):hover {
+  background:rgba(255,255,255,.52);border-color:color-mix(in srgb,var(--pw-accent) 28%,transparent);color:var(--pw-ink);
+}
+.pwb[data-editing=true] .pw-head .pw-layout-button.is-primary {background:var(--pw-accent);color:#fff;border-color:transparent}
+.pwb .pw-head :is(.pw-layout-button,.pw-refresh):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px;border-radius:10px}
+.pwb .pw-head .pw-attention summary > svg {color:var(--pw-muted)}
+.pwb .pw-brief-copy .pw-brief-read,.pwb .pw-brief-folded-headline .pw-card-link {
+  display:inline-flex;align-items:center;gap:4px;min-height:28px;padding:2px 0;
+  border:0;background:transparent;box-shadow:none;color:var(--pw-muted);font:400 12px/18px var(--pw-body);text-decoration:none;
+}
+.pwb .pw-brief-copy .pw-brief-read:hover,.pwb .pw-brief-folded-headline .pw-card-link:hover {
+  color:var(--pw-accent);background:transparent;text-decoration:underline;text-underline-offset:3px;
+}
+.pwb .pw-plan .pw-calendar-grid button > span {background:transparent;color:inherit;border-radius:0}
+.pwb .pw-plan .pw-calendar-grid button > .pw-calendar-task-list {padding:0;text-align:left}
+.pwb .pw-plan .pw-calendar-grid button.is-today > .pw-calendar-number,
+.pwb .pw-plan .pw-calendar-grid button[aria-pressed=true] > .pw-calendar-number {
+  background:transparent;color:var(--pw-ink);border-radius:0;
+}
+.pwb .pw-plan .pw-calendar-grid button.is-today > .pw-calendar-number {color:var(--pw-accent);font-weight:700}
+.pwb .pw-plan .pw-calendar-grid button.is-today > .pw-calendar-number::after {
+  content:'';display:inline-block;width:4px;height:4px;margin-left:3px;vertical-align:middle;border-radius:50%;background:var(--pw-accent);
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode] button[aria-pressed=true] {
+  background:color-mix(in srgb,var(--pw-accent) 9%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pw-accent) 28%,transparent);color:var(--pw-ink);
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode] button:hover:not([aria-pressed=true]) {background:rgba(255,255,255,.36)}
+
+/* Simple checkbox, visible sync status and actionable plan links. */
+.pwb .pw-plan .pw-plan-check {width:16px;height:16px;min-width:16px;min-height:16px;padding:0;border:1px solid #819b9c;border-radius:3px;background:transparent;box-shadow:none}
+.pwb .pw-plan .is-done .pw-plan-check {border-color:var(--pw-accent);background:var(--pw-accent);color:#fff}
+.pwb .pw-plan .pw-plan-check svg {width:12px;height:12px;flex:none}
+.pwb .pw-plan .pw-plan-check:focus-visible {outline:2px solid var(--pw-accent);outline-offset:3px}
+.pwb .pw-plan .pw-plan-sync-row {border:0;padding:0 0 6px;min-height:28px;flex:none;justify-content:flex-start}
+.pwb .pw-plan-inline-link {display:inline;white-space:normal}
+.pwb .pw-plan-inline-link a {display:inline-flex;align-items:baseline;gap:3px;color:var(--pw-accent);text-decoration:underline;text-underline-offset:3px;font:inherit}
+.pwb .pw-plan-inline-link button {padding:2px 5px;margin-left:4px;border:0;border-radius:5px;color:var(--pw-muted);background:transparent;font:400 11px/18px var(--pw-body)}
+.pwb .pw-plan-inline-link button:hover {background:var(--pw-hover);color:var(--pw-accent)}
+.pwb .pw-plan-inline-link :is(a,button):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+.pwb .pw-link-copy-status {font:400 11px/18px var(--pw-body);color:var(--pw-muted)}
+
+.pwb .pw-credit {flex:none;margin:12px 0 8px;text-align:center;color:var(--pw-muted);opacity:.7;font:400 10px/16px var(--pw-body);letter-spacing:.08em;pointer-events:none}
 
 `;
     function bindWorkbenchWheel(board) {
@@ -1701,16 +1761,26 @@ html[data-platform="darwin"] .pwb .pw-head {
           const content=taskText(task.text||task.title),checked=checkedFor(task),saving=checks.has(task.id);
           return h('div',{key,className:'pw-plan-row'+(checked?' is-done':'')},
             h('button',{className:'pw-plan-check',type:'button',role:'checkbox','aria-label':content.title,'aria-checked':checked,'aria-busy':saving,'aria-disabled':saving,onClick:()=>void checkTask(task)},checked&&h(Icon,{name:'check',size:13})),
-            h('div',{className:'pw-plan-copy'},h('p',{className:'pw-plan-text',title:content.title},content.title),content.note&&h('p',{className:'pw-plan-meta'},content.note)));
+            h('div',{className:'pw-plan-copy'},h('p',{className:'pw-plan-text',title:content.title},planNoteContent(content.title)),content.note&&h('p',{className:'pw-plan-meta'},planNoteContent(content.note))));
+        }
+        function planNoteContent(value) {
+          return text(value).split(/(https:[/][/][^\s<>]+)/g).map((part,index)=>{
+            if(!part.startsWith('https://'))return part;
+            const clean=part.replace(/[。，；！？、,.!?;）)\]】]+$/u,''),href=safeHTTPS(clean);
+            if(!href)return part;
+            const host=new URL(href).hostname;
+            const label=host==='vc.feishu.cn'?'加入飞书会议':/(^|\.)zoom\.us$/.test(host)?'加入 Zoom 会议':host==='meeting.tencent.com'?'加入腾讯会议':host==='meet.google.com'?'加入 Google Meet':'打开链接';
+            return h(React.Fragment,{key:index},h(PlanInlineLink,{href,label}),part.slice(clean.length));
+          });
         }
         function planNodes(items,depth=0) {
           if(depth>10)return null;
           return list(items).map((node,i)=>{
             const key=node.id||node.task?.id||i;
             if(node.type==='task')return h(React.Fragment,{key},planRow(node.task||{},key),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
-            if(node.type==='note'||node.type==='label')return h('div',{key},node.text&&h('p',{className:'pw-plan-note '+(['quote','callout'].includes(node.style)?node.style:'')},node.text),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
+            if(node.type==='note'||node.type==='label')return h('div',{key},node.text&&h('p',{className:'pw-plan-note '+(['quote','callout'].includes(node.style)?node.style:'')},planNoteContent(node.text)),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
             // The original plan owns expandable notes and editing. Preview its caption here.
-            if(node.type==='toggle')return node.text?h('p',{key,className:'pw-plan-note'},node.text):null;
+            if(node.type==='toggle')return node.text?h('p',{key,className:'pw-plan-note'},planNoteContent(node.text)):null;
             return h(React.Fragment,{key},planNodes(node.children,depth+1));
           });
         }
@@ -1725,7 +1795,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           if(editingFeed)return h('form',{className:'pw-release-form',onSubmit:saveReadingLink},
             h('label',null,'日报链接',h('input',{type:'url',value:feedDraft,maxLength:2048,placeholder:'https://…',onChange:event=>setFeedDraft(event.target.value)})),
             h('div',null,h('button',{type:'button',onClick:()=>setEditingFeed(false)},'取消'),h('button',{type:'submit'},'保存')));
-          return reader?h('div',{className:'pw-brief-layout'},h('div',{className:'pw-brief-copy'},h('a',{className:'pw-dashboard-action is-accent',href:reader,target:'_blank',rel:'noopener noreferrer'},'阅读全文',h(Icon,{name:'arrow',size:12})))):empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
+          return reader?h('div',{className:'pw-brief-layout'},h('div',{className:'pw-brief-copy'},h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer'},'阅读全文',h(Icon,{name:'arrow',size:12})))):empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
         }
         function attentionSummary() {
           if(!attention.length)return null;
@@ -1996,6 +2066,7 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
                 h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
+          h('p',{className:'pw-credit'},'由玄清设计'),
           h('div',{className:readError||error||grid.notice?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(Icon,{name:'grid',size:20})));
