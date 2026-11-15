@@ -1344,7 +1344,15 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-plan-inline-link :is(a,button):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
 .pwb .pw-link-copy-status {font:400 11px/18px var(--pw-body);color:var(--pw-muted)}
 
-.pwb .pw-credit {flex:none;margin:12px 0 8px;text-align:center;color:var(--pw-muted);opacity:.7;font:400 10px/16px var(--pw-body);letter-spacing:.08em;pointer-events:none}
+.pwb .pw-credit {position:static;display:flex;align-items:center;justify-content:center;gap:0;flex:none;margin:0;padding:24px 12px 20px;text-align:center;color:var(--pw-muted);opacity:.72;font:400 10px/16px var(--pw-body);letter-spacing:.04em;white-space:nowrap}
+.pwb .pw-credit::before,.pwb .pw-credit::after {content:'';flex:none;width:20px;height:1px;background:currentColor;opacity:.22;margin-inline:12px}
+.pwb .pw-credit-name {font-weight:500;margin-inline-start:3px}
+.pwb .pw-credit-separator {margin-inline:5px}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] {border:0;gap:0}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period] {border:0;box-shadow:none}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period]+button[data-period] {border-left:1px solid rgba(68,94,98,.08)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[aria-pressed=true] {background:color-mix(in srgb,var(--pw-accent) 7%,transparent);box-shadow:none}
+
 
 `;
     function bindWorkbenchWheel(board) {
@@ -2065,8 +2073,8 @@ html[data-platform="darwin"] .pwb .pw-head {
                 h('div',{className:'pw-card-body'},planBody())),
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
-                h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
-          h('p',{className:'pw-credit'},'由玄清设计'),
+                h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加'))))),
+          h('footer',{className:'pw-credit','aria-label':'设计署名'},h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'玄清'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'))),
           h('div',{className:readError||error||grid.notice?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(Icon,{name:'grid',size:20})));
