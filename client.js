@@ -1024,9 +1024,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick {display:grid;align-content:start;min-width:0;padding:0;border:0}
 .pwb .pw-brief-layout .pw-news-quick li {border-color:var(--pw-line)}
 .pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
-  display:grid;grid-template-columns:minmax(0,1fr) 12px;align-items:center;gap:8px;min-height:34px;padding:6px 0;text-decoration:none
+  display:grid;grid-template-columns:24px minmax(0,1fr) 12px;align-items:start;gap:8px;min-height:34px;padding:6px 0;text-decoration:none
 }
-.pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:minmax(0,1fr)}
+.pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:24px minmax(0,1fr)}
+.pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:700 20px/1.2 var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
+.pwb .pw-brief-layout .pw-news-quick li > a > svg {margin-top:3px}
 .pwb .pw-brief-layout .pw-news-quick li > a:hover {background:var(--pw-hover)}
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-title {font:500 13px/1.45 var(--pw-body)}
