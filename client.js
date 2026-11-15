@@ -930,8 +930,19 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-head .pw-pet .hbc-home .hbc-launcher {--hbc-dock-size:var(--pw-header-pet-size);width:var(--hbc-dock-size)!important}
 .pwb .pw-head .pw-header-pet .pw-pet-art > .hbc-launcher {width:var(--pw-header-pet-size)!important}
 .pwb .pw-header-pet .hbc-launcher svg {width:100%;height:auto}
-.pwb .pw-header-pet .hbc-state-label:not(:has(button)),.pwb .pw-header-pet .hbc-name {display:none}
-.pwb .pw-header-pet .hbc-dock-actions {margin:0;margin-inline-start:6px}
+.pwb .pw-header-pet .pw-pet-art:has(> .hbc-home) {
+  display:grid;grid-template-columns:auto auto;grid-template-rows:1fr 1fr;
+  column-gap:8px;row-gap:4px;
+}
+.pwb .pw-header-pet .hbc-home {grid-row:1 / span 2;grid-column:1}
+.pwb .pw-header-pet .hbc-home .hbc-name {
+  margin-block-start:2px;color:var(--pw-ink);font:600 12px/16px var(--pw-body);text-align:center;
+}
+.pwb .pw-header-pet .hbc-state-label {
+  grid-area:1 / 2;align-self:end;min-height:0;max-inline-size:108px;
+  color:var(--pw-muted);font:500 12px/17px var(--pw-body);text-align:start;overflow-wrap:anywhere;
+}
+.pwb .pw-header-pet .hbc-dock-actions {grid-area:2 / 2;align-self:start;justify-content:start;margin:0}
 .pwb .pw-header-pet .hbc-pet-actions {flex-wrap:wrap}
 .pwb .pw-header-pet .hbc-pet-actions button {padding:4px 8px;white-space:nowrap}
 @container pw-root (max-width:700px) {
@@ -945,7 +956,9 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-head:has(.pw-attention) .pw-refresh {margin-inline-start:0}
 }
 @container pw-root (max-width:440px) {
-  .pwb .pw-header-pet .hbc-dock-actions {flex-direction:column;margin-inline-start:4px}
+  .pwb .pw-header-pet .pw-pet-art:has(> .hbc-home) {column-gap:4px}
+  .pwb .pw-header-pet .hbc-state-label {max-inline-size:69px}
+  .pwb .pw-header-pet .hbc-dock-actions {flex-direction:column}
   .pwb .pw-header-pet .hbc-pet-actions button {padding-inline:6px}
 }
 .pwb :is(.pw-brief-copy,.pw-assistant-copy,.pw-project-heading) h3 {margin:0;font:600 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body);overflow-wrap:anywhere}
