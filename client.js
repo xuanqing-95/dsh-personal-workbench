@@ -1137,9 +1137,8 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick {
   display:grid;align-content:start;grid-auto-rows:44px;min-width:0;padding:0;border:0
 }
-.pwb .pw-brief-layout .pw-news-quick li {
-  min-width:0;border:0;border-block-end:1px solid var(--pw-line)
-}
+.pwb .pw-brief-layout .pw-news-quick li {min-width:0;border:0}
+.pwb .pw-brief-layout .pw-news-quick li:not(:first-child) {border-block-end:1px solid var(--pw-line)}
 .pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
   box-sizing:border-box;display:grid;height:100%;grid-template-columns:16px minmax(0,1fr) 12px;
   align-items:center;gap:6px;padding:0 8px;text-decoration:none
