@@ -1160,9 +1160,6 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
   .pwb .pw-brief-layout .pw-news-quick {padding-inline-start:14px;border-inline-start:1px solid var(--pw-line)}
 }
-@container pw-card (max-width:649px) {
-  .pwb .pw-brief-layout .pw-news-quick {border-block-start:1px solid var(--pw-line)}
-}
 
 .pwb .pw-assistant-list.pw-assistant-feed {grid-template-columns:minmax(0,1fr);gap:8px;padding-inline:var(--pw-card-inset)}
 .pwb .pw-assistant-feed .pw-assistant-group {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:10px;margin:0;padding:10px 12px}
