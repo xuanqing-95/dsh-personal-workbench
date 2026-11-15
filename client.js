@@ -1135,7 +1135,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-media[hidden] {display:none}
 .pwb .pw-brief-media > .pw-news-image {position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;object-position:right center}
 
-.pwb .pw-brief-layout .pw-news-quick {display:grid;align-content:center;row-gap:8px;min-width:0;padding:0;border:0}
+.pwb .pw-brief-layout .pw-news-quick {display:grid;align-content:space-between;row-gap:8px;min-width:0;padding:0;border:0}
 .pwb .pw-brief-layout .pw-news-quick li {border-color:var(--pw-line)}
 .pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
   display:grid;grid-template-columns:16px minmax(0,1fr) 12px;align-items:first baseline;gap:6px;min-height:24px;padding:2px 0;text-decoration:none
