@@ -262,16 +262,52 @@ window.__ModuleLoader__.load({
     }
     function gridDefaults(profile) {
       const folded=profile.collapsed===true;
-      if(profile.cols===4)return [{id:'plan',x:0,y:folded?4:6,w:4,h:6},{id:'news',x:0,y:0,w:4,h:folded?1:3},{id:'activity',x:0,y:folded?10:12,w:4,h:4},{id:'pet',x:0,y:folded?1:3,w:4,h:3},{id:'projects',x:0,y:folded?14:16,w:4,h:3}];
-      const left=profile.cols===12?7:4,right=profile.cols-left;
-      return [{id:'plan',x:left,y:4,w:right,h:8},{id:'news',x:0,y:0,w:left,h:folded?1:4},{id:'activity',x:0,y:folded?1:4,w:left,h:4},{id:'pet',x:left,y:0,w:right,h:4},{id:'projects',x:0,y:folded?5:8,w:left,h:4}];
+      const news=folded?1:profile.cols===4?11:profile.cols===8?7:5;
+      const assistants=profile.cols===4?7:6;
+      const left=profile.cols===12?7:4;
+      const single=profile.cols===4;
+      return [
+        {id:'plan',x:single?0:left,y:news,w:single?4:profile.cols-left,h:single?6:12},
+        {id:'news',x:0,y:0,w:profile.cols,h:news},
+        {id:'activity',x:0,y:news+(single?6:0),w:left,h:assistants},
+        {id:'projects',x:0,y:news+assistants+(single?6:0),w:left,h:profile.cols===12?6:12}
+      ];
+    }
+    // Adopt the new composition for untouched presets. In custom layouts,
+    // reuse empty space next to the old banner before repairing collisions.
+    const oldGridPresets={
+      wide:{plan:[7,0,5,12],news:[0,0,4,5],activity:[0,5,7,4],pet:[4,0,3,5],projects:[0,9,7,3]},
+      medium:{plan:[4,0,4,12],news:[0,0,4,3],activity:[0,6,4,3],pet:[0,3,4,3],projects:[0,9,4,3]},
+      narrow:{plan:[0,6,4,6],news:[0,0,4,3],activity:[0,12,4,4],pet:[0,3,4,3],projects:[0,16,4,3]}
+    };
+    function gridSavedRows(value,profile) {
+      if(!Array.isArray(value))return [];
+      const preset=oldGridPresets[profile.key],keys=['x','y','w','h'];
+      const validOldPreset=preset&&value.length===Object.keys(preset).length&&
+        Object.keys(preset).every(id=>value.some(row=>row?.id===id&&keys.every((key,i)=>row[key]===preset[id][i])));
+      if(validOldPreset)return [];
+      if(!preset||!value.some(row=>row?.id==='pet'))return value;
+      const cards=value.filter(row=>row?.id!=='pet');
+      return cards.map(row=>{
+        if(!row||typeof row.h!=='number')return row;
+        if(row.id==='news'){
+          const full={...row,x:0,w:profile.cols};
+          const available=row.x===0&&gridFits(full,cards.filter(card=>card&&card!==row));
+          const next=available?full:row;
+          return {...next,h:Math.max(row.h,available?(profile.cols===4?11:profile.cols===8?7:5):5)};
+        }
+        if(row.id==='activity')return {...row,h:Math.max(row.h,6)};
+        if(row.id==='projects')return {...row,h:Math.max(row.h,6)};
+        return row;
+      });
     }
     function gridBound(value,fallback,min,max) {
       return Math.max(min,Math.min(max,typeof value==='number'&&Number.isFinite(value)?Math.round(value):fallback));
     }
     function gridCard(value,fallback,profile) {
+      const minimumHeight=fallback.id==='plan'||(fallback.id==='activity'&&profile.cols!==8)?4:3;
       const w=gridBound(value?.w,fallback.w,profile.minW,profile.cols);
-      return {id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?1:gridBound(value?.h,fallback.h,['news','pet','projects'].includes(fallback.id)?3:4,24)};
+      return {id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?1:gridBound(value?.h,fallback.h,minimumHeight,24)};
     }
     function gridOverlap(a,b) {
       return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
@@ -287,7 +323,7 @@ window.__ModuleLoader__.load({
       return null;
     }
     function gridNormalize(value,profile) {
-      const defaults=gridDefaults(profile),rows=Array.isArray(value)?value:[],seen=new Set(),byId=new Map();
+      const defaults=gridDefaults(profile),rows=gridSavedRows(value,profile),seen=new Set(),byId=new Map();
       for(const row of rows.slice(0,32))if(row&&typeof row==='object'&&defaults.some(card=>card.id===row.id)&&!seen.has(row.id)){seen.add(row.id);byId.set(row.id,row);}
       const cards=defaults.map(card=>gridCard(byId.get(card.id),card,profile)),placed=[];
       const ordered=[...cards].sort((a,b)=>a.y-b.y||a.x-b.x||defaults.findIndex(d=>d.id===a.id)-defaults.findIndex(d=>d.id===b.id));
@@ -845,6 +881,121 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-head .pw-attention .pw-attention-popover { max-height: 36dvh; padding-inline: 12px; }
 }
 
+
+.pwb {--pw-body:"Inter","PingFang SC",-apple-system,sans-serif;--pw-body-size:14px;--pw-body-leading:20px;--pw-label-size:12px;--pw-label-leading:16px}
+.pwb .pw-head .pw-header-pet > .pw-pet-art > .hbc-launcher {width:60px!important}
+.pwb .pw-head .pw-header-pet .hbc-launcher svg {width:100%;height:auto}
+.pwb .pw-header-pet .hbc-launcher span {font-size:11px}
+@container pw-root (max-width:560px){.pwb .pw-head .pw-header-pet > .pw-pet-art > .hbc-launcher {width:46px!important}}
+/* Dashboard overview */
+.pwb .pw-head {grid-template-areas:"plugin tools" "title pet";row-gap:4px;padding-block:8px 10px}
+.pwb .pw-head .pw-head-title h1 {font:600 clamp(22px,3.1cqw,32px)/1.15 var(--pw-display);white-space:normal}
+.pwb .pw-head .pw-header-pet {grid-area:pet;justify-self:end;align-self:center;background:none}
+.pwb .pw-header-pet .pw-pet-art {display:flex;align-items:center}
+.pwb .pw-head .pw-pet .hbc-home .hbc-launcher {--hbc-dock-size:60px;width:var(--hbc-dock-size)!important}
+.pwb .pw-header-pet .hbc-launcher svg {width:100%;height:100%}
+.pwb .pw-header-pet .hbc-state-label:not(:has(button)),.pwb .pw-header-pet .hbc-name {display:none}
+.pwb .pw-header-pet .hbc-dock-actions {margin:0;margin-inline-start:6px}
+.pwb .pw-header-pet .hbc-pet-actions {flex-wrap:wrap}
+.pwb .pw-header-pet .hbc-pet-actions button {padding:4px 8px;white-space:nowrap}
+@container pw-root (max-width:560px) {
+  .pwb .pw-head {grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"plugin plugin" "title pet" "tools tools"}
+  .pwb .pw-head .pw-pet .hbc-home .hbc-launcher {--hbc-dock-size:44px}
+  .pwb .pw-header-pet .hbc-dock-actions {margin-inline-start:2px;max-width:85px}
+}
+.pwb :is(.pw-brief-copy,.pw-assistant-copy,.pw-project-heading) h3 {margin:0;font:600 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body);overflow-wrap:anywhere}
+.pwb .pw-dashboard-action {
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:30px;padding:4px 10px;
+  color:var(--pw-blue);background:transparent;border:1px solid color-mix(in srgb,var(--pw-accent) 38%,transparent);
+  font:600 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body);text-decoration:none;white-space:nowrap
+}
+.pwb .pw-dashboard-action:hover {background:var(--pw-hover)}
+.pwb .pw-dashboard-action.is-accent {background:var(--pw-accent);border-color:var(--pw-accent);color:#fff}
+.pwb .pw-dashboard-action.is-accent:hover {background:color-mix(in srgb,var(--pw-accent) 82%,black)}
+.pwb :is(.pw-dashboard-action,.pw-brief-layout a):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+.pwb .pw-state[data-state=planned],.pwb .pw-state[data-state=waiting] {color:#285775;background:#e7f0f6}
+
+.pwb .pw-card.pw-news-banner {--pw-brief-image-height:132px;background:var(--pw-glass);color:var(--pw-ink);box-shadow:inset 0 0 0 1px var(--pw-line)}
+.pwb .pw-news-banner[data-folded=false]::before {content:none}
+.pwb .pw-news-banner .pw-card-head .pw-card-title > svg,.pwb .pw-news-banner .pw-card-link {color:var(--pw-blue)}
+.pwb .pw-news-banner .pw-brief-edition {color:var(--pw-muted)}
+.pwb .pw-news-banner .pw-brief-date {background:var(--pw-paper);color:var(--pw-ink);border-color:var(--pw-line)}
+.pwb .pw-news-banner .pw-card-link:hover,.pwb .pw-news-banner .pw-news-title:hover {color:var(--pw-blue)}
+.pwb .pw-news-banner :is(button,a,select):focus-visible {outline-color:var(--pw-accent)}
+.pwb .pw-brief-layout {display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:14px;padding:4px var(--pw-card-inset) 12px}
+.pwb .pw-brief-lead {display:flex;align-items:center;gap:clamp(10px,2.4cqw,24px);min-width:0}
+.pwb .pw-brief-copy {display:grid;align-content:start;justify-items:start;gap:8px;flex:1;min-width:0}
+.pwb .pw-brief-copy h3 {font-size:clamp(18px,2.5cqw,24px);line-height:1.28}
+.pwb .pw-brief-layout .pw-news-title {display:block;color:var(--pw-ink);text-transform:none;text-decoration:none;letter-spacing:normal;overflow-wrap:anywhere}
+.pwb .pw-brief-copy .pw-news-title {font:inherit}
+.pwb .pw-brief-copy .pw-news-summary {
+  color:var(--pw-muted);font:400 13px/1.55 var(--pw-body);margin:0;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden
+}
+.pwb .pw-brief-lead > .pw-news-image {
+  flex:none;width:auto;height:auto;max-width:min(40%,calc(var(--pw-brief-image-height) * 16 / 9));
+  max-height:var(--pw-brief-image-height);object-fit:contain
+}
+.pwb .pw-brief-layout .pw-news-quick {display:grid;align-content:start;min-width:0;padding:0;border:0}
+.pwb .pw-brief-layout .pw-news-quick li {border-color:var(--pw-line)}
+.pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
+  display:grid;grid-template-columns:15px minmax(0,1fr) 12px;align-items:center;gap:8px;min-height:34px;padding:6px 0;text-decoration:none
+}
+.pwb .pw-brief-layout .pw-news-quick li > a:hover {background:var(--pw-hover)}
+.pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
+.pwb .pw-brief-layout .pw-news-quick .pw-news-title {font:500 13px/1.45 var(--pw-body)}
+@container pw-card (min-width:650px) {
+  .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,2.15fr) minmax(0,1fr)}
+  .pwb .pw-brief-layout .pw-news-quick {padding-inline-start:14px;border-inline-start:1px solid var(--pw-line)}
+}
+@container pw-card (max-width:649px) {
+  .pwb .pw-brief-layout .pw-news-quick {border-block-start:1px solid var(--pw-line)}
+}
+
+.pwb .pw-assistant-list.pw-assistant-feed {grid-template-columns:minmax(0,1fr);gap:8px;padding-inline:var(--pw-card-inset)}
+.pwb .pw-assistant-feed .pw-assistant-group {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:10px;margin:0;padding:10px 12px}
+.pwb .pw-assistant-feed .pw-assistant-avatar {display:grid;place-items:center;width:38px;height:38px;background:var(--pw-tile);color:var(--pw-blue)}
+.pwb .pw-assistant-feed .pw-operations-icon {width:30px;height:30px}
+.pwb .pw-assistant-copy {display:grid;gap:4px;min-width:0}
+.pwb .pw-assistant-feed .pw-assistant-heading {display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;min-height:22px}
+.pwb .pw-assistant-copy .pw-assistant-context {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;color:var(--pw-ink);line-height:16px}
+.pwb .pw-assistant-context > span {color:var(--pw-muted)}
+.pwb .pw-assistant-feed .pw-assistant-field {display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px;align-items:start;font:400 12px/17px var(--pw-body)}
+.pwb .pw-assistant-feed .pw-assistant-review .pw-quiet-link {min-height:18px;line-height:17px}
+.pwb .pw-assistant-feed .pw-assistant-review-empty {font-size:12px}
+.pwb .pw-assistant-feed .pw-assistant-receipt > small {font-size:11px}
+.pwb .pw-assistant-feed .pw-assistant-open {align-self:center}
+@container pw-card (max-width:350px) {
+  .pwb .pw-assistant-feed .pw-assistant-group {gap:7px;padding:8px;grid-template-columns:32px minmax(0,1fr) auto}
+  .pwb .pw-assistant-feed .pw-assistant-avatar {width:32px;height:32px}
+  .pwb .pw-assistant-feed .pw-assistant-open {padding-inline:6px}
+  .pwb .pw-assistant-feed .pw-assistant-open > svg {display:none}
+  .pwb .pw-assistant-feed .pw-assistant-field {grid-template-columns:minmax(0,1fr);gap:1px}
+}
+
+.pwb .pw-project-list.pw-project-tiles {grid-template-columns:minmax(0,1fr);gap:8px;padding-inline:var(--pw-card-inset)}
+.pwb .pw-project-tiles .pw-project-row {display:grid;grid-template-rows:auto 1fr auto;grid-row:auto;gap:8px;margin:0;padding:10px}
+.pwb .pw-project-tiles .pw-project-heading {display:flex;align-items:flex-start;flex-wrap:wrap;gap:5px 7px;padding:0}
+.pwb .pw-project-tiles .pw-project-heading > div {flex:1;min-width:92px}
+.pwb .pw-project-tiles .pw-project-heading > .pw-state {max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.pwb .pw-project-tiles .pw-project-icon {width:26px;height:26px}
+.pwb .pw-project-tiles .pw-project-icon.is-placeholder {background:var(--pw-tile);color:var(--pw-blue)}
+.pwb .pw-project-version {font:400 11px/15px var(--pw-body);color:var(--pw-muted);overflow-wrap:anywhere}
+.pwb .pw-project-tiles .pw-project-remove {flex:none;align-self:start;min-width:24px;min-height:24px;padding:0}
+.pwb .pw-project-tiles .pw-project-facts {min-width:0;margin:0}
+.pwb .pw-project-tiles .pw-project-field {grid-template-columns:4em minmax(0,1fr);gap:6px;padding:5px 0}
+.pwb .pw-project-tiles .pw-project-field + .pw-project-field {border-block-start:1px solid var(--pw-line)}
+.pwb .pw-project-tiles .pw-project-field-value {margin:0}
+.pwb .pw-project-tiles .pw-project-enter {width:100%;background:var(--pw-tile)}
+.pwb .pw-project-tiles .pw-project-enter:hover {background:var(--pw-hover)}
+@container pw-card (min-width:455px) {
+  .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(2,minmax(0,1fr));row-gap:0}
+  .pwb .pw-project-tiles .pw-project-row {grid-template-rows:subgrid;grid-row:span 3;margin-block-end:8px}
+}
+@container pw-card (min-width:700px) {
+  .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
 `;
     const gridStorageKey='dsh-personal-workbench:layout:v2';
     function gridReadPreferences() {
@@ -854,7 +1005,7 @@ html[data-platform="darwin"] .pwb .pw-head {
       const viewport=React.useRef(null),gesture=React.useRef(null),current=React.useRef(null);
       const [saved,setSaved]=React.useState(gridReadPreferences),[draft,setDraft]=React.useState({}),[editing,setEditing]=React.useState(false),[active,setActive]=React.useState(null),[notice,setNotice]=React.useState('');
       const [size,setSize]=React.useState({width:0,height:0});
-      const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?12:profile.key==='medium'?16:24,row=Math.max(24,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
+      const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?12:profile.key==='medium'?16:24,row=Math.max(34,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
       const layout=gridNormalize((editing?draft:saved)[profile.key],profile);
       current.current={profile,gap,row,column,layout,editing};
       function stopGesture(cancel=false) {
@@ -1191,7 +1342,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           if(editingFeed)return h('form',{className:'pw-release-form',onSubmit:saveReadingLink},
             h('label',null,'日报链接',h('input',{type:'url',value:feedDraft,maxLength:2048,placeholder:'https://…',onChange:event=>setFeedDraft(event.target.value)})),
             h('div',null,h('button',{type:'button',onClick:()=>setEditingFeed(false)},'取消'),h('button',{type:'submit'},'保存')));
-          return reader?null:empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
+          return reader?h('div',{className:'pw-brief-layout'},h('div',{className:'pw-brief-copy'},h('a',{className:'pw-dashboard-action is-accent',href:reader,target:'_blank',rel:'noopener noreferrer'},'阅读全文',h(Icon,{name:'arrow',size:12})))):empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
         }
         function attentionSummary() {
           if(!attention.length)return null;
@@ -1275,8 +1426,10 @@ html[data-platform="darwin"] .pwb .pw-head {
             monthView&&activeMonth?.availability!=='connected'&&h('p',{className:'pw-calendar-status',role:'status'},
               activeMonth?'本月安排暂未同步，可点日期单独查看':'正在读取本月安排…'));
         }
+        function badge(state,label,title) {
+          return h('span',{className:'pw-state','data-state':state,title},label);
+        }
         function assistantBody() {
-          const badge=(state,label,title)=>h('span',{className:'pw-state','data-state':state,title},label);
           const operations=assistants.operation;
           const openOperations=()=>navigate({panel:'redflow-workbench'});
           function receipt(row,mark) {
@@ -1290,34 +1443,36 @@ html[data-platform="darwin"] .pwb .pw-head {
                 title:'标记已验收','aria-label':'标记已验收：'+title},h(Icon,{name:'check',size:13})),
               h('small',null,state));
           }
-          function assistantCard({name,icon,status,reviews,open}) {
+          function assistantCard({name,icon,status,detail,reviews,open,action='打开'}) {
             const result=reviews.latest;
             return h('section',{className:'pw-assistant-group','aria-label':name},
-              h('div',{className:'pw-assistant-heading'},icon,h('strong',null,name),
-                open&&h('button',{className:'pw-quiet-link',type:'button','aria-label':'打开'+name,onClick:open},'打开',h(Icon,{name:'arrow',size:11}))),
-              h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'当前状态'),
-                h('div',{className:'pw-assistant-status'},status)),
-              h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),
-                h('div',{className:'pw-assistant-review'},
-                  result?receipt(result,reviews.mark):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无结果'),
-                  reviews.error&&h('span',{role:'status',className:'pw-assistant-warning'},reviews.error))));
+              h('span',{className:'pw-assistant-avatar','aria-hidden':true},icon),
+              h('div',{className:'pw-assistant-copy'},
+                h('div',{className:'pw-assistant-heading'},h('h3',null,name),status),
+                detail&&h('p',{className:'pw-assistant-context',title:detail.hint},h('span',null,detail.label+'：'),detail.text),
+                h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),
+                  h('div',{className:'pw-assistant-review'},
+                    result?receipt(result,reviews.mark):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无结果'),
+                    reviews.error&&h('span',{role:'status',className:'pw-assistant-warning'},reviews.error)))),
+              open&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':'打开'+name,onClick:open},action,h(Icon,{name:'chevron',size:11})));
           }
           const primary=operations[0];
           const operation=assistantCard({
             name:'运营助手',icon:h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),
-            status:primary?h(React.Fragment,null,badge(primary.state,primary.label),
-              h('span',{className:'pw-assistant-context',title:primary.state==='failed'?primary.detail:undefined},
-                [primary.title,primary.timing].filter(Boolean).join(' · '))):
+            status:primary?badge(primary.state,primary.label,primary.state==='failed'?primary.detail:undefined):
               badge('unknown',assistants.synced?'暂无新任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
-            reviews:{...operationReviews,unavailable:monitor?.resultsUnavailable||monitor?.availability==='unavailable'},open:openOperations
+            detail:primary&&{label:primary.state==='failed'?'原因':'当前任务',
+              text:primary.state==='failed'&&primary.detail?primary.detail:[primary.title,primary.timing].filter(Boolean).join(' · '),
+              hint:primary.detail||primary.title},
+            reviews:{...operationReviews,unavailable:monitor?.resultsUnavailable||monitor?.availability==='unavailable'},open:openOperations,action:'查看'
           });
           const current=rows[0];
           const secondary=current&&assistantCard({
-            name:'Harness 助手',icon:h('span',{className:'pw-assistant-avatar is-news'},h(Icon,{name:'activity',size:15})),
-            status:h(React.Fragment,null,badge('active',rows.length+' 项进展'),h('span',{className:'pw-assistant-context'},current.title)),
+            name:'Harness 助手',icon:h(Icon,{name:'activity',size:22}),
+            status:badge('active',rows.length+' 项进展'),detail:{label:'当前任务',text:current.title},
             reviews:{},open:current.destination?()=>navigate(current.destination):null
           });
-          return h('div',{className:'pw-assistant-list pw-assistant-compact'},operation,secondary);
+          return h('div',{className:'pw-assistant-list pw-assistant-feed'},operation,secondary);
         }
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
         function projectDestination(project) {
@@ -1411,23 +1566,23 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         function projectBody() {
           if(!allProjects.length)return empty('把项目放在手边','添加项目后，可以直接回到它的开发对话。','grid');
-          const field=(key,label,value)=>h('span',{className:'pw-project-field','data-field':key,hidden:!value},
-            value&&h(React.Fragment,null,
-              h('span',{className:'pw-project-field-label'},label),
-              h('span',{className:'pw-project-field-value',title:value},value)));
-          return h('div',{className:'pw-project-list'},allProjects.map(project=>{
+          const field=(key,label,value)=>h('div',{className:'pw-project-field','data-field':key},
+            h('dt',{className:'pw-project-field-label'},label),
+            h('dd',{className:'pw-project-field-value',title:value||undefined},value||'—'));
+          return h('div',{className:'pw-project-list pw-project-tiles'},allProjects.map(project=>{
             const pending=list(notes[project.id]?.requirements).filter(item=>!item.done);
             const latest=pending.reduce((last,item)=>!last||item.createdAt>=last.createdAt?item:last,null);
-            const progress=projectProgress(project);
-            return h('div',{className:'pw-project-row',key:project.id},
-              h('button',{className:'pw-project-open',onClick:event=>openProject(project,event),'aria-label':'查看项目：'+project.title},
-                h('span',{className:'pw-project-heading'},
-                  project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':'grid',size:21})),
-                  h('strong',null,project.title),h(Icon,{name:'chevron',size:13})),
-                field('version','版本',project.version&&'v'+project.version),
+            const progress=projectProgress(project),version=project.version?['v'+project.version]:[];
+            return h('article',{className:'pw-project-row',key:project.id},
+              h('div',{className:'pw-project-heading'},
+                project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':project.id==='today-plan'?'calendar':'grid',size:21})),
+                h('div',null,h('h3',null,project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
+                project.source&&h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×')),
+              h('dl',{className:'pw-project-facts'},
                 field('progress','最近进展',progress),
-                field('requirements','待开发',latest&&(pending.length>1?pending.length+' 项 · ':'')+latest.title)),
-              project.source&&h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×'));
+                latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)),
+              h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
+                'aria-label':'查看项目：'+project.title},'进入项目',h(Icon,{name:'arrow',size:13})));
           }));
         }
         function removeProject(project) {
@@ -1442,16 +1597,15 @@ html[data-platform="darwin"] .pwb .pw-head {
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
-          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing&&h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小')),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
+          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing&&h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小')),h('div',{className:'pw-pet pw-header-pet','aria-label':'猫咪个人助手'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中'))),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
           h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas',style:grid.canvasStyle},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'news'}),h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
-                reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'原文',h(Icon,{name:'arrow',size:11})),
+                newsFolded&&reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'原文',h(Icon,{name:'arrow',size:11})),
                 h('button',{className:'pw-card-link',onClick:()=>{setFeedDraft(reader);setEditingFeed(true);if(newsFolded)toggleBrief();}},reader?'修改链接':'添加链接'),
                 h('button',{className:'pw-card-link',onClick:toggleBrief,'aria-expanded':!newsFolded,'aria-label':newsFolded?'展开日报':'收起日报'},newsFolded?'展开':'收起',h('span',{'aria-hidden':true},newsFolded?'⌄':'⌃')))),
-              h('div',{className:'pw-card-body'},newsBody()))),
-            h('section',{...grid.card('pet'),className:'pw-card pw-pet','aria-label':'猫咪个人助手'},grid.handles('pet','猫咪助手'),h('div',contentProps,h('div',{className:'pw-pet-main'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中'))))),
-            h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'activity'}),h('h2',null,'AI 助手'))),h('div',{className:'pw-card-body'},assistantBody()))),
+              !newsFolded||grid.editing?h('div',{className:'pw-card-body'},newsBody()):null)),
+            h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'activity'}),h('h2',null,'助手动态'))),h('div',{className:'pw-card-body'},assistantBody()))),
             h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'grid'}),h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',progress:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
             h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},'今日计划'),planDateNav(),planViewSelector()),
