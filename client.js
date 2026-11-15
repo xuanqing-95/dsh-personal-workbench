@@ -381,7 +381,7 @@ window.__ModuleLoader__.load({
 @container pw-root (max-width:520px){.pwb .pw-head{flex-wrap:wrap;gap:0;align-content:center;padding-top:9px;padding-bottom:8px}.pwb .pw-head-title{flex:1;min-width:0}.pwb .pw-head-actions{flex:0 0 auto}.pwb .pw-attention{position:static}.pwb .pw-attention summary{padding:5px 7px}.pwb .pw-attention-label{font-size:10px}.pwb .pw-attention-popover{right:12px;top:78px}.pwb .pw-head:has(.pw-attention){min-height:102px}.pwb .pw-head:has(.pw-attention) .pw-head-title{flex:0 0 100%}.pwb .pw-head h1{white-space:nowrap}.pwb .pw-head:has(.pw-attention) .pw-head-actions{flex-basis:100%;justify-content:flex-start;padding-top:6px}.pwb .pw-head:has(.pw-attention) .pw-refresh{margin-left:auto}.pwb .pw-head:has(.pw-attention) .pw-attention-popover{top:101px}}
 @media(max-height:590px){.pwb{overflow:auto}.pwb .pw-shell{min-height:570px}}
 @media(prefers-reduced-motion:reduce){.pwb *{scroll-behavior:auto!important}}
-.pwb .pw-homeboard{display:block;position:relative;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent;scrollbar-gutter:stable}
+.pwb .pw-homeboard{display:block;position:relative;overflow:auto;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent;scrollbar-gutter:stable}
 .pwb .pw-grid-canvas{position:relative;width:100%;min-height:100%}
 .pwb .pw-card-content{display:flex;flex-direction:column;flex:1;min-height:0;min-width:0}
 .pwb .pw-card{position:absolute;grid-area:auto;container-type:inline-size;container-name:pw-card}
@@ -513,7 +513,7 @@ window.__ModuleLoader__.load({
 }
 
 .pwb .pw-plan-view {display:flex;flex:1;min-height:0;flex-direction:column}
-.pwb .pw-plan-view[data-mode=month] {overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent}
+.pwb .pw-plan-view[data-mode=month] {overflow:auto;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent}
 .pwb .pw-plan-view[data-mode=month]>.pw-card-body {flex:0 0 auto;overflow:visible}
 .pwb .pw-segmented {background:var(--pw-tile);border:1px solid var(--pw-line)}
 .pwb .pw-segmented button {min-height:24px}
