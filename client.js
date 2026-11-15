@@ -331,6 +331,16 @@ window.__ModuleLoader__.load({
       if(profile.collapsed)for(const card of [...placed].filter(item=>item.id!=='news').sort((a,b)=>a.y-b.y)){while(card.y>0&&gridFits({...card,y:card.y-1},placed.filter(item=>item!==card)))card.y--;}
       return defaults.map(card=>placed.find(row=>row.id===card.id));
     }
+    function canFitOverviewContent(layout, profile) {
+      const [plan, news, activity, projects] = layout;
+      const [, defaultNews, defaultActivity] = gridDefaults(profile);
+      return profile.cols > 4
+        && news.x === 0 && news.y === 0 && news.w === profile.cols
+        && news.h === defaultNews.h && activity.h === defaultActivity.h
+        && plan.y === news.h && activity.y === news.h
+        && projects.x === activity.x && projects.w === activity.w
+        && projects.y === activity.y + activity.h;
+    }
     function gridArrange(value,id,patch,profile) {
       const base=gridNormalize(value,profile),old=base.find(card=>card.id===id);
       if(!old)return base;
@@ -888,6 +898,23 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-header-pet .hbc-launcher span {font-size:11px}
 @container pw-root (max-width:560px){.pwb .pw-head .pw-header-pet > .pw-pet-art > .hbc-launcher {width:46px!important}}
 /* Dashboard overview */
+.pwb .pw-grid-canvas[data-fit-content=true] {
+  display:grid;
+  grid-template-columns:repeat(var(--pw-overview-columns), minmax(0,1fr));
+  grid-template-rows:max-content max-content auto;
+  gap:12px var(--pw-overview-gap);
+  align-content:start;
+  align-items:start;
+}
+.pwb .pw-grid-canvas[data-fit-content=true] > .pw-card {position:relative}
+.pwb .pw-grid-canvas[data-fit-content=true] > .pw-plan {contain:size layout style;align-self:stretch}
+.pwb [data-fit-content=true] > :is(.pw-news,.pw-assistants) .pw-card-head {padding-block:12px 8px}
+.pwb [data-fit-content=true] > .pw-news[data-folded=true] .pw-card-head {min-height:42px;padding-block:4px}
+.pwb [data-fit-content=true] .pw-brief-layout {padding-block:0 12px}
+.pwb [data-fit-content=true] .pw-brief-layout .pw-news-quick li > :is(a,span) {min-height:29px;padding-block:4px}
+.pwb [data-fit-content=true] .pw-assistant-feed {padding-bottom:10px}
+.pwb [data-fit-content=true] .pw-assistant-feed .pw-assistant-group {padding-block:7px}
+.pwb [data-fit-content=true] .pw-assistant-copy {row-gap:3px}
 .pwb .pw-head {grid-template-areas:"plugin tools" "title pet";row-gap:4px;padding-block:8px 10px}
 .pwb .pw-head .pw-head-title h1 {font:600 clamp(22px,3.1cqw,32px)/1.15 var(--pw-display);white-space:normal}
 .pwb .pw-head .pw-header-pet {grid-area:pet;justify-self:end;align-self:center;background:none}
@@ -1007,6 +1034,7 @@ html[data-platform="darwin"] .pwb .pw-head {
       const [size,setSize]=React.useState({width:0,height:0});
       const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?12:profile.key==='medium'?16:24,row=Math.max(34,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
       const layout=gridNormalize((editing?draft:saved)[profile.key],profile);
+      const fitContent = !editing && canFitOverviewContent(layout, profile);
       current.current={profile,gap,row,column,layout,editing};
       function stopGesture(cancel=false) {
         const previous=gesture.current;if(!previous)return;
@@ -1067,7 +1095,13 @@ html[data-platform="darwin"] .pwb .pw-head {
       }
       function card(id) {
         const item=layout.find(item=>item.id===id);
-        return {'data-grid-id':id,'data-active':active===id?'true':undefined,style:{left:item.x*column,top:item.y*(row+gap),width:Math.max(0,item.w*column-gap),height:item.h*row+(item.h-1)*gap}};
+        const height = item.h * (row + gap) - gap;
+        const style = fitContent ? {
+          gridColumn: `${item.x + 1} / span ${item.w}`,
+          gridRow: {news:'1', activity:'2', projects:'3', plan:'2 / span 2'}[id],
+          height: id === 'projects' ? height : undefined
+        } : {left:item.x*column,top:item.y*(row+gap),width:Math.max(0,item.w*column-gap),height};
+        return {'data-grid-id':id,'data-active':active===id?'true':undefined,style};
       }
       function edit(){setDraft({...saved});setNotice('');setEditing(true);}
       function cancel(){stopGesture(true);setEditing(false);setNotice('');}
@@ -1078,7 +1112,15 @@ html[data-platform="darwin"] .pwb .pw-head {
         setSaved(profiles);setEditing(false);
         try{localStorage.setItem(gridStorageKey,JSON.stringify({version:2,profiles}));setNotice('布局已保存');}catch{setNotice('本次布局已应用，但无法保存到此设备');}
       }
-      return {viewport,editing,active,notice,profile,handles,card,edit,cancel,reset,finish,canvasStyle:{height:Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap,'--pw-grid-column':column+'px','--pw-grid-row':(row+gap)+'px'}};
+      const canvasStyle = fitContent ? {
+        '--pw-overview-columns': profile.cols,
+        '--pw-overview-gap': gap + 'px'
+      } : {
+        height: Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap,
+        '--pw-grid-column': column+'px',
+        '--pw-grid-row': (row+gap)+'px'
+      };
+      return {viewport,editing,active,notice,profile,handles,card,edit,cancel,reset,finish,fitContent,canvasStyle};
     }
     return {inject:['slots','locale','layout'],apply(ctx) {
       ctx.effect(()=>ctx.locale.register('personalWorkbench','zh',{title:'个人主控台'}));
@@ -1598,7 +1640,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb',ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
           h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing&&h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小')),h('div',{className:'pw-pet pw-header-pet','aria-label':'猫咪个人助手'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中'))),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:'刷新','aria-label':'刷新首页',disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:18}))))),
-          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas',style:grid.canvasStyle},
+          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,style:grid.canvasStyle},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h(Icon,{name:'news'}),h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
                 newsFolded&&reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'原文',h(Icon,{name:'arrow',size:11})),
