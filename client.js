@@ -1023,7 +1023,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb [data-fit-content=true] > .pw-news[data-folded=true] .pw-card-head {min-height:42px;padding-block:4px}
 .pwb [data-fit-content=true] .pw-brief-layout {padding-block:0 12px}
 .pwb [data-fit-content=true] .pw-assistant-feed {padding-bottom:10px}
-.pwb [data-fit-content=true] .pw-assistant-copy {row-gap:3px}
+.pwb [data-fit-content=true] .pw-assistant-copy {row-gap:6px}
 .pwb .pw-head {
   --pw-header-pet-size:clamp(72px,9cqw,92px);
   grid-template-columns:minmax(0,1fr) auto auto;
@@ -1119,7 +1119,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-news-banner .pw-brief-date {background:var(--pw-paper);color:var(--pw-ink);border-color:var(--pw-line)}
 .pwb .pw-news-banner .pw-card-link:hover,.pwb .pw-news-banner .pw-news-title:hover {color:var(--pw-blue)}
 .pwb .pw-news-banner :is(button,a,select):focus-visible {outline-color:var(--pw-accent)}
-.pwb .pw-brief-layout {display:grid;flex:1;min-height:0;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:14px;padding:4px var(--pw-card-inset) 12px}
+.pwb .pw-brief-layout {display:grid;flex:1;min-height:0;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:20px;padding:4px var(--pw-card-inset) 12px}
 .pwb .pw-brief-lead {display:flex;align-items:stretch;gap:12px;min-width:0}
 .pwb .pw-brief-copy {display:flex;flex-direction:column;align-self:stretch;align-items:flex-start;gap:8px;flex:1;min-width:0}
 .pwb .pw-brief-copy h3 {font-size:clamp(18px,2.5cqw,24px);line-height:1.28}
@@ -1137,10 +1137,9 @@ html[data-platform="darwin"] .pwb .pw-head {
   display:grid;align-content:start;grid-auto-rows:44px;min-width:0;padding:0;border:0
 }
 .pwb .pw-brief-layout .pw-news-quick li {min-width:0;border:0}
-.pwb .pw-brief-layout .pw-news-quick li:not(:first-child) {border-block-end:1px solid var(--pw-line)}
 .pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
   box-sizing:border-box;display:grid;height:100%;grid-template-columns:16px minmax(0,1fr) 12px;
-  align-items:center;gap:6px;padding:0 8px;text-decoration:none
+  align-items:center;gap:6px;padding:0 8px;text-decoration:none;border:0;box-shadow:none;background:transparent
 }
 .pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:16px minmax(0,1fr)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:600 13px/18px var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
@@ -1156,11 +1155,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 @container pw-card (min-width:650px) {
   .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
-  .pwb .pw-brief-layout .pw-news-quick {padding-inline-start:14px;border-inline-start:1px solid var(--pw-line)}
+  .pwb .pw-brief-layout .pw-news-quick {padding-inline-start:8px;border:0}
 }
 
-.pwb .pw-assistant-list.pw-assistant-feed {grid-template-columns:minmax(0,1fr);gap:8px;padding-inline:var(--pw-card-inset)}
-.pwb .pw-assistant-feed .pw-assistant-group {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:8px;margin:0;padding:8px 12px}
+.pwb .pw-assistant-list.pw-assistant-feed {grid-template-columns:minmax(0,1fr);gap:12px;padding-inline:var(--pw-card-inset)}
+.pwb .pw-assistant-feed .pw-assistant-group {display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:12px;margin:0;padding:12px 16px}
 .pwb .pw-assistant-feed .pw-assistant-avatar {display:grid;place-items:center;width:38px;height:38px;background:var(--pw-tile);color:var(--pw-blue)}
 .pwb .pw-assistant-feed .pw-operations-icon {width:30px;height:30px}
 .pwb .pw-assistant-copy {display:grid;gap:4px;min-width:0}
@@ -1180,10 +1179,10 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-assistant-feed .pw-assistant-field {grid-template-columns:minmax(0,1fr);gap:1px}
 }
 
-.pwb .pw-project-list.pw-project-tiles {grid-template-columns:minmax(0,1fr);gap:8px;padding-inline:var(--pw-card-inset)}
+.pwb .pw-project-list.pw-project-tiles {grid-template-columns:minmax(0,1fr);align-items:start;align-content:start;gap:12px;padding-inline:var(--pw-card-inset)}
 .pwb .pw-project-tiles .pw-project-row {
-  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;
-  grid-row:auto;gap:8px;margin:0;padding:8px 12px
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:max-content max-content;
+  grid-row:auto;gap:12px;margin:0;padding:12px 16px
 }
 .pwb .pw-project-tiles .pw-project-heading {
   display:grid;grid-template-columns:26px minmax(0,1fr);align-items:start;gap:5px 7px;padding:0
@@ -1201,19 +1200,26 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-project-tiles .pw-project-enter {grid-area:1 / 2;align-self:start;gap:4px;padding-inline:7px;background:var(--pw-tile)}
 .pwb .pw-project-tiles .pw-project-enter:hover {background:var(--pw-hover)}
 @container pw-card (min-width:455px) {
-  .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(2,minmax(0,1fr));row-gap:0}
-  .pwb .pw-project-tiles .pw-project-row {grid-template-rows:subgrid;grid-row:span 2;margin-block-end:8px}
+  .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(2,minmax(0,1fr));row-gap:12px}
+  .pwb .pw-project-tiles .pw-project-row {grid-template-rows:max-content max-content;grid-row:auto;margin-block-end:0}
 }
 @container pw-card (min-width:700px) {
   .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-projects[data-auto-height=true] :is(.pw-card-content,.pw-card-body) {flex:0 0 auto;min-height:0;height:auto;align-content:start}
+.pwb .pw-grid-canvas[data-fit-content=true] {--pw-overview-gap:20px!important;column-gap:20px;row-gap:20px}
+.pwb .pw-grid-canvas[data-fit-content=true] > .pw-overview-column {row-gap:20px}
+@container pw-root (max-width:560px) {
+ .pwb .pw-grid-canvas[data-fit-content=true] {--pw-overview-gap:16px!important;column-gap:16px;row-gap:16px}
+}
+
 /* Shared card rhythm: one source for spacing and heading size in every state. */
-.pwb {--pw-card-padding:20px;--pw-card-title-size:18px;--pw-card-title-leading:24px;--pw-card-content-gap:8px;--pw-card-bottom:12px}
+.pwb {--pw-card-padding:24px;--pw-card-title-size:18px;--pw-card-title-leading:24px;--pw-card-content-gap:12px;--pw-card-bottom:16px}
 .pwb .pw-grid-canvas .pw-card,
 .pwb .pw-grid-canvas .pw-card .pw-card-content {--pw-card-inset:var(--pw-card-padding)}
 .pwb .pw-grid-canvas .pw-card .pw-card-content > .pw-card-head {
-  flex:0 0 auto;min-height:44px;padding:12px var(--pw-card-inset) var(--pw-card-content-gap);gap:8px;align-items:center;flex-wrap:wrap
+  flex:0 0 auto;min-height:44px;padding:16px var(--pw-card-inset) var(--pw-card-content-gap);gap:8px;align-items:center;flex-wrap:wrap
 }
 .pwb .pw-grid-canvas .pw-card .pw-card-head .pw-card-title h2,
 .pwb .pw-grid-canvas .pw-plan .pw-card-head > h2 {
@@ -1388,7 +1394,7 @@ html[data-platform="darwin"] .pwb .pw-head {
   background:none;border:0;box-shadow:none
 }
 .pwb .pw-pet .hbc-nest::before {
-  inset:4%;box-sizing:border-box;border-radius:50%;border:1px solid #99753526;
+  inset:4%;box-sizing:border-box;border-radius:50%;corner-shape:round;border:1px solid #99753526;
   clip-path:none;box-shadow:none;transition:border-color .18s ease,opacity .18s ease
 }
 .pwb .pw-pet .hbc-home-ready .hbc-nest::before {border-color:#99753555}
@@ -1398,9 +1404,8 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 .pwb .pw-pet .hbc-nest::after {content:none;display:none}
 
-/* Equal-height expanded overview cards, with a distinct summary and larger actions. */
+/* The pet keeps its own size when the daily brief expands or folds. */
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {display:grid;grid-template-columns:128px minmax(0,1fr);gap:12px;align-items:center;padding:16px;box-sizing:border-box}
-.pwb .pw-grid-canvas[data-pet-placement=aligned]:has(.pw-news[data-folded=false]) .pw-pet.pw-overview-pet {min-height:var(--pw-news-card-height,auto)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:128px;padding:0;align-self:center;align-content:center;row-gap:5px}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;min-inline-size:0;margin:0;padding:12px;border:1px solid rgba(255,255,255,.55);border-radius:12px;background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {display:flex;width:100%;gap:8px;flex-wrap:nowrap;margin:4px 0 0;justify-content:center}
@@ -1434,6 +1439,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-plan .pw-plan-group + .pw-plan-group,
 .pwb .pw-plan[data-density=compact] .pw-plan-group + .pw-plan-group {margin-top:24px}
 .pwb .pw-plan .pw-group-title {margin:0 0 4px;color:var(--pw-ink);font:600 14px/20px var(--pw-body);letter-spacing:normal;text-transform:none}
+.pwb .pw-plan-group > .pw-plan-section-label:not(:first-child) {margin-top:24px}
 .pwb .pw-plan .pw-plan-time {color:var(--pw-muted);font-weight:500}
 .pwb .pw-plan :is(.pw-plan-note,.pw-plan-note.quote,.pw-plan-note.callout) {margin:4px 0;padding:0;border:0;border-radius:0;background:transparent;color:var(--pw-muted)}
 
@@ -1565,9 +1571,9 @@ html[data-platform="darwin"] .pwb .pw-head {
         const style = fitContent ? {
           gridColumn: `${item.x + 1} / span ${item.w}`,
           gridRow: {news:'1', activity:'2', projects:'3', plan:'2 / span 2'}[id],
-          height: id === 'projects' ? height : undefined
+          height: id === 'projects' && item.h !== gridDefaults(profile).find(card => card.id === 'projects').h ? height : undefined
         } : {left:item.x*column,top:item.y*(row+gap),width:Math.max(0,item.w*column-gap),height};
-        return {'data-grid-id':id,'data-active':active===id?'true':undefined,style};
+        return {'data-grid-id':id,'data-auto-height':fitContent&&id==='projects'&&style.height===undefined?'true':undefined,'data-active':active===id?'true':undefined,style};
       }
       function edit(){setDraft({...saved});setNotice('');setEditing(true);}
       function cancel(){stopGesture(true);setEditing(false);setNotice('');}
@@ -1690,15 +1696,6 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [selectedDate,setSelectedDate]=React.useState(()=>restoredUI('selectedDate','')),[calendarMode,setCalendarMode]=React.useState(()=>restoredUI('calendarMode','day')),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
         const grid=useWorkbenchGrid(newsFolded);
-        React.useLayoutEffect(()=>{
-          const canvas=grid.viewport.current?.querySelector('.pw-grid-canvas'),news=canvas?.querySelector('.pw-news');
-          if(!canvas||!news||!grid.fitContent||grid.petPlacement!=='aligned'||newsFolded)return;
-          let lastHeight=0;
-          const syncHeight=()=>{const height=Math.round(news.getBoundingClientRect().height);if(height>0&&height!==lastHeight){lastHeight=height;canvas.style.setProperty('--pw-news-card-height',height+'px');}};
-          syncHeight();const observer=new ResizeObserver(syncHeight);observer.observe(news);
-          return()=>{observer.disconnect();canvas.style.removeProperty('--pw-news-card-height');};
-        },[grid.fitContent,grid.petPlacement,newsFolded]);
-
         React.useLayoutEffect(() => {
           const board = grid.viewport.current;
           if (board) return bindWorkbenchWheel(board);
@@ -1878,7 +1875,9 @@ html[data-platform="darwin"] .pwb .pw-head {
           return list(items).map((node,i)=>{
             const key=node.id||node.task?.id||i;
             if(node.type==='task')return h(React.Fragment,{key},planRow(node.task||{},key),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
-            if(node.type==='note'||node.type==='label')return h('div',{key},node.text&&h('p',{className:'pw-plan-note '+(['quote','callout'].includes(node.style)?node.style:'')},planNoteContent(node.text)),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
+            const isSection=node.type==='label'||(depth===0&&node.type==='note'&&/^(?:上午|下午|晚上|晚间|早晨|早上|有余力(?:再)?做|固定(?:任务|收尾))[:：]?$/u.test(text(node.text).trim()));
+            if(isSection)return h('div',{key,className:'pw-plan-section-label'},node.text&&h('h3',{className:'pw-group-title'},node.text),planNodes(node.children,depth+1));
+            if(node.type==='note')return h('div',{key},node.text&&h('p',{className:'pw-plan-note '+(['quote','callout'].includes(node.style)?node.style:'')},planNoteContent(node.text)),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
             // The original plan owns expandable notes and editing. Preview its caption here.
             if(node.type==='toggle')return node.text?h('p',{key,className:'pw-plan-note'},planNoteContent(node.text)):null;
             return h(React.Fragment,{key},planNodes(node.children,depth+1));
