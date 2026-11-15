@@ -1060,6 +1060,58 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 
 `;
+    function bindWorkbenchWheel(board) {
+      const shell = board.closest('.pwb');
+      const lastPosition = new WeakMap();
+
+      function scrollable(element) {
+        return element.scrollHeight > element.clientHeight
+          && /^(auto|scroll)$/.test(window.getComputedStyle(element).overflowY);
+      }
+
+      function scrollBy(element, delta) {
+        const maximum = element.scrollHeight - element.clientHeight;
+        const current = Math.max(0, Math.min(maximum, element.scrollTop));
+        const previous = lastPosition.get(element);
+        const start = previous?.rendered === current && previous.maximum === maximum ? previous.exact : current;
+        const requested = start + delta;
+        const next = Math.max(0, Math.min(maximum, requested));
+        element.scrollTop = next;
+        // Keep subpixel trackpad movement when the engine rounds scrollTop.
+        lastPosition.set(element, { rendered: element.scrollTop, exact: next, maximum });
+        return requested - next;
+      }
+
+      function onWheel(event) {
+        if (event.defaultPrevented || !event.cancelable || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        const mode = event.deltaMode;
+        if (!event.deltaY || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+        const target = event.target;
+        if (!(target instanceof Element) || !target.closest('[data-grid-id]')
+          || target.closest('select, input[type="number"]')) return;
+
+        const chain = [];
+        for (let element = target; element && element !== board; element = element.parentElement) {
+          if (scrollable(element)) chain.push(element);
+        }
+        if (scrollable(board)) chain.push(board);
+        if (shell && scrollable(shell)) chain.push(shell);
+        if (!chain.length) return;
+
+        const unit = mode === 1 ? 16 : mode === 2 ? chain[0].clientHeight : 1;
+        let remaining = event.deltaY * unit;
+        // Native wheel handling can consume a whole input at the inner edge.
+        // Carry the unused distance to the next scroller in the same event.
+        event.preventDefault();
+        for (const element of chain) {
+          remaining = scrollBy(element, remaining);
+          if (!remaining) break;
+        }
+      }
+
+      board.addEventListener('wheel', onWheel, { passive: false });
+      return () => board.removeEventListener('wheel', onWheel);
+    }
     const gridStorageKey='dsh-personal-workbench:layout:v2';
     function gridReadPreferences() {
       try {const raw=localStorage.getItem(gridStorageKey);if(!raw||raw.length>12000)return {};const value=JSON.parse(raw);return value?.version===2&&value.profiles&&typeof value.profiles==='object'?value.profiles:{};}catch{return {};}
@@ -1255,6 +1307,10 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [selectedDate,setSelectedDate]=React.useState(''),[calendarMode,setCalendarMode]=React.useState('day'),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
         const grid=useWorkbenchGrid(newsFolded);
+        React.useLayoutEffect(() => {
+          const board = grid.viewport.current;
+          if (board) return bindWorkbenchWheel(board);
+        }, []);
         const attentionRef=React.useRef(null);
         const root=React.useRef(null),reading=React.useRef(false),alive=React.useRef(true),openingLock=React.useRef(false);
         const [notes,setNotes]=React.useState(()=>projectNotes(storedValue(PROJECT_NOTES_KEY,{})));
