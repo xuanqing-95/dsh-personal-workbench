@@ -1741,12 +1741,11 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('div',{className:'pw-project-heading'},
                 project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':project.id==='today-plan'?'calendar':'grid',size:21})),
                 h('div',null,h('h3',null,project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
-                project.source&&h('div',{className:'pw-project-meta'},
-                  h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×'))),
+                h('div',{className:'pw-project-meta'},badge('unknown',progress?'有进展记录':'进展待同步'))),
               h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
                 'aria-label':'进入项目：'+project.title},'进入项目',h(Icon,{name:'arrow',size:13})),
               h('dl',{className:'pw-project-facts'},
-                field('progress','最近进展',progress),
+                field('progress','最近进展',progress||'尚未同步开发进展'),
                 latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)));
           }));
         }
