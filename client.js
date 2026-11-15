@@ -1344,7 +1344,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-plan-inline-link :is(a,button):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
 .pwb .pw-link-copy-status {font:400 11px/18px var(--pw-body);color:var(--pw-muted)}
 
-.pwb .pw-credit {position:static;display:flex;align-items:center;justify-content:center;gap:0;flex:none;margin:0;padding:24px 12px 20px;text-align:center;color:var(--pw-muted);opacity:.72;font:400 10px/16px var(--pw-body);letter-spacing:.04em;white-space:nowrap}
+.pwb .pw-credit {position:static;display:flex;align-items:center;justify-content:center;gap:0;flex:none;margin:0;padding:24px 12px 20px;text-align:center;color:var(--pw-muted);opacity:.52;font:400 10px/16px var(--pw-body);letter-spacing:.04em;white-space:nowrap}
 .pwb .pw-credit::before,.pwb .pw-credit::after {content:'';flex:none;width:20px;height:1px;background:currentColor;opacity:.22;margin-inline:12px}
 .pwb .pw-credit-name {font-weight:500;margin-inline-start:3px}
 .pwb .pw-credit-separator {margin-inline:5px}
@@ -1411,6 +1411,13 @@ html[data-platform="darwin"] .pwb .pw-head {
 @media (prefers-reduced-motion:reduce) {
  .pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > a) > svg {transition:none!important;transform:none!important}
 }
+
+/* Group related tasks through proximity, rather than extra colors or callout boxes. */
+.pwb .pw-plan .pw-plan-group + .pw-plan-group,
+.pwb .pw-plan[data-density=compact] .pw-plan-group + .pw-plan-group {margin-top:24px}
+.pwb .pw-plan .pw-group-title {margin:0 0 4px;color:var(--pw-ink);font:600 13px/20px var(--pw-body);letter-spacing:normal;text-transform:none}
+.pwb .pw-plan .pw-plan-time {color:var(--pw-muted);font-weight:500}
+.pwb .pw-plan :is(.pw-plan-note,.pw-plan-note.quote,.pw-plan-note.callout) {margin:4px 0;padding:0;border:0;border-radius:0;background:transparent;color:var(--pw-muted)}
 
 `;
     function bindWorkbenchWheel(board) {
