@@ -36,7 +36,7 @@ async function fixture({running=false,draft=false,navigateDuring=false,fail=fals
  await new Promise(setImmediate);
  const runtime=runtimeWindow.__personalWorkbenchSafeUpdateV1;runtime.lastInput=0;runtime.capture=()=>({selectedDate:'2026-11-15',calendarMode:'week',boardScroll:240});
  await tick();
- return {reloads,restores,selected,runtime,tick};
+ return {get reloads(){return reloads;},restores,selected,runtime,tick,setRunning:value=>{running=value;},clearDraft:()=>{input.value="";}};
 }
 test('only the workbench entry reloads, then its view snapshot and panel are restored',async()=>{
  const f=await fixture();assert.equal(f.reloads,1);assert.equal(f.restores,1);assert.equal(f.runtime.snapshot.calendarMode,'week');assert.equal(f.runtime.snapshot.boardScroll,240);assert.equal(f.runtime.loaded,'new');assert.equal(f.runtime.inFlight,false);
@@ -65,4 +65,9 @@ test('publisher installs a complete marked bundle and retains one rollback',asyn
   assert.throws(()=>execFileSync(process.execPath,[new URL('./publish-ui.mjs',import.meta.url).pathname,dir,sha('// wrong')],{stdio:'pipe'}));
   assert.equal(await readFile(join(dir,'client.js'),'utf8'),code);
  }finally{await rm(dir,{recursive:true,force:true});}
+});
+
+test('a deferred update resumes after the chat completes or draft clears',async()=>{
+ const busy=await fixture({running:true});assert.equal(busy.reloads,0);busy.setRunning(false);await busy.tick();assert.equal(busy.reloads,1);assert.equal(busy.runtime.loaded,'new');
+ const draft=await fixture({draft:true});assert.equal(draft.reloads,0);draft.clearDraft();await draft.tick();assert.equal(draft.reloads,1);
 });
