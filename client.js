@@ -1147,7 +1147,8 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:16px minmax(0,1fr)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:600 13px/18px var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick li > a:is(:hover,:focus-visible) {
-  background:var(--pw-hover);box-shadow:inset 0 0 0 1px var(--pw-line)
+  background:var(--pw-hover);
+  box-shadow:inset 0 1px rgba(255,255,255,.65),inset 0 -1px color-mix(in srgb,var(--pw-ink) 10%,transparent)
 }
 .pwb .pw-brief-layout .pw-news-quick li > a:focus-visible {outline-offset:-2px}
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
