@@ -916,16 +916,20 @@ html[data-platform="darwin"] .pwb .pw-head {
   --pw-header-pet-size:clamp(72px,9cqw,92px);
   grid-template-columns:minmax(0,1fr) auto auto;
   grid-template-rows:1fr 1fr;
-  grid-template-areas:"plugin pet tools" "title pet tools";
+  grid-template-areas:"plugin tools pet" "title tools pet";
   column-gap:clamp(8px,1.5cqw,20px);
   row-gap:4px;
   padding-block:8px 10px;
 }
 .pwb .pw-head .pw-plugin-name {align-self:end}
 .pwb .pw-head .pw-head-title {align-self:start}
-.pwb .pw-head .pw-head-actions {align-self:center}
+.pwb .pw-head .pw-head-actions {align-self:center;min-width:0}
 .pwb .pw-head .pw-head-title h1 {font:600 clamp(22px,3.1cqw,32px)/1.15 var(--pw-display);white-space:normal}
-.pwb .pw-head .pw-header-pet {grid-area:pet;justify-self:end;align-self:center;background:none}
+.pwb .pw-head .pw-header-pet {
+  grid-area:pet;justify-self:end;align-self:center;background:none;
+  padding-inline-start:clamp(8px,1.5cqw,20px);
+  border-inline-start:1px solid var(--pw-line);
+}
 .pwb .pw-header-pet .pw-pet-art {display:flex;align-items:center}
 .pwb .pw-head .pw-pet .hbc-home .hbc-launcher {--hbc-dock-size:var(--pw-header-pet-size);width:var(--hbc-dock-size)!important}
 .pwb .pw-head .pw-header-pet .pw-pet-art > .hbc-launcher {width:var(--pw-header-pet-size)!important}
@@ -934,25 +938,26 @@ html[data-platform="darwin"] .pwb .pw-head {
   display:grid;grid-template-columns:auto auto;grid-template-rows:1fr 1fr;
   column-gap:8px;row-gap:4px;
 }
-.pwb .pw-header-pet .hbc-home {grid-row:1 / span 2;grid-column:1}
+.pwb .pw-header-pet .hbc-home {grid-row:1 / span 2;grid-column:2}
 .pwb .pw-header-pet .hbc-home .hbc-name {
   margin-block-start:2px;color:var(--pw-ink);font:600 12px/16px var(--pw-body);text-align:center;
 }
 .pwb .pw-header-pet .hbc-state-label {
-  grid-area:1 / 2;align-self:end;min-height:0;max-inline-size:108px;
+  grid-area:1 / 1;align-self:end;min-height:0;max-inline-size:108px;
   color:var(--pw-muted);font:500 12px/17px var(--pw-body);text-align:start;overflow-wrap:anywhere;
 }
-.pwb .pw-header-pet .hbc-dock-actions {grid-area:2 / 2;align-self:start;justify-content:start;margin:0}
+.pwb .pw-header-pet .hbc-dock-actions {grid-area:2 / 1;align-self:start;justify-content:start;margin:0}
 .pwb .pw-header-pet .hbc-pet-actions {flex-wrap:wrap}
 .pwb .pw-header-pet .hbc-pet-actions button {padding:4px 8px;white-space:nowrap}
 @container pw-root (max-width:700px) {
   .pwb .pw-head {
     --pw-header-pet-size:clamp(54px,13cqw,72px);
-    grid-template-columns:minmax(0,1fr) auto minmax(0,max-content);
+    grid-template-columns:minmax(0,1fr) auto;
     grid-template-rows:auto auto auto;
-    grid-template-areas:"plugin plugin plugin" "title title title" ". pet tools";
+    grid-template-areas:"plugin plugin" "title title" "tools pet";
   }
-  .pwb .pw-head .pw-head-actions {flex-wrap:wrap;width:auto;justify-content:flex-end}
+  .pwb .pw-head .pw-head-actions {flex-wrap:wrap;width:auto;justify-self:start;justify-content:flex-start}
+  .pwb .pw-head .pw-header-pet {padding-inline-start:8px;border-inline-start:0}
   .pwb .pw-head:has(.pw-attention) .pw-refresh {margin-inline-start:0}
 }
 @container pw-root (max-width:440px) {
