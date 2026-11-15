@@ -178,6 +178,19 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       const raw = text(value).trim(), match = raw.match(actualPattern);
       return match ? {title:match[1].trimEnd(),note:'实际 '+match[3]+' · 专注 '+match[5]} : {title:raw,note:''};
     }
+    // Format only explicit timing metadata; the source task remains unchanged.
+    function planTaskContent(value) {
+      const content=taskText(value),parts=[];
+      let title=content.title;
+      const scheduled=title.match(/^((?:[01]?\d|2[0-3])[:：][0-5]\d(?:\s*[-–—~～]\s*(?:[01]?\d|2[0-3])[:：][0-5]\d)?)\s+(.+)$/u);
+      if(scheduled){parts.push('计划 '+scheduled[1]);title=scheduled[2];}
+      const estimate=title.match(/\s*[（(]\s*((?:\d+(?:\.\d+)?\s*(?:小时|分钟|分|h(?:ours?|r)?|mins?|m)\s*)+)[)）]$/iu);
+      if(estimate&&title.slice(0,estimate.index).trim()){
+        parts.push('预计 '+estimate[1].trim());title=title.slice(0,estimate.index).trimEnd();
+      }
+      if(content.note)parts.push(content.note);
+      return {title,timing:parts.join(' · '),label:content.title};
+    }
     async function api(action, signal, input={}) {
       const opening = ['addPlanTask','checkPlanTask','projectShortcuts','openCodexThread'].includes(action);
       const response = await fetch('/api/dsh-personal-workbench'+(opening?'':'?'+new URLSearchParams({action,...input})),{method:opening?'POST':'GET',credentials:'same-origin',cache:'no-store',signal,headers:opening?{'Content-Type':'application/json','X-Personal-UI':'1'}:undefined,body:opening?JSON.stringify({action,input}):undefined});
@@ -1438,10 +1451,73 @@ html[data-platform="darwin"] .pwb .pw-head {
 /* Group related tasks through proximity, rather than extra colors or callout boxes. */
 .pwb .pw-plan .pw-plan-group + .pw-plan-group,
 .pwb .pw-plan[data-density=compact] .pw-plan-group + .pw-plan-group {margin-top:24px}
-.pwb .pw-plan .pw-group-title {margin:0 0 4px;color:var(--pw-ink);font:600 14px/20px var(--pw-body);letter-spacing:normal;text-transform:none}
+.pwb .pw-plan .pw-group-title {margin:0 0 4px;color:var(--pw-muted);font:400 12px/18px var(--pw-body);letter-spacing:normal;text-transform:none}
 .pwb .pw-plan-group > .pw-plan-section-label:not(:first-child) {margin-top:24px}
-.pwb .pw-plan .pw-plan-time {color:var(--pw-muted);font-weight:500}
+.pwb .pw-plan :is(.pw-plan-time,.pw-plan-meta) {margin:4px 0 0;color:var(--pw-muted);font:400 12px/18px var(--pw-body);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .pwb .pw-plan :is(.pw-plan-note,.pw-plan-note.quote,.pw-plan-note.callout) {margin:4px 0;padding:0;border:0;border-radius:0;background:transparent;color:var(--pw-muted)}
+
+/* Owned overlays share the glass material, with a denser surface for legibility. */
+.pwb {--pw-overlay-surface:linear-gradient(135deg,rgba(255,255,255,.42),rgba(255,255,255,.16)),rgba(255,255,255,.68);--pw-overlay-shadow:var(--pw-glass-shadow),0 16px 40px -12px rgba(35,56,61,.22)}
+.pwb .pw-head .pw-attention .pw-attention-popover,
+.pwb .pw-project-dialog {
+ color:var(--pw-ink);background:var(--pw-overlay-surface);border:1px solid rgba(255,255,255,.80);border-radius:16px;
+ box-shadow:var(--pw-overlay-shadow);-webkit-backdrop-filter:var(--pw-glass-blur);backdrop-filter:var(--pw-glass-blur);color-scheme:light;
+}
+.pwb .pw-head .pw-attention .pw-attention-popover {padding:4px 20px}
+.pwb .pw-attention-item {padding:12px 0}
+.pwb .pw-attention-item strong {font:600 14px/20px var(--pw-body)}
+.pwb .pw-attention-item p {margin-top:4px;font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-attention-item .pw-quiet-link {font:400 12px/18px var(--pw-body)}
+.pwb .pw-attention-tag {font:400 12px/16px var(--pw-body);color:#914734;background:#fae8e1}
+.pwb .pw-modal-backdrop {background:rgba(22,48,49,.16);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:20px;z-index:30}
+.pwb .pw-project-dialog {padding:24px;font:400 14px/20px var(--pw-body)}
+.pwb .pw-project-dialog h2 {font:600 18px/24px var(--pw-body);margin:0;overflow-wrap:anywhere}
+.pwb .pw-project-dialog :is(label,summary) {font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-project-dialog label {margin-top:16px}
+.pwb .pw-project-dialog :is(input,select,textarea) {border-radius:10px;border:1px solid var(--pw-line);background:rgba(255,255,255,.42);padding:8px 12px;color:var(--pw-ink);font:400 14px/20px var(--pw-body)}
+.pwb .pw-project-dialog :is(input,select,textarea,button):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+.pwb .pw-project-dialog .pw-layout-button {
+ min-height:36px;padding:8px 12px;border:1px solid var(--pw-line);border-radius:10px;
+ background:rgba(255,255,255,.36);color:var(--pw-ink);font:500 12px/18px var(--pw-body);
+}
+.pwb .pw-project-dialog .pw-layout-button:hover:not(:disabled) {background:rgba(255,255,255,.64)}
+.pwb .pw-project-dialog .pw-layout-button.is-primary {background:var(--pw-accent);color:#fff;border-color:transparent}
+.pwb .pw-project-dialog .pw-layout-button.is-primary:hover:not(:disabled) {background:#084c4e}
+.pwb .pw-project-detail header button,.pwb .pw-project-dialog .pw-requirement-controls button {min-width:32px;min-height:32px;border-radius:10px;background:rgba(255,255,255,.36);border:1px solid var(--pw-line)}
+.pwb .pw-project-dialog footer {gap:8px;margin-top:20px}
+.pwb .pw-project-detail .pw-requirement-row {font:400 14px/20px var(--pw-body);padding-block:12px}
+.pwb .pw-project-dialog :disabled {opacity:.5;cursor:default}
+.pwb .pw-brief-date {color-scheme:light}
+.pwb .pw-brief-date option {background:#f4f8f7;color:var(--pw-ink)}
+@container pw-root (max-width:560px) {
+ .pwb .pw-head .pw-attention .pw-attention-popover {padding-inline:16px}
+ .pwb .pw-modal-backdrop {padding:12px}
+ .pwb .pw-project-dialog {padding:20px}
+ .pwb .pw-project-dialog h2 {font-size:16px}
+ .pwb .pw-attention-item-top {grid-template-columns:minmax(0,1fr);gap:4px}
+ .pwb .pw-attention-tag {justify-self:start}
+}
+@supports not (backdrop-filter:blur(1px)) {
+ .pwb .pw-head .pw-attention .pw-attention-popover,.pwb .pw-project-dialog {background:#f4f8f7}
+}
+@media (prefers-reduced-transparency:reduce) {
+ .pwb .pw-head .pw-attention .pw-attention-popover,.pwb .pw-project-dialog {background:#f4f8f7;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+/* Editing instructions belong beside the controls they describe. */
+.pwb .pw-head .pw-layout-edit-controls {display:flex;align-items:center;justify-content:flex-end;gap:12px;min-width:0;max-width:100%}
+.pwb .pw-head .pw-layout-edit-controls .pw-layout-help {margin:0;max-width:320px;color:#40595b;font:400 12px/18px var(--pw-body);text-align:right}
+.pwb .pw-head .pw-layout-edit-buttons {display:flex;align-items:center;gap:8px;flex:none}
+@container pw-root (max-width:900px) {
+ .pwb .pw-head .pw-layout-edit-controls {flex-direction:column-reverse;align-items:flex-end;gap:6px}
+ .pwb .pw-head .pw-layout-edit-controls .pw-layout-help {max-width:250px}
+}
+@container pw-root (max-width:560px) {
+ .pwb[data-editing=true] .pw-head {grid-template-areas:"plugin plugin" "title pet" "tools tools";grid-template-rows:auto auto auto}
+ .pwb[data-editing=true] .pw-head .pw-head-actions {justify-self:start;justify-content:flex-start}
+ .pwb .pw-head .pw-layout-edit-controls {align-items:flex-start}
+ .pwb .pw-head .pw-layout-edit-controls .pw-layout-help {text-align:left}
+}
 
 `;
     function bindWorkbenchWheel(board) {
@@ -1701,7 +1777,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           if (board) return bindWorkbenchWheel(board);
         }, []);
         React.useLayoutEffect(()=>{
-          uiUpdates.capture=()=>({selectedDate,calendarMode,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
+          uiUpdates.capture=()=>({selectedDate,calendarMode,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
           return()=>{uiUpdates.capture=null;};
         });
         const updateScrollRestored=React.useRef(false);
@@ -1855,10 +1931,10 @@ html[data-platform="darwin"] .pwb .pw-head {
           }
         }
         function planRow(task,key) {
-          const content=taskText(task.text||task.title),checked=checkedFor(task),saving=checks.has(task.id);
+          const content=planTaskContent(task.text||task.title),checked=checkedFor(task),saving=checks.has(task.id);
           return h('div',{key,className:'pw-plan-row'+(checked?' is-done':'')},
             h('button',{className:'pw-plan-check',type:'button',role:'checkbox','aria-label':content.title,'aria-checked':checked,'aria-busy':saving,'aria-disabled':saving,onClick:()=>void checkTask(task)},checked&&h(Icon,{name:'check',size:13})),
-            h('div',{className:'pw-plan-copy'},h('p',{className:'pw-plan-text',title:content.title},planNoteContent(content.title)),content.note&&h('p',{className:'pw-plan-meta'},planNoteContent(content.note))));
+            h('div',{className:'pw-plan-copy'},h('p',{className:'pw-plan-text',title:content.label},planNoteContent(content.title)),content.timing&&h('p',{className:'pw-plan-meta'},planNoteContent(content.timing))));
         }
         function planNoteContent(value) {
           return text(value).split(/(https:[/][/][^\s<>]+)/g).map((part,index)=>{
@@ -2143,7 +2219,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
-          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台'),grid.editing&&h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小')),h('div',{className:'pw-pet pw-header-pet','aria-label':'猫咪个人助手'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中'))),h('div',{className:'pw-head-actions'},grid.editing?h(React.Fragment,null,h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成')):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))))),
+          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台')),h('div',{className:'pw-pet pw-header-pet','aria-label':'猫咪个人助手'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中'))),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))))),
           h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,style:grid.canvasStyle},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
