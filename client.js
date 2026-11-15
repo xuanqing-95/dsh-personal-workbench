@@ -1147,7 +1147,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-title {font:500 13px/1.45 var(--pw-body)}
 @container pw-card (min-width:650px) {
-  .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)}
+  .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
   .pwb .pw-brief-layout .pw-news-quick {padding-inline-start:14px;border-inline-start:1px solid var(--pw-line)}
 }
 @container pw-card (max-width:649px) {
@@ -1353,6 +1353,56 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period]+button[data-period] {border-left:1px solid rgba(68,94,98,.08)}
 .pwb .pw-plan .pw-calendar-grid[data-mode=week] button[aria-pressed=true] {background:color-mix(in srgb,var(--pw-accent) 7%,transparent);box-shadow:none}
 
+
+/* One size for agent identities and project icons, independent of action icons. */
+.pwb {--pw-entity-icon-size:32px}
+.pwb .pw-assistant-feed .pw-assistant-avatar,
+.pwb .pw-project-tiles .pw-project-heading .pw-project-icon {
+  display:grid;place-items:center;flex:none;width:var(--pw-entity-icon-size);height:var(--pw-entity-icon-size);
+  min-width:var(--pw-entity-icon-size);max-width:var(--pw-entity-icon-size);margin:0;padding:0;
+  border:0;border-radius:8px;background:transparent;object-fit:contain;
+}
+.pwb .pw-assistant-feed .pw-assistant-avatar > img {display:block;width:100%;height:100%;object-fit:contain;border-radius:8px}
+.pwb .pw-assistant-feed .pw-assistant-avatar > svg,
+.pwb .pw-project-tiles .pw-project-icon.is-placeholder > svg {width:26px;height:26px}
+.pwb .pw-project-tiles .pw-project-heading {grid-template-columns:var(--pw-entity-icon-size) minmax(0,1fr);column-gap:8px}
+.pwb .pw-project-tiles .pw-project-heading .pw-project-icon.is-workbench {border-radius:50%}
+
+.pwb .pw-project-tiles .pw-project-field {display:grid;grid-template-columns:minmax(0,1fr);gap:3px;padding:7px 0}
+.pwb .pw-project-tiles .pw-project-field-label {font:400 11px/16px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-project-tiles .pw-project-field-value {font:400 13px/20px var(--pw-body);color:var(--pw-ink);min-width:0}
+
+/* Scheduled items use the same plain checklist row as every other task. */
+.pwb .pw-plan .pw-plan-row.has-time {margin-block:0;padding:4px 0;border:0;border-radius:0;background:transparent;box-shadow:none}
+
+/* The pet's backdrop is a true circle, with no separate floor highlight. */
+.pwb .pw-pet .hbc-nest {width:var(--hbc-dock-size);height:var(--hbc-dock-size);aspect-ratio:1;box-sizing:border-box}
+.pwb .pw-pet .hbc-nest::before {inset:auto;top:4%;left:4%;width:92%;height:92%;border-radius:50%}
+.pwb .pw-pet .hbc-nest::after {content:none;display:none}
+
+/* Equal-height expanded overview cards, with a distinct summary and larger actions. */
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet {display:grid;grid-template-columns:128px minmax(0,1fr);gap:12px;align-items:center;padding:16px;box-sizing:border-box}
+.pwb .pw-grid-canvas[data-pet-placement=aligned]:has(.pw-news[data-folded=false]) .pw-pet.pw-overview-pet {min-height:var(--pw-news-card-height,auto)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:128px;padding:0;align-self:center;align-content:center;row-gap:5px}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;min-inline-size:0;margin:0;padding:12px;border:1px solid rgba(255,255,255,.55);border-radius:12px;background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {display:flex;width:100%;gap:8px;flex-wrap:nowrap;margin:4px 0 0;justify-content:center}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button {display:inline-flex;align-items:center;justify-content:center;flex:1;min-width:52px;min-height:40px;padding:6px 8px;border:1px solid var(--pw-line);border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.42),rgba(255,255,255,.2));color:var(--pw-ink);font:500 12px/18px var(--pw-body);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:hover {background:rgba(255,255,255,.6);border-color:color-mix(in srgb,var(--pw-accent) 28%,transparent)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+@container pw-root (max-width:520px) {
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {grid-template-columns:112px minmax(0,1fr);gap:8px;padding:12px}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:112px;padding:0}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {padding:10px}
+}
+/* Intrinsic aspect ratio gives narrow images' unused space back to the headline. */
+.pwb .pw-brief-layout {--pw-brief-image-height:clamp(144px,28cqw,224px)}
+.pwb .pw-brief-media {flex:0 1 auto;width:calc(var(--pw-brief-image-height) * var(--pw-brief-image-ratio,1));max-width:52%;height:var(--pw-brief-image-height);min-height:0;align-self:center}
+.pwb .pw-assistant-feed .pw-assistant-receipt {display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;column-gap:6px;min-width:0}
+.pwb .pw-assistant-feed .pw-assistant-receipt:not(:has(small)) {grid-template-columns:minmax(0,1fr)}
+.pwb .pw-assistant-feed .pw-assistant-receipt small {grid-column:auto;font:400 11px/17px var(--pw-body);color:var(--pw-muted);white-space:nowrap}
+.pwb .pw-assistant-feed .pw-assistant-receipt a {display:flex;align-items:baseline;gap:4px;min-width:0;max-width:100%}
+.pwb .pw-assistant-feed .pw-assistant-result-name {display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.pwb .pw-assistant-feed .pw-assistant-receipt a > svg {flex:none}
 
 `;
     function bindWorkbenchWheel(board) {
@@ -1607,6 +1657,15 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [selectedDate,setSelectedDate]=React.useState(()=>restoredUI('selectedDate','')),[calendarMode,setCalendarMode]=React.useState(()=>restoredUI('calendarMode','day')),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
         const grid=useWorkbenchGrid(newsFolded);
+        React.useLayoutEffect(()=>{
+          const canvas=grid.viewport.current?.querySelector('.pw-grid-canvas'),news=canvas?.querySelector('.pw-news');
+          if(!canvas||!news||!grid.fitContent||grid.petPlacement!=='aligned'||newsFolded)return;
+          let lastHeight=0;
+          const syncHeight=()=>{const height=Math.round(news.getBoundingClientRect().height);if(height>0&&height!==lastHeight){lastHeight=height;canvas.style.setProperty('--pw-news-card-height',height+'px');}};
+          syncHeight();const observer=new ResizeObserver(syncHeight);observer.observe(news);
+          return()=>{observer.disconnect();canvas.style.removeProperty('--pw-news-card-height');};
+        },[grid.fitContent,grid.petPlacement,newsFolded]);
+
         React.useLayoutEffect(() => {
           const board = grid.viewport.current;
           if (board) return bindWorkbenchWheel(board);
@@ -1897,9 +1956,9 @@ html[data-platform="darwin"] .pwb .pw-head {
             const {title,url,key}=row, when=row.deliveredAt||row.updatedAt;
             const date=assistantDate(when||row.date,assistants.today,Boolean(when));
             return h('div',{className:'pw-assistant-receipt',key},
+              date&&h('small',null,date),
               h('a',{className:'pw-quiet-link',href:safeHTTPS(url),target:'_blank',rel:'noopener noreferrer',title,
-                'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11})),
-              date&&h('small',null,date));
+                'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11}))); 
           }
           function assistantCard({name,icon,status,detail,next,reviews,open,action='打开'}) {
             const result=reviews.latest;
@@ -2028,8 +2087,6 @@ html[data-platform="darwin"] .pwb .pw-head {
             h('dt',{className:'pw-project-field-label'},label),
             h('dd',{className:'pw-project-field-value',title:value||undefined},value||'—'));
           return h('div',{className:'pw-project-list pw-project-tiles'},allProjects.map(project=>{
-            const pending=list(notes[project.id]?.requirements).filter(item=>!item.done);
-            const latest=pending.reduce((last,item)=>!last||item.createdAt>=last.createdAt?item:last,null);
             const event=list(project.github?.value?.history)[0],pull=project.github?.value?.pull;
             const progress=event?.label||pull?.label||projectProgress(project),version=project.version?['v'+project.version]:[];
             const phase=pull?.state||event?.state||(project.repositoryState==='ambiguous'?'待确认仓库':'进展待同步');
@@ -2041,8 +2098,7 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
                 'aria-label':'进入项目：'+project.title,title:'进入项目：'+project.title},h(Icon,{name:'arrow',size:17})),
               h('dl',{className:'pw-project-facts'},
-                field('progress','最近进展',progress||'尚未同步开发进展'),
-                latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)));
+                field('progress','最近进展',progress||'尚未同步开发进展')));
           }));
         }
         async function saveProject(event){
