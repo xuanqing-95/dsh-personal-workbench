@@ -1,0 +1,49 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: public-release
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run release:verify
+      - name: Package and index
+        run: |
+          node -e 'if("v"+require("./package.json").version!==process.env.GITHUB_REF_NAME)process.exit(1)'
+          mkdir -p dist
+          npm pack --ignore-scripts --pack-destination dist
+          cd dist
+          sha256sum *.tgz > SHA256SUMS
+          cd ..
+          node scripts/release.mjs site "$GITHUB_SHA"
+      - name: Publish package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.tgz dist/SHA256SUMS --title "个人主控台 $GITHUB_REF_NAME" --notes-file RELEASE-NOTES.md --prerelease
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  pages:
+    needs: package
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish installation page and index
+        id: deployment
+        uses: actions/deploy-pages@v4

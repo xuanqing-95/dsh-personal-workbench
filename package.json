@@ -1,8 +1,8 @@
 {
   "name": "dsh-personal-workbench",
-  "version": "0.8.0-beta.1",
+  "version": "0.8.0-beta.2",
   "type": "module",
-  "description": "个人主控台：每日计划、AI 助手、日报和项目都在一屏。",
+  "description": "个人主控台：用聊天管理计划、AI 日报与项目，五区玻璃卡片自由排布。",
   "exports": {
     ".": "./index.js",
     "./package.json": "./package.json",
@@ -32,7 +32,12 @@
     "ui-update-host.js",
     "ui-release.json",
     "ui-update-client.js",
-    "publish-ui.mjs"
+    "publish-ui.mjs",
+    "content.js",
+    "plan-tools.js",
+    "LICENSE",
+    "PRIVACY.md",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "dependencies": {
     "zod": "4.4.3"
@@ -62,10 +67,27 @@
     "dsh-plugin",
     "deepseek-harness",
     "dashboard",
-    "planner"
+    "planner",
+    "personal-workbench",
+    "AI",
+    "任务管理",
+    "AI日报",
+    "个人主控台"
   ],
   "scripts": {
     "test": "node --test *.test.js",
-    "publish:ui": "node publish-ui.mjs"
-  }
+    "publish:ui": "node publish-ui.mjs",
+    "release:seal": "node scripts/release.mjs seal",
+    "release:verify": "node scripts/release.mjs verify"
+  },
+  "author": "玄清",
+  "homepage": "https://xuanqing-95.github.io/dsh-personal-workbench/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuanqing-95/dsh-personal-workbench.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xuanqing-95/dsh-personal-workbench/issues"
+  },
+  "license": "SEE LICENSE IN LICENSE"
 }

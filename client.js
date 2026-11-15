@@ -2,7 +2,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
     const React = require('react'), h = React.createElement;
-    const WORKBENCH_UI_BUILD = "development";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.2";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -172,6 +172,17 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     const safeHTTPS = value => {const url=safeURL(value);return url?.startsWith('https://')?url:null;};
     const inputLabel = value => list(value).includes('approval')?'等你确认':list(value).includes('question')?'等你回复':'等待输入';
     const runLabel = run => run.action_id==='xhs.original.image.generate'?'内容配图':run.action_id==='xhs.original.text.generate'?'原创内容':run.action_id==='xhs.rewrite.pipeline'?'内容仿写':'内容制作';
+    function selectBriefEdition(selected,archived,published) {
+      const editions=[archived,published].filter(edition=>edition&&(!selected||edition.date===selected));
+      return editions.sort((a,b)=>b.date.localeCompare(a.date))[0]||null;
+    }
+    function briefDateLabel(date,today) {
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return '选择日期';
+      const days=Math.round((Date.parse(date)-Date.parse(today))/86400000);
+      const relative=({'0':'今天','-1':'昨天','-2':'前天','1':'明天'})[days];
+      const calendar=(date.slice(0,4)!==today.slice(0,4)?Number(date.slice(0,4))+'年':'')+Number(date.slice(5,7))+'月'+Number(date.slice(8))+'日';
+      return (relative?relative+' · ':'')+calendar;
+    }
     const localDay = () => new Intl.DateTimeFormat('en-CA',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
     const actualPattern = /^(.*?)(（实际\s+(.+?)｜(专注|合计)\s+(\d+h(?:\d+m)?(?:\d+s)?|\d+m(?:\d+s)?|\d+s)）)$/u;
     function taskText(value) {
@@ -198,8 +209,8 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       if(!response.ok || result.error) throw new Error(text(result.error) || '暂时无法读取，请稍后再试。');
       return Object.prototype.hasOwnProperty.call(result,'value') ? result.value : result;
     }
-    const dateInShanghai = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'});
-    const timeInShanghai = new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+    const dateInShanghai = new Intl.DateTimeFormat('en-CA',{year:'numeric',month:'2-digit',day:'2-digit'});
+    const timeInShanghai = new Intl.DateTimeFormat('zh-CN',{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
     function assistantDate(value,today,includeTime=false) {
       if(!value||!Number.isFinite(Date.parse(value)))return '';
       const date=/^\d{4}-\d{2}-\d{2}$/.test(value)?value:dateInShanghai.format(new Date(value));
@@ -288,6 +299,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     async function production(signal) {
       async function read(args) {
         const response = await fetch('/api/redflow-workbench?'+new URLSearchParams(args),{credentials:'same-origin',cache:'no-store',signal});
+        if(response.status===404&&args.action==='status')return {connected:false};
         const result = await response.json();if(!response.ok || result.error) throw new Error('内容进展暂时无法读取');return result.value;
       }
       try {
@@ -378,20 +390,18 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return width>=1000?{key:'wide',cols:12,minW:4,rows:12}:width>=640?{key:'medium',cols:8,minW:4,rows:12}:{key:'narrow',cols:4,minW:4,rows:12};
     }
     function gridDefaults(profile) {
-      const folded=profile.collapsed===true;
-      const news=folded?1:profile.cols===4?11:profile.cols===8?7:5;
-      const assistants=profile.cols===4?7:6;
-      const left=profile.cols===12?7:4;
-      const single=profile.cols===4;
+      const single=profile.cols===4,left=profile.cols===12?7:4;
+      const expandedNews=single?11:profile.cols===8?7:5;
+      const news=profile.collapsed?2:expandedNews,pet=single?5:expandedNews;
+      const assistants=single?7:6,newsY=single?pet:0;
       return [
-        {id:'plan',x:single?0:left,y:news,w:single?4:profile.cols-left,h:single?6:12},
-        {id:'news',x:0,y:0,w:profile.cols,h:news},
-        {id:'activity',x:0,y:news+(single?6:0),w:left,h:assistants},
-        {id:'projects',x:0,y:news+assistants+(single?6:0),w:left,h:profile.cols===12?6:12}
+        {id:'plan',x:single?0:left,y:single?pet+news:pet,w:single?4:profile.cols-left,h:single?6:12},
+        {id:'news',x:0,y:newsY,w:left,h:news},
+        {id:'activity',x:0,y:single?pet+news+6:news,w:left,h:assistants},
+        {id:'projects',x:0,y:single?pet+news+6+assistants:news+assistants,w:left,h:profile.cols===12?6:12},
+        {id:'pet',x:single?0:left,y:0,w:single?4:profile.cols-left,h:pet}
       ];
     }
-    // Adopt the new composition for untouched presets. In custom layouts,
-    // reuse empty space next to the old banner before repairing collisions.
     const oldGridPresets={
       wide:{plan:[7,0,5,12],news:[0,0,4,5],activity:[0,5,7,4],pet:[4,0,3,5],projects:[0,9,7,3]},
       medium:{plan:[4,0,4,12],news:[0,0,4,3],activity:[0,6,4,3],pet:[0,3,4,3],projects:[0,9,4,3]},
@@ -400,23 +410,20 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     function gridSavedRows(value,profile) {
       if(!Array.isArray(value))return [];
       const preset=oldGridPresets[profile.key],keys=['x','y','w','h'];
-      const validOldPreset=preset&&value.length===Object.keys(preset).length&&
-        Object.keys(preset).every(id=>value.some(row=>row?.id===id&&keys.every((key,i)=>row[key]===preset[id][i])));
-      if(validOldPreset)return [];
-      if(!preset||!value.some(row=>row?.id==='pet'))return value;
-      const cards=value.filter(row=>row?.id!=='pet');
-      return cards.map(row=>{
-        if(!row||typeof row.h!=='number')return row;
-        if(row.id==='news'){
-          const full={...row,x:0,w:profile.cols};
-          const available=row.x===0&&gridFits(full,cards.filter(card=>card&&card!==row));
-          const next=available?full:row;
-          return {...next,h:Math.max(row.h,available?(profile.cols===4?11:profile.cols===8?7:5):5)};
-        }
-        if(row.id==='activity')return {...row,h:Math.max(row.h,6)};
-        if(row.id==='projects')return {...row,h:Math.max(row.h,6)};
-        return row;
-      });
+      if(preset&&value.length===5&&Object.keys(preset).every(id=>value.some(row=>row?.id===id&&keys.every((key,i)=>row[key]===preset[id][i]))))return [];
+      const expanded=gridDefaults({...profile,collapsed:false});
+      // Fold only the news. The pet keeps its own coordinates and dimensions.
+      if(profile.collapsed&&expanded.every(card=>value.some(row=>row?.id===card.id&&keys.every(key=>row[key]===card[key]))))return gridDefaults(profile);
+      if(value.some(row=>row?.id==='pet'))return value;
+      const single=profile.cols===4,left=single?4:profile.cols===12?7:4;
+      const news=profile.cols===4?11:profile.cols===8?7:5,activity=single?7:6;
+      const old={plan:[single?0:left,news,single?4:profile.cols-left,single?6:12],news:[0,0,profile.cols,news],activity:[0,news+(single?6:0),left,activity],projects:[0,news+activity+(single?6:0),left,profile.cols===12?6:12]};
+      // The former content-fitting preset had no pet row. Adopt the equivalent
+      // five-card preset, retaining a deliberately resized projects card.
+      if(value.length===4&&Object.keys(old).every(id=>value.some(row=>row?.id===id&&keys.every((key,i)=>id==='projects'&&key==='h'||row[key]===old[id][i])))){
+        return gridDefaults(profile).map(card=>card.id==='projects'?{...card,h:value.find(row=>row.id==='projects').h}:card);
+      }
+      return value;
     }
     function gridBound(value,fallback,min,max) {
       return Math.max(min,Math.min(max,typeof value==='number'&&Number.isFinite(value)?Math.round(value):fallback));
@@ -424,7 +431,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     function gridCard(value,fallback,profile) {
       const minimumHeight=fallback.id==='plan'||(fallback.id==='activity'&&profile.cols!==8)?4:3;
       const w=gridBound(value?.w,fallback.w,profile.minW,profile.cols);
-      return {id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?1:gridBound(value?.h,fallback.h,minimumHeight,24)};
+      return {id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?2:gridBound(value?.h,fallback.h,minimumHeight,24)};
     }
     function gridOverlap(a,b) {
       return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
@@ -443,20 +450,15 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       const defaults=gridDefaults(profile),rows=gridSavedRows(value,profile),seen=new Set(),byId=new Map();
       for(const row of rows.slice(0,32))if(row&&typeof row==='object'&&defaults.some(card=>card.id===row.id)&&!seen.has(row.id)){seen.add(row.id);byId.set(row.id,row);}
       const cards=defaults.map(card=>gridCard(byId.get(card.id),card,profile)),placed=[];
-      const ordered=[...cards].sort((a,b)=>a.y-b.y||a.x-b.x||defaults.findIndex(d=>d.id===a.id)-defaults.findIndex(d=>d.id===b.id));
+      const ordered=[...cards].sort((a,b)=>Number(byId.has(b.id))-Number(byId.has(a.id))||a.y-b.y||a.x-b.x||defaults.findIndex(d=>d.id===a.id)-defaults.findIndex(d=>d.id===b.id));
       for(const card of ordered){const next=gridPlace(card,placed,profile);if(!next){placed.length=0;for(const row of ordered)placed.push(gridPlace({...row,y:0},placed,profile));break;}placed.push(next);}
-      if(profile.collapsed)for(const card of [...placed].filter(item=>item.id!=='news').sort((a,b)=>a.y-b.y)){while(card.y>0&&gridFits({...card,y:card.y-1},placed.filter(item=>item!==card)))card.y--;}
       return defaults.map(card=>placed.find(row=>row.id===card.id));
     }
     function canFitOverviewContent(layout, profile) {
-      const [plan, news, activity, projects] = layout;
-      const [, defaultNews, defaultActivity] = gridDefaults(profile);
-      return profile.cols > 4
-        && news.x === 0 && news.y === 0 && news.w === profile.cols
-        && news.h === defaultNews.h && activity.h === defaultActivity.h
-        && plan.y === news.h && activity.y === news.h
-        && projects.x === activity.x && projects.w === activity.w
-        && projects.y === activity.y + activity.h;
+      return gridDefaults(profile).every(base=>{
+        const card=layout.find(row=>row.id===base.id);
+        return card&&['x','y','w','h'].every(key=>base.id==='projects'&&key==='h'||card[key]===base[key]);
+      });
     }
     function gridArrange(value,id,patch,profile) {
       const base=gridNormalize(value,profile),old=base.find(card=>card.id===id);
@@ -482,12 +484,11 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
         }},'复制'),h('span',{className:'pw-link-copy-status',role:'status','aria-live':'polite'},copyState));
     }
     function Icon({name='grid',size=18}) {
-      const paths={grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',down:'m6 9 6 6 6-6',up:'m6 15 6-6 6 6',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
+      const paths={grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',left:'m15 5-7 7 7 7',down:'m6 9 6 6 6-6',up:'m6 15 6-6 6 6',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
       return h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true},h('path',{d:paths[name]||paths.grid}));
     }
     const css=`
-.pwb{--pw-bg:#f5f5f7;--pw-paper:#fff;--pw-ink:#1d1d1f;--pw-muted:#787880;--pw-line:rgba(60,60,67,.10);--pw-blue:#007aff;--pw-hover:rgba(0,122,255,.045);--pw-plan:#fffcf3;--pw-plan-ink:#35352d;--pw-plan-muted:#8d887a;--pw-olive:#77866b;--pw-plan-line:#e7e1d2;--pw-news:#f2f6fd;--pw-orange:#b76b16;height:100%;min-height:0;position:relative;isolation:isolate;z-index:0;overflow:hidden;background:var(--pw-bg);color:var(--pw-ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","PingFang SC",sans-serif;-webkit-font-smoothing:antialiased;container-type:inline-size;container-name:pw-root;color-scheme:light}
-.pwb[data-appearance=dark]{--pw-bg:#1c1c1e;--pw-paper:#2c2c2e;--pw-ink:#f5f5f7;--pw-muted:#a1a1a6;--pw-line:rgba(235,235,245,.11);--pw-blue:#5aa7ff;--pw-hover:rgba(90,167,255,.06);--pw-plan:#2e3029;--pw-plan-ink:#eeeee2;--pw-plan-muted:#b4b1a0;--pw-olive:#adbfa0;--pw-plan-line:#47493c;--pw-news:#292f39;--pw-orange:#e7b165;color-scheme:dark}
+.pwb{height:100%;min-height:0;position:relative;isolation:isolate;z-index:0;overflow:hidden;background:var(--pw-bg);color:var(--pw-ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","PingFang SC",sans-serif;-webkit-font-smoothing:antialiased;container-type:inline-size;container-name:pw-root;color-scheme:light}
 .pwb,.pwb *{box-sizing:border-box}.pwb h1,.pwb h2,.pwb h3,.pwb p{margin:0}.pwb button,.pwb a{font:inherit;color:inherit}.pwb button{border:0;background:none;padding:0;cursor:pointer}.pwb a{text-decoration:none}.pwb svg{flex-shrink:0}.pwb button:disabled{opacity:.5;cursor:default}.pwb :is(button,a):focus-visible{outline:3px solid var(--pw-blue);outline-offset:3px;border-radius:5px}.pwb .pw-theme-probe{position:absolute;width:0;height:0;visibility:hidden;pointer-events:none;color:var(--dsw-alias-bg-base,#f5f5f7)}
 .pwb .pw-shell{--pw-gutter:28px;max-width:1380px;height:100%;margin:auto;padding:0 var(--pw-gutter);display:flex;flex-direction:column;min-height:0}.pwb .pw-head{flex-shrink:0;min-height:92px;display:flex;align-items:center;gap:16px;justify-content:space-between}.pwb .pw-head h1{font-size:23px;line-height:1.25;font-weight:650;letter-spacing:-.6px}.pwb .pw-refresh{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;color:var(--pw-muted);-webkit-app-region:no-drag}.pwb .pw-refresh:hover{background:var(--pw-line);color:var(--pw-ink)}
 .pwb .pw-homeboard{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1.35fr) minmax(0,1fr);gap:20px}.pwb .pw-card{min-width:0;min-height:0;display:flex;flex-direction:column;background:var(--pw-paper);border:1px solid var(--pw-line);border-radius:20px;box-shadow:0 2px 10px rgba(20,20,30,.025);overflow:hidden}.pwb .pw-plan{grid-row:1/3;background:var(--pw-plan);color:var(--pw-plan-ink);border-color:var(--pw-plan-line)}.pwb .pw-news{grid-column:2;grid-row:1}.pwb .pw-activity{grid-column:2;grid-row:2}.pwb .pw-card-head{padding:21px 24px 13px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-shrink:0}.pwb .pw-card-title{display:flex;align-items:center;gap:9px;min-width:0}.pwb .pw-card-title h2{font-size:17px;letter-spacing:-.35px;font-weight:650}.pwb .pw-card-title>svg{color:var(--pw-muted);width:17px;height:17px}.pwb .pw-card-link{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;color:var(--pw-muted);font-size:11px;min-height:26px}.pwb .pw-card-link:hover{color:var(--pw-blue)}.pwb .pw-count{font-size:11px;color:var(--pw-muted);font-variant-numeric:tabular-nums;white-space:nowrap}.pwb .pw-card-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent}.pwb .pw-card-foot{flex-shrink:0;margin:0 24px;padding:11px 0 13px;border-top:1px solid var(--pw-line);display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--pw-muted)}
@@ -545,51 +546,19 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-modal-backdrop{position:absolute;inset:0;z-index:30;background:#0005;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px}.pwb .pw-project-dialog{background:var(--pw-paper);border:1px solid var(--pw-line);border-radius:20px;padding:24px;width:390px;max-width:100%;max-height:95%;overflow:auto;box-shadow:0 20px 70px #0003}.pwb .pw-project-dialog h2{font-size:20px}.pwb .pw-project-dialog>p{font-size:12px;color:var(--pw-muted);margin:7px 0 18px}.pwb .pw-project-dialog label{display:block;font-size:12px;margin-top:13px}.pwb .pw-project-dialog input,.pwb .pw-project-dialog select{display:block;width:100%;margin-top:6px;padding:9px 10px;background:var(--pw-bg);border:1px solid var(--pw-line);border-radius:8px;color:var(--pw-ink);font:inherit}.pwb .pw-project-dialog footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
 @container pw-card (max-width:400px){.pwb .pw-calendar{padding-inline:16px}.pwb .pw-date-nav{gap:3px;font-size:10px}.pwb .pw-pet-main{padding:12px;gap:4px}.pwb .pw-pet-art{flex-basis:80px}.pwb .pw-pet .hbc-launcher{width:80px!important}.pwb .pw-pet .hbc-launcher svg{width:78px;height:78px}.pwb .pw-pet-copy h2{font-size:15px}.pwb .pw-card .pw-card-title h2{font-size:15px}.pwb .pw-news-banner .pw-folded-summary{display:none}.pwb .pw-assistant-list,.pwb .pw-project-list{padding-inline:16px}}
 
-/* Match the warm paper background in the HOSHI ONE reference. */
-.pwb,.pwb[data-appearance=dark] {
-  --pw-bg:#f2f0e8;
-  --pw-paper:#fbfaf6;
-  --pw-glass:rgba(235,230,219,.90);
-  --pw-glass-edge:rgba(255,255,255,.78);
-  --pw-ink:#111;
-  --pw-muted:#625d54;
-  --pw-line:rgba(17,17,17,.15);
-  --pw-accent:#d81b1e;
-  --pw-blue:#b31719;
-  --pw-hover:rgba(17,17,17,.055);
-  --pw-plan:var(--pw-glass);
-  --pw-plan-ink:var(--pw-ink);
-  --pw-plan-muted:var(--pw-muted);
-  --pw-plan-line:var(--pw-line);
-  --pw-olive:var(--pw-accent);
-  --pw-news:rgba(17,17,17,.045);
-  --pw-orange:#7c4a04;
-  --pw-gold:#e9a514;
-  --pw-tile:rgba(255,255,255,.30);
-  --pw-on-accent:#fff;
-  --pw-display:"Oswald","Arial Narrow","PingFang SC",-apple-system,sans-serif;
-  color-scheme:light;
-  font-family:"Inter","PingFang SC",-apple-system,BlinkMacSystemFont,sans-serif;
-  background:var(--pw-bg);
+.pwb .pw-head-title h1 {
+  font:500 clamp(26px,4.2cqw,60px)/.95 var(--pw-display);
+  letter-spacing:-.025em;
 }
-.pwb .pw-head-title h1 {font-family:var(--pw-display);font-size:34px;font-weight:700;line-height:1.1;letter-spacing:-.025em}
-.pwb .pw-head-title {position:relative;padding-inline-start:14px}
-.pwb .pw-head-title::before {
-  content:"";
-  position:absolute;
-  inset:3px auto 3px 0;
-  width:3px;
-  border-radius:2px;
-  background:var(--pw-accent);
-}
+.pwb .pw-head-title {position:relative}
 .pwb .pw-card-title>svg {color:var(--pw-blue)}
 .pwb .pw-layout-button.is-primary {background:var(--pw-accent);border-color:var(--pw-accent);color:var(--pw-on-accent)}
-.pwb .pw-layout-button.is-primary:hover {background:#c71619}
+.pwb .pw-layout-button.is-primary:hover {background:var(--pw-ink)}
 .pwb .pw-assistant-avatar,.pwb .pw-attention summary,.pwb .pw-segmented,.pwb .pw-calendar-grid button {border-radius:6px}
 .pwb .pw-project-dialog,.pwb .pw-attention-popover {border-radius:16px}
 .pwb .pw-project-dialog :is(input,select,textarea) {border-radius:6px}
 .pwb .pw-card-link,.pwb .pw-layout-button,.pwb .pw-quiet-link {
-  transition:color 150ms ease,background-color 150ms ease,border-color 150ms ease;
+  transition:color var(--pw-motion-fast) ease,background-color var(--pw-motion-fast) ease,border-color var(--pw-motion-fast) ease;
 }
 @media(prefers-reduced-motion:reduce) {
   .pwb .pw-card-link,.pwb .pw-layout-button,.pwb .pw-quiet-link {transition:none}
@@ -603,6 +572,23 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-news-banner .pw-news-entry:not(.is-lead) .pw-news-title {color:var(--pw-muted)}
 .pwb .pw-news-banner .pw-news-entry a:hover .pw-news-title {color:var(--pw-blue)}
 .pwb .pw-news-banner :is(a,button):focus-visible {outline-color:var(--pw-blue);outline-offset:-2px}
+.pwb .pw-news-lead .pw-news-copy {flex:1}
+.pwb .pw-news-figure {
+  display:grid;
+  place-items:center;
+  flex:none;
+  width:120px;
+  height:90px;
+  background:var(--pw-tile);
+  border:1px solid var(--pw-line);
+  border-radius:6px;
+  overflow:hidden;
+}
+.pwb .pw-news-image {display:block;width:100%;height:100%;min-width:0;min-height:0;object-fit:cover;object-position:center}
+.pwb .pw-news-image[hidden] {display:none}
+@container pw-card (max-width:400px) {
+  .pwb .pw-news-actions .pw-read-extra {display:none}
+}
 
 .pwb .pw-pet {
   background:transparent;
@@ -617,7 +603,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 }
 .pwb .pw-assistant-avatar.is-news {color:var(--pw-orange);background:color-mix(in srgb,var(--pw-gold) 24%,var(--pw-paper))}
 .pwb .pw-assistant-heading .pw-quiet-link {padding-inline:3px;color:var(--pw-blue);white-space:nowrap}
-.pwb .pw-state[data-state=failed] {background:rgba(216,26,29,.17);color:var(--pw-blue)}
+.pwb .pw-state[data-state=failed] {background:color-mix(in srgb,var(--pw-gold) 40%,var(--pw-paper));color:var(--pw-blue)}
 
 .pwb .pw-project-row:focus-within,.pwb .pw-project-row:hover {background:var(--pw-hover)}
 .pwb .pw-project-open:focus-visible {outline-offset:-3px}
@@ -632,7 +618,6 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-requirement-controls {display:flex;gap:4px;flex-shrink:0}
 .pwb .pw-project-detail :disabled {opacity:.5;cursor:default}
 .pwb .pw-project-detail footer {flex-wrap:wrap}
-
 @container pw-card (min-width:500px) {
   .pwb .pw-project-list,.pwb .pw-assistant-list {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .pwb .pw-project-list>:first-child:not(.pw-project-row) {grid-column:1/-1}
@@ -656,6 +641,11 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-calendar-grid button.is-outside {color:var(--pw-muted);opacity:.72}
 .pwb .pw-week-label {font-size:10px;font-weight:600}
 .pwb .pw-progress-value {background:var(--pw-olive)}
+.pwb button.pw-plan-check {border:1.5px solid var(--pw-plan-muted)}
+.pwb button.pw-plan-check:hover:not(:disabled) {border-color:var(--pw-blue);background:var(--pw-hover)}
+.pwb .is-done button.pw-plan-check:hover:not(:disabled) {background:var(--pw-olive);filter:brightness(.92)}
+.pwb button.pw-plan-check[aria-busy=true] {cursor:progress}
+.pwb .pw-plan .pw-card-foot>span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pwb .pw-plan-row.is-done .pw-plan-check {color:var(--pw-on-accent)}
 .pwb .pw-group-title {color:var(--pw-muted);font-weight:650}
 .pwb .pw-plan-note.quote {background:var(--pw-tile);border-radius:0 6px 6px 0;padding-block:3px}
@@ -666,47 +656,18 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
   .pwb .pw-assistant-heading {gap:5px;flex-wrap:wrap}
   .pwb .pw-date-nav button {min-width:19px}
 }
-.pwb .pw-task-form {gap:8px;padding-block:9px}
-.pwb .pw-task-form input,.pwb .pw-release-form input {width:100%;min-width:0;border:1px solid var(--pw-line);border-radius:9px;background:var(--pw-tile);color:var(--pw-ink);padding:7px 9px;font:inherit}
-.pwb .pw-task-form button,.pwb .pw-release-form button {padding:6px 10px;background:var(--pw-blue);color:var(--pw-on-accent);border-radius:8px;white-space:nowrap}
-.pwb .pw-card .pw-plan-check {border:1.5px solid var(--pw-plan-muted);border-radius:5px}
-.pwb .pw-card .is-done .pw-plan-check {border-color:var(--pw-olive);background:var(--pw-olive);color:var(--pw-on-accent)}
-.pwb .pw-release-form {display:grid;gap:8px;padding:0 21px 8px}
-.pwb .pw-release-form input {display:block;margin-top:5px;color:var(--pw-ink);background:var(--pw-paper)}
-.pwb .pw-release-form div {display:flex;justify-content:flex-end;gap:8px}
-.pwb .pw-release-form button {color:var(--pw-on-accent)}
-.pwb .pw-release-reading-link {display:inline-flex;align-items:center;gap:8px;text-decoration:underline;font-size:18px;font-weight:650}
-.pwb .pw-footer .pw-footer-message {font-size:12px}
-
 /* Shared component dimensions and visual treatments. See DESIGN.md. */
 .pwb .pw-shell {--pw-gutter:32px;max-width:none}
 .pwb .pw-head {min-height:88px;gap:16px}
 .pwb .pw-head-title {padding-inline-start:16px}
-.pwb .pw-head-title h1 {font-size:clamp(32px,4cqw,48px);font-weight:700;line-height:1}
+.pwb .pw-head-title h1 {font-size:clamp(32px,4cqw,48px);font-weight:600;line-height:1}
 .pwb .pw-card {
   --pw-card-inset:24px;
-  border:1px solid var(--pw-glass-edge);
+  border:0;
   border-radius:16px;
   background:var(--pw-glass);
   box-shadow:none;
   backdrop-filter:blur(12px);
-}
-.pwb .pw-news-banner[data-folded=false] {
-  border-color:transparent;
-}
-.pwb .pw-news-banner[data-folded=false]::before {
-  content:"";
-  position:absolute;
-  inset:0;
-  padding:2px;
-  border-radius:inherit;
-  background:linear-gradient(140deg,#fff,rgba(255,255,255,.30) 52%,rgba(17,17,17,.20));
-  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
-  mask-composite:exclude;
-  pointer-events:none;
-}
-@container pw-root (min-width:1000px) {
-  .pwb .pw-news-banner[data-folded=false] {border-radius:40px}
 }
 .pwb .pw-card-head,.pwb .pw-plan .pw-card-head {padding:16px var(--pw-card-inset) 8px;gap:8px}
 .pwb .pw-card-title {gap:8px}
@@ -716,11 +677,13 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-news-banner .pw-news-list,.pwb .pw-assistant-list,.pwb .pw-project-list,
 .pwb .pw-plan .pw-card-body,.pwb .pw-calendar,.pwb .pw-plan .pw-progress {padding-inline:var(--pw-card-inset)}
 .pwb .pw-news-banner .pw-news-entry.is-lead {padding:0 0 8px;margin-bottom:4px}
-.pwb .pw-news-banner .is-lead .pw-news-title {font:700 clamp(20px,4cqw,28px)/1.15 var(--pw-display);letter-spacing:-.025em}
+.pwb .pw-news-banner .is-lead .pw-news-title {font:600 clamp(20px,4cqw,28px)/1 var(--pw-display);letter-spacing:-.025em;text-transform:uppercase}
 .pwb .pw-news-banner .pw-news-summary {font-size:14px;line-height:20px;margin-top:8px}
 .pwb .pw-news-banner .pw-news-entry:not(.is-lead) {padding-block:4px}
 .pwb .pw-news-entry:not(.is-lead) .pw-news-title {font-size:13px;line-height:20px}
 .pwb .pw-news-actions {display:flex;align-items:center;gap:12px;flex-shrink:0}
+.pwb .pw-brief-edition {font-size:11px;font-weight:400;white-space:nowrap}
+.pwb .pw-news-banner .pw-card-title:has(.pw-brief-edition) {flex-wrap:wrap;column-gap:8px;row-gap:0}
 .pwb .pw-news-banner .pw-news-lead {display:flex;align-items:center;gap:16px}
 .pwb .pw-pet {border-color:transparent;background:transparent;backdrop-filter:none}
 .pwb .pw-pet .pw-pet-main {padding:8px var(--pw-card-inset);gap:16px}
@@ -740,7 +703,18 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row {gap:8px;padding-block:4px}
 .pwb .pw-layout-button,.pwb .pw-card-link,.pwb .pw-quiet-link {border-radius:0;min-height:28px;font-size:12px;font-weight:600}
 .pwb .pw-layout-button {min-height:32px;padding:4px 12px}
-.pwb .pw-layout-button.is-primary {border:0}
+.pwb .pw-layout-button.is-primary,
+.pwb .pw-task-form button,.pwb .pw-release-form button {
+  padding:0;
+  min-height:32px;
+  border:0;
+  border-radius:0;
+  background:var(--pw-accent);
+  color:var(--pw-on-accent);
+  font:600 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body);
+}
+.pwb .pw-layout-button.is-primary:hover,
+.pwb .pw-task-form button:hover,.pwb .pw-release-form button:hover {background:var(--pw-ink);color:var(--pw-on-accent)}
 .pwb .pw-card-link,.pwb .pw-plan .pw-card-link,.pwb .pw-assistant-heading .pw-quiet-link {color:var(--pw-ink)}
 .pwb .pw-card-link:hover,.pwb .pw-plan .pw-card-link:hover,.pwb .pw-quiet-link:hover {color:var(--pw-blue)}
 .pwb .pw-state {border-radius:9999px;padding:2px 6px;font-size:10px}
@@ -761,29 +735,13 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
   .pwb .pw-card-content {--pw-card-inset:16px}
   .pwb .pw-card-head,.pwb .pw-plan .pw-card-head {padding-block:12px 8px}
   .pwb .pw-news-banner .pw-news-lead {gap:8px}
+  .pwb .pw-news-figure {width:80px;height:60px}
   .pwb .pw-news-actions {gap:8px}
 }
 
 .pwb .pw-plan .pw-card-head {align-items:center}
 .pwb .pw-plan h2 {font:600 18px/28px var(--pw-display);letter-spacing:0}
 .pwb .pw-plan .pw-card-head .pw-segmented {flex-shrink:0}
-.pwb .pw-plan .pw-card-head { flex-wrap: wrap; }
-.pwb .pw-plan .pw-card-head h2 { flex: 0 0 auto; white-space: nowrap; }
-.pwb .pw-plan .pw-date-nav { gap: 2px; justify-content: center; }
-.pwb .pw-plan .pw-date-nav > span { font-size: 12px; line-height: 18px; font-variant-numeric: tabular-nums; }
-.pwb .pw-plan .pw-date-nav button {
-  display: inline-grid;
-  place-items: center;
-  min-width: 24px;
-  min-height: 28px;
-  border-radius: 0;
-}
-.pwb .pw-plan .pw-date-nav button:hover:not(:disabled) { background: var(--pw-hover); }
-.pwb .pw-plan .pw-date-nav .pw-today { white-space: nowrap; }
-.pwb .pw-plan .pw-date-nav .pw-today:disabled { color: var(--pw-muted); cursor: default; }
-@container pw-card (max-width: 350px) {
-  .pwb .pw-plan .pw-date-nav { order: 1; flex-basis: 100%; justify-content: flex-start; }
-}
 .pwb .pw-calendar-grid[data-mode=month] {gap:0}
 .pwb .pw-calendar-grid[data-mode=month] .pw-week-label {padding-block:4px}
 .pwb .pw-calendar-grid[data-mode=month] button {
@@ -834,6 +792,64 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
   .pwb .pw-head:has(.pw-attention) .pw-attention-popover {top:100%;right:0}
 }
 
+/* Text on the black canvas uses the secondary white. Glass uses primary ink. */
+.pwb .pw-head-title h1,.pwb .pw-head .pw-refresh:hover {color:var(--pw-on-dark)}
+.pwb :is(.pw-plugin-name,.pw-date,.pw-layout-help,.pw-footer,.pw-head .pw-refresh) {color:var(--pw-muted-on-dark)}
+.pwb .pw-head .pw-layout-button:not(.is-primary) {color:var(--pw-on-dark);border-color:#fff6;background:#fff1}
+.pwb .pw-head .pw-layout-button:not(.is-primary):hover,.pwb .pw-head .pw-refresh:hover {background:#fff3}
+.pwb .pw-head .pw-attention summary {color:var(--pw-gold);border-color:color-mix(in srgb,var(--pw-gold) 50%,transparent);background:color-mix(in srgb,var(--pw-gold) 10%,transparent)}
+.pwb .pw-head .pw-attention summary .pw-attention-label {color:inherit}
+.pwb .pw-head .pw-attention summary .pw-attention-preview {color:var(--pw-muted-on-dark)}
+.pwb .pw-head .pw-attention-popover {color:var(--pw-ink);background:var(--pw-glass);backdrop-filter:blur(12px)}
+.pwb .pw-pet .pw-pet-copy h2,.pwb .pw-pet .pw-pet-goal {color:var(--pw-on-dark)}
+.pwb .pw-pet :is(.pw-eyebrow,.pw-pet-copy>p:not(.pw-pet-goal),.pw-card-foot,.pw-pet-placeholder) {color:var(--pw-muted-on-dark)}
+.pwb .pw-pet .pw-pet-goal>span {color:var(--pw-gold)}
+.pwb .pw-pet .pw-card-foot {border-color:#fff3}
+.pwb .pw-pet-art .hbc-launcher {color:var(--pw-on-dark)}
+.pwb .pw-plan-text,.pwb .pw-plan[data-density=compact] .pw-plan-text,
+.pwb .pw-news-banner .pw-news-summary,.pwb .pw-pet-copy>p:not(.pw-pet-goal) {
+  font:600 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body);
+  letter-spacing:var(--pw-body-tracking);
+}
+.pwb .pw-card-link,.pwb .pw-plan .pw-card-link,.pwb .pw-quiet-link,.pwb .pw-assistant-heading .pw-quiet-link {padding:0;border:0;border-radius:0}
+.pwb :is(.pw-card-link,.pw-quiet-link,.pw-layout-button):focus-visible {border-radius:0}
+.pwb .pw-project-dialog {color-scheme:light;background:var(--pw-glass);box-shadow:none;backdrop-filter:blur(12px)}
+.pwb .pw-project-dialog :is(input,select,textarea) {background:var(--pw-tile);color:var(--pw-ink)}
+.pwb .pw-project-dialog .pw-footer-message {color:var(--pw-orange)}
+.pwb .pw-plan-note.callout {padding:8px 12px;border-radius:6px}
+.pwb .pw-plan-row.is-done .pw-plan-check {color:var(--pw-on-accent)}
+.pwb .pw-news-banner .pw-card-title h2 {letter-spacing:normal}
+.pwb .pw-card-head .pw-card-title h2,.pwb .pw-plan h2 {font:600 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body)}
+.pwb .pw-card-head .pw-segmented button[aria-pressed=true] {color:var(--pw-on-accent)}
+.pwb .pw-card-body {color-scheme:light}
+.pwb .pw-calendar-grid button > .pw-calendar-number {border-radius:9999px}
+.pwb .pw-card-foot .pw-dot {border-radius:9999px}
+.pwb .pw-footer .pw-footer-message {color:var(--pw-gold)}
+.pwb .pw-grid-resize,.pwb .pw-grid-move {color:var(--pw-ink)}
+.pwb[data-editing=true] .pw-pet :is(.pw-grid-resize,.pw-grid-move) {color:var(--pw-on-dark)}
+@container pw-root (max-width:640px) {
+  .pwb .pw-head .pw-head-actions {
+    gap:4px;
+  }
+  .pwb .pw-head .pw-layout-button {
+    padding-inline:6px;
+  }
+  .pwb .pw-head .pw-attention summary {
+    gap:4px;
+    padding-inline:6px;
+  }
+  .pwb .pw-head .pw-refresh {
+    width:24px;
+    height:28px;
+  }
+  .pwb .pw-head .pw-layout-button.is-primary {
+    padding-inline:0;
+  }
+}
+@container pw-card (max-width:399px) {
+  .pwb .pw-news-banner .pw-card-title h2 {font-size:16px;line-height:24px}
+}
+
 /* Compact cards keep their useful content visible within the saved grid. */
 .pwb .pw-operations-icon {width:24px;height:24px;object-fit:contain;flex:none}
 .pwb .pw-assistant-compact .pw-assistant-group {display:grid;grid-template-rows:24px auto auto;row-gap:4px;align-items:start}
@@ -857,6 +873,282 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 @container pw-card (min-width:500px) {
   .pwb .pw-assistant-compact .pw-assistant-group {grid-row:span 3;grid-template-rows:subgrid}
 }
+.pwb .pw-project-sync {display:grid;gap:6px;min-width:0;overflow-wrap:anywhere}
+.pwb .pw-project-sync li+li {margin-top:6px}
+
+.pwb .pw-news-banner .pw-card-body {overflow-y:auto;scrollbar-gutter:stable}
+.pwb .pw-news-split[data-quick=true] {
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+  gap:16px;
+  align-items:start;
+}
+.pwb .pw-news-split .pw-news-lead {
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  align-items:start;
+  gap:8px 12px;
+}
+.pwb .pw-news-split .pw-news-lead:has(.pw-news-figure) {
+  grid-template-columns:minmax(0,1fr) auto;
+}
+.pwb .pw-news-lead .pw-news-title {grid-column:1/-1}
+.pwb .pw-news-lead .pw-news-figure {grid-column:2;grid-row:2}
+.pwb .pw-news-split .pw-news-entry.is-lead {margin:0;padding:0}
+.pwb .pw-news-split .is-lead :is(.pw-news-title,.pw-news-summary) {
+  display:block;
+  -webkit-line-clamp:unset;
+  overflow-wrap:anywhere;
+}
+.pwb .pw-news-split .is-lead .pw-news-title {font-size:clamp(17px,3.8cqw,24px);line-height:1.2}
+.pwb .pw-news-split .is-lead .pw-news-summary {
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:4;
+  overflow:hidden;
+  margin-top:0;
+}
+.pwb .pw-news-split .pw-news-entry.is-lead {background:transparent}
+.pwb .pw-news-quick {list-style:none;margin:0;padding:0 0 0 16px;border-inline-start:1px solid var(--pw-line);min-width:0}
+.pwb .pw-news-quick li+li {border-top:1px solid var(--pw-line)}
+.pwb .pw-news-quick .pw-news-entry {padding:4px 0}
+.pwb .pw-news-quick .pw-news-entry a {align-items:center;gap:4px}
+.pwb .pw-news-quick .pw-news-title {font-size:13px;line-height:16px;color:var(--pw-ink)}
+.pwb .pw-news-quick .pw-news-copy {min-width:0}
+@container pw-card (max-width:499px) {
+  .pwb .pw-news-split[data-quick=true] {grid-template-columns:minmax(0,1fr);gap:12px}
+  .pwb .pw-news-quick {padding:4px 0 0;border-inline-start:0;border-block-start:1px solid var(--pw-line)}
+}
+@container pw-card (max-width:639px) {
+  .pwb .pw-news-lead .pw-news-figure {width:80px;height:60px}
+}
+@container pw-card (max-width:399px) {
+  .pwb .pw-news-quick .pw-news-title {font-size:12px;line-height:16px}
+  .pwb .pw-news-quick .pw-news-entry {padding-block:0;min-height:20px}
+  .pwb .pw-news-banner .pw-card-head {padding-block:8px 4px}
+  .pwb .pw-news-banner .pw-card-title h2 {font-size:16px;line-height:24px}
+}
+
+/* Koko glass, grid and typography with the workbench mint palette. */
+.pwb {
+  --pw-bg: #edf7f6;
+  --pw-paper: #fff;
+  --pw-glass: rgba(252,255,254,.86);
+  --pw-glass-shadow: 0 20px 40px -20px rgba(0,0,0,.3);
+  --pw-glass-blur: blur(12px);
+  --pw-label-tracking: 1.8px;
+  --pw-ink: #163031;
+  --pw-muted: #586e70;
+  --pw-line: #d7e9e7;
+  --pw-divider: #e7efee;
+  --pw-accent: #076567;
+  --pw-blue: #076567;
+  --pw-hover: #e7f5f3;
+  --pw-plan: #fff;
+  --pw-plan-ink: var(--pw-ink);
+  --pw-plan-muted: var(--pw-muted);
+  --pw-plan-line: #d7e9e7;
+  --pw-olive: #076567;
+  --pw-news: #075d5f;
+  --pw-orange: #984b39;
+  --pw-gold: #ffd042;
+  --pw-tile: #f0f8f7;
+  --pw-on-accent: #fff;
+  --pw-on-dark: #fff;
+  --pw-muted-on-dark: #d1eeeb;
+  --pw-body: "PWB Koko Inter", "Inter", "PingFang SC", -apple-system, sans-serif;
+  --pw-display: var(--pw-body);
+  --pw-label-size: 12px;
+  --pw-label-leading: 16px;
+  --pw-body-size: 14px;
+  --pw-body-leading: 20px;
+  --pw-motion-fast: 150ms;
+  color-scheme: light;
+  font: 400 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body);
+  background:
+    radial-gradient(ellipse at 4% 0%, #acd6d6 0%, transparent 48%),
+    radial-gradient(ellipse at 98% 70%, rgba(172,214,214,.8), transparent 56%),
+    var(--pw-bg);
+}
+.pwb .pw-shell {
+  --pw-gutter: 24px;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding-block-end: 12px;
+  border-radius: 0;
+  background: transparent;
+}
+.pwb .pw-head {
+  --pw-window-offset: 0px;
+  --pw-plugin-name-height: 0px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "plugin tools" "title title";
+  align-items: center;
+  min-height: 0;
+  column-gap: 12px;
+  row-gap: 2px;
+  padding-block: 12px;
+}
+html[data-platform="darwin"] .pwb .pw-head {
+  --pw-window-offset: max(0px, calc(var(--dsh-frame-leading-clearance, 0px) - var(--pw-gutter)));
+  /* Keep the name centered on the macOS button row even when the sidebar is open. */
+  --pw-plugin-name-height: calc(var(--dsh-frame-top-clearance, 48px) + 2px - 2 * var(--pw-header-top-inset));
+}
+.pwb .pw-head .pw-plugin-name {
+  grid-area: plugin;
+  display: flex;
+  align-items: center;
+  min-height: var(--pw-plugin-name-height);
+  padding-inline-start: calc(var(--pw-window-offset) + min(8px, var(--pw-window-offset)));
+  margin: 0;
+  font: 400 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body);
+  letter-spacing: var(--pw-label-tracking);
+  text-transform: uppercase;
+  color: var(--pw-muted);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.pwb .pw-head .pw-head-title { grid-area: title; padding-inline-start: 0; }
+.pwb .pw-head .pw-head-title h1 {
+  color: var(--pw-ink);
+  font: 500 clamp(26px, 4.2cqw, 48px)/.95 var(--pw-display);
+  letter-spacing: -.025em;
+}
+.pwb .pw-head .pw-head-actions { grid-area: tools; justify-self: end; width: auto; gap: 8px; }
+.pwb .pw-head .pw-refresh {
+  color: var(--pw-blue);
+  border-radius: 0;
+  background: var(--pw-glass);
+}
+.pwb .pw-head .pw-refresh:hover { color: var(--pw-ink); background: var(--pw-hover); }
+.pwb .pw-head .pw-attention summary {
+  min-height: 36px;
+  padding: 8px 12px;
+  gap: 6px;
+  border: 1px solid var(--pw-ink);
+  border-radius: 0;
+  background: var(--pw-glass);
+  color: var(--pw-ink);
+}
+.pwb .pw-head .pw-attention summary:hover { background: var(--pw-hover); }
+.pwb .pw-head .pw-attention-label { font: 400 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body); }
+.pwb .pw-layout-help,.pwb .pw-footer.pw-footer-message { color: var(--pw-muted); }
+.pwb .pw-footer.pw-footer-message { padding-block: 8px; white-space: normal; overflow-wrap: anywhere; }
+
+.pwb[data-editing=true] .pw-homeboard {
+  background-image: linear-gradient(90deg,rgba(7,101,103,.08) 1px,transparent 1px),
+    linear-gradient(rgba(7,101,103,.08) 1px,transparent 1px);
+  background-size: 32px 32px;
+}
+.pwb .pw-card {
+  --pw-card-inset: 20px;
+  border: 0;
+  border-radius: 0;
+  color: var(--pw-ink);
+  background: var(--pw-glass);
+  box-shadow: none;
+  -webkit-backdrop-filter: var(--pw-glass-blur);
+  backdrop-filter: var(--pw-glass-blur);
+}
+.pwb .pw-card-head,.pwb .pw-plan .pw-card-head {
+  padding: var(--pw-card-inset) var(--pw-card-inset) 8px;
+  gap: 8px;
+}
+.pwb .pw-card-head .pw-card-title h2,.pwb .pw-plan h2 {
+  font: 500 20px/24px var(--pw-display);
+  letter-spacing: -.025em;
+}
+.pwb .pw-card-head .pw-card-title > svg { color: var(--pw-blue); }
+.pwb .pw-card.pw-news-banner {
+  --pw-card-inset: 21px;
+  color: #fff;
+  border-radius: 0;
+  background: rgba(7,101,103,.93);
+}
+.pwb .pw-news-banner[data-folded=false] {
+  box-shadow: var(--pw-glass-shadow);
+}
+.pwb .pw-news-banner[data-folded=false]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,.46);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.pwb .pw-news-banner .pw-card-head .pw-card-title > svg,
+.pwb .pw-news-banner .pw-card-link,.pwb .pw-news-banner .pw-news-title { color: #fff; }
+.pwb .pw-news-banner :is(button,a):focus-visible { outline-color: #ffdc63; }
+.pwb .pw-news-banner .pw-card-link:hover,.pwb .pw-news-banner .pw-news-entry a:hover .pw-news-title { color: #ffdf73; }
+.pwb .pw-news-banner[data-folded=true] .pw-card-head {
+  flex: 1;
+  align-items: center;
+  padding: 0 var(--pw-card-inset);
+}
+.pwb .pw-news-banner .is-lead .pw-news-title {
+  font: 650 clamp(17px, 3.5cqw, 22px)/1.35 var(--pw-body);
+  letter-spacing: normal;
+  text-transform:none;
+}
+.pwb .pw-news-banner .pw-news-summary { color: #edf9f7; font: 400 13px/1.6 var(--pw-body); letter-spacing: normal; }
+.pwb .pw-news-banner .pw-news-split { padding-block: 6px 12px; }
+.pwb .pw-news-banner .pw-news-lead { row-gap:10px; }
+.pwb .pw-news-banner .pw-brief-edition { color:#d1eeeb; font: 400 12px/18px var(--pw-body); white-space:nowrap; }
+.pwb .pw-news-banner .pw-brief-date {
+  min-height:26px; max-width:105px; padding-inline:4px; border:1px solid rgba(255,255,255,.35);
+  border-radius:0; background:#116668; color:#fff; font:400 12px/18px var(--pw-body);
+}
+.pwb .pw-news-banner .pw-brief-date:focus-visible { outline:2px solid #ffdc63; }
+.pwb .pw-news-banner[data-folded=false] .pw-card-head { flex-wrap:wrap; row-gap:6px; }
+.pwb .pw-news-banner .pw-news-quick {
+  border-color: rgba(255,255,255,.25);
+}
+.pwb .pw-news-banner .pw-news-quick .pw-news-entry { padding-block:5px; }
+.pwb .pw-news-banner .pw-news-entry:not(.is-lead) .pw-news-title {
+  display:block; color:#f0fbfa; font:400 13px/1.5 var(--pw-body); overflow-wrap:anywhere;
+}
+.pwb .pw-news-banner .pw-news-quick :is(li + li,.pw-news-entry) { border-color: rgba(255,255,255,.22); }
+.pwb .pw-news-figure { border: 1px solid rgba(255,255,255,.22); border-radius: 0; background: #1a7778; }
+
+.pwb .pw-card.pw-pet {
+  color: var(--pw-ink);
+  background: rgba(223,242,240,.70);
+}
+.pwb .pw-pet .pw-pet-main { padding: var(--pw-card-inset); }
+.pwb .pw-pet .pw-pet-art {
+  background: radial-gradient(circle closest-side at 50% 38%, #ffd041 98%, transparent) center top / 116px 104px no-repeat;
+}
+.pwb .pw-pet .hbc-launcher,.pwb .pw-pet .pw-pet-placeholder { color: var(--pw-ink); }
+.pwb .pw-pet .hbc-state-label { color: var(--pw-muted); }
+.pwb .pw-pet :is(.hbc-launcher span,.hbc-state-label,.hbc-pet-actions button) { font: 500 12px/17px var(--pw-body); }
+.pwb .pw-pet .hbc-pet-actions button {
+  color: var(--pw-blue);
+  padding: 6px 12px;
+  border: 1px solid var(--pw-accent);
+  border-radius: 0;
+  background: var(--pw-glass);
+}
+.pwb .pw-pet .hbc-pet-actions button:last-child { color: #fff; border-color: var(--pw-accent); background: var(--pw-accent); }
+
+.pwb .pw-card:is(.pw-assistants,.pw-projects) {
+  box-shadow: inset 0 0 0 1px var(--pw-line);
+}
+.pwb .pw-assistant-list,.pwb .pw-project-list { gap: 8px 16px; padding-bottom: 12px; }
+.pwb .pw-assistant-group,.pwb .pw-assistant-group+.pw-assistant-group,
+.pwb .pw-project-row,.pwb .pw-project-row:first-child {
+  border: 1px solid var(--pw-line);
+  border-radius: 0;
+  background: rgba(255,255,255,.64);
+}
+.pwb .pw-assistant-group,.pwb .pw-assistant-group+.pw-assistant-group { padding: 12px; }
+.pwb .pw-assistant-compact .pw-assistant-group { row-gap: 3px; }
+.pwb .pw-project-row:focus-within,.pwb .pw-project-row:hover { background: rgba(240,251,250,.93); }
+.pwb .pw-project-icon,.pwb .pw-assistant-avatar { border-radius: 0; }
+.pwb .pw-assistant-heading strong { font: 500 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body); }
 .pwb .pw-project-row { display: grid; position: relative; align-items: stretch; }
 .pwb .pw-project-open { display: grid; align-content: start; align-items: start; padding: 10px 12px; gap: 0; }
 .pwb .pw-project-heading {
@@ -868,9 +1160,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 }
 .pwb .pw-project-heading .pw-project-icon { width: 28px; height: 28px; }
 .pwb .pw-project-heading strong {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
+  font: 600 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body);
   overflow-wrap: anywhere;
 }
 .pwb .pw-project-heading > svg { color: var(--pw-blue); }
@@ -888,11 +1178,16 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
   align-items: start;
   gap: 8px;
   padding-block: 2px;
-  font-size: 12px;
-  line-height: 17px;
+  font: 400 12px/17px var(--pw-body);
 }
 .pwb .pw-project-field-label { color: var(--pw-muted); }
 .pwb .pw-project-field-value { min-width: 0; overflow-wrap: anywhere; }
+.pwb .pw-project-field[data-field=status] .pw-project-field-value {
+  justify-self: start;
+  color: var(--pw-blue);
+  background: color-mix(in srgb,var(--pw-blue) 10%,transparent);
+  padding-inline: 5px;
+}
 .pwb .pw-project-field:is([data-field=progress],[data-field=requirements]) .pw-project-field-value {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -902,106 +1197,211 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
 .pwb .pw-project-field[hidden] { display: none; }
 @container pw-card (min-width:500px) {
   .pwb .pw-project-list { row-gap: 0; }
-  .pwb .pw-project-row,.pwb .pw-project-open { grid-template-rows: subgrid; grid-row: span 4; }
+  .pwb .pw-project-row,.pwb .pw-project-open { grid-template-rows: subgrid; grid-row: span 6; }
   .pwb .pw-project-row { margin-block-end: 8px; }
   .pwb .pw-project-field[hidden] { display: block; visibility: hidden; padding: 0; }
 }
 
+.pwb .pw-state {
+  font: 400 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body);
+  border-radius: 0;
+  padding: 2px 7px;
+}
+.pwb .pw-state[data-state=active] { color: #604500; background: #ffedac; }
+.pwb .pw-state[data-state=done] { color: #065657; background: #d9efeb; }
+.pwb .pw-state[data-state=failed],.pwb .pw-state[data-state=attention] { color: #914734; background: #fae8e1; }
 
-.pwb .pw-shell { padding-block-end: 12px; }
-.pwb .pw-footer.pw-footer-message { padding-block: 6px; white-space: normal; overflow-wrap: anywhere; }
-.pwb .pw-head {
-  --pw-window-offset: 0px;
+.pwb .pw-card.pw-plan {
+  background: var(--pw-glass);
+  border: 0;
+  border-radius: 0;
+}
+.pwb .pw-plan .pw-card-head { align-items: center; padding-bottom: 12px; }
+.pwb .pw-plan .pw-segmented {
+  padding: 2px;
+  gap: 2px;
+  background: transparent;
+  border: 1px solid var(--pw-accent);
+  border-radius: 0;
+}
+.pwb .pw-plan .pw-segmented button {
+  min-width: 28px;
+  min-height: 24px;
+  border-radius: 0;
+  color: var(--pw-muted);
+  font: 400 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body);
+}
+.pwb .pw-plan .pw-card-head .pw-segmented button[aria-pressed=true] { background: var(--pw-accent); color: #fff; box-shadow: none; }
+.pwb .pw-plan .pw-calendar { padding-bottom: 8px; }
+.pwb .pw-plan .pw-card-head { flex-wrap: wrap; }
+.pwb .pw-plan .pw-card-head h2 { flex: 0 0 auto; white-space: nowrap; }
+.pwb .pw-plan .pw-date-nav { gap: 2px; justify-content: center; }
+.pwb .pw-plan .pw-date-nav > span { font-size: 12px; line-height: 18px; font-variant-numeric: tabular-nums; }
+.pwb .pw-plan .pw-date-nav button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  min-height: 28px;
+  border-radius: 0;
+}
+.pwb .pw-plan .pw-date-nav button:hover:not(:disabled) { background: var(--pw-hover); }
+.pwb .pw-plan .pw-date-nav .pw-today { white-space: nowrap; }
+.pwb .pw-plan .pw-date-nav .pw-today:disabled { color: var(--pw-muted); cursor: default; }
+@container pw-card (max-width: 350px) {
+  .pwb .pw-plan .pw-date-nav { order: 1; flex-basis: 100%; justify-content: flex-start; }
+}
+.pwb .pw-plan .pw-calendar-grid { gap: 4px; }
+.pwb .pw-plan .pw-calendar-grid :is(.pw-week-label,.pw-calendar-marker,.pw-calendar-week-status) { color: var(--pw-muted); font: 500 10px/14px var(--pw-body); }
+.pwb .pw-plan .pw-calendar-grid button,
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button {
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period=future] { border: 1px dashed var(--pw-line); }
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period=past],
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button[data-has-record=true] { background: #f2f9f8; }
+.pwb .pw-plan .pw-calendar-grid button:hover,.pwb .pw-plan .pw-calendar-grid button[aria-pressed=true] { background: #e3f2ef; }
+.pwb .pw-plan .pw-calendar-grid .pw-calendar-number { min-width: 24px; min-height: 24px; padding: 3px; font: 600 12px/18px var(--pw-body); border-radius: 0; }
+.pwb .pw-plan .pw-calendar-grid button.is-today > .pw-calendar-number { color: #413000; background: var(--pw-gold); }
+.pwb .pw-plan .pw-calendar-grid button[aria-pressed=true] > .pw-calendar-number { color: #fff; background: var(--pw-accent); }
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button { min-height: 60px; padding: 4px; }
+.pwb .pw-plan .pw-calendar-grid[data-mode=week]{gap:0;border-block:1px solid var(--pw-line)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button{border:0;background:transparent;min-height:68px;padding:5px 2px;gap:2px;justify-content:flex-start}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button+button{border-left:1px solid var(--pw-line)}
+.pwb .pw-plan .pw-calendar-weekday{font:500 10px/14px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[aria-pressed=true]{background:var(--pw-hover)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month]{gap:0}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button{border:0;border-top:1px solid var(--pw-line);background:transparent;min-height:96px;align-items:stretch;justify-content:flex-start;gap:4px;padding:6px;overflow:hidden}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button:not(:nth-of-type(7n+1)){border-left:1px solid var(--pw-line)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button[aria-pressed=true]{background:var(--pw-hover)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-number{align-self:flex-start;font-size:11px;min-height:20px;line-height:14px}
+.pwb .pw-plan .pw-calendar-task-list{display:flex;flex-direction:column;gap:4px;min-width:0;width:100%}
+.pwb .pw-plan .pw-calendar-task-list .pw-calendar-preview{display:block;width:100%;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;font:400 10px/15px var(--pw-body);color:var(--pw-ink)}
+.pwb .pw-plan .pw-calendar-task-list .pw-calendar-preview[data-checked=true]{color:var(--pw-muted);text-decoration:line-through}
+.pwb .pw-plan .pw-calendar-task-list .pw-calendar-marker{font:400 10px/15px var(--pw-body);text-align:left}
+.pwb .pw-plan .pw-progress { padding-block: 8px; gap: 8px; }
+.pwb .pw-plan .pw-progress-track { height: 4px; border-radius: 0; background: #e3eeec; }
+.pwb .pw-plan .pw-progress-value { height: 4px; border-radius: 0; background: var(--pw-accent); }
+.pwb .pw-plan .pw-progress-count { font: 600 12px/17px var(--pw-body); }
+.pwb .pw-plan .pw-card-body { padding-block: 2px 8px; }
+.pwb .pw-plan .pw-group-title { color: var(--pw-accent); font: 400 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body); letter-spacing: var(--pw-label-tracking); text-transform: uppercase; margin-block: 6px 4px; }
+.pwb .pw-plan :is(.pw-plan-note.quote,.pw-plan-note.callout) {
+  margin-block: 4px; padding: 4px 8px; border-radius: 0; background: #eef7f5;
+}
+.pwb .pw-plan .pw-plan-note { font: 400 12px/17px var(--pw-body); }
+.pwb .pw-plan .pw-plan-text,.pwb .pw-plan[data-density=compact] .pw-plan-text { font: 400 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body); letter-spacing: normal; }
+.pwb .pw-plan .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row { gap: 8px; padding-block: 4px; }
+.pwb .pw-plan .pw-plan-check { border: 1px solid #9fbdb9; border-radius: 0; }
+.pwb .pw-plan .is-done .pw-plan-check { color: #fff; background: var(--pw-accent); }
+.pwb .pw-plan .pw-plan-row.has-time {
+  margin-block: 4px;
+  padding: 4px 8px;
+  border: 1px solid #cbe6e2;
+  border-radius: 0;
+  background: #edf8f6;
+}
+.pwb .pw-plan-time { color: var(--pw-accent); font: 650 10px/14px var(--pw-body); }
+.pwb .pw-plan .pw-card-foot { margin-inline: var(--pw-card-inset); padding-block: 8px; font: 400 11px/16px var(--pw-body); }
+.pwb .pw-plan .pw-card-foot .pw-dot { background: #0a8a76; }
+
+.pwb .pw-layout-button,.pwb .pw-head .pw-layout-button:not(.is-primary) {
+  min-height: 36px; padding: 8px 12px; border: 1px solid var(--pw-ink); border-radius: 0;
+  background: var(--pw-glass); color: var(--pw-ink); font: 400 14px/20px var(--pw-body);
+}
+.pwb .pw-layout-button.is-primary,.pwb .pw-head .pw-layout-button.is-primary,
+.pwb .pw-task-form button,.pwb .pw-release-form button {
+  min-height: 36px; padding: 10px; border: 0; border-radius: 0;
+  background: var(--pw-accent); color: #fff; font: 400 var(--pw-label-size)/var(--pw-label-leading) var(--pw-body);
+  letter-spacing: var(--pw-label-tracking); text-transform: uppercase;
+}
+.pwb .pw-action-label { display: flex; align-items: center; gap: 6px; }
+.pwb .pw-layout-button.is-primary:hover,.pwb .pw-head .pw-layout-button.is-primary:hover { background: #084c4e; }
+.pwb .pw-head .pw-layout-button:not(.is-primary):hover { color: var(--pw-ink); background: var(--pw-hover); }
+.pwb :is(.pw-card-link,.pw-quiet-link),.pwb .pw-plan .pw-card-link,.pwb .pw-assistant-review .pw-quiet-link {
+  padding: 0; border: 0; border-radius: 0; color: var(--pw-blue); font: 400 14px/20px var(--pw-body);
+}
+.pwb :is(.pw-card-link,.pw-quiet-link):hover { text-decoration: underline; text-underline-offset: 3px; }
+.pwb .pw-head .pw-attention-popover,.pwb .pw-project-dialog {
+  background: rgba(255,255,255,.96); color: var(--pw-ink); border: 1px solid var(--pw-line);
+  border-radius: 0; box-shadow: var(--pw-glass-shadow);
+  -webkit-backdrop-filter: var(--pw-glass-blur);
+  backdrop-filter: var(--pw-glass-blur);
+}
+.pwb .pw-head .pw-attention-popover {
+  max-height: min(320px, 42dvh);
+  padding: 0 20px;
+  overscroll-behavior: contain;
+  -webkit-app-region: no-drag;
+}
+.pwb .pw-attention-popover:focus-visible { outline: 2px solid var(--pw-accent); outline-offset: -2px; }
+.pwb .pw-attention-item-top {
   display: grid;
-  grid-template-columns: minmax(0,1fr) auto;
-  grid-template-areas: "plugin tools" "title title";
-  align-items: center;
-  column-gap: 12px;
-  row-gap: 4px;
-  min-height: 0;
-  padding-block: 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, max-content);
+  align-items: start;
+  gap: 6px 16px;
 }
-html[data-platform="darwin"] .pwb .pw-head {
-  --pw-window-offset: max(0px,calc(var(--dsh-frame-leading-clearance,0px) - var(--pw-gutter)));
-}
-.pwb .pw-head .pw-plugin-name {
-  grid-area: plugin;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  min-height: min(32px,var(--pw-window-offset));
-  margin: 0;
-  padding-inline-start: var(--pw-window-offset);
-  font-size: 11px;
-  line-height: 16px;
-  letter-spacing: .04em;
+.pwb .pw-attention-item :is(strong, p, .pw-attention-tag) { overflow-wrap: anywhere; }
+.pwb .pw-attention-item strong { font: 500 14px/20px var(--pw-body); }
+.pwb .pw-attention-item p { font: 400 13px/18px var(--pw-body); }
+.pwb .pw-attention-tag {
+  justify-self: end;
+  max-width: 168px;
+  padding: 2px 6px;
+  background: color-mix(in srgb,var(--pw-orange) 9%,var(--pw-paper));
   white-space: normal;
-  overflow-wrap: anywhere;
+  font: 400 12px/16px var(--pw-body);
 }
-.pwb .pw-head .pw-head-title { grid-area: title; padding-inline-start: 0; }
-.pwb .pw-head .pw-head-title h1 { font-size: clamp(24px,3.1cqw,32px); line-height: 1.2; font-weight: 500; }
-.pwb .pw-head .pw-head-actions { grid-area: tools; justify-self: end; width: auto; }
+.pwb .pw-attention-item .pw-quiet-link { margin-top: 4px; }
+.pwb .pw-project-dialog { padding: 21px; }
+.pwb .pw-project-dialog :is(input,select,textarea) { border-radius: 0; }
+.pwb[data-editing=true] .pw-card { border: 1px dashed #79b4af; }
+.pwb[data-editing=true] .pw-card[data-active=true] { outline-color: var(--pw-accent); }
+.pwb .pw-grid-resize { color: var(--pw-accent); background: #e2f4f1; border-radius: 0; }
+.pwb .pw-head :is(button,summary),.pwb :is(.pw-card-link,.pw-quiet-link) {
+  transition: color var(--pw-motion-fast) ease, background-color var(--pw-motion-fast) ease;
+}
+@container pw-root (max-width: 760px) {
+  .pwb .pw-shell { --pw-gutter: 16px; }
+}
 @container pw-root (max-width: 560px) {
-  .pwb .pw-head {
-    grid-template-columns: minmax(0,1fr);
-    grid-template-areas: "plugin" "title" "tools";
-  }
+  .pwb .pw-head { grid-template-columns: minmax(0,1fr); grid-template-areas: "plugin" "title" "tools"; padding-block: 8px; }
+  .pwb .pw-head .pw-head-actions { flex-wrap: wrap; width: 100%; justify-content: flex-end; }
+  .pwb .pw-attention-item-top { grid-template-columns: minmax(0, 1fr); }
+  .pwb .pw-attention-tag { justify-self: start; max-width: 100%; }
+}
+@container pw-card (max-width: 400px) {
+  .pwb .pw-card-content { --pw-card-inset: 12px; }
+  .pwb .pw-card-head .pw-card-title h2,.pwb .pw-plan h2 { font-size: 16px; }
+  .pwb .pw-news-banner .pw-card-link { font-size: 11px; gap: 4px; }
+  .pwb .pw-plan .pw-card-foot .pw-card-link { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pwb .pw-head :is(button,summary),.pwb :is(.pw-card-link,.pw-quiet-link),
+  .pwb[data-editing=true] .pw-card { transition: none; }
 }
 
+.pwb .pw-pet .pw-pet-art { background: none; }
+.pwb .pw-plan .pw-plan-view[data-mode=day] { overflow-y: auto; }
+.pwb .pw-plan .pw-plan-view[data-mode=day] > .pw-card-body { flex: 0 0 auto; overflow: visible; }
 
-.pwb .pw-calendar-grid[data-mode=week] button {
-  min-height: 48px;
-  justify-content: flex-start;
-  padding: 4px 1px;
+@container pw-card (max-width: 400px) {
+  .pwb .pw-news-banner[data-folded=false] .pw-card-body { padding-bottom: 16px; }
 }
-.pwb .pw-calendar-grid[data-mode=week] button[data-period=past],
-.pwb .pw-calendar-grid[data-mode=month] button[data-has-record=true] {
-  background: var(--pw-tile);
+
+.pwb .pw-pet .hbc-launcher { font-family: var(--pw-body); }
+.pwb .pw-news-banner .pw-news-quick .pw-news-entry svg { color: #d1eeeb; }
+@container pw-root (max-width: 560px) {
+  .pwb .pw-head .pw-layout-button:not(.is-primary) { padding: 6px 8px; }
 }
-.pwb .pw-calendar-grid[data-mode=week] button[data-period=future] {
-  border: 1px dashed var(--pw-line);
+@container pw-card (max-width: 400px) {
+  .pwb .pw-assistant-group,.pwb .pw-assistant-group+.pw-assistant-group { padding: 10px; }
 }
-.pwb .pw-calendar-grid[data-mode=week] button[aria-pressed=true],
-.pwb .pw-calendar-grid[data-mode=month] button[aria-pressed=true] {
-  box-shadow: inset 0 0 0 1px var(--pw-accent);
-  background: var(--pw-hover);
-}
-.pwb .pw-calendar-grid[data-mode=month] button {
-  min-height: 60px;
-  overflow: hidden;
-}
-.pwb .pw-calendar-grid[data-mode=month] .pw-calendar-marker {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pwb .pw-calendar-grid[data-mode=month] .pw-calendar-preview {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-  text-align: start;
-  color: var(--pw-ink);
-  font-size: 10px;
-  line-height: 12px;
-}
-.pwb .pw-calendar-grid[data-mode=month] .pw-calendar-preview[data-checked=true] {
-  color: var(--pw-muted);
-  text-decoration: line-through;
-}
-.pwb .pw-calendar-week-status {
-  color: var(--pw-muted);
-  font-size: 10px;
-  line-height: 12px;
-  font-weight: 500;
-  text-align: center;
-  max-width: 100%;
-}
-.pwb .pw-calendar-grid button[data-period=today] .pw-calendar-week-status { color: var(--pw-ink); font-weight: 650; }
-@container pw-card (max-width:400px) {
-  .pwb .pw-calendar-grid[data-mode=month] button { padding-inline: 2px; }
-}
+
+.pwb .pw-project-detail header button,.pwb .pw-requirement-controls button,
+.pwb .pw-plan-note.callout,.pwb .pw-card-foot .pw-dot,
+.pwb .pw-news-entry.is-lead,.pwb .pw-activity-icon,.pwb .pw-pet .hbc-launcher { border-radius: 0; }
 
 
 .pwb .pw-head .pw-attention { position: relative; }
@@ -1017,38 +1417,63 @@ html[data-platform="darwin"] .pwb .pw-head {
   .pwb .pw-head .pw-attention .pw-attention-popover { max-height: 36dvh; padding-inline: 12px; }
 }
 
-
-.pwb {--pw-body:"Inter","PingFang SC",-apple-system,sans-serif;--pw-body-size:14px;--pw-body-leading:20px;--pw-label-size:12px;--pw-label-leading:16px}
-.pwb .pw-header-pet .hbc-launcher span {font-size:11px}
 /* Dashboard overview */
+.pwb .pw-grid-canvas {
+  --pw-overview-pet-size:122px;
+}
 .pwb .pw-grid-canvas[data-fit-content=true] {
   display:grid;
+  min-height:0;
   grid-template-columns:repeat(var(--pw-overview-columns), minmax(0,1fr));
   grid-template-rows:max-content max-content auto;
   gap:12px var(--pw-overview-gap);
   align-content:start;
   align-items:start;
 }
-.pwb .pw-grid-canvas[data-fit-content=true] > .pw-card {position:relative}
-.pwb .pw-grid-canvas[data-fit-content=true] > .pw-plan {contain:layout style;align-self:start;height:auto;max-height:none}
-.pwb .pw-grid-canvas[data-fit-content=true] .pw-plan :is(.pw-card-content,.pw-plan-view,.pw-card-body) {flex:0 0 auto;height:auto;max-height:none;overflow:visible;}
-.pwb [data-fit-content=true] > :is(.pw-news,.pw-assistants) .pw-card-head {padding-block:12px 8px}
-.pwb [data-fit-content=true] > .pw-news[data-folded=true] .pw-card-head {min-height:42px;padding-block:4px}
+.pwb .pw-overview-column {display:contents}
+.pwb .pw-grid-canvas[data-pet-placement=aligned] {grid-template-rows:auto}
+.pwb [data-pet-placement=aligned] > .pw-overview-column {
+  display:grid;grid-row:1;grid-template-columns:minmax(0,1fr);grid-auto-rows:max-content;align-content:start;row-gap:12px;min-width:0;
+}
+.pwb [data-pet-placement=aligned] > .pw-overview-left {grid-column:1 / span var(--pw-overview-left-columns)}
+.pwb [data-pet-placement=aligned] > .pw-overview-right {grid-column:calc(var(--pw-overview-left-columns) + 1) / -1}
+.pwb .pw-grid-canvas[data-fit-content=true] [data-grid-id] {position:relative}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-plan {contain:layout style;align-self:start;height:auto;max-height:none}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-plan :is(.pw-card-content,.pw-plan-view,.pw-card-body) {
+  flex:0 0 auto;height:auto;max-height:none;overflow:visible;
+}
+.pwb .pw-grid-canvas[data-fit-content=true][data-grid-profile=narrow] {
+  grid-template-rows:max-content auto max-content auto;
+  row-gap:var(--pw-overview-gap);
+}
+.pwb .pw-grid-canvas[data-pet-placement=stacked] {
+  grid-template-rows:max-content max-content auto max-content auto;
+}
+.pwb [data-fit-content=true] .pw-assistants .pw-card-head {padding-block:12px 8px}
 .pwb [data-fit-content=true] .pw-brief-layout {padding-block:0 12px}
 .pwb [data-fit-content=true] .pw-assistant-feed {padding-bottom:10px}
 .pwb [data-fit-content=true] .pw-assistant-copy {row-gap:6px}
 .pwb .pw-head {
-  --pw-header-pet-size:clamp(72px,9cqw,92px);
-  grid-template-columns:minmax(0,1fr) auto auto;
-  grid-template-rows:48px minmax(40px,auto);
-  grid-template-areas:"plugin plugin pet" "title tools pet";
+  --pw-header-top-inset:6px;
+  grid-template-columns:minmax(112px,1fr) minmax(0,auto);
+  grid-template-rows:auto minmax(36px,auto);
+  grid-template-areas:"plugin plugin" "title tools";
   column-gap:clamp(8px,1.5cqw,20px);
-  row-gap:0;
-  padding-block:0 8px;
+  row-gap:8px;
+  align-content:start;
+  padding-block:var(--pw-header-top-inset) 14px;
 }
-.pwb .pw-head .pw-plugin-name {align-self:start;height:48px;min-height:0}
+@container pw-root (max-width:520px) {
+  .pwb[data-editing=true] .pw-head {padding-block-start:var(--pw-header-top-inset)}
+}
+.pwb .pw-head .pw-plugin-name {
+  padding-block:0;
+}
 .pwb .pw-head .pw-head-title {align-self:center}
-.pwb .pw-head .pw-head-actions {align-self:center;min-width:0}
+.pwb .pw-head .pw-head-actions,.pwb .pw-head:has(.pw-attention) .pw-head-actions {
+  align-self:center;min-width:0;flex-wrap:wrap;width:auto;justify-content:flex-end;padding:0;
+}
+.pwb .pw-head:has(.pw-attention) .pw-refresh {margin-inline-start:0}
 .pwb .pw-head .pw-refresh {
   width:auto;height:36px;min-width:76px;padding:6px 9px;gap:6px;
   font:500 12px/16px var(--pw-body);font-variant-numeric:tabular-nums;white-space:nowrap;
@@ -1057,61 +1482,54 @@ html[data-platform="darwin"] .pwb .pw-head {
 @keyframes pw-refresh-turn {to {transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce) {.pwb .pw-refresh[aria-busy=true] > svg {animation:none}}
 .pwb .pw-head .pw-head-title h1 {font:600 clamp(22px,3.1cqw,32px)/1.15 var(--pw-display);white-space:normal}
-.pwb .pw-head .pw-header-pet {
-  grid-area:pet;justify-self:end;align-self:center;background:none;padding-block-start:6px;
-  padding-inline-start:clamp(8px,1.5cqw,20px);
-  border-inline-start:1px solid var(--pw-line);
+.pwb .pw-pet.pw-overview-pet {
+  grid-column:1/-1;grid-row:1;justify-self:end;
+  display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px clamp(12px,1.25cqw,20px);
+  width:min(100%,360px);max-width:100%;padding:10px 0;border:0;
 }
-.pwb .pw-header-pet .pw-pet-art {display:flex;align-items:center}
-.pwb .pw-head .pw-pet .hbc-home .hbc-launcher {--hbc-dock-size:var(--pw-header-pet-size);width:var(--hbc-dock-size)!important}
-.pwb .pw-head .pw-header-pet .pw-pet-art > .hbc-launcher {width:var(--pw-header-pet-size)!important}
-.pwb .pw-header-pet .hbc-launcher svg {width:100%;height:auto}
-.pwb .pw-header-pet .pw-pet-art:has(> .hbc-home) {
-  --pw-pet-column-gap:8px;
-  display:grid;grid-template-columns:auto auto;grid-template-rows:1fr 1fr;
-  column-gap:var(--pw-pet-column-gap);row-gap:4px;min-height:76px;
+.pwb [data-pet-placement=aligned] .pw-overview-pet {width:100%;padding-inline:4px}
+.pwb [data-pet-placement=stacked] .pw-overview-pet {
+  width:100%;padding:8px 12px;
 }
-.pwb .pw-header-pet .hbc-home {grid-row:1 / span 2;grid-column:1;align-self:center}
-.pwb .pw-header-pet .hbc-home .hbc-name {
-  position:absolute;left:calc(100% + var(--pw-pet-column-gap) + 1px);top:calc(50% - 36px);
-  margin:0;width:max-content;max-width:108px;white-space:nowrap;
-  color:var(--pw-ink);font:600 13px/18px var(--pw-body);text-align:start;
+.pwb [data-fit-content=false] .pw-overview-pet {position:absolute;inset:0 0 auto auto}
+.pwb [data-pet-placement=bottom] .pw-overview-pet {inset-block-start:100%;padding-block-end:8px}
+.pwb .pw-today-overview {
+  flex:1 1 224px;min-inline-size:min(100%,224px);
+  color:var(--pw-ink);font:400 13px/1.55 var(--pw-body);overflow-wrap:anywhere;
 }
-.pwb .pw-header-pet .hbc-state-label {
-  grid-area:1 / 2;align-self:end;justify-self:start;min-height:0;max-inline-size:108px;
-  color:var(--pw-muted);font:500 12px/17px var(--pw-body);text-align:start;overflow-wrap:anywhere;
+.pwb .pw-today-overview h2 {margin:0 0 5px;font:600 14px/20px var(--pw-body)}
+.pwb .pw-today-overview p {margin:0 0 5px}
+.pwb .pw-today-overview .pw-today-status {color:var(--pw-muted)}
+.pwb .pw-today-overview .pw-today-attention {
+  display:inline;padding:0;border:0;background:none;text-align:start;
+  color:var(--pw-blue);font:600 12px/1.55 var(--pw-body);cursor:pointer;
 }
-.pwb .pw-header-pet .hbc-dock-actions {grid-area:2 / 2;align-self:start;justify-self:start;justify-content:start;margin:0}
-.pwb .pw-header-pet .hbc-pet-actions {flex-wrap:wrap;min-width:92px}
-.pwb .pw-header-pet .hbc-pet-actions button {padding:4px 8px;white-space:nowrap}
+.pwb .pw-today-attention:hover {text-decoration:underline}
+.pwb .pw-today-attention svg {vertical-align:middle}
+.pwb .pw-pet.pw-overview-pet .pw-pet-art {flex:0 0 112px;display:grid;justify-items:center;min-width:0}
+/* The embedded Data widget adds its stylesheet after the workbench styles. */
+.pwb .pw-pet.pw-overview-pet .hbc-home .hbc-launcher {
+  --hbc-dock-size:var(--pw-overview-pet-size);
+  width:var(--hbc-dock-size)!important;
+}
+.pwb .pw-overview-pet .pw-pet-art > .hbc-launcher {width:var(--pw-overview-pet-size)!important}
+.pwb .pw-overview-pet .hbc-launcher svg {width:100%;height:auto}
+.pwb .pw-overview-pet .pw-pet-art:has(> .hbc-home) {
+  row-gap:3px;
+}
+.pwb .pw-overview-pet .hbc-home .hbc-name {
+  margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  color:var(--pw-ink);font:600 13px/18px var(--pw-body);text-align:center;
+}
+.pwb .pw-overview-pet .hbc-state-label {
+  min-height:0;max-inline-size:100%;
+  color:var(--pw-muted);font:500 12px/17px var(--pw-body);text-align:center;overflow-wrap:anywhere;
+}
+.pwb .pw-overview-pet .hbc-dock-actions {justify-content:center;margin:0}
+.pwb .pw-overview-pet .hbc-pet-actions {flex-wrap:wrap}
+.pwb .pw-overview-pet .hbc-pet-actions button {padding:4px 8px;white-space:nowrap}
 @container pw-root (max-width:900px) {
-  .pwb .pw-head {
-    --pw-header-pet-size:64px;
-    grid-template-columns:minmax(0,1fr) auto;
-    grid-template-rows:minmax(76px,auto) minmax(40px,auto);
-    grid-template-areas:"plugin pet" "title tools";
-    column-gap:10px;
-  }
-  .pwb .pw-head .pw-plugin-name {display:block;padding-block-start:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .pwb .pw-head .pw-head-title h1 {font-size:22px}
-  .pwb .pw-head .pw-header-pet {padding-inline-start:0;border-inline-start:0}
-}
-@container pw-root (max-width:560px) {
-  .pwb .pw-head {
-    --pw-header-pet-size:clamp(54px,13cqw,72px);
-    grid-template-columns:minmax(0,1fr) auto;
-    grid-template-rows:minmax(48px,auto) auto auto;
-    grid-template-areas:"plugin plugin" "title title" "tools pet";
-  }
-  .pwb .pw-head .pw-head-actions {flex-wrap:wrap;width:auto;justify-self:start;justify-content:flex-start}
-  .pwb .pw-head .pw-header-pet {padding-inline-start:8px;border-inline-start:0}
-  .pwb .pw-head:has(.pw-attention) .pw-refresh {margin-inline-start:0}
-}
-@container pw-root (max-width:440px) {
-  .pwb .pw-header-pet .pw-pet-art:has(> .hbc-home) {--pw-pet-column-gap:4px}
-  .pwb .pw-header-pet .hbc-state-label {max-inline-size:69px}
-  .pwb .pw-header-pet .hbc-dock-actions {flex-direction:column}
-  .pwb .pw-header-pet .hbc-pet-actions button {padding-inline:6px}
 }
 .pwb :is(.pw-brief-copy,.pw-assistant-copy,.pw-project-heading) h3 {margin:0;font:600 var(--pw-body-size)/var(--pw-body-leading) var(--pw-body);overflow-wrap:anywhere}
 .pwb .pw-dashboard-action {
@@ -1121,11 +1539,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 .pwb .pw-dashboard-action:hover {background:var(--pw-hover)}
 .pwb .pw-dashboard-action.is-accent {background:var(--pw-accent);border-color:var(--pw-accent);color:#fff}
-.pwb .pw-dashboard-action.is-accent:hover {background:color-mix(in srgb,var(--pw-accent) 82%,black)}
+.pwb .pw-dashboard-action.is-accent:hover {background:#084c4e}
 .pwb :is(.pw-dashboard-action,.pw-brief-layout a):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
 .pwb .pw-state[data-state=planned],.pwb .pw-state[data-state=waiting] {color:#285775;background:#e7f0f6}
 
-.pwb .pw-card.pw-news-banner {background:var(--pw-glass);color:var(--pw-ink);box-shadow:inset 0 0 0 1px var(--pw-line)}
+.pwb .pw-card.pw-news-banner {--pw-card-inset:18px;background:var(--pw-glass);color:var(--pw-ink);box-shadow:inset 0 0 0 1px var(--pw-line)}
 .pwb .pw-news-banner[data-folded=false]::before {content:none}
 .pwb .pw-news-banner .pw-card-head .pw-card-title > svg,.pwb .pw-news-banner .pw-card-link {color:var(--pw-blue)}
 .pwb .pw-news-banner .pw-brief-edition {color:var(--pw-muted)}
@@ -1239,7 +1657,6 @@ html[data-platform="darwin"] .pwb .pw-head {
   margin:0;font:600 var(--pw-card-title-size)/var(--pw-card-title-leading) var(--pw-body);letter-spacing:normal
 }
 .pwb .pw-grid-canvas .pw-card .pw-card-head .pw-card-title {min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-content > .pw-card-head {padding-block:12px;min-height:48px}
 .pwb .pw-grid-canvas .pw-news .pw-card-body,
 .pwb .pw-grid-canvas :is(.pw-assistants,.pw-projects) > .pw-card-content > .pw-card-body {padding:0}
 .pwb .pw-grid-canvas .pw-card :is(.pw-brief-layout,.pw-assistant-feed,.pw-project-tiles) {padding:0 var(--pw-card-inset) var(--pw-card-bottom)}
@@ -1265,15 +1682,15 @@ html[data-platform="darwin"] .pwb .pw-head {
   --pw-divider:rgba(68,94,98,.10);
   --pw-muted:#4d6466;
 }
-.pwb .pw-grid-canvas > .pw-card:not(.pw-pet) {
+.pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet) {
   border:1px solid rgba(255,255,255,.66);
   border-radius:var(--pw-glass-radius);
   background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.10) 46%,rgba(255,255,255,.22)),var(--pw-glass);
   box-shadow:var(--pw-glass-shadow);
   -webkit-backdrop-filter:var(--pw-glass-blur);backdrop-filter:var(--pw-glass-blur);
 }
-.pwb .pw-grid-canvas > .pw-card:not(.pw-pet)::before {content:none}
-.pwb .pw-grid-canvas > .pw-card > .pw-card-content {border-radius:inherit}
+.pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet)::before {content:none}
+.pwb .pw-grid-canvas [data-grid-id] > .pw-card-content {border-radius:inherit}
 .pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-assistant-group+.pw-assistant-group,.pw-project-row,.pw-project-row:first-child) {
   border:1px solid rgba(255,255,255,.52);border-radius:16px;
   background:linear-gradient(135deg,rgba(255,255,255,.30),rgba(255,255,255,.12));
@@ -1284,13 +1701,18 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas :is(.pw-project-icon,.pw-assistant-avatar) {border-radius:10px}
 .pwb .pw-grid-canvas .pw-news-image {border-radius:10px}
 .pwb .pw-grid-canvas .pw-project-enter {background:rgba(255,255,255,.36)}
-.pwb .pw-grid-canvas .pw-pet {background:transparent;border:0;box-shadow:none;backdrop-filter:none}
-.pwb[data-editing=true] .pw-grid-canvas > .pw-card {border:1px dashed #40898b}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:stretch;gap:0;box-sizing:border-box;width:100%;padding:16px;border:1px solid var(--pw-line);border-radius:20px;background:var(--pw-glass,var(--pw-paper));box-shadow:var(--pw-glass-shadow);backdrop-filter:var(--pw-glass-blur)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art{align-self:stretch;align-content:center;padding:8px 12px 8px 0;box-sizing:border-box;width:112px}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview{align-self:stretch;min-inline-size:0;margin:0;padding:8px 0 8px 16px;border-left:1px solid var(--pw-line);display:flex;flex-direction:column;justify-content:center;text-align:left}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview h2{margin:0 0 8px}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview p:last-child{margin-bottom:0}
+@container pw-root (max-width:520px){.pwb .pw-grid-canvas .pw-pet.pw-overview-pet{grid-template-columns:96px minmax(0,1fr);padding:12px}.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art{width:96px;padding-right:8px}.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview{padding-left:12px}}
+.pwb[data-editing=true] .pw-grid-canvas [data-grid-id] {border:1px dashed #40898b}
 @supports not (backdrop-filter:blur(1px)) {
-  .pwb .pw-grid-canvas > .pw-card:not(.pw-pet) {background:rgba(245,250,249,.94)}
+  .pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet) {background:rgba(245,250,249,.94)}
 }
 @media (prefers-reduced-transparency:reduce) {
-  .pwb .pw-grid-canvas > .pw-card:not(.pw-pet) {background:#edf5f3;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet) {background:#edf5f3;backdrop-filter:none;-webkit-backdrop-filter:none}
 }
 
 
@@ -1310,15 +1732,31 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 
 
-/* A collapsed brief keeps its lead story subordinate to the section heading. */
-.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-content > .pw-card-head {display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:3px}
-.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-title {grid-column:1;grid-row:1}
-.pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-news-actions {grid-column:2;grid-row:1/3;align-self:center}
-.pwb .pw-grid-canvas .pw-news .pw-brief-folded-headline {grid-column:1;grid-row:2;margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 13px/20px var(--pw-body);color:var(--pw-muted)}
-@container pw-card (max-width:430px) {
- .pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-card-head .pw-card-title {gap:4px}
- .pwb .pw-grid-canvas .pw-news[data-folded=true] .pw-news-actions .pw-card-link:has([aria-hidden]) {padding-inline:0}
+/* Both states share the same top-right slot for the disclosure button. */
+.pwb .pw-news .pw-card-content > .pw-card-head {
+  display:grid;grid-template-columns:minmax(0,1fr) 48px;align-items:start;
+  column-gap:12px;row-gap:4px;min-height:0;padding:16px var(--pw-card-inset) 12px;
 }
+.pwb .pw-news .pw-card-head .pw-card-title {grid-area:1 / 1;min-height:28px}
+.pwb .pw-news .pw-card-head .pw-brief-toggle {
+  grid-area:1 / 2;justify-content:flex-end;min-height:28px;margin:0;padding:0;white-space:nowrap;
+}
+.pwb .pw-news .pw-brief-folded-headline {
+  grid-column:1/-1;display:flex;align-items:center;gap:8px;min-width:0;
+  font:400 13px/20px var(--pw-body);color:var(--pw-muted);
+}
+.pwb .pw-brief-folded-headline > span {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pwb .pw-brief-folded-headline > a {flex-shrink:0}
+
+
+.pwb .pw-plan .pw-card-foot .pw-plan-sync {display:inline-flex;align-items:center;gap:6px;min-height:28px;max-width:100%;color:var(--pw-muted);font:400 11px/16px var(--pw-body);text-decoration:none;white-space:normal}
+.pwb .pw-plan .pw-card-foot a.pw-plan-sync {color:var(--pw-accent)}
+.pwb .pw-plan .pw-card-foot a.pw-plan-sync:hover {text-decoration:underline;text-underline-offset:3px}
+.pwb .pw-plan .pw-card-foot .pw-plan-sync[data-state=error] {color:var(--pw-orange)}
+.pwb .pw-plan-sync .pw-sync-pulse {flex:none;width:7px;height:7px;border-radius:50%;background:currentColor;animation:pw-sync-breathe 1.4s ease-in-out infinite}
+@keyframes pw-sync-breathe {0%,100%{opacity:.4;box-shadow:0 0 0 0 rgba(7,101,103,0)}50%{opacity:1;box-shadow:0 0 0 4px rgba(7,101,103,.12)}}
+@media (prefers-reduced-motion:reduce) {.pwb .pw-plan-sync .pw-sync-pulse {animation:none}}
+
 /* Shared quiet controls and whole-cell calendar selection. */
 .pwb .pw-head :is(.pw-attention summary,.pw-layout-button,.pw-layout-button.is-primary,.pw-refresh) {
   min-height:36px;border:1px solid var(--pw-line);border-radius:10px;
@@ -1360,7 +1798,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-plan .is-done .pw-plan-check {border-color:var(--pw-accent);background:var(--pw-accent);color:#fff}
 .pwb .pw-plan .pw-plan-check svg {width:12px;height:12px;flex:none}
 .pwb .pw-plan .pw-plan-check:focus-visible {outline:2px solid var(--pw-accent);outline-offset:3px}
-.pwb .pw-plan .pw-plan-sync-row {border:0;padding:0 0 6px;min-height:28px;flex:none;justify-content:flex-start}
+.pwb .pw-plan .pw-plan-sync-row {border:0;border-top:1px solid var(--pw-divider);padding:8px 0;min-height:28px;flex:none;justify-content:flex-start}
 .pwb .pw-plan-inline-link {display:inline;white-space:normal}
 .pwb .pw-plan-inline-link a {display:inline-flex;align-items:baseline;gap:3px;color:var(--pw-accent);text-decoration:underline;text-underline-offset:3px;font:inherit}
 .pwb .pw-plan-inline-link button {padding:2px 5px;margin-left:4px;border:0;border-radius:5px;color:var(--pw-muted);background:transparent;font:400 11px/18px var(--pw-body)}
@@ -1417,7 +1855,9 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 .pwb .pw-pet .hbc-nest::after {content:none;display:none}
 
-/* The pet keeps its own size when the daily brief expands or folds. */
+/* Wide overview cards align to the expanded brief. Folding keeps the pet's last height. */
+.pwb .pw-grid-canvas[data-match-overview-height] .pw-news[data-folded=false] {min-height:280px}
+.pwb .pw-grid-canvas[data-match-overview-height] .pw-pet.pw-overview-pet {min-height:var(--pw-expanded-overview-height,280px)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {display:grid;grid-template-columns:128px minmax(0,1fr);gap:12px;align-items:center;padding:16px;box-sizing:border-box}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:128px;padding:0;align-self:center;align-content:center;row-gap:5px}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;min-inline-size:0;margin:0;padding:12px;border:1px solid rgba(255,255,255,.55);border-radius:12px;background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
@@ -1426,7 +1866,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:hover {background:rgba(255,255,255,.6);border-color:color-mix(in srgb,var(--pw-accent) 28%,transparent)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
 @container pw-root (max-width:520px) {
- .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {grid-template-columns:112px minmax(0,1fr);gap:8px;padding:12px}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {--pw-overview-pet-size:112px;grid-template-columns:112px minmax(0,1fr);gap:8px;padding:12px}
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:112px;padding:0}
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {padding:10px}
 }
@@ -1513,7 +1953,7 @@ html[data-platform="darwin"] .pwb .pw-head {
  .pwb .pw-head .pw-layout-edit-controls .pw-layout-help {max-width:250px}
 }
 @container pw-root (max-width:560px) {
- .pwb[data-editing=true] .pw-head {grid-template-areas:"plugin plugin" "title pet" "tools tools";grid-template-rows:auto auto auto}
+ .pwb[data-editing=true] .pw-head {grid-template-areas:"plugin plugin" "title title" "tools tools";grid-template-rows:auto auto auto}
  .pwb[data-editing=true] .pw-head .pw-head-actions {justify-self:start;justify-content:flex-start}
  .pwb .pw-head .pw-layout-edit-controls {align-items:flex-start}
  .pwb .pw-head .pw-layout-edit-controls .pw-layout-help {text-align:left}
@@ -1542,6 +1982,35 @@ html[data-platform="darwin"] .pwb .pw-head {
 /* Time belongs to the title above it, with more space before the next task. */
 .pwb .pw-plan :is(.pw-plan-time,.pw-plan-meta) {margin-top:2px}
 .pwb .pw-plan .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row,.pwb .pw-plan .pw-plan-row.has-time {padding-block:6px}
+/* The companion is a first-class grid card; only its handle moves the card. */
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet {display:block;padding:0;inset:auto;overflow:hidden;container-type:inline-size}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {
+ display:grid;grid-template-columns:128px minmax(0,1fr);align-items:center;gap:12px;min-width:0;min-height:0;height:100%;padding:16px;box-sizing:border-box;
+}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button {
+ flex:none;width:var(--pw-button-s);min-width:var(--pw-button-s);height:var(--pw-control-height);min-height:var(--pw-control-height);padding:8px;box-sizing:border-box;
+}
+.pwb[data-editing=true] .pw-grid-canvas .pw-pet.pw-overview-pet {padding-top:28px}
+.pwb[data-editing=true] .pw-pet-content {pointer-events:none}
+.pwb [data-fit-content=false] .pw-pet-content {overflow:auto}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-pet.pw-overview-pet .pw-pet-content {height:auto}
+.pwb .pw-grid-canvas[data-match-overview-height] .pw-pet.pw-overview-pet .pw-pet-content {min-height:calc(var(--pw-expanded-overview-height,280px) - 2px)}
+@container pw-root (max-width:520px) {
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {grid-template-columns:128px minmax(0,1fr);gap:8px;padding:12px}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:128px}
+}
+
+.pwb .pw-public-cat{display:flex;flex-direction:column;align-items:center;gap:5px;width:128px;color:var(--pw-ink)}
+.pwb .pw-public-cat-art{display:block;width:120px;height:120px;aspect-ratio:1;flex:none;padding:4px;border:1px solid #d3b55a55;border-radius:50%;corner-shape:round;background:linear-gradient(135deg,#fff1bc,#f7da89);cursor:pointer;overflow:hidden;box-sizing:border-box}
+.pwb .pw-public-cat-art svg{width:100%;height:100%;display:block}
+.pwb .pw-public-cat strong{font:600 14px/20px var(--pw-body)}
+.pwb .pw-public-cat-status{font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-project-captured-notes{border-top:1px solid var(--pw-line);margin-top:8px;padding-top:8px;font:400 12px/18px var(--pw-body)}
+.pwb .pw-project-captured-notes p{margin:4px 0 0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.pwb .pw-plan .pw-task-form{display:flex;gap:8px;padding:12px var(--pw-card-inset) 16px;border-top:1px solid var(--pw-line)}
+.pwb .pw-task-form input{min-width:0;flex:1;padding:8px;border:1px solid var(--pw-line);border-radius:10px;background:var(--pw-paper);font:400 13px/20px var(--pw-body);color:var(--pw-ink)}
+.pwb .pw-task-form button{width:60px;height:40px;flex:none;border:1px solid var(--pw-line);border-radius:10px;background:var(--pw-paper);color:var(--pw-ink)}
+.pwb .pw-overview-secondary{font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
 
 `;
     function bindWorkbenchWheel(board) {
@@ -1602,11 +2071,22 @@ html[data-platform="darwin"] .pwb .pw-head {
     }
     function useWorkbenchGrid(collapsed=false) {
       const viewport=React.useRef(null),gesture=React.useRef(null),current=React.useRef(null);
+      const editOrigin=React.useRef(null);
       const [saved,setSaved]=React.useState(gridReadPreferences),[draft,setDraft]=React.useState({}),[editing,setEditing]=React.useState(false),[active,setActive]=React.useState(null),[notice,setNotice]=React.useState('');
       const [size,setSize]=React.useState({width:0,height:0});
-      const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?12:profile.key==='medium'?16:24,row=Math.max(34,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
+      const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?8:16,row=Math.max(34,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
       const layout=gridNormalize((editing?draft:saved)[profile.key],profile);
+      const origin=editing&&editOrigin.current?.profile===profile.key?editOrigin.current:null;
+      const untouched=origin&&JSON.stringify(draft[profile.key])===JSON.stringify(origin.layout);
       const fitContent = !editing && canFitOverviewContent(layout, profile);
+      const narrow = profile.key === 'narrow';
+      const [plan,news,activity] = layout;
+      const aligned = fitContent && !narrow
+        && activity.x === 0 && activity.w === plan.x && plan.x + plan.w === profile.cols;
+      const petPlacement = aligned ? 'aligned' : fitContent ? 'stacked' : 'custom';
+      const stacked = petPlacement === 'stacked';
+      const newsRow = stacked ? 2 : 1, planRow = stacked ? 3 : 2;
+      const foldedExtra = profile.collapsed && !fitContent ? Math.max(0,94-row) : 0;
       current.current={profile,gap,row,column,layout,editing};
       function stopGesture(cancel=false) {
         const previous=gesture.current;if(!previous)return;
@@ -1667,32 +2147,58 @@ html[data-platform="darwin"] .pwb .pw-head {
       }
       function card(id) {
         const item=layout.find(item=>item.id===id);
+        if(untouched&&origin.rects[id])return {'data-grid-id':id,style:{...origin.rects[id],position:'absolute'}};
         const height = item.h * (row + gap) - gap;
+        const contentRows = narrow ? {pet:1,news:newsRow, plan:planRow, activity:planRow+1, projects:planRow+2}
+          : {pet:1,news:newsRow, activity:planRow, projects:planRow+1, plan:`${planRow} / span 2`};
+        const naturalProjects = id === 'projects' && item.h === gridDefaults(profile).find(card => card.id === 'projects').h;
         const style = fitContent ? {
-          gridColumn: `${item.x + 1} / span ${item.w}`,
-          gridRow: {news:'1', activity:'2', projects:'3', plan:'2 / span 2'}[id],
-          height: id === 'projects' && item.h !== gridDefaults(profile).find(card => card.id === 'projects').h ? height : undefined
-        } : {left:item.x*column,top:item.y*(row+gap),width:Math.max(0,item.w*column-gap),height};
+          gridColumn: aligned ? undefined : `${item.x + 1} / span ${item.w}`,
+          gridRow: aligned ? undefined : contentRows[id],
+          height: id === 'projects' && !naturalProjects ? height : undefined
+        } : {
+          left:item.x*column,
+          top:item.y*(row+gap),
+          height:height+(id==='news'?foldedExtra:0),width:Math.max(0,item.w*column-gap)
+        };
         return {'data-grid-id':id,'data-auto-height':fitContent&&id==='projects'&&style.height===undefined?'true':undefined,'data-active':active===id?'true':undefined,style};
       }
-      function edit(){setDraft({...saved});setNotice('');setEditing(true);}
+      function edit(){
+        const canvas=viewport.current?.querySelector?.('.pw-grid-canvas');
+        const bounds=canvas?.getBoundingClientRect(),rects={};
+        if(bounds)for(const item of layout){
+          const rect=canvas.querySelector('[data-grid-id="'+item.id+'"]')?.getBoundingClientRect();
+          if(rect?.width&&rect.height)rects[item.id]={left:rect.left-bounds.left,top:rect.top-bounds.top,width:rect.width,height:rect.height};
+        }
+        if(Object.keys(rects).length===layout.length){
+          const measured=gridNormalize(layout.map(item=>{const r=rects[item.id];return {...item,x:Math.round(r.left/column),y:Math.round(r.top/(row+gap)),w:Math.round((r.width+gap)/column),h:Math.ceil((r.height+gap)/(row+gap))};}),{...profile,collapsed:false});
+          editOrigin.current={profile:profile.key,layout:measured,rects,height:Math.max(...Object.values(rects).map(r=>r.top+r.height))};
+          setDraft({...saved,[profile.key]:measured});
+        }else {editOrigin.current=null;setDraft({...saved});}
+        setNotice('');setEditing(true);
+      }
       function cancel(){stopGesture(true);setEditing(false);setNotice('');}
-      function reset(){stopGesture();setDraft(value=>({...value,[profile.key]:gridDefaults(profile)}));setNotice('已恢复当前窗口的默认布局');viewport.current.scrollTop=0;}
+      function reset(){stopGesture();editOrigin.current=null;setDraft(value=>({...value,[profile.key]:gridDefaults(profile)}));setNotice('已恢复当前窗口的默认布局');viewport.current.scrollTop=0;}
       function finish(){
         stopGesture();
-        const profiles={};for(const width of [390,800,1200]){const p=gridProfile(width);if(draft[p.key])profiles[p.key]=gridNormalize(draft[p.key],p);}
+        const committed={...draft},baseline=editOrigin.current;
+        if(baseline&&JSON.stringify(committed[baseline.profile])===JSON.stringify(baseline.layout)){
+          if(saved[baseline.profile])committed[baseline.profile]=saved[baseline.profile];else delete committed[baseline.profile];
+        }
+        const profiles={};for(const width of [390,800,1200]){const p=gridProfile(width);if(committed[p.key])profiles[p.key]=gridNormalize(committed[p.key],p);}
         setSaved(profiles);setEditing(false);
         try{localStorage.setItem(gridStorageKey,JSON.stringify({version:2,profiles}));setNotice('布局已保存');}catch{setNotice('本次布局已应用，但无法保存到此设备');}
       }
       const canvasStyle = fitContent ? {
         '--pw-overview-columns': profile.cols,
+        '--pw-overview-left-columns': activity.w,
         '--pw-overview-gap': gap + 'px'
       } : {
-        height: Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap,
+        height: untouched?origin.height:Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap+foldedExtra,
         '--pw-grid-column': column+'px',
         '--pw-grid-row': (row+gap)+'px'
       };
-      return {viewport,editing,active,notice,profile,handles,card,edit,cancel,reset,finish,fitContent,canvasStyle};
+      return {viewport,editing,active,notice,profile,handles,card,edit,cancel,reset,finish,fitContent,petPlacement,canvasStyle};
     }
     return {inject:['slots','locale','layout'],apply(ctx) {
       ctx.effect(()=>ctx.locale.register('personalWorkbench','zh',{title:'个人主控台'}));
@@ -1727,6 +2233,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           React.useEffect(()=>{try{sessionStorage.setItem(ns+'.assistantOpen',String(open));}catch{}},[open]);
           const [settings,setSettings]=React.useState(false);
           const launcher=React.useRef(null),closeButton=React.useRef(null);
+          const [loved,setLoved]=React.useState(false);React.useEffect(()=>{if(!loved)return;const t=setTimeout(()=>setLoved(false),1200);return()=>clearTimeout(t);},[loved]);
           React.useEffect(()=>{
             if(!open)return;
             const abort=new AbortController();
@@ -1765,7 +2272,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           React.useEffect(()=>{if(open)closeButton.current?.focus();},[open]);
           function close(){setOpen(false);setReference(null);launcher.current?.focus();}
           return h(React.Fragment,null,h('style',null,catCss),
-            h('button',{ref:launcher,className:'hbc-launcher',style:{position:'relative',right:'auto',top:'auto',width:76,padding:'0 6px 4px',flexShrink:0},'aria-label':t('open'),'aria-expanded':open,'aria-controls':'hbc-assistant-drawer',onClick:()=>{if(open)close();else{setReference(null);setOpen(true);}}},h(CatArt,{}),h('span',null,t('title'))),
+            h('div',{className:'pw-public-cat'},h('button',{ref:launcher,className:'pw-public-cat-art'+(loved?' hbc-loved':''),title:'摸摸 Data','aria-label':'摸摸 Data',onClick:()=>setLoved(true)},h(CatArt,{loved})),h('strong',null,'Data'),h('span',{className:'pw-public-cat-status'},loved?'呼噜呼噜…':'陪着你'),h('div',{className:'hbc-dock-actions'},h('button',{onClick:()=>setLoved(true)},'摸摸'),h('button',{'aria-label':t('open'),'aria-expanded':open,'aria-controls':'hbc-assistant-drawer',onClick:()=>{if(open)close();else setOpen(true);}},'聊聊'))),
             open&&dockTarget&&createPortal(h('aside',{id:'hbc-assistant-drawer',className:'hbc-drawer',role:'region','aria-label':t('title'),onKeyDown:e=>{if(e.key==='Escape'&&e.target===closeButton.current){e.preventDefault();close();}}},
               h('header',{className:'hbc-drawer-head'},h(CatArt,{}),h('div',null,h('strong',null,t('title')),h('p',null,t('subtitle'))),h('button',{onClick:()=>setSettings(v=>!v),'aria-expanded':settings},t('settings')),h('button',{ref:closeButton,onClick:close,'aria-label':t('close')},'×')),
               settings&&h(Settings,{}),
@@ -1788,6 +2295,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [editingFeed,setEditingFeed]=React.useState(false);
         const [feedDraft,setFeedDraft]=React.useState('');
         React.useSyncExternalStore(fn=>ctx.locale.subscribe(fn),()=>ctx.locale.getSnapshot());
+        const [briefDay,setBriefDay]=React.useState(()=>restoredUI('briefDay','')),[briefArchive,setBriefArchive]=React.useState(null),[briefReadError,setBriefReadError]=React.useState(null);
         const [foldedDay,setFoldedDay]=React.useState(()=>storedValue('dsh-personal-workbench:brief-folded-day',''));
         const [lastRefreshedAt,setLastRefreshedAt]=React.useState(null);
         const refreshTime=lastRefreshedAt?new Date(lastRefreshedAt).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false}):'未同步';
@@ -1795,13 +2303,33 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [data,setData]=React.useState(null),[monitor,setMonitor]=React.useState(null),[loading,setLoading]=React.useState(true),[tick,setTick]=React.useState(0),[error,setError]=React.useState(''),[readError,setReadError]=React.useState('');
         const [selectedDate,setSelectedDate]=React.useState(()=>restoredUI('selectedDate','')),[calendarMode,setCalendarMode]=React.useState(()=>restoredUI('calendarMode','day')),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
+        React.useEffect(()=>{const abort=new AbortController();setBriefReadError(null);
+          api('briefArchive',abort.signal,briefDay?{date:briefDay}:{}).then(value=>{if(!abort.signal.aborted)setBriefArchive({...value,selection:briefDay});}).catch(()=>{if(!abort.signal.aborted)setBriefReadError(briefDay);});
+          return()=>abort.abort();},[briefDay,today,tick]);
         const grid=useWorkbenchGrid(newsFolded);
+        const expandedOverviewHeight=React.useRef(280);
+        React.useLayoutEffect(()=>{
+          const canvas=grid.viewport.current?.querySelector('.pw-grid-canvas'),news=canvas?.querySelector('.pw-news');
+          if(!canvas||!news)return;
+          const align=()=>{
+            // When the news columns stack, both cards return to natural height.
+            const match=grid.fitContent&&grid.petPlacement==='aligned'&&(news.getBoundingClientRect().width>=650||Boolean(news.querySelector('.pw-empty')));
+            canvas.toggleAttribute('data-match-overview-height',match);
+            if(!match){canvas.style.removeProperty('--pw-expanded-overview-height');return;}
+            if(!newsFolded)expandedOverviewHeight.current=Math.max(280,Math.ceil(news.getBoundingClientRect().height));
+            const value=expandedOverviewHeight.current+'px';
+            if(canvas.style.getPropertyValue('--pw-expanded-overview-height')!==value)canvas.style.setProperty('--pw-expanded-overview-height',value);
+          };
+          align();const observer=new ResizeObserver(align);observer.observe(news);
+          return()=>observer.disconnect();
+        },[grid.fitContent,grid.petPlacement,newsFolded]);
+
         React.useLayoutEffect(() => {
           const board = grid.viewport.current;
           if (board) return bindWorkbenchWheel(board);
         }, []);
         React.useLayoutEffect(()=>{
-          uiUpdates.capture=()=>({selectedDate,calendarMode,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
+          uiUpdates.capture=()=>({selectedDate,calendarMode,briefDay,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
           return()=>{uiUpdates.capture=null;};
         });
         const updateScrollRestored=React.useRef(false);
@@ -1819,7 +2347,7 @@ html[data-platform="darwin"] .pwb .pw-head {
             let result=await api('projects',abort.signal);
             const legacy=projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]));
             if(legacy.length){await api('projectShortcuts',abort.signal,{action:'import',items:legacy});result=await api('projects',abort.signal);localStorage.removeItem(PROJECT_SHORTCUTS_KEY);}
-            if(!abort.signal.aborted)setCustomProjects(list(result.shortcuts));
+            if(!abort.signal.aborted){setCustomProjects(list(result.shortcuts));setNotes(result.notes||{});}
           })().catch(()=>{if(!abort.signal.aborted)setReadError('项目暂时未同步，已保留上次内容');});
           return()=>abort.abort();
         },[tick]);
@@ -1900,7 +2428,15 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         const mergedData=data;
         const checkedFor=task=>checks.get(task.id)??Boolean(task.checked);
-        const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor),reader=feedURL;
+        const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor);
+        const currentArchive=briefArchive?.selection===briefDay?briefArchive:null;
+        const edition=selectBriefEdition(briefDay,currentArchive?.edition,data?.brief),news=list(edition?.items),reader=safeHTTPS(edition?.url)||(!briefDay?feedURL:null);
+        const briefToday=briefArchive?.today||today;
+        const shownBriefDate=briefDay||edition?.date||briefToday;
+        const briefDateOptions=[...new Set([shownBriefDate,...[-2,-1,0,1].map(n=>new Date(Date.parse(briefToday)+n*86400000).toISOString().slice(0,10)),...list(briefArchive?.dates)])].sort().reverse();
+        const briefEdition=h('select',{className:'pw-brief-date','aria-label':'选择日报日期',value:shownBriefDate,onChange:event=>setBriefDay(event.target.value)},briefDateOptions.map(date=>h('option',{key:date,value:date},briefDateLabel(date,briefToday))));
+        const leadImage=safeHTTPS(edition?.imageUrl);
+
         const assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
         const operationReviews=useAssistantReviews(monitor?.accountId?'operations:'+monitor.accountId:null,
           completed.filter(row=>row.key?.startsWith('original:')||row.key?.startsWith('rewrite:')));
@@ -1991,10 +2527,35 @@ html[data-platform="darwin"] .pwb .pw-head {
           return groups.length?groups.map((group,i)=>h('div',{className:'pw-plan-group',key:i},group.title&&group.title!==plan.title&&h('h3',{className:'pw-group-title'},group.title),planNodes(list(group.items).length?group.items:list(group.tasks).map(task=>({type:'task',task}))))):planItems.map((task,i)=>planRow(task,task.id||i));
         }
         function newsBody() {
-          if(editingFeed)return h('form',{className:'pw-release-form',onSubmit:saveReadingLink},
-            h('label',null,'日报链接',h('input',{type:'url',value:feedDraft,maxLength:2048,placeholder:'https://…',onChange:event=>setFeedDraft(event.target.value)})),
-            h('div',null,h('button',{type:'button',onClick:()=>setEditingFeed(false)},'取消'),h('button',{type:'submit'},'保存')));
-          return reader?h('div',{className:'pw-brief-layout'},h('div',{className:'pw-brief-copy'},h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer'},'阅读全文',h(Icon,{name:'arrow',size:12})))):empty('把常看的 AI 日报放在这里','添加公开阅读链接。','news');
+          if(!edition&&briefReadError===briefDay)return empty('日报暂未同步',null,'news');
+          if(!edition&&!currentArchive)return skeleton();
+          if(!news.length&&reader)return h('div',{className:'pw-brief-layout'},h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer'},'打开已保存的日报',h(Icon,{name:'arrow',size:12})));
+          if(!news.length)return empty(briefDay===briefToday?'今日尚未发布':briefDay>briefToday?'这天尚未到来':briefDay?'这天没有已发布的日报':'暂无已发布日报','跟助手说“把今天的日报放到主控台”，制作完成后即可在这里阅读。','news');
+          const [lead,...quick]=news;
+          function storyTitle(item) {
+            const title=item.title||'今日资讯',url=safeURL(item.url);
+            return url?h('a',{className:'pw-news-title',href:url,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读：'+title},title)
+              :h('span',{className:'pw-news-title'},title);
+          }
+          return h('div',{className:'pw-brief-layout','data-quick':String(quick.length>0)},
+            h('article',{className:'pw-brief-lead is-lead'},
+              h('div',{className:'pw-brief-copy'},h('h3',null,storyTitle(lead)),
+                lead.summary&&h('p',{className:'pw-news-summary',title:lead.summary},lead.summary),
+                reader&&h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'阅读全文',h(Icon,{name:'arrow',size:12}))),
+              leadImage&&h('div',{className:'pw-brief-media',key:leadImage},h('img',{className:'pw-news-image',src:leadImage,alt:news[0]?.title||'日报配图',decoding:'async',
+                referrerPolicy:'no-referrer',onLoad:event=>{const img=event.currentTarget;if(img.naturalWidth&&img.naturalHeight)img.parentElement.style.setProperty('--pw-brief-image-ratio',String(img.naturalWidth/img.naturalHeight));},onError:event=>{event.currentTarget.parentElement.hidden=true;}}))),
+            quick.length>0&&h('ol',{className:'pw-news-quick','aria-label':'简讯'},
+              quick.map((item,index)=>{
+                const title=item.title||'今日资讯',url=safeURL(item.url)||reader;
+                const row=[h('span',{className:'pw-news-number','aria-hidden':true},index+1),h('span',{className:'pw-news-title',title},title),url&&h(Icon,{name:'arrow',size:12})];
+                return h('li',{key:item.url||index},url?h('a',{href:url,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读第 '+(index+1)+' 条简讯：'+title},...row):h('span',null,...row));
+              })));
+        }
+        function todayOverview(){
+          const items=list(data?.plan?.items),remaining=items.filter(item=>!checkedFor(item));
+          const high=list(data?.tasks?.items).find(item=>item.dueDate===today&&item.priority==='high'&&item.status!=='done');
+          const first=high||remaining[0];
+          return h('section',{className:'pw-today-overview'},h('h2',null,'今日概况'),h('p',null,first?(high?'今天重点：':'接下来：')+(first.title||first.text):items.length?'今天的计划都完成了。':'还没有安排，和我聊聊今天想做什么。'),h('p',{className:'pw-overview-secondary'},items.length?'已完成 '+(items.length-remaining.length)+' / '+items.length+' 项':'可以先说：“帮我安排今天的计划”。'));
         }
         function attentionSummary() {
           if(!attention.length)return null;
@@ -2106,7 +2667,7 @@ html[data-platform="darwin"] .pwb .pw-head {
               open&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':'打开'+name,onClick:open},action,h(Icon,{name:'chevron',size:11})));
           }
           const primary=operations[0];
-          const operation=assistantCard({
+          const operation=monitor?.availability!=='not_connected'&&assistantCard({
             name:'运营助手',icon:h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),
             status:primary?badge(primary.state,primary.label,primary.state==='failed'?primary.detail:undefined):
               badge('unknown',assistants.synced?'暂无新任务':monitor?.availability==='not_connected'?'未连接':'待同步'),
@@ -2115,14 +2676,22 @@ html[data-platform="darwin"] .pwb .pw-head {
               hint:primary.detail||primary.title},
             reviews:{...operationReviews,unavailable:monitor?.resultsUnavailable||monitor?.availability==='unavailable'},open:openOperations,action:'查看'
           });
-          const current=rows[0];
-          const secondary=current&&assistantCard({
-            name:'Harness 助手',icon:h(Icon,{name:'activity',size:22}),
-            status:badge('active',rows.length+' 项进展'),detail:{label:'当前任务',text:current.title},
-            reviews:{},open:current.destination?()=>navigate(current.destination):null
+          const jobs=list(data?.automations?.items);
+          const seen=new Set(jobs.map(job=>job.sessionId));
+          const agents=jobs.map(job=>({id:job.id,name:job.name,sessionId:job.sessionId,execution:job.execution,schedule:job.status==='paused'?'已暂停':job.scheduleLabel,result:job.result,lastRun:job.lastRun}));
+          for(const session of list(data?.ai?.items))if(!seen.has(session.id)&&(session.running===true||pending(session.pendingInput)||queued(session.queue)))agents.push({id:session.id,name:session.title,sessionId:session.id,execution:session});
+          const cards=agents.slice(0,6).map(agent=>{
+            const state=agent.execution,waiting=pending(state?.pendingInput),running=state?.running===true;
+            const label=waiting?inputLabel(state.pendingInput):running?'进行中':queued(state?.queue)?'排队中':state?.running===false?'等待开始':'状态待同步';
+            return h('section',{className:'pw-assistant-group',key:agent.id,'aria-label':agent.name},h('span',{className:'pw-assistant-avatar'},h(Icon,{name:'activity',size:22})),
+              h('div',{className:'pw-assistant-copy'},h('div',{className:'pw-assistant-heading'},h('h3',null,agent.name),badge(running?'active':'unknown',label)),
+                agent.schedule&&h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'排期'),h('span',null,agent.schedule)),
+                h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),h('div',{className:'pw-assistant-receipt'},agent.result&&h('small',null,assistantDate(agent.result.createdAt||agent.lastRun,today,true)),agent.result?h('button',{className:'pw-quiet-link',title:agent.result.text,onClick:()=>navigate({session:agent.sessionId})},h('span',{className:'pw-assistant-result-name'},agent.result.text.split('\n').find(Boolean)),h(Icon,{name:'arrow',size:11})):h('span',null,'暂无结果')))),
+              agent.sessionId&&h('button',{className:'pw-dashboard-action pw-assistant-open','aria-label':'打开'+agent.name,onClick:()=>navigate({session:agent.sessionId})},'打开',h(Icon,{name:'arrow',size:11})));
           });
-          return h('div',{className:'pw-assistant-list pw-assistant-feed'},operation,secondary);
+          return operation||cards.length?h('div',{className:'pw-assistant-list pw-assistant-feed'},operation,cards):empty('暂时没有进行中的任务','开始对话或建立自动化后，进度会出现在这里。','activity');
         }
+
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
         function projectDestination(project) {
           return project.source==='codex'?{codex:project.threadId}:{session:project.threadId};
@@ -2176,45 +2745,16 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         function projectDetail() {
           if(!activeProject)return null;
-          const requirements=list(notes[activeProject.id]?.requirements),pending=requirements.filter(item=>!item.done),finished=requirements.filter(item=>item.done);
-          const update=(id,done)=>saveProjectNotes({requirements:requirements.map(item=>item.id===id?{...item,done}:item)});
-          function move(index,offset) {
-            const next=[...pending],target=index+offset;
-            if(target<0||target>=next.length)return;
-            [next[index],next[target]]=[next[target],next[index]];
-            saveProjectNotes({requirements:[...next,...finished]});
-          }
-          function addRequirement(event) {
-            event.preventDefault();
-            const title=requirementDraft.trim();
-            if(!title)return;
-            if(requirements.length>=100){setProjectNotice('需求清单已满，请先移除不再需要的条目。');return;}
-            if(saveProjectNotes({requirements:[...requirements,{id:crypto.randomUUID(),title,done:false,createdAt:Date.now()}]}))setRequirementDraft('');
-          }
-          return h('div',{className:'pw-modal-backdrop'},
-            h('section',{className:'pw-project-dialog pw-project-detail',role:'dialog','aria-modal':true,'aria-labelledby':'pw-project-detail-title',onKeyDown:event=>{if(event.key==='Escape')closeProject();}},
-              h('header',null,h('h2',{id:'pw-project-detail-title'},activeProject.title),h('button',{type:'button','aria-label':'关闭项目',onClick:closeProject},'×')),
-              h('form',{onSubmit:event=>{event.preventDefault();if(saveProjectNotes({progress:progressDraft.trim()}))setProjectNotice('进展已保存。');}},
-                h('label',null,'当前进展',h('input',{maxLength:120,value:progressDraft,onChange:event=>setProgressDraft(event.target.value),placeholder:'一句话记下做到哪了'})),
-                h('button',{type:'submit',className:'pw-layout-button',disabled:progressDraft.trim()===projectProgress(activeProject)},'保存进展')),
-              h('form',{onSubmit:addRequirement},
-                h('label',null,'待开发需求',h('textarea',{autoFocus:true,value:requirementDraft,maxLength:400,onChange:event=>setRequirementDraft(event.target.value),placeholder:'记下想新增或修改的功能'})),
-                h('button',{type:'submit',className:'pw-layout-button',disabled:!requirementDraft.trim()},'记下需求')),
-              pending.length>0&&h('ol',{'aria-label':'按开发顺序排列的需求'},pending.map((item,index)=>h('li',{key:item.id,className:'pw-requirement-row'},
-                h('span',null,(index+1)+'. '+item.title),h('div',{className:'pw-requirement-controls'},
-                  h('button',{type:'button',disabled:index===0,'aria-label':'上移：'+item.title,onClick:()=>move(index,-1)},'↑'),
-                  h('button',{type:'button',disabled:index===pending.length-1,'aria-label':'下移：'+item.title,onClick:()=>move(index,1)},'↓'),
-                  h('button',{type:'button','aria-label':'标记已完成：'+item.title,onClick:()=>update(item.id,true)},'✓'))))),
-              finished.length>0&&h('details',null,h('summary',null,'已完成 · '+finished.length),h('ul',null,finished.map(item=>h('li',{key:item.id,className:'pw-requirement-row'},h('span',null,item.title),h('div',{className:'pw-requirement-controls'},
-                h('button',{type:'button',onClick:()=>update(item.id,false)},'恢复'),
-                h('button',{type:'button','aria-label':'移除：'+item.title,onClick:()=>saveProjectNotes({requirements:requirements.filter(row=>row.id!==item.id)})},'×')))))),
-              projectNotice&&h('p',{role:'status',className:'pw-footer-message'},projectNotice),
-              h('footer',null,
-                h('button',{type:'button',className:'pw-layout-button',onClick:async()=>{if(await navigate(projectDestination(activeProject)))closeProject();else setProjectNotice('暂时无法打开关联对话。');}},'打开开发对话'),
-                pending.length>0&&h('button',{type:'button',className:'pw-layout-button is-primary',disabled:handingOff,onClick:()=>void handoff(activeProject,pending)},'复制待办并打开对话'))));
+          const requirements=list(notes[activeProject.id]?.requirements),pending=requirements.filter(item=>!item.done);
+          return h('div',{className:'pw-modal-backdrop'},h('section',{className:'pw-project-dialog pw-project-detail',role:'dialog','aria-modal':true,'aria-labelledby':'pw-project-detail-title',onKeyDown:event=>{if(event.key==='Escape')closeProject();}},
+            h('header',null,h('h2',{id:'pw-project-detail-title'},activeProject.title),h('button',{autoFocus:true,type:'button','aria-label':'关闭项目',onClick:closeProject},'×')),
+            h('p',null,projectProgress(activeProject)||'还没有记录开发进展。'),
+            requirements.length>0&&h('ul',null,requirements.map(item=>h('li',{key:item.id,style:{textDecoration:item.done?'line-through':undefined}},item.title))),
+            projectNotice&&h('p',{role:'status'},projectNotice),
+            h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:async()=>{if(await navigate(projectDestination(activeProject)))closeProject();}},'打开对话'),pending.length>0&&h('button',{type:'button',className:'pw-layout-button',disabled:handingOff,onClick:()=>void handoff(activeProject,pending)},'复制记录并打开'))));
         }
         function projectBody() {
-          if(!allProjects.length)return empty('把项目放在手边','添加项目后，可以直接回到它的开发对话。','grid');
+          if(!allProjects.length)return empty('把项目放在手边','在聊天中说“把这个项目加入主控台”，之后可直接回到开发对话。','grid');
           const field=(key,label,value)=>h('div',{className:'pw-project-field','data-field':key},
             h('dt',{className:'pw-project-field-label'},label),
             h('dd',{className:'pw-project-field-value',title:value||undefined},value||'—'));
@@ -2230,7 +2770,8 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
                 'aria-label':'进入项目：'+project.title,title:'进入项目：'+project.title},h(Icon,{name:'arrow',size:17})),
               h('dl',{className:'pw-project-facts'},
-                field('progress','最近进展',progress||'尚未同步开发进展')));
+                field('progress','最近进展',progress||'尚未同步开发进展')),
+              list(notes[project.id]?.requirements).length>0&&h('div',{className:'pw-project-captured-notes'},h('small',null,'已记录 '+notes[project.id].requirements.length+' 条'),h('p',null,notes[project.id].requirements.filter(item=>!item.done).slice(0,2).map(item=>item.title).join(' · ')||'记录已完成')));
           }));
         }
         async function saveProject(event){
@@ -2243,16 +2784,24 @@ html[data-platform="darwin"] .pwb .pw-head {
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
         return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
-          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台')),h('div',{className:'pw-pet pw-header-pet','aria-label':'猫咪个人助手'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',{className:'pw-pet-placeholder'},'猫咪助手连接中'))),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))))),
-          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,style:grid.canvasStyle},
+          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台')),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))))),
+          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,'data-grid-profile':grid.profile.key,'data-pet-placement':grid.petPlacement,style:grid.canvasStyle},
+            h('div',{className:'pw-overview-column pw-overview-left'},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'每日 AI 日报'},grid.handles('news','每日 AI 日报'),h('div',contentProps,
-              h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'每日 AI 日报')),h('div',{className:'pw-news-actions'},
-                newsFolded&&reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'原文',h(Icon,{name:'arrow',size:11})),
-                h('button',{className:'pw-card-link',onClick:()=>{setFeedDraft(reader);setEditingFeed(true);if(newsFolded)toggleBrief();}},reader?'修改链接':'添加链接'),
-                h('button',{className:'pw-card-link pw-brief-toggle',onClick:toggleBrief,'aria-expanded':!newsFolded,'aria-label':newsFolded?'展开日报':'收起日报',title:newsFolded?'展开日报':'收起日报'},h(Icon,{name:newsFolded?'down':'up',size:16})))),
+              h('header',{className:'pw-card-head'},
+                h('div',{className:'pw-card-title'},h('h2',null,'每日 AI 日报'),briefEdition),
+                h('button',{className:'pw-card-link pw-brief-toggle',type:'button',onClick:toggleBrief,
+                  'aria-expanded':!newsFolded,'aria-label':newsFolded?'展开日报':'收起日报',title:newsFolded?'展开日报':'收起日报'},
+                  h(Icon,{name:newsFolded?'down':'up',size:16})),
+                newsFolded&&!grid.editing&&(news[0]?.title||reader)&&h('div',{className:'pw-brief-folded-headline'},
+                  news[0]?.title&&h('span',{title:news[0].title},news[0].title),
+                  reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},
+                    '阅读原文',h(Icon,{name:'arrow',size:11})))),
               !newsFolded||grid.editing?h('div',{className:'pw-card-body'},newsBody()):null)),
             h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手'},grid.handles('activity','AI 助手'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'AI Agents'))),h('div',{className:'pw-card-body'},assistantBody()))),
-            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'我的项目')),h('button',{className:'pw-card-link',onClick:()=>{setProjectForm({title:'',version:'',progress:'',target:'',icon:'app'});setProjectError('');setAddingProject(true);}},'+ 添加项目')),h('div',{className:'pw-card-body'},projectBody()),h('footer',{className:'pw-card-foot'},h('span',null,'点项目，回到对应对话'),h('span',null,'自定义项目入口')))),
+            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'我的项目'},grid.handles('projects','我的项目'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'我的项目'))),h('div',{className:'pw-card-body'},projectBody())))),
+            h('div',{className:'pw-overview-column pw-overview-right'},
+            h('section',{...grid.card('pet'),className:'pw-card pw-pet pw-overview-pet','aria-label':'猫咪个人助手'},grid.handles('pet','Data 助手'),h('div',{...contentProps,className:'pw-pet-content'},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',null,'助手连接中')),todayOverview())),
             h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},'今日计划'),planDateNav(),planViewSelector()),
               h('div',{className:'pw-plan-view','data-mode':calendarMode},calendarBody(),
@@ -2261,7 +2810,7 @@ html[data-platform="darwin"] .pwb .pw-head {
                 h('div',{className:'pw-card-body'},planBody())),
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
-                h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加'))))),
+                h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
           h('footer',{className:'pw-credit','aria-label':'设计署名'},h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'玄清'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'))),
           h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }

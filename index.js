@@ -1,4 +1,6 @@
 import {createUIReleaseReader} from './ui-update-host.js';
+import {attachContent} from './content.js';
+import {planTool} from './plan-tools.js';
 import {createCodexThreadOpener} from './project-navigation.js';
 import {attachProjects} from './project-service.js';
 import { z } from 'zod';
@@ -17,6 +19,7 @@ export function apply(ctx) {
   ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
   const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
   const projects=attachProjects(ctx);
+  const content=attachContent(ctx,projects);
   const openCodexThread=createCodexThreadOpener();
   let pendingStore;
   function store() {
@@ -41,6 +44,7 @@ export function apply(ctx) {
     async read() { return (await store()).global.get(); },
     async write(value) { await (await store()).global.set(value); return {ok: true}; },
   }});
+  ctx.effect(()=>ctx.tools.register(planTool(tasks)));
   let schedule, controller;
   ctx.inject(['schedule'], child => { schedule = child.schedule; child.effect(() => () => { schedule = undefined; }); });
   ctx.inject(['sessionController'], child => { controller = child.sessionController; child.effect(() => () => { controller = undefined; }); });
@@ -48,20 +52,21 @@ export function apply(ctx) {
   const live = createHarnessAdapter({schedule: () => schedule, controller: () => controller});
   async function assistants() {
     const {ai, automations} = await live.snapshot();
-    // Only distribute the display fields used by the dashboard, never chat replies.
+    // Only distribute the display fields and latest result excerpt used by this profile dashboard.
     const state = ({running, pendingInput, queue}) => ({running, pendingInput, queue});
     return {
       ai: {availability:ai.availability, items:ai.items.map(item=>({id:item.id,title:item.title,...state(item)}))},
       automations: {availability:automations.availability, items:automations.items.map(item=>({
         id:item.id,name:item.name,source:item.source,sessionId:item.sessionId,
-        execution:item.execution && state(item.execution),
+        status:item.status,scheduleLabel:item.scheduleLabel,lastRun:item.lastRun,
+        result:item.result,execution:item.execution && state(item.execution),
       }))},
     };
   }
   async function dashboard() {
-    const [records, activity] = await Promise.all([tasks.list(), assistants()]);
+    const [records, activity, brief] = await Promise.all([tasks.list(), assistants(), content.archive()]);
     return {today:records.today, checkedAt:new Date().toISOString(), tasks:records,
-      plan:planDay(records.items,records.today), threads:activity.ai.items.map(({id,title})=>({id,title})), ...activity};
+      plan:planDay(records.items,records.today), brief:brief.edition, threads:activity.ai.items.map(({id,title})=>({id,title})), ...activity};
   }
   async function change(input) {
     const request = z.discriminatedUnion('action', [
@@ -88,7 +93,9 @@ export function apply(ctx) {
         const query = new URL(request.url).searchParams;
         switch (query.get('action')) {
           case 'uiRelease': return reply({value:await readUIRelease()});
-          case 'projects': return reply({value:await projects.read()});
+          case 'projects': return reply({value:{...await projects.read(),notes:await content.projectNotes()}});
+          case 'briefArchive': return reply({value:await content.archive(query.get('date')||undefined)});
+          case 'export': return reply({value:{format:1,exportedAt:new Date().toISOString(),tasks:await tasks.list(),projects:await projects.read(),content:await content.export()}});
           case 'dashboard': return reply({value:await dashboard()});
           case 'assistants': return reply({value:await assistants()});
           case 'plan': return reply({value:planDay((await tasks.list()).items,query.get('date'))});

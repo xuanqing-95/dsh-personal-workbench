@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="由玄清设计的个人主控台。将今日计划、AI 日报、助手动态和项目放在一处，适用于 DeepSeek Harness。免费安装与原样分享。">
+<meta name="theme-color" content="#e8f2ef">
+<title>个人主控台 · 玄清</title>
+<style>
+:root{color-scheme:light;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;color:#183d38;background:#edf4f1;font-size:16px;line-height:1.65}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 8% 8%,#bedfd5,transparent 50%),radial-gradient(ellipse at 100% 70%,#d1e1d8,transparent 50%)}main,footer{max-width:1120px;margin:auto;padding:40px 32px}nav{display:flex;align-items:center;justify-content:space-between;gap:24px}nav a{color:inherit;font-size:14px}a{color:#18665a;text-underline-offset:4px}a:focus-visible,button:focus-visible{outline:3px solid #18665a;outline-offset:4px}h1{font-size:clamp(36px,7vw,68px);line-height:1.15;letter-spacing:-2px;margin:16px 0 24px;font-weight:650}h2{font-size:24px;line-height:1.4;margin:0 0 16px;font-weight:600}h3{font-size:17px;margin:0 0 8px}p{margin:0 0 16px}.hero{padding:72px 0 40px;max-width:800px}.eyebrow{font-size:12px;letter-spacing:2px;color:#526f68}.lead{font-size:20px;max-width:620px;color:#45645d}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.button,button{font:inherit;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;border:1px solid #9ebfb5;border-radius:12px;color:#234c43;background:#ffffff80;text-decoration:none;cursor:pointer}.primary{color:white;background:#256e5c;border-color:#256e5c}.preview{margin:12px 0 56px;padding:12px;border:1px solid #ffffffc0;background:#ffffff50;border-radius:24px;box-shadow:0 20px 60px #264c4012}.preview img{display:block;width:100%;height:auto;border-radius:14px}.preview figcaption{font-size:12px;color:#546b64;margin:10px 8px 0}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:0 0 56px}.glass{padding:28px;background:#ffffff69;border:1px solid #ffffffc7;border-radius:20px}.features p{font-size:14px;color:#48675e;margin:0}.install{scroll-margin-top:24px}ol{padding-left:24px;margin-bottom:0}li{margin:14px 0}code{font-size:13px;overflow-wrap:anywhere}.address{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0;padding:16px;background:#ffffff80;border-radius:12px}.address code{flex:1;min-width:200px}.address button{font-size:14px;min-width:96px;padding:8px 16px}.muted{color:#536e65;font-size:14px}.notes{padding:36px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:32px}.notes p{font-size:14px;color:#48675e}.footer{border-top:1px solid #809d9226;color:#627a71;font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.footer a{color:inherit}#copy-status{font-size:13px;min-height:22px;margin:0;color:#296658}@media(max-width:700px){main,footer{padding:24px 20px}.hero{padding-top:48px}.features,.notes{grid-template-columns:1fr}.features{gap:12px}.glass{padding:24px}.preview{margin-bottom:32px}.lead{font-size:18px}.features{margin-bottom:32px}}
+</style>
+<main>
+  <nav><span class="eyebrow">XUANQING / PERSONAL TOOLS</span><a href="https://github.com/xuanqing-95/dsh-personal-workbench">GitHub ↗</a></nav>
+  <section class="hero">
+    <p class="eyebrow">DSH-PERSONAL-WORKBENCH</p>
+    <h1>个人主控台</h1>
+    <p class="lead">今天的安排，AI 的进度，项目的下一步。<br>打开一页，就在手边。</p>
+    <p class="muted">由玄清设计 · DeepSeek Harness 插件 · 公开测试版</p>
+    <div class="actions"><a class="button primary" href="#install">安装到 Harness</a><a class="button" href="https://github.com/xuanqing-95/dsh-personal-workbench/releases">查看版本 ↗</a></div>
+  </section>
+  <figure class="preview"><img src="preview.png" width="1660" height="1000" alt="个人主控台示例：AI 日报、Data 助手、今日计划、AI Agents 和项目卡片" loading="eager"><figcaption>实际界面 · 图中为演示数据，首次安装从空白开始。</figcaption></figure>
+  <section class="features" aria-label="主要功能">
+    <div class="glass"><h3>用聊天管理事务</h3><p>让 Data 记录计划、项目和想法。待办可直接勾选，项目可回到对应对话。</p></div>
+    <div class="glass"><h3>一眼看到进展</h3><p>阅读自己的日报，查看 Harness 自动化排期和结果，追踪关联仓库的更新。</p></div>
+    <div class="glass"><h3>按你的习惯排列</h3><p>五个区域自由拖动、调整尺寸。收起日报，保留布局，让常用内容更顺手。</p></div>
+  </section>
+  <section class="glass install" id="install">
+    <h2>安装只需一个索引地址</h2>
+    <p class="muted">需先安装 DeepSeek Harness 0.2.2（rc.1 起）。插件免费使用，AI 聊天使用你自己配置的模型。</p>
+    <ol>
+      <li>打开 Harness「插件」，启用实验性的「自定义插件索引」。</li>
+      <li>在「发现 → 添加索引源」粘贴下面的地址。</li>
+      <li>搜索「<strong>个人主控台</strong>」或「<strong>玄清</strong>」，核对作者后安装；随后点击侧栏「个人主控台」。</li>
+    </ol>
+    <div class="address"><code id="index-url">https://xuanqing-95.github.io/dsh-personal-workbench/index.json</code><button type="button" id="copy">复制地址</button></div>
+    <p id="copy-status" role="status" aria-live="polite"></p>
+    <p class="muted">没有“发现”？从 <a href="https://github.com/xuanqing-95/dsh-personal-workbench/releases">版本页面</a> 下载 <code>.tgz</code> 安装包，在「添加插件」选择该文件。Harness 没有默认索引源，添加上方地址后才能搜索到此插件。</p>
+  </section>
+  <section class="notes">
+    <div><h3>开始使用</h3><p>配置好模型后点「聊聊」，说“把明天下午准备演示加入计划”，或“把这个项目加入主控台”。日报由你自己的助手制作并保存，不附带作者的私人订阅。</p><a href="https://github.com/xuanqing-95/dsh-personal-workbench#第一次使用">查看使用说明 ↗</a></div>
+    <div><h3>公开测试，逐步完善</h3><p>已在 macOS 独立配置测试。Windows / Linux 尚未实测；Notion 双向同步和作者的本机连接不在本公开包中。更新前先完成正在进行的聊天。</p><a href="https://github.com/xuanqing-95/dsh-personal-workbench/issues">反馈问题 ↗</a></div>
+  </section>
+</main>
+<footer><div class="footer"><span>Designed by 玄清 · © 2026</span><span><a href="https://github.com/xuanqing-95/dsh-personal-workbench/blob/main/PRIVACY.md">隐私</a> · <a href="https://github.com/xuanqing-95/dsh-personal-workbench/blob/main/LICENSE">使用许可</a> · 非 DeepSeek 官方产品</span></div></footer>
+<script>document.querySelector('#copy').addEventListener('click',async()=>{const status=document.querySelector('#copy-status');try{await navigator.clipboard.writeText(document.querySelector('#index-url').textContent);status.textContent='已复制，回到 Harness 添加索引源即可。'}catch{status.textContent='请选中上面的地址并复制。'}});</script>
+</html>

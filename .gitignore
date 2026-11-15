@@ -1,15 +1,11 @@
 node_modules/
-.env
-.env.*
-.dsh/
-.runtime/
-*.tgz
-*.log
-.DS_Store
-coverage/
-validation/
-
 .ui-rollback/
-ui-release.json
-.client-publish-*
-.ui-release-*
+dist/
+validation/
+*.tgz
+.DS_Store
+
+# Generated for the exact release commit by the publishing workflow.
+site/index.json
+site/icons/
+site/.nojekyll
