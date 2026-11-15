@@ -1,3 +1,4 @@
+import {createUIReleaseReader} from './ui-update-host.js';
 import {createCodexThreadOpener} from './project-navigation.js';
 import {attachProjects} from './project-service.js';
 import { z } from 'zod';
@@ -11,6 +12,10 @@ export const inject = ['connection', 'storageDomain', 'tools'];
 const title = '个人主控台';
 
 export function apply(ctx) {
+
+  let uiModules;
+  ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
+  const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
   const projects=attachProjects(ctx);
   const openCodexThread=createCodexThreadOpener();
   let pendingStore;
@@ -82,6 +87,7 @@ export function apply(ctx) {
         }
         const query = new URL(request.url).searchParams;
         switch (query.get('action')) {
+          case 'uiRelease': return reply({value:await readUIRelease()});
           case 'projects': return reply({value:await projects.read()});
           case 'dashboard': return reply({value:await dashboard()});
           case 'assistants': return reply({value:await assistants()});

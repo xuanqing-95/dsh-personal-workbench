@@ -8,3 +8,8 @@ node_modules/
 .DS_Store
 coverage/
 validation/
+
+.ui-rollback/
+ui-release.json
+.client-publish-*
+.ui-release-*

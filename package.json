@@ -28,7 +28,11 @@
     "project-tracking.js",
     "project-tools.js",
     "project-service.js",
-    "project-navigation.js"
+    "project-navigation.js",
+    "ui-update-host.js",
+    "ui-release.json",
+    "ui-update-client.js",
+    "publish-ui.mjs"
   ],
   "dependencies": {
     "zod": "4.4.3"
@@ -61,6 +65,7 @@
     "planner"
   ],
   "scripts": {
-    "test": "node --test *.test.js"
+    "test": "node --test *.test.js",
+    "publish:ui": "node publish-ui.mjs"
   }
 }
