@@ -1001,23 +1001,28 @@ html[data-platform="darwin"] .pwb .pw-head {
 }
 
 .pwb .pw-project-list.pw-project-tiles {grid-template-columns:minmax(0,1fr);gap:8px;padding-inline:var(--pw-card-inset)}
-.pwb .pw-project-tiles .pw-project-row {display:grid;grid-template-rows:auto 1fr auto;grid-row:auto;gap:8px;margin:0;padding:10px}
-.pwb .pw-project-tiles .pw-project-heading {display:flex;align-items:flex-start;flex-wrap:wrap;gap:5px 7px;padding:0}
-.pwb .pw-project-tiles .pw-project-heading > div {flex:1;min-width:92px}
-.pwb .pw-project-tiles .pw-project-heading > .pw-state {max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.pwb .pw-project-tiles .pw-project-row {
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr;
+  grid-row:auto;gap:8px;margin:0;padding:10px
+}
+.pwb .pw-project-tiles .pw-project-heading {
+  display:grid;grid-template-columns:26px minmax(0,1fr);align-items:start;gap:5px 7px;padding:0
+}
+.pwb .pw-project-tiles .pw-project-meta {grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.pwb .pw-project-tiles .pw-project-meta > .pw-state {max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .pwb .pw-project-tiles .pw-project-icon {width:26px;height:26px}
 .pwb .pw-project-tiles .pw-project-icon.is-placeholder {background:var(--pw-tile);color:var(--pw-blue)}
 .pwb .pw-project-version {font:400 11px/15px var(--pw-body);color:var(--pw-muted);overflow-wrap:anywhere}
 .pwb .pw-project-tiles .pw-project-remove {flex:none;align-self:start;min-width:24px;min-height:24px;padding:0}
-.pwb .pw-project-tiles .pw-project-facts {min-width:0;margin:0}
+.pwb .pw-project-tiles .pw-project-facts {grid-column:1/-1;min-width:0;margin:0}
 .pwb .pw-project-tiles .pw-project-field {grid-template-columns:4em minmax(0,1fr);gap:6px;padding:5px 0}
 .pwb .pw-project-tiles .pw-project-field + .pw-project-field {border-block-start:1px solid var(--pw-line)}
 .pwb .pw-project-tiles .pw-project-field-value {margin:0}
-.pwb .pw-project-tiles .pw-project-enter {width:100%;background:var(--pw-tile)}
+.pwb .pw-project-tiles .pw-project-enter {grid-area:1 / 2;align-self:start;gap:4px;padding-inline:7px;background:var(--pw-tile)}
 .pwb .pw-project-tiles .pw-project-enter:hover {background:var(--pw-hover)}
 @container pw-card (min-width:455px) {
   .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(2,minmax(0,1fr));row-gap:0}
-  .pwb .pw-project-tiles .pw-project-row {grid-template-rows:subgrid;grid-row:span 3;margin-block-end:8px}
+  .pwb .pw-project-tiles .pw-project-row {grid-template-rows:subgrid;grid-row:span 2;margin-block-end:8px}
 }
 @container pw-card (min-width:700px) {
   .pwb .pw-project-list.pw-project-tiles {grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -1619,12 +1624,13 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('div',{className:'pw-project-heading'},
                 project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':project.id==='today-plan'?'calendar':'grid',size:21})),
                 h('div',null,h('h3',null,project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
-                project.source&&h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×')),
+                project.source&&h('div',{className:'pw-project-meta'},
+                  h('button',{className:'pw-project-remove','aria-label':'移除项目入口：'+project.title,onClick:()=>removeProject(project)},'×'))),
+              h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
+                'aria-label':'进入项目：'+project.title},'进入项目',h(Icon,{name:'arrow',size:13})),
               h('dl',{className:'pw-project-facts'},
                 field('progress','最近进展',progress),
-                latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)),
-              h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
-                'aria-label':'查看项目：'+project.title},'进入项目',h(Icon,{name:'arrow',size:13})));
+                latest&&field('requirements','待开发',(pending.length>1?pending.length+' 项 · ':'')+latest.title)));
           }));
         }
         function removeProject(project) {
