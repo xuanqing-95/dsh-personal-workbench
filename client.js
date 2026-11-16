@@ -2132,8 +2132,171 @@ html[data-platform="darwin"] .pwb .pw-head {
  .pw-assistant-frame > .pw-assistant-dock {position:absolute;z-index:15;inset:var(--pw-chat-header-height,160px) 0 0;width:100%!important;min-width:0!important;background:#edf6f5}
  .pw-assistant-frame > .pw-assistant-dock .hbc-drawer {width:100%!important;max-width:none!important;height:100%;border-radius:0}
 }
+/* One identity control, two clear actions. */
+.pwb .pw-head .pw-personal-tools {display:flex;gap:0;align-items:center;height:40px;padding:0 3px;border:1px solid var(--pw-line);border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,.48),rgba(255,255,255,.22))}
+.pwb .pw-head .pw-personal-tools :is(.pw-chat-shortcut,.pw-account-button) {display:grid;place-items:center;box-sizing:border-box;width:40px;min-width:40px;height:36px;min-height:36px;padding:0;border:0;border-radius:9px;background:transparent;color:var(--pw-accent);cursor:pointer}
+.pwb .pw-head .pw-personal-tools :is(.pw-chat-shortcut,.pw-account-button):hover,.pwb .pw-head .pw-personal-tools button[aria-expanded=true] {background:rgba(255,255,255,.56)}
+.pwb .pw-head .pw-personal-tools button:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+.pwb .pw-head .pw-personal-tools .pw-account-avatar {width:30px;height:30px;border:1px solid rgba(255,255,255,.8)}
+.pwb .pw-head .pw-personal-divider {width:1px;height:18px;margin:0 3px;background:var(--pw-line)}
+.pwb[data-custom-background] {--pw-muted:#364f52;background-repeat:no-repeat}
+.pwb .pw-appearance-backdrop {z-index:40}
+.pwb .pw-appearance-dialog {width:min(520px,100%);max-height:calc(100% - 8px);padding:24px;overscroll-behavior:contain;color:var(--pw-ink);background:linear-gradient(135deg,rgba(247,252,252,.96),rgba(235,246,245,.96))}
+.pwb .pw-appearance-dialog input[hidden] {display:none!important}
+.pwb .pw-appearance-dialog>header,.pwb .pw-appearance-section-head {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pwb .pw-appearance-dialog>header h2 {font:600 18px/24px var(--pw-body);margin:0}
+.pwb .pw-appearance-dialog>section {margin-top:24px}
+.pwb .pw-appearance-dialog h3 {font:600 14px/20px var(--pw-body);margin:0 0 12px}
+.pwb .pw-appearance-section-head h3 {margin:0}
+.pwb .pw-appearance-dialog button {min-height:36px;padding:7px 12px;border:1px solid var(--pw-line);border-radius:10px;background:rgba(255,255,255,.4);font:500 12px/20px var(--pw-body);color:var(--pw-ink);cursor:pointer}
+.pwb .pw-appearance-dialog button:hover:not(:disabled) {background:rgba(255,255,255,.8)}
+.pwb .pw-appearance-dialog button:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+.pwb .pw-appearance-dialog button:disabled {opacity:.45;cursor:default}
+.pwb .pw-appearance-dialog>header button {display:grid;place-items:center;width:36px;padding:0;border:0;background:transparent}
+.pwb .pw-avatar-settings {display:flex;align-items:center;gap:16px}
+.pwb .pw-settings-avatar {display:block;width:64px;height:64px;border-radius:50%;corner-shape:round;object-fit:cover;object-position:50% 28%;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);flex:none}
+.pwb .pw-appearance-actions {display:flex;gap:8px;flex-wrap:wrap}
+.pwb .pw-appearance-hint {font:400 12px/18px var(--pw-body);color:var(--pw-muted);margin:8px 0 12px}
+.pwb .pw-background-options {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pwb .pw-background-item {position:relative;min-width:0}
+.pwb .pw-appearance-dialog .pw-background-choice {position:relative;width:100%;padding:4px 4px 7px;display:flex;flex-direction:column;align-items:stretch;gap:6px;text-align:left;min-width:0;border:1px solid transparent;background:rgba(255,255,255,.25)}
+.pwb .pw-appearance-dialog .pw-background-choice[aria-pressed=true] {border-color:var(--pw-accent);background:rgba(255,255,255,.6)}
+.pwb .pw-background-choice>span:not(.pw-background-thumb):not(.pw-background-selected) {padding:0 3px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font:400 11px/16px var(--pw-body)}
+.pwb .pw-background-thumb {display:block;width:100%;aspect-ratio:16 / 10;object-fit:cover;border-radius:7px;background:#eaf5f4}
+.pwb .pw-background-thumb.is-default {background:radial-gradient(ellipse at 4% 0%,#acd6d6,transparent 70%),#edf7f6}
+.pwb .pw-background-selected {position:absolute;bottom:29px;left:8px;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;corner-shape:round;background:var(--pw-accent);color:white;font:500 12px/16px var(--pw-body)}
+.pwb .pw-appearance-dialog .pw-background-remove {position:absolute;right:7px;top:7px;display:grid;place-items:center;width:28px;height:28px;min-height:28px;padding:0;background:rgba(247,252,252,.92);border-radius:8px}
+.pwb .pw-appearance-dialog footer {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:20px;padding-top:12px;border-top:1px solid var(--pw-line)}
+.pwb .pw-appearance-dialog footer p {margin:0;font:400 12px/18px var(--pw-body)}
+.pwb .pw-appearance-status {margin-left:auto!important;color:var(--pw-muted)}
+.pwb .pw-appearance-error {flex-basis:100%;color:#9a341f}
+@container pw-root (max-width:430px) {.pwb .pw-appearance-dialog {padding:20px}.pwb .pw-background-options {grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 `;
+    const APPEARANCE_DB = 'dsh-personal-workbench-appearance-v1';
+    // Appearance assets stay in this browser profile; they never enter assistant requests.
+    function appearanceStore(writeValue) {
+      return new Promise((resolve,reject)=>{
+        const request=indexedDB.open(APPEARANCE_DB,1);let cancelled=false;
+        request.onupgradeneeded=()=>request.result.createObjectStore('preferences');
+        request.onerror=()=>reject(request.error);
+        request.onblocked=()=>{cancelled=true;reject(new Error('外观存储暂时被其他窗口占用，请稍后重试。'));};
+        request.onsuccess=()=>{
+          const db=request.result;if(cancelled){db.close();return;}
+          try{
+          const tx=db.transaction('preferences',writeValue===undefined?'readonly':'readwrite');
+          const store=tx.objectStore('preferences');
+          const op=writeValue===undefined?store.get('appearance'):store.put(writeValue,'appearance');
+          tx.oncomplete=()=>{db.close();resolve(op.result);};
+          tx.onerror=tx.onabort=()=>{db.close();reject(tx.error||new Error('无法保存外观设置。'));};
+          }catch(error){db.close();reject(error);}
+        };
+      });
+    }
+    async function checkedAppearanceImage(file) {
+      if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('请选择 PNG、JPG 或 WebP 图片。');
+      if(file.size>8*1024*1024)throw new Error('图片请控制在 8 MB 以内。');
+      const url=URL.createObjectURL(file);
+      try{
+        const image=new Image();image.src=url;await image.decode();
+        if(!image.naturalWidth||image.naturalWidth*image.naturalHeight>40000000)throw new Error('图片尺寸过大，请选择较小的图片。');
+      }catch(error){throw new Error(error.message.includes('尺寸过大')?error.message:'这张图片无法读取，请换一张试试。');}
+      finally{URL.revokeObjectURL(url);}
+      return file.slice(0,file.size,file.type);
+    }
+    function WorkbenchIdentity({root,assistantDock,assistantOpen,onChat}) {
+      const [open,setOpen]=React.useState(false),[ready,setReady]=React.useState(false),[busy,setBusy]=React.useState(false),[error,setError]=React.useState(''),[notice,setNotice]=React.useState('');
+      const [value,setValue]=React.useState({avatar:null,backgroundId:null,backgrounds:[]});
+      const [assets,setAssets]=React.useState({avatar:WORKBENCH_PORTRAIT,backgrounds:[]});
+      const trigger=React.useRef(null),dialog=React.useRef(null),avatarInput=React.useRef(null),backgroundInput=React.useRef(null),lock=React.useRef(false),mounted=React.useRef(true);
+      React.useEffect(()=>{mounted.current=true;void load();return()=>{mounted.current=false;};},[]);
+      async function load(){
+        try{
+          const saved=await appearanceStore();
+          if(!mounted.current)return;
+          if(saved)setValue({avatar:saved.avatar instanceof Blob?saved.avatar:null,backgroundId:saved.backgroundId||null,backgrounds:Array.isArray(saved.backgrounds)?saved.backgrounds.filter(item=>item.blob instanceof Blob&&typeof item.id==='string'):[]});
+          setReady(true);setError('');
+        }catch{if(mounted.current){setReady(false);setError('暂时无法读取外观设置，请重试。');}}
+      }
+      React.useEffect(()=>{
+        const urls=[];
+        const url=blob=>{const item=URL.createObjectURL(blob);urls.push(item);return item;};
+        setAssets({avatar:value.avatar?url(value.avatar):WORKBENCH_PORTRAIT,backgrounds:value.backgrounds.map(item=>({...item,url:url(item.blob)}))});
+        return()=>urls.forEach(item=>URL.revokeObjectURL(item));
+      },[value]);
+      React.useEffect(()=>{
+        const el=root.current;if(!el)return;
+        const selected=assets.backgrounds.find(item=>item.id===value.backgroundId);
+        el.toggleAttribute('data-custom-background',!!selected);
+        if(selected){el.style.backgroundImage='linear-gradient(rgba(238,247,247,.68),rgba(238,247,247,.68)),url("'+selected.url+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center';}
+        else{el.style.removeProperty('background-image');el.style.removeProperty('background-size');el.style.removeProperty('background-position');}
+        return()=>{el.removeAttribute('data-custom-background');el.style.removeProperty('background-image');el.style.removeProperty('background-size');el.style.removeProperty('background-position');};
+      },[assets,value.backgroundId,root]);
+      React.useEffect(()=>{
+        if(!open)return;
+        const shell=root.current?.querySelector('.pw-shell'),wasInert=shell?.inert,dockWasInert=assistantDock?.inert;
+        if(shell)shell.inert=true;if(assistantDock)assistantDock.inert=true;
+        dialog.current?.querySelector('button')?.focus({preventScroll:true});
+        document.addEventListener('keydown',dialogKey,true);
+        return()=>{document.removeEventListener('keydown',dialogKey,true);if(shell)shell.inert=wasInert;if(assistantDock)assistantDock.inert=dockWasInert;trigger.current?.focus({preventScroll:true});};
+      },[open,assistantDock,root]);
+      async function save(next){
+        await appearanceStore(next);
+        if(mounted.current){setValue(next);setNotice('已保存');}
+      }
+      async function change(action){
+        if(!ready||lock.current)return;lock.current=true;setBusy(true);setError('');setNotice('');
+        try{await action();}
+        catch(err){if(mounted.current)setError(err?.name==='QuotaExceededError'?'设备存储空间不足，请删除不需要的背景后重试。':err.message||'未能保存，请重试。');}
+        finally{lock.current=false;if(mounted.current)setBusy(false);}
+      }
+      function upload(event,kind){
+        const file=event.target.files?.[0];event.target.value='';if(!file)return;
+        void change(async()=>{
+          const blob=await checkedAppearanceImage(file);
+          if(kind==='avatar')await save({...value,avatar:blob});
+          else{
+            if(value.backgrounds.length>=12)throw new Error('最多保留 12 张自定义背景，请先删除一张。');
+            const id=crypto.randomUUID();await save({...value,backgroundId:id,backgrounds:[...value.backgrounds,{id,name:file.name,blob}]});
+          }
+        });
+      }
+      function close(){if(!lock.current)setOpen(false);}
+      function dialogKey(event){
+        if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close();}
+        if(event.key!=='Tab')return;
+        const buttons=[...dialog.current.querySelectorAll('button:not(:disabled),[tabindex="0"]')].filter(el=>el.getClientRects().length);
+        if(!buttons.length)return;
+        const first=buttons[0],last=buttons.at(-1);
+        if(!dialog.current.contains(document.activeElement)){event.preventDefault();first.focus();}
+        else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+      }
+      const settings=open&&root.current?require('react-dom').createPortal(
+        h('div',{className:'pw-modal-backdrop pw-appearance-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
+          h('section',{ref:dialog,className:'pw-project-dialog pw-appearance-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-appearance-title','aria-busy':busy},
+            h('header',null,h('h2',{id:'pw-appearance-title'},'工作台设置'),h('button',{type:'button','aria-label':'关闭设置',disabled:busy,onClick:close},h(Icon,{name:'close',size:18}))),
+            h('section',{'aria-labelledby':'pw-avatar-title'},h('h3',{id:'pw-avatar-title'},'头像'),
+              h('div',{className:'pw-avatar-settings'},h('img',{src:assets.avatar,alt:'当前头像',className:'pw-settings-avatar'}),
+                h('div',{className:'pw-appearance-actions'},h('button',{type:'button',disabled:!ready||busy,onClick:()=>avatarInput.current?.click()},'更换头像'),h('button',{type:'button',disabled:!ready||busy||!value.avatar,onClick:()=>void change(()=>save({...value,avatar:null}))},'恢复默认'))),
+              h('input',{ref:avatarInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择头像图片',onChange:event=>upload(event,'avatar')})),
+            h('section',{'aria-labelledby':'pw-background-title'},h('div',{className:'pw-appearance-section-head'},h('h3',{id:'pw-background-title'},'背景'),h('button',{type:'button',disabled:!ready||busy,onClick:()=>backgroundInput.current?.click()},'添加背景')),
+              h('p',{className:'pw-appearance-hint'},'保留默认浅青背景，也可以使用自己的图片。'),
+              h('input',{ref:backgroundInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择背景图片',onChange:event=>upload(event,'background')}),
+              h('div',{className:'pw-background-options'},
+                h('button',{type:'button',className:'pw-background-choice','aria-pressed':!value.backgroundId,disabled:!ready||busy,onClick:()=>void change(()=>save({...value,backgroundId:null}))},h('span',{className:'pw-background-thumb is-default'}),h('span',null,'默认背景'),!value.backgroundId&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                ...assets.backgrounds.map(item=>h('div',{className:'pw-background-item',key:item.id},
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId===item.id,disabled:!ready||busy,title:item.name,onClick:()=>void change(()=>save({...value,backgroundId:item.id}))},h('img',{className:'pw-background-thumb',src:item.url,alt:''}),h('span',null,item.name),value.backgroundId===item.id&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  h('button',{type:'button',className:'pw-background-remove','aria-label':'删除背景 '+item.name,title:'删除这张背景',disabled:busy,onClick:()=>void change(()=>save({...value,backgroundId:value.backgroundId===item.id?null:value.backgroundId,backgrounds:value.backgrounds.filter(bg=>bg.id!==item.id)}))},h(Icon,{name:'close',size:14}))))),
+              h('p',{className:'pw-appearance-hint'},'支持 PNG、JPG、WebP，单张不超过 8 MB。')),
+            h('footer',null,h('p',{className:'pw-appearance-hint'},'自动保存到当前设备'),h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':busy?'正在保存…':notice)),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试')))),root.current):null;
+      return h(React.Fragment,null,
+        h('div',{className:'pw-personal-tools',role:'group','aria-label':'个人工作台'},
+          h('button',{ref:trigger,type:'button',className:'pw-account-button',title:'工作台设置','aria-label':'打开工作台设置','aria-haspopup':'dialog','aria-expanded':open,onClick:()=>{setNotice('');setOpen(true);}},h('img',{className:'pw-account-avatar',src:assets.avatar,alt:'',width:32,height:32,decoding:'async'})),
+          h('span',{className:'pw-personal-divider','aria-hidden':true}),
+          h('button',{type:'button',className:'pw-chat-shortcut',title:'与 Data 聊天','aria-label':'与 Data 聊天','aria-expanded':assistantOpen,onClick:onChat},h(Icon,{name:'chat',size:20}))),settings);
+    }
+
     function bindWorkbenchWheel(board) {
       const shell = board.closest('.pwb');
       const lastPosition = new WeakMap();
@@ -2454,9 +2617,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           root.current?.querySelector('.pw-pet .hbc-dock-actions button:last-child')?.click();
         }
         function personalTools() {
-          return h('div',{className:'pw-personal-tools'},
-            h('button',{type:'button',className:'pw-chat-shortcut',title:'与 Data 聊天','aria-label':'与 Data 聊天','aria-expanded':assistantOpen,onClick:openAssistantShortcut},h(Icon,{name:'chat',size:20})),
-            h('img',{className:'pw-account-avatar',src:WORKBENCH_PORTRAIT,alt:'我的工作台头像',title:'我的工作台',width:36,height:36,decoding:'async'}));
+          return h(WorkbenchIdentity,{root,assistantDock,assistantOpen,onChat:openAssistantShortcut});
         }
 
         const [taskTitle,setTaskTitle]=React.useState('');
@@ -2933,7 +3094,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title)))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
-        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden',position:'relative',containerType:'inline-size',containerName:'pw-frame'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject);}},
+        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden',position:'relative',containerType:'inline-size',containerName:'pw-frame'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h('span',{className:'pw-theme-probe','aria-hidden':true}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject||!!node.closest('.pwb')?.querySelector('.pw-appearance-dialog'));}},
           h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人主控台')),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))),personalTools())),
           h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,'data-grid-profile':grid.profile.key,'data-pet-placement':grid.petPlacement,style:grid.canvasStyle},
             h('div',{className:'pw-overview-column pw-overview-left'},
