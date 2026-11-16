@@ -512,7 +512,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
         }},'复制'),h('span',{className:'pw-link-copy-status',role:'status','aria-live':'polite'},copyState));
     }
     function Icon({name='grid',size=18}) {
-      const paths={grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',left:'m15 5-7 7 7 7',down:'m6 9 6 6 6-6',up:'m6 15 6-6 6 6',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
+      const paths={dismiss:'m6 6 12 12M18 6 6 18',grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',left:'m15 5-7 7 7 7',down:'m6 9 6 6 6-6',up:'m6 15 6-6 6 6',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
       return h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true},h('path',{d:paths[name]||paths.grid}));
     }
     const css=`
@@ -1581,11 +1581,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout {display:grid;flex:1;min-height:0;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:20px;padding:4px var(--pw-card-inset) 12px}
 .pwb .pw-brief-lead {display:flex;align-items:stretch;gap:12px;min-width:0}
 .pwb .pw-brief-copy {display:flex;flex-direction:column;align-self:stretch;align-items:flex-start;gap:8px;flex:1;min-width:0}
-.pwb .pw-brief-copy h3 {font-size:clamp(18px,2.5cqw,24px);line-height:1.28}
+.pwb .pw-brief-copy h3 {font:600 clamp(18px,2.5cqw,22px)/1.45 var(--pw-body);text-wrap:pretty}
 .pwb .pw-brief-layout .pw-news-title {display:block;color:var(--pw-ink);text-transform:none;text-decoration:none;letter-spacing:normal;overflow-wrap:anywhere}
 .pwb .pw-brief-copy .pw-news-title {font:inherit}
 .pwb .pw-brief-copy .pw-news-summary {
-  color:var(--pw-muted);font:400 13px/1.55 var(--pw-body);margin:0;
+  color:var(--pw-muted);font:400 13px/1.75 var(--pw-body);letter-spacing:.01em;margin:0;
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden
 }
 .pwb .pw-brief-media {position:relative;flex:0 1 42%;min-width:0;min-height:132px;align-self:stretch}
@@ -1601,7 +1601,7 @@ html[data-platform="darwin"] .pwb .pw-head {
   align-items:center;gap:6px;padding:0 8px;text-decoration:none;border:0;box-shadow:none;background:transparent
 }
 .pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:16px minmax(0,1fr)}
-.pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:600 13px/18px var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
+.pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:500 12px/20px var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick li > a:is(:hover,:focus-visible) {
   background:var(--pw-hover);
   box-shadow:inset 0 1px rgba(255,255,255,.65),inset 0 -1px color-mix(in srgb,var(--pw-ink) 10%,transparent)
@@ -1610,7 +1610,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-title {
   display:block;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
-  font:500 13px/18px var(--pw-body)
+  font:400 13px/20px var(--pw-body);letter-spacing:normal
 }
 @container pw-card (min-width:650px) {
   .pwb .pw-brief-layout[data-quick=true] {grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
@@ -1946,6 +1946,9 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-project-dialog h2 {font:600 18px/24px var(--pw-body);margin:0;overflow-wrap:anywhere}
 .pwb .pw-project-dialog :is(label,summary) {font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
 .pwb .pw-project-dialog label {margin-top:16px}
+.pwb .pw-project-dialog.pw-project-detail form {margin-top:20px;gap:10px}
+.pwb .pw-project-dialog.pw-project-detail form label {display:grid;gap:8px;margin:0}
+.pwb .pw-project-dialog.pw-project-detail :is(input,textarea):focus-visible {outline:2px solid var(--pw-accent);outline-offset:0}
 .pwb .pw-project-dialog :is(input,select,textarea) {border-radius:10px;border:1px solid var(--pw-line);background:rgba(255,255,255,.42);padding:8px 12px;color:var(--pw-ink);font:400 14px/20px var(--pw-body)}
 .pwb .pw-project-dialog :is(input,select,textarea,button):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
 .pwb .pw-project-dialog .pw-layout-button {
@@ -2014,6 +2017,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 /* Time belongs to the title above it, with more space before the next task. */
 .pwb .pw-plan :is(.pw-plan-time,.pw-plan-meta) {margin-top:2px}
 .pwb .pw-plan .pw-plan-row,.pwb .pw-plan[data-density=compact] .pw-plan-row,.pwb .pw-plan .pw-plan-row.has-time {padding-block:6px}
+/* A task and its following annotations form one reading group. */
+.pwb .pw-plan .pw-plan-item:has(> .pw-plan-annotations) > .pw-plan-row {padding-bottom:0}
+.pwb .pw-plan .pw-plan-annotations {margin:2px 0 10px 24px}
+.pwb .pw-plan .pw-plan-annotations .pw-plan-note {margin:2px 0;font:400 12px/18px var(--pw-body)}
+.pwb .pw-plan .pw-plan-item > .pw-plan-nested {padding-left:24px}
 /* The companion is a first-class grid card; only its handle moves the card. */
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {display:block;padding:0;inset:auto;overflow:hidden;container-type:inline-size}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {
@@ -2169,6 +2177,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-appearance-dialog footer {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:20px;padding-top:12px;border-top:1px solid var(--pw-line)}
 .pwb .pw-appearance-dialog footer p {margin:0;font:400 12px/18px var(--pw-body)}
 .pwb .pw-appearance-status {margin-left:auto!important;color:var(--pw-muted)}
+.pwb .pw-appearance-footer-actions {display:flex;gap:8px;margin-left:auto}
+.pwb .pw-appearance-dialog .pw-appearance-footer-actions button {min-width:72px}
+.pwb .pw-appearance-dialog .pw-appearance-save {background:var(--pw-accent);color:#fff;border-color:var(--pw-accent)}
+.pwb .pw-appearance-dialog .pw-appearance-save:hover:not(:disabled) {background:color-mix(in srgb,var(--pw-accent) 90%,#000)}
+.pwb .pw-appearance-dialog .pw-background-remove {border:0}
 .pwb .pw-appearance-error {flex-basis:100%;color:#9a341f}
 @container pw-root (max-width:430px) {.pwb .pw-appearance-dialog {padding:20px}.pwb .pw-background-options {grid-template-columns:repeat(2,minmax(0,1fr))}}
 
@@ -2208,13 +2221,15 @@ html[data-platform="darwin"] .pwb .pw-head {
       const [open,setOpen]=React.useState(false),[ready,setReady]=React.useState(false),[busy,setBusy]=React.useState(false),[error,setError]=React.useState(''),[notice,setNotice]=React.useState('');
       const [value,setValue]=React.useState({avatar:null,backgroundId:null,backgrounds:[]});
       const [assets,setAssets]=React.useState({avatar:WORKBENCH_PORTRAIT,backgrounds:[]});
+      const committed=React.useRef(null);
       const trigger=React.useRef(null),dialog=React.useRef(null),avatarInput=React.useRef(null),backgroundInput=React.useRef(null),lock=React.useRef(false),mounted=React.useRef(true);
       React.useEffect(()=>{mounted.current=true;void load();return()=>{mounted.current=false;};},[]);
       async function load(){
         try{
           const saved=await appearanceStore();
           if(!mounted.current)return;
-          if(saved)setValue({avatar:saved.avatar instanceof Blob?saved.avatar:null,backgroundId:saved.backgroundId||null,backgrounds:Array.isArray(saved.backgrounds)?saved.backgrounds.filter(item=>item.blob instanceof Blob&&typeof item.id==='string'):[]});
+          const restored=saved?{avatar:saved.avatar instanceof Blob?saved.avatar:null,backgroundId:saved.backgroundId||null,backgrounds:Array.isArray(saved.backgrounds)?saved.backgrounds.filter(item=>item.blob instanceof Blob&&typeof item.id==='string'):[]}:{avatar:null,backgroundId:null,backgrounds:[]};
+          committed.current=restored;setValue(restored);
           setReady(true);setError('');
         }catch{if(mounted.current){setReady(false);setError('暂时无法读取外观设置，请重试。');}}
       }
@@ -2228,7 +2243,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const el=root.current;if(!el)return;
         const selected=assets.backgrounds.find(item=>item.id===value.backgroundId);
         el.toggleAttribute('data-custom-background',!!selected);
-        if(selected){el.style.backgroundImage='linear-gradient(rgba(238,247,247,.68),rgba(238,247,247,.68)),url("'+selected.url+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center';}
+        if(selected){el.style.backgroundImage='url("'+selected.url+'")';el.style.backgroundSize='cover';el.style.backgroundPosition='center';}
         else{el.style.removeProperty('background-image');el.style.removeProperty('background-size');el.style.removeProperty('background-position');}
         return()=>{el.removeAttribute('data-custom-background');el.style.removeProperty('background-image');el.style.removeProperty('background-size');el.style.removeProperty('background-position');};
       },[assets,value.backgroundId,root]);
@@ -2240,9 +2255,14 @@ html[data-platform="darwin"] .pwb .pw-head {
         document.addEventListener('keydown',dialogKey,true);
         return()=>{document.removeEventListener('keydown',dialogKey,true);if(shell)shell.inert=wasInert;if(assistantDock)assistantDock.inert=dockWasInert;trigger.current?.focus({preventScroll:true});};
       },[open,assistantDock,root]);
-      async function save(next){
-        await appearanceStore(next);
-        if(mounted.current){setValue(next);setNotice('已保存');}
+      async function previewAppearance(next){
+        if(mounted.current){setValue(next);setNotice('尚未保存');}
+      }
+      async function commitAppearance(){
+        await change(async()=>{
+          await appearanceStore(value);
+          if(mounted.current){committed.current=value;setNotice('');setOpen(false);}
+        });
       }
       async function change(action){
         if(!ready||lock.current)return;lock.current=true;setBusy(true);setError('');setNotice('');
@@ -2254,14 +2274,14 @@ html[data-platform="darwin"] .pwb .pw-head {
         const file=event.target.files?.[0];event.target.value='';if(!file)return;
         void change(async()=>{
           const blob=await checkedAppearanceImage(file);
-          if(kind==='avatar')await save({...value,avatar:blob});
+          if(kind==='avatar')await previewAppearance({...value,avatar:blob});
           else{
             if(value.backgrounds.length>=12)throw new Error('最多保留 12 张自定义背景，请先删除一张。');
-            const id=crypto.randomUUID();await save({...value,backgroundId:id,backgrounds:[...value.backgrounds,{id,name:file.name,blob}]});
+            const id=crypto.randomUUID();await previewAppearance({...value,backgroundId:id,backgrounds:[...value.backgrounds,{id,name:file.name,blob}]});
           }
         });
       }
-      function close(){if(!lock.current)setOpen(false);}
+      function close(){if(!lock.current){if(committed.current){setValue(committed.current);setError('');}setNotice('');setOpen(false);}}
       function dialogKey(event){
         if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close();}
         if(event.key!=='Tab')return;
@@ -2275,21 +2295,21 @@ html[data-platform="darwin"] .pwb .pw-head {
       const settings=open&&root.current?require('react-dom').createPortal(
         h('div',{className:'pw-modal-backdrop pw-appearance-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
           h('section',{ref:dialog,className:'pw-project-dialog pw-appearance-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-appearance-title','aria-busy':busy},
-            h('header',null,h('h2',{id:'pw-appearance-title'},'工作台设置'),h('button',{type:'button','aria-label':'关闭设置',disabled:busy,onClick:close},h(Icon,{name:'close',size:18}))),
+            h('header',null,h('h2',{id:'pw-appearance-title'},'工作台设置'),h('button',{type:'button','aria-label':'关闭设置',disabled:busy,onClick:close},h(Icon,{name:'dismiss',size:18}))),
             h('section',{'aria-labelledby':'pw-avatar-title'},h('h3',{id:'pw-avatar-title'},'头像'),
               h('div',{className:'pw-avatar-settings'},h('img',{src:assets.avatar,alt:'当前头像',className:'pw-settings-avatar'}),
-                h('div',{className:'pw-appearance-actions'},h('button',{type:'button',disabled:!ready||busy,onClick:()=>avatarInput.current?.click()},'更换头像'),h('button',{type:'button',disabled:!ready||busy||!value.avatar,onClick:()=>void change(()=>save({...value,avatar:null}))},'恢复默认'))),
+                h('div',{className:'pw-appearance-actions'},h('button',{type:'button',disabled:!ready||busy,onClick:()=>avatarInput.current?.click()},'更换头像'),h('button',{type:'button',disabled:!ready||busy||!value.avatar,onClick:()=>void change(()=>previewAppearance({...value,avatar:null}))},'恢复默认'))),
               h('input',{ref:avatarInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择头像图片',onChange:event=>upload(event,'avatar')})),
             h('section',{'aria-labelledby':'pw-background-title'},h('div',{className:'pw-appearance-section-head'},h('h3',{id:'pw-background-title'},'背景'),h('button',{type:'button',disabled:!ready||busy,onClick:()=>backgroundInput.current?.click()},'添加背景')),
               h('p',{className:'pw-appearance-hint'},'保留默认浅青背景，也可以使用自己的图片。'),
               h('input',{ref:backgroundInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择背景图片',onChange:event=>upload(event,'background')}),
               h('div',{className:'pw-background-options'},
-                h('button',{type:'button',className:'pw-background-choice','aria-pressed':!value.backgroundId,disabled:!ready||busy,onClick:()=>void change(()=>save({...value,backgroundId:null}))},h('span',{className:'pw-background-thumb is-default'}),h('span',null,'默认背景'),!value.backgroundId&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                h('button',{type:'button',className:'pw-background-choice','aria-pressed':!value.backgroundId,disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:null}))},h('span',{className:'pw-background-thumb is-default'}),h('span',null,'默认背景'),!value.backgroundId&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
                 ...assets.backgrounds.map(item=>h('div',{className:'pw-background-item',key:item.id},
-                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId===item.id,disabled:!ready||busy,title:item.name,onClick:()=>void change(()=>save({...value,backgroundId:item.id}))},h('img',{className:'pw-background-thumb',src:item.url,alt:''}),h('span',null,item.name),value.backgroundId===item.id&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                  h('button',{type:'button',className:'pw-background-remove','aria-label':'删除背景 '+item.name,title:'删除这张背景',disabled:busy,onClick:()=>void change(()=>save({...value,backgroundId:value.backgroundId===item.id?null:value.backgroundId,backgrounds:value.backgrounds.filter(bg=>bg.id!==item.id)}))},h(Icon,{name:'close',size:14}))))),
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId===item.id,disabled:!ready||busy,title:item.name,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:item.id}))},h('img',{className:'pw-background-thumb',src:item.url,alt:''}),h('span',null,item.name),value.backgroundId===item.id&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  h('button',{type:'button',className:'pw-background-remove','aria-label':'删除背景 '+item.name,title:'删除这张背景',disabled:busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:value.backgroundId===item.id?null:value.backgroundId,backgrounds:value.backgrounds.filter(bg=>bg.id!==item.id)}))},h(Icon,{name:'dismiss',size:14}))))),
               h('p',{className:'pw-appearance-hint'},'支持 PNG、JPG、WebP，单张不超过 8 MB。')),
-            h('footer',null,h('p',{className:'pw-appearance-hint'},'自动保存到当前设备'),h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':busy?'正在保存…':notice)),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试')))),root.current):null;
+            h('footer',null,h('p',{className:'pw-appearance-hint'},'保存后应用到当前设备'),h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':busy?'正在处理…':notice)),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试'),h('div',{className:'pw-appearance-footer-actions'},h('button',{type:'button',disabled:busy,onClick:close},'取消'),h('button',{type:'button',className:'pw-appearance-save',disabled:!ready||busy,onClick:()=>void commitAppearance()},'保存'))))),root.current):null;
       return h(React.Fragment,null,
         h('div',{className:'pw-personal-tools',role:'group','aria-label':'个人工作台'},
           h('button',{ref:trigger,type:'button',className:'pw-account-button',title:'工作台设置','aria-label':'打开工作台设置','aria-haspopup':'dialog','aria-expanded':open,onClick:()=>{setNotice('');setOpen(true);}},h('img',{className:'pw-account-avatar',src:assets.avatar,alt:'',width:32,height:32,decoding:'async'})),
@@ -2635,9 +2655,37 @@ html[data-platform="darwin"] .pwb .pw-head {
         const [data,setData]=React.useState(null),[monitor,setMonitor]=React.useState(null),[loading,setLoading]=React.useState(true),[tick,setTick]=React.useState(0),[error,setError]=React.useState(''),[readError,setReadError]=React.useState('');
         const [selectedDate,setSelectedDate]=React.useState(()=>restoredUI('selectedDate','')),[calendarMode,setCalendarMode]=React.useState(()=>restoredUI('calendarMode','day')),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
-        React.useEffect(()=>{const abort=new AbortController();setBriefReadError(null);
-          api('briefArchive',abort.signal,briefDay?{date:briefDay}:{}).then(value=>{if(!abort.signal.aborted)setBriefArchive({...value,selection:briefDay});}).catch(()=>{if(!abort.signal.aborted)setBriefReadError(briefDay);});
-          return()=>abort.abort();},[briefDay,today,tick]);
+        React.useEffect(()=>{
+          const abort=new AbortController();
+          let readingArchive=false;
+          async function refreshBriefArchive() {
+            if (abort.signal.aborted || readingArchive || document.hidden) return;
+            if(briefDay>today){
+              setBriefArchive(previous=>({selection:briefDay,today,dates:previous?.dates||[],edition:null}));
+              setBriefReadError(null);return;
+            }
+            readingArchive=true;
+            try {
+              const result=await api('briefArchive',abort.signal,briefDay?{date:briefDay}:{});
+              if (abort.signal.aborted) return;
+              setBriefArchive(previous=>({selection:briefDay,dates:previous?.dates,...result}));
+              setBriefReadError(null);
+            } catch {
+              if (!abort.signal.aborted) setBriefReadError(briefDay);
+            } finally {
+              readingArchive=false;
+            }
+          }
+          void refreshBriefArchive();
+          const briefTimer=setInterval(refreshBriefArchive,15000);
+          document.addEventListener('visibilitychange',refreshBriefArchive);
+          window.addEventListener('focus',refreshBriefArchive);
+          return ()=>{
+            abort.abort();clearInterval(briefTimer);
+            document.removeEventListener('visibilitychange',refreshBriefArchive);
+            window.removeEventListener('focus',refreshBriefArchive);
+          };
+        },[briefDay,today,tick]);
         const grid=useWorkbenchGrid(newsFolded);
         React.useLayoutEffect(()=>{
           uiUpdates.capture=()=>({selectedDate,calendarMode,briefDay,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
@@ -2819,10 +2867,19 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         function planNodes(items,depth=0) {
           if(depth>10)return null;
-          return list(items).map((node,i)=>{
+          const nodes=list(items),attached=new Set();
+          const section=node=>node.type==='label'||(node.type==='note'&&/^(?:上午|下午|晚上|晚间|早晨|早上|有余力(?:再)?做|固定(?:任务|收尾))[:：]?$/u.test(text(node.text).trim()));
+          return nodes.map((node,i)=>{
+            if(attached.has(i))return null;
             const key=node.id||node.task?.id||i;
-            if(node.type==='task')return h(React.Fragment,{key},planRow(node.task||{},key),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
-            const isSection=node.type==='label'||(depth===0&&node.type==='note'&&/^(?:上午|下午|晚上|晚间|早晨|早上|有余力(?:再)?做|固定(?:任务|收尾))[:：]?$/u.test(text(node.text).trim()));
+            if(node.type==='task'){
+              const notes=[];
+              for(let j=i+1;j<nodes.length&&['note','toggle'].includes(nodes[j].type)&&!section(nodes[j]);j++){notes.push(nodes[j]);attached.add(j);}
+              return h('div',{key,className:'pw-plan-item'},planRow(node.task||{},key),
+                list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)),
+                notes.length>0&&h('div',{className:'pw-plan-annotations'},planNodes(notes,depth+1)));
+            }
+            const isSection=section(node);
             if(isSection)return h('div',{key,className:'pw-plan-section-label'},node.text&&h('h3',{className:'pw-group-title'},node.text),planNodes(node.children,depth+1));
             if(node.type==='note')return h('div',{key},node.text&&h('p',{className:'pw-plan-note '+(['quote','callout'].includes(node.style)?node.style:'')},planNoteContent(node.text)),list(node.children).length>0&&h('div',{className:'pw-plan-nested'},planNodes(node.children,depth+1)));
             // The original plan owns expandable notes and editing. Preview its caption here.
