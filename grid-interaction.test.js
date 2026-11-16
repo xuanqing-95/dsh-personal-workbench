@@ -120,6 +120,11 @@ test('saved default projects still fit content; an intentional taller project ca
     restored.act(ui => ui.finish());
     const reopened = harness({ width, initial: restored.stored() });
     assert.ok(reopened.ui.card('projects').style.height > 0);
+    const legacy=reopened.stored();
+    for(const rows of Object.values(legacy.profiles))for(const row of rows)delete row.fixedHeight;
+    const legacyRestored=harness({width,initial:legacy});
+    assert.equal(legacyRestored.ui.card('projects').style.height,undefined);
+    assert.equal(legacyRestored.ui.card('projects')['data-auto-height'],'true');
   }
 });
 
@@ -213,7 +218,9 @@ test('blocked persistence keeps the applied layout and clearly reports that it w
   app.control('plan', 'resize').key('ArrowRight');
   const changed = plain(app.ui.card('plan').style);
   app.act(ui => ui.finish());
-  assert.deepEqual(plain(app.ui.card('plan').style), changed);
+  assert.equal(app.ui.card('plan').style.width,changed.width);
+  assert.equal(app.ui.card('plan').style.minHeight,changed.height);
+  assert.equal(app.ui.card('plan')['data-auto-height'],'true');
   assert.match(app.ui.notice, /无法保存/);
   assert.equal(app.stored(), undefined);
 });
@@ -264,4 +271,14 @@ test('upgrading a saved 9/3 layout preserves pet position through edit, viewport
  const reopened=harness({initial:app.stored()});
  assert.deepEqual(plain(reopened.ui.card('pet').style),pet);
  assert.deepEqual(plain(reopened.ui.card('plan').style),plan);
+});
+
+test('horizontal resize keeps automatic height; only a vertical resize persists fixed height',()=>{
+ const app=harness();app.act(ui=>ui.edit());app.control('news','resize').key('ArrowLeft');app.act(ui=>ui.finish());
+ assert.equal(app.stored().profiles.wide.find(r=>r.id==='news').fixedHeight,undefined);
+ assert.equal(app.ui.card('news')['data-auto-height'],'true');
+ app.act(ui=>ui.edit());app.control('news','resize').key('ArrowDown');app.act(ui=>ui.finish());
+ assert.equal(app.stored().profiles.wide.find(r=>r.id==='news').fixedHeight,true);
+ const reopened=harness({initial:app.stored()});assert.equal(reopened.ui.card('news')['data-fixed-height'],'true');
+ assert.equal(reopened.ui.card('activity')['data-auto-height'],'true');
 });

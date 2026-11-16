@@ -2,7 +2,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
     const React = require('react'), h = React.createElement;
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.3";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.4";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -409,6 +409,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     };
     function gridSavedRows(value,profile) {
       if(!Array.isArray(value))return [];
+      if(value.some(row=>row?.fixedHeight===true))return value;
       const preset=oldGridPresets[profile.key],keys=['x','y','w','h'];
       if(preset&&value.length===5&&Object.keys(preset).every(id=>value.some(row=>row?.id===id&&keys.every((key,i)=>row[key]===preset[id][i]))))return [];
       const expanded=gridDefaults({...profile,collapsed:false});
@@ -434,7 +435,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       // Increasing that saved width would create a collision and move unrelated cards.
       const minimumWidth=fallback.id==='pet'&&profile.key==='wide'?3:profile.minW;
       const w=gridBound(value?.w,fallback.w,minimumWidth,profile.cols);
-      return {id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?2:gridBound(value?.h,fallback.h,minimumHeight,24)};
+      return {...(value?.fixedHeight===true?{fixedHeight:true}:{}),id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?2:gridBound(value?.h,fallback.h,minimumHeight,24)};
     }
     function gridOverlap(a,b) {
       return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
@@ -458,6 +459,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return defaults.map(card=>placed.find(row=>row.id===card.id));
     }
     function canFitOverviewContent(layout, profile) {
+      if(layout.some(card=>card.fixedHeight))return false;
       return gridDefaults(profile).every(base=>{
         const card=layout.find(row=>row.id===base.id);
         return card&&['x','y','w','h'].every(key=>base.id==='projects'&&key==='h'||card[key]===base[key]);
@@ -467,7 +469,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       const base=gridNormalize(value,profile),old=base.find(card=>card.id===id);
       if(!old)return base;
       const active=gridCard({...old,...(patch&&typeof patch==='object'?patch:{})},old,profile);
-      if(['x','y','w','h'].every(key=>old[key]===active[key]))return base;
+      if(['x','y','w','h','fixedHeight'].every(key=>old[key]===active[key]))return base;
       const placed=[active],others=base.filter(card=>card.id!==id).sort((a,b)=>a.y-b.y||a.x-b.x);
       for(const card of others){const next=gridPlace(card,placed,profile);if(!next){placed.splice(1);for(const row of others)placed.push(gridPlace({...row,y:0},placed,profile));break;}placed.push(next);}
       // Fill vertical gaps left by moving/shrinking a card. Only passive cards
@@ -475,6 +477,25 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       const passive=placed.filter(card=>card.id!==id).sort((a,b)=>a.y-b.y||a.x-b.x);
       for(const card of passive){const occupied=placed.filter(other=>other!==card);while(card.y>0&&gridFits({...card,y:card.y-1},occupied))card.y--;}
       return base.map(card=>placed.find(row=>row.id===card.id));
+    }
+    // Layout coordinates are intent; growing content only moves cards beneath it.
+    function gridContentRects(layout,{column,row,gap,foldedExtra=0},heights={}) {
+      const step=row+gap,placed=new Map();
+      const ordered=[...layout].sort((a,b)=>a.y-b.y||a.x-b.x);
+      for(const item of ordered){
+        const minimum=item.h*step-gap+(item.id==='news'?foldedExtra:0);
+        const height=item.fixedHeight?minimum:Math.max(minimum,Number.isFinite(heights[item.id])?heights[item.id]:0);
+        const anchors=new Set();
+        for(let x=item.x;x<item.x+item.w;x++){
+          const above=ordered.filter(other=>other.id!==item.id&&other.x<=x&&other.x+other.w>x&&other.y+other.h<=item.y)
+            .sort((a,b)=>(b.y+b.h)-(a.y+a.h))[0];
+          if(above)anchors.add(above);
+        }
+        let top=item.y*step;
+        for(const above of anchors){const previous=placed.get(above.id);if(previous)top=Math.max(top,previous.top+previous.height+gap+(item.y-above.y-above.h)*step);}
+        placed.set(item.id,{left:item.x*column,top,width:Math.max(0,item.w*column-gap),height,minimum});
+      }
+      return Object.fromEntries(placed);
     }
     /* GRID_GEOMETRY_END */
     function PlanInlineLink({href,label}) {
@@ -1678,6 +1699,10 @@ html[data-platform="darwin"] .pwb .pw-head {
 /* Transparent glass material: typography and spacing remain shared above. */
 .pwb {
   --pw-glass:rgba(255,255,255,.26);
+  --pw-inner-surface:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0)),rgba(38,38,38,.10);
+  --pw-inner-hover:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0)),rgba(38,38,38,.13);
+  --pw-inner-edge:rgba(255,255,255,.32);
+  --pw-inner-shadow:inset 0 1px 0 rgba(255,255,255,.30),inset 0 -1px 0 rgba(0,0,0,.025);
   --pw-glass-blur:blur(24px) saturate(1.12);
   --pw-glass-radius:28px;
   --pw-glass-shadow:inset 0 1px 1px rgba(255,255,255,.88),inset 0 -1px 1px rgba(255,255,255,.36),0 8px 24px -12px rgba(35,56,61,.20);
@@ -1695,11 +1720,12 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet)::before {content:none}
 .pwb .pw-grid-canvas [data-grid-id] > .pw-card-content {border-radius:inherit}
 .pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-assistant-group+.pw-assistant-group,.pw-project-row,.pw-project-row:first-child) {
-  border:1px solid rgba(255,255,255,.52);border-radius:16px;
-  background:linear-gradient(135deg,rgba(255,255,255,.30),rgba(255,255,255,.12));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.50);
+  --pw-muted:#405658;
+  border:1px solid var(--pw-inner-edge);border-radius:16px;
+  background:var(--pw-inner-surface);
+  box-shadow:var(--pw-inner-shadow);
 }
-.pwb .pw-grid-canvas .pw-project-row:hover {background:rgba(255,255,255,.40)}
+.pwb .pw-grid-canvas .pw-project-row:is(:hover,:focus-within) {background:var(--pw-inner-hover)}
 .pwb .pw-grid-canvas :is(.pw-dashboard-action,.pw-brief-date,.pw-view-switch,.pw-calendar-nav button) {border-radius:10px}
 .pwb .pw-grid-canvas :is(.pw-project-icon,.pw-assistant-avatar) {border-radius:10px}
 .pwb .pw-grid-canvas .pw-news-image {border-radius:10px}
@@ -1863,7 +1889,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas[data-match-overview-height] .pw-pet.pw-overview-pet {min-height:var(--pw-expanded-overview-height,280px)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet {display:grid;grid-template-columns:128px minmax(0,1fr);gap:12px;align-items:center;padding:16px;box-sizing:border-box}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:128px;padding:0;align-self:center;align-content:center;row-gap:5px}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;min-inline-size:0;margin:0;padding:12px;border:1px solid rgba(255,255,255,.55);border-radius:12px;background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {align-self:stretch;display:flex;flex-direction:column;justify-content:center;min-width:0;min-inline-size:0;margin:0;padding:12px;border:1px solid var(--pw-inner-edge);border-radius:12px;background:var(--pw-inner-surface);box-shadow:var(--pw-inner-shadow)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {display:flex;width:100%;gap:8px;flex-wrap:nowrap;margin:4px 0 0;justify-content:center}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button {display:inline-flex;align-items:center;justify-content:center;flex:1;min-width:52px;min-height:40px;padding:6px 8px;border:1px solid var(--pw-line);border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.42),rgba(255,255,255,.2));color:var(--pw-ink);font:500 12px/18px var(--pw-body);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.6)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:hover {background:rgba(255,255,255,.6);border-color:color-mix(in srgb,var(--pw-accent) 28%,transparent)}
@@ -2027,6 +2053,27 @@ html[data-platform="darwin"] .pwb .pw-head {
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {padding:10px;align-self:stretch}
 }
 
+/* Project navigation stays quiet until hovered, with a full-size hit target. */
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter {
+ background:transparent;border-color:transparent;box-shadow:none;color:var(--pw-muted);
+ transition:background 180ms ease,color 180ms ease;
+}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter svg {width:16px;height:16px;transition:transform 180ms ease}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:is(:hover,:focus-visible) {background:rgba(255,255,255,.22);color:var(--pw-accent)}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:is(:hover,:focus-visible) svg {transform:translate(2px,-2px)}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce) {
+ .pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter,.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter svg {transition:none}
+ .pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:is(:hover,:focus-visible) svg {transform:none}
+}
+
+/* Content grows by default. Only an explicit vertical resize opts into scrolling. */
+.pwb .pw-grid-canvas [data-auto-height=true] {contain:layout style;container-type:inline-size;height:auto;max-height:none}
+.pwb .pw-grid-canvas [data-auto-height=true] :is(.pw-card-content,.pw-card-body,.pw-plan-view,.pw-pet-content) {flex:0 0 auto;height:auto;max-height:none;overflow:visible}
+.pwb .pw-grid-canvas [data-auto-height=true] .pw-card-body {scrollbar-gutter:auto}
+.pwb .pw-grid-canvas [data-fixed-height=true] > :is(.pw-card-content,.pw-pet-content) {height:100%;min-height:0;overflow:auto}
+.pwb .pw-grid-canvas [data-fixed-height=true] .pw-card-body {flex:0 0 auto;overflow:visible}
+
 `;
     function bindWorkbenchWheel(board) {
       const shell = board.closest('.pwb');
@@ -2089,6 +2136,7 @@ html[data-platform="darwin"] .pwb .pw-head {
       const editOrigin=React.useRef(null);
       const [saved,setSaved]=React.useState(gridReadPreferences),[draft,setDraft]=React.useState({}),[editing,setEditing]=React.useState(false),[active,setActive]=React.useState(null),[notice,setNotice]=React.useState('');
       const [size,setSize]=React.useState({width:0,height:0});
+      const [contentSizes,setContentSizes]=React.useState({});
       const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?8:16,row=Math.max(34,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
       const layout=gridNormalize((editing?draft:saved)[profile.key],profile);
       const origin=editing&&editOrigin.current?.profile===profile.key?editOrigin.current:null;
@@ -2102,7 +2150,18 @@ html[data-platform="darwin"] .pwb .pw-head {
       const stacked = petPlacement === 'stacked';
       const newsRow = stacked ? 2 : 1, planRow = stacked ? 3 : 2;
       const foldedExtra = profile.collapsed && !fitContent ? Math.max(0,94-row) : 0;
+      const measuredHeights={};
+      for(const item of layout){const measured=contentSizes[item.id];if(measured&&Math.abs(measured.width-(item.w*column-gap))<1)measuredHeights[item.id]=measured.height;}
+      const contentRects=gridContentRects(layout,{column,row,gap,foldedExtra},measuredHeights);
       current.current={profile,gap,row,column,layout,editing};
+      React.useLayoutEffect(()=>{
+        if(editing||fitContent)return;
+        const cards=viewport.current?.querySelectorAll?.('[data-grid-id]');if(!cards?.length)return;
+        const measure=()=>{const next={};for(const node of cards){const rect=node.getBoundingClientRect();next[node.dataset.gridId]={width:rect.width,height:rect.height};}
+          setContentSizes(previous=>JSON.stringify(previous)===JSON.stringify(next)?previous:next);};
+        const observer=new ResizeObserver(measure);for(const card of cards)observer.observe(card);measure();
+        return()=>observer.disconnect();
+      },[editing,fitContent,size.width,profile.collapsed]);
       function stopGesture(cancel=false) {
         const previous=gesture.current;if(!previous)return;
         gesture.current=null;
@@ -2141,7 +2200,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         if(autoScroll&&moved&&event.clientY>rect.bottom-32)view.scrollTop+=18;
         else if(autoScroll&&moved&&event.clientY<rect.top+32)view.scrollTop-=18;
         const dx=Math.round((event.clientX-start.startX)/start.column),dy=Math.round((event.clientY-start.startY+view.scrollTop-start.scrollTop)/(start.row+start.gap));
-        const patch=start.mode==='resize'?{w:start.item.w+dx,h:start.item.h+dy}:{x:start.item.x+dx,y:start.item.y+dy};
+        const patch=start.mode==='resize'?{w:start.item.w+dx,h:start.item.h+dy,...(dy?{fixedHeight:true}:{})}:{x:start.item.x+dx,y:start.item.y+dy};
         const next=gridArrange(start.layout,start.id,patch,start.profile);
         setDraft(value=>({...value,[start.profile.key]:next}));
       }
@@ -2149,7 +2208,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         if(!editing||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
         event.preventDefault();event.stopPropagation();
         const state=current.current,item=state.layout.find(item=>item.id===id),dx=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:0,dy=event.key==='ArrowUp'?-1:event.key==='ArrowDown'?1:0;
-        const patch=mode==='resize'?{w:item.w+dx,h:item.h+dy}:{x:item.x+dx,y:item.y+dy};
+        const patch=mode==='resize'?{w:item.w+dx,h:item.h+dy,...(dy?{fixedHeight:true}:{})}:{x:item.x+dx,y:item.y+dy};
         setDraft(value=>({...value,[state.profile.key]:gridArrange(state.layout,id,patch,state.profile)}));
         setNotice('布局已调整，点击“完成”保存');
       }
@@ -2170,13 +2229,15 @@ html[data-platform="darwin"] .pwb .pw-head {
         const style = fitContent ? {
           gridColumn: aligned ? undefined : `${item.x + 1} / span ${item.w}`,
           gridRow: aligned ? undefined : contentRows[id],
-          height: id === 'projects' && !naturalProjects ? height : undefined
+          minHeight: id === 'projects' && !naturalProjects ? height : undefined
         } : {
-          left:item.x*column,
-          top:item.y*(row+gap),
-          height:height+(id==='news'?foldedExtra:0),width:Math.max(0,item.w*column-gap)
+          left:contentRects[id].left,
+          top:editing?item.y*(row+gap):contentRects[id].top,
+          width:contentRects[id].width,
+          height:editing||item.fixedHeight?height+(id==='news'?foldedExtra:0):undefined,
+          minHeight:!editing&&!item.fixedHeight?contentRects[id].minimum:undefined
         };
-        return {'data-grid-id':id,'data-auto-height':fitContent&&id==='projects'&&style.height===undefined?'true':undefined,'data-active':active===id?'true':undefined,style};
+        return {'data-grid-id':id,'data-auto-height':!editing&&!item.fixedHeight?'true':undefined,'data-fixed-height':!editing&&item.fixedHeight?'true':undefined,'data-active':active===id?'true':undefined,style};
       }
       function edit(){
         const canvas=viewport.current?.querySelector?.('.pw-grid-canvas');
@@ -2209,7 +2270,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         '--pw-overview-left-columns': activity.w,
         '--pw-overview-gap': gap + 'px'
       } : {
-        height: untouched?origin.height:Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap+foldedExtra,
+        height: untouched?origin.height:editing?Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap+foldedExtra:Math.max(...Object.values(contentRects).map(rect=>rect.top+rect.height)),
         '--pw-grid-column': column+'px',
         '--pw-grid-row': (row+gap)+'px'
       };

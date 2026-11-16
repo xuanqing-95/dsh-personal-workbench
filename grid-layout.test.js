@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source=readFileSync(new URL('./client.js',import.meta.url),'utf8');
-const sandbox={};vm.runInNewContext(source.split('/* GRID_GEOMETRY_START */')[1].split('/* GRID_GEOMETRY_END */')[0]+'\nglobalThis.api={gridProfile,gridDefaults,gridNormalize,gridArrange};',sandbox);
-const {gridProfile,gridDefaults,gridNormalize,gridArrange}=sandbox.api;
+const sandbox={};vm.runInNewContext(source.split('/* GRID_GEOMETRY_START */')[1].split('/* GRID_GEOMETRY_END */')[0]+'\nglobalThis.api={gridProfile,gridDefaults,gridNormalize,gridArrange,gridContentRects};',sandbox);
+const {gridProfile,gridDefaults,gridNormalize,gridArrange,gridContentRects}=sandbox.api;
 const plain=v=>JSON.parse(JSON.stringify(v));
 const ids=['plan','news','activity','projects','pet'];
 const overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
@@ -64,4 +64,20 @@ test('a companion can be resized back to three columns without changing other ca
   const profile=gridProfile(width),pet=gridArrange(gridDefaults(profile),'pet',{w:3},profile).find(r=>r.id==='pet');
   assert.equal(pet.w,4,'medium and narrow cards retain their safe minimum');
  }
+});
+
+test('automatic content growth pushes only cards beneath its columns and leaves stored intent unchanged',()=>{
+ const base=plain(savedNineThree),metrics={column:100,row:50,gap:16};
+ const before=gridContentRects(base,metrics),expanded=gridContentRects(base,metrics,{news:500,activity:300});
+ assert.equal(expanded.news.height,500);assert.equal(expanded.pet.top,0);
+ assert.equal(expanded.activity.top,516);assert.equal(expanded.plan.top,516);
+ assert.equal(expanded.projects.top,832);assert.deepEqual(base,savedNineThree);
+ assert.deepEqual(plain(gridContentRects(base,metrics)),plain(before),'content shrinking restores positions without a saved-layout write');
+});
+test('an explicitly fixed card keeps its height while neighboring automatic content can grow',()=>{
+ const p=gridProfile(1512),base=savedNineThree.map(r=>r.id==='news'?{...r,fixedHeight:true}:r);
+ const next=gridNormalize(base,p);assert.equal(next.find(r=>r.id==='news').fixedHeight,true);
+ const rects=gridContentRects(next,{column:100,row:50,gap:16},{news:800,activity:400});
+ assert.equal(rects.news.height,248);assert.equal(rects.activity.height,400);
+ assert.equal(rects.pet.top,0);assert.equal(rects.projects.top,680);
 });
