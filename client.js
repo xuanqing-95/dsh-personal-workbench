@@ -1649,7 +1649,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-project-tiles .pw-project-meta > .pw-state {max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .pwb .pw-project-tiles .pw-project-icon {width:26px;height:26px}
 .pwb .pw-project-tiles .pw-project-icon.is-placeholder {background:var(--pw-tile);color:var(--pw-blue)}
-.pwb .pw-project-version {font:400 11px/16px var(--pw-body);color:var(--pw-muted);overflow-wrap:anywhere}
+.pwb .pw-project-version {font:400 11px/16px var(--pw-body);color:var(--pw-muted);display:block;min-width:0;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;overflow-wrap:normal}
 .pwb .pw-project-tiles .pw-project-remove {flex:none;align-self:start;min-width:24px;min-height:24px;padding:0}
 .pwb .pw-project-tiles .pw-project-facts {grid-column:1/-1;min-width:0;margin:0}
 .pwb .pw-project-tiles .pw-project-field {grid-template-columns:4em minmax(0,1fr);gap:6px;padding:5px 0}
