@@ -511,6 +511,12 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
           try{await navigator.clipboard.writeText(href);setCopyState('已复制');}catch{setCopyState('未能复制，请右键链接复制');}
         }},'复制'),h('span',{className:'pw-link-copy-status',role:'status','aria-live':'polite'},copyState));
     }
+    function activateCard(event) {
+      if(event.target.closest?.('a,button,input,textarea,select,summary,[contenteditable="true"]'))return;
+      const selection=window.getSelection();
+      if(selection&&!selection.isCollapsed&&event.currentTarget.contains(selection.anchorNode))return;
+      event.currentTarget.querySelector('.pw-project-enter,.pw-assistant-open')?.click();
+    }
     function Icon({name='grid',size=18}) {
       const paths={dismiss:'m6 6 12 12M18 6 6 18',grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',left:'m15 5-7 7 7 7',down:'m6 9 6 6 6-6',up:'m6 15 6-6 6 6',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
       return h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.6,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true},h('path',{d:paths[name]||paths.grid}));
@@ -2181,8 +2187,21 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-appearance-dialog .pw-appearance-footer-actions button {min-width:72px}
 .pwb .pw-appearance-dialog .pw-appearance-save {background:var(--pw-accent);color:#fff;border-color:var(--pw-accent)}
 .pwb .pw-appearance-dialog .pw-appearance-save:hover:not(:disabled) {background:color-mix(in srgb,var(--pw-accent) 90%,#000)}
-.pwb .pw-appearance-dialog .pw-background-remove {border:0}
+.pwb .pw-appearance-dialog .pw-background-remove,
+.pwb .pw-appearance-dialog > header button {border:1px solid transparent;background:transparent;box-shadow:none}
+.pwb .pw-appearance-dialog .pw-background-remove svg {filter:drop-shadow(0 0 1px rgba(255,255,255,.95))}
+.pwb .pw-appearance-dialog .pw-background-remove:is(:hover,:focus-visible):not(:disabled),
+.pwb .pw-appearance-dialog > header button:is(:hover,:focus-visible):not(:disabled) {border-color:var(--pw-line);background:rgba(255,255,255,.8)}
 .pwb .pw-appearance-error {flex-basis:100%;color:#9a341f}
+/* One quiet whole-card action; embedded links retain their own destination. */
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] {cursor:pointer}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) {background:var(--pw-inner-hover)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open) {color:var(--pw-accent)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open) svg {transform:translate(2px,-2px)}
+@media (prefers-reduced-motion:reduce) {
+ .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open) svg {transform:none}
+}
+
 @container pw-root (max-width:430px) {.pwb .pw-appearance-dialog {padding:20px}.pwb .pw-background-options {grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 `;
@@ -2256,7 +2275,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         return()=>{document.removeEventListener('keydown',dialogKey,true);if(shell)shell.inert=wasInert;if(assistantDock)assistantDock.inert=dockWasInert;trigger.current?.focus({preventScroll:true});};
       },[open,assistantDock,root]);
       async function previewAppearance(next){
-        if(mounted.current){setValue(next);setNotice('尚未保存');}
+        if(mounted.current){setValue(next);setNotice('');}
       }
       async function commitAppearance(){
         await change(async()=>{
@@ -2309,7 +2328,7 @@ html[data-platform="darwin"] .pwb .pw-head {
                   h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId===item.id,disabled:!ready||busy,title:item.name,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:item.id}))},h('img',{className:'pw-background-thumb',src:item.url,alt:''}),h('span',null,item.name),value.backgroundId===item.id&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
                   h('button',{type:'button',className:'pw-background-remove','aria-label':'删除背景 '+item.name,title:'删除这张背景',disabled:busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:value.backgroundId===item.id?null:value.backgroundId,backgrounds:value.backgrounds.filter(bg=>bg.id!==item.id)}))},h(Icon,{name:'dismiss',size:14}))))),
               h('p',{className:'pw-appearance-hint'},'支持 PNG、JPG、WebP，单张不超过 8 MB。')),
-            h('footer',null,h('p',{className:'pw-appearance-hint'},'保存后应用到当前设备'),h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':busy?'正在处理…':notice)),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试'),h('div',{className:'pw-appearance-footer-actions'},h('button',{type:'button',disabled:busy,onClick:close},'取消'),h('button',{type:'button',className:'pw-appearance-save',disabled:!ready||busy,onClick:()=>void commitAppearance()},'保存'))))),root.current):null;
+            h('footer',null,h('p',{className:'pw-appearance-hint'},'保存后应用到当前设备'),(error||!ready||busy)&&h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':'正在处理…')),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试'),h('div',{className:'pw-appearance-footer-actions'},h('button',{type:'button',disabled:busy,onClick:close},'取消'),h('button',{type:'button',className:'pw-appearance-save',disabled:!ready||busy,onClick:()=>void commitAppearance()},'保存'))))),root.current):null;
       return h(React.Fragment,null,
         h('div',{className:'pw-personal-tools',role:'group','aria-label':'个人工作台'},
           h('button',{ref:trigger,type:'button',className:'pw-account-button',title:'工作台设置','aria-label':'打开工作台设置','aria-haspopup':'dialog','aria-expanded':open,onClick:()=>{setNotice('');setOpen(true);}},h('img',{className:'pw-account-avatar',src:assets.avatar,alt:'',width:32,height:32,decoding:'async'})),
@@ -3023,7 +3042,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           }
           function assistantCard({name,icon,status,detail,next,reviews,open,action='打开'}) {
             const result=reviews.latest;
-            return h('section',{className:'pw-assistant-group','aria-label':name},
+            return h('section',{className:'pw-assistant-group','aria-label':name,'data-card-action':open?'true':undefined,onClick:open?activateCard:undefined},
               h('span',{className:'pw-assistant-avatar','aria-hidden':true},icon),
               h('div',{className:'pw-assistant-copy'},
                 h('div',{className:'pw-assistant-heading'},h('h3',null,name),status),
@@ -3051,7 +3070,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           const cards=agents.slice(0,6).map(agent=>{
             const state=agent.execution,waiting=pending(state?.pendingInput),running=state?.running===true;
             const label=waiting?inputLabel(state.pendingInput):running?'进行中':queued(state?.queue)?'排队中':state?.running===false?'等待开始':'状态待同步';
-            return h('section',{className:'pw-assistant-group',key:agent.id,'aria-label':agent.name},h('span',{className:'pw-assistant-avatar'},h(Icon,{name:'activity',size:22})),
+            return h('section',{className:'pw-assistant-group',key:agent.id,'aria-label':agent.name,'data-card-action':agent.sessionId?'true':undefined,onClick:agent.sessionId?activateCard:undefined},h('span',{className:'pw-assistant-avatar'},h(Icon,{name:'activity',size:22})),
               h('div',{className:'pw-assistant-copy'},h('div',{className:'pw-assistant-heading'},h('h3',null,agent.name),badge(running?'active':'unknown',label)),
                 agent.schedule&&h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'排期'),h('span',null,agent.schedule)),
                 h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),h('div',{className:'pw-assistant-receipt'},agent.result&&h('small',null,assistantDate(agent.result.createdAt||agent.lastRun,today,true)),agent.result?h('button',{className:'pw-quiet-link',title:agent.result.text,onClick:()=>navigate({session:agent.sessionId})},h('span',{className:'pw-assistant-result-name'},agent.result.text.split('\n').find(Boolean)),h(Icon,{name:'arrow',size:11})):h('span',null,'暂无结果')))),
@@ -3130,7 +3149,7 @@ html[data-platform="darwin"] .pwb .pw-head {
             const event=list(project.github?.value?.history)[0],pull=project.github?.value?.pull;
             const progress=event?.label||pull?.label||projectProgress(project),version=project.version?['v'+project.version]:[];
             const phase=pull?.state||event?.state||(project.repositoryState==='ambiguous'?'待确认仓库':'进展待同步');
-            return h('article',{className:'pw-project-row',key:project.id},
+            return h('article',{className:'pw-project-row',key:project.id,'data-card-action':'true',onClick:activateCard},
               h('div',{className:'pw-project-heading'},
                 project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':project.id==='today-plan'?'calendar':'grid',size:21})),
                 h('div',null,h('h3',{title:project.title},project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
