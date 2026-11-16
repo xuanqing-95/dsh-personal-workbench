@@ -2,7 +2,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
     const React = require('react'), h = React.createElement;
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.4";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.5";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -1699,10 +1699,10 @@ html[data-platform="darwin"] .pwb .pw-head {
 /* Transparent glass material: typography and spacing remain shared above. */
 .pwb {
   --pw-glass:rgba(255,255,255,.26);
-  --pw-inner-surface:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0)),rgba(38,38,38,.10);
-  --pw-inner-hover:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0)),rgba(38,38,38,.13);
-  --pw-inner-edge:rgba(255,255,255,.32);
-  --pw-inner-shadow:inset 0 1px 0 rgba(255,255,255,.30),inset 0 -1px 0 rgba(0,0,0,.025);
+  --pw-inner-surface:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.10));
+  --pw-inner-hover:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.18));
+  --pw-inner-edge:rgba(255,255,255,.44);
+  --pw-inner-shadow:inset 0 1px 0 rgba(255,255,255,.50);
   --pw-glass-blur:blur(24px) saturate(1.12);
   --pw-glass-radius:28px;
   --pw-glass-shadow:inset 0 1px 1px rgba(255,255,255,.88),inset 0 -1px 1px rgba(255,255,255,.36),0 8px 24px -12px rgba(35,56,61,.20);
@@ -1720,7 +1720,6 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet)::before {content:none}
 .pwb .pw-grid-canvas [data-grid-id] > .pw-card-content {border-radius:inherit}
 .pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-assistant-group+.pw-assistant-group,.pw-project-row,.pw-project-row:first-child) {
-  --pw-muted:#405658;
   border:1px solid var(--pw-inner-edge);border-radius:16px;
   background:var(--pw-inner-surface);
   box-shadow:var(--pw-inner-shadow);

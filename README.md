@@ -4,7 +4,7 @@
 
 [安装与使用](https://xuanqing-95.github.io/dsh-personal-workbench/) · [下载版本](https://github.com/xuanqing-95/dsh-personal-workbench/releases) · [问题反馈](https://github.com/xuanqing-95/dsh-personal-workbench/issues)
 
-当前为 **0.8.0-beta.4 公开测试版**。适配 DeepSeek Harness **0.2.2 发行线（rc.1 起）**；宿主仍处于预览阶段。本次在 macOS 独立配置验证，Windows / Linux 尚未实测。界面目前以中文为主。
+当前为 **0.8.0-beta.5 公开测试版**。适配 DeepSeek Harness **0.2.2 发行线（rc.1 起）**；宿主仍处于预览阶段。本次在 macOS 独立配置验证，Windows / Linux 尚未实测。界面目前以中文为主。
 
 ## 安装
 
