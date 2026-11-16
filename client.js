@@ -1732,7 +1732,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas :is(.pw-project-icon,.pw-assistant-avatar) {border-radius:10px}
 .pwb .pw-grid-canvas .pw-news-image {border-radius:10px}
 .pwb .pw-grid-canvas .pw-project-enter {background:rgba(255,255,255,.36)}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:stretch;gap:0;box-sizing:border-box;width:100%;padding:16px;border:1px solid var(--pw-line);border-radius:20px;background:var(--pw-glass,var(--pw-paper));box-shadow:var(--pw-glass-shadow);backdrop-filter:var(--pw-glass-blur)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:stretch;gap:0;box-sizing:border-box;width:100%;padding:16px;border:1px solid rgba(255,255,255,.66);border-radius:var(--pw-glass-radius);background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.04) 46%,rgba(255,255,255,.12)),var(--pw-glass);box-shadow:var(--pw-glass-shadow);-webkit-backdrop-filter:var(--pw-glass-blur);backdrop-filter:var(--pw-glass-blur)}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art{align-self:stretch;align-content:center;padding:8px 12px 8px 0;box-sizing:border-box;width:112px}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview{align-self:stretch;min-inline-size:0;margin:0;padding:8px 0 8px 16px;border-left:1px solid var(--pw-line);display:flex;flex-direction:column;justify-content:center;text-align:left}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview h2{margin:0 0 8px}
@@ -1876,7 +1876,7 @@ html[data-platform="darwin"] .pwb .pw-head {
   background:none;border:0;box-shadow:none
 }
 .pwb .pw-pet .hbc-nest::before {
-  inset:4%;box-sizing:border-box;border-radius:50%;corner-shape:round;border:1px solid #99753526;
+  inset:0;box-sizing:border-box;border-radius:50%;corner-shape:round;border:1px solid #99753526;
   clip-path:none;box-shadow:none;transition:border-color .18s ease,opacity .18s ease
 }
 .pwb .pw-pet .hbc-home-ready .hbc-nest::before {border-color:#99753555}
@@ -2081,24 +2081,31 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas [data-fixed-height=true] > :is(.pw-card-content,.pw-pet-content) {height:100%;min-height:0;overflow:auto}
 .pwb .pw-grid-canvas [data-fixed-height=true] .pw-card-body {flex:0 0 auto;overflow:visible}
 
+/* The dock shares the card surface and uses one consistent action row. */
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button {width:100%;min-width:0;height:40px;min-height:40px;padding:8px 12px;font:500 13px/20px var(--pw-body)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:last-child {background:var(--pw-accent);border-color:var(--pw-accent);color:#fff}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:last-child:hover {background:color-mix(in srgb,var(--pw-accent) 90%,#000);border-color:transparent}
+.pwb .pw-pet .hbc-nest .hbc-art[data-pose="sleep"] > .hbc-contact-shadow {display:none}
+.pwb .pw-grid-canvas .pw-pet .pw-today-attention {font:400 12px/18px var(--pw-body);margin-top:4px}
+
 /* Independent compact companion: the plan follows its natural height, not the news. */
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {position:relative;grid-template-columns:128px minmax(0,1fr);grid-template-rows:20px 18px auto 40px;gap:6px 16px;padding:16px;min-height:0}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {position:relative;grid-template-columns:128px minmax(0,1fr);grid-template-rows:20px 18px 40px auto;align-content:start;gap:6px 16px;padding:16px;min-height:0}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {display:contents}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {grid-column:1;grid-row:1 / -1;align-self:center}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-launcher {position:static!important}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {grid-column:1;grid-row:1 / -1;align-self:start;border:0}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-launcher {position:static!important;display:block;padding:0!important}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-name {position:absolute;left:160px;right:16px;top:16px;margin:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:600 14px/20px var(--pw-body)}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-state-label {grid-column:2;grid-row:2;justify-self:start;align-self:start;margin:0;text-align:left}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {grid-column:2;grid-row:3;padding:10px;align-self:stretch;min-height:0}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-state-label {grid-column:2;grid-row:2;justify-self:start;align-self:start;margin:0;text-align:left;font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {grid-column:2;grid-row:4;padding:10px 12px;align-self:start;min-height:0;margin-top:6px;justify-content:flex-start}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview h2 {display:none}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview p {margin:0;font:400 12px/18px var(--pw-body)}
-.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {grid-column:2;grid-row:4;align-self:start;justify-content:flex-end;margin:0}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {grid-column:2;grid-row:3;align-self:start;justify-self:start;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;max-width:240px;gap:8px;margin:0}
 @container pw-card (max-width:330px) {
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {grid-template-columns:88px minmax(0,1fr);gap:6px 8px;padding:12px}
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-name {left:108px;right:12px;top:12px}
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {--pw-overview-pet-size:88px;--hbc-dock-size:88px}
 }
 .pwb .pw-grid-canvas .pw-pet .pw-public-cat {display:contents}
-.pwb .pw-grid-canvas .pw-pet .pw-public-cat-art {grid-column:1;grid-row:1 / -1;align-self:center;width:120px;height:120px}
+.pwb .pw-grid-canvas .pw-pet .pw-public-cat-art {grid-column:1;grid-row:1 / -1;align-self:start;width:120px;height:120px}
 .pwb .pw-grid-canvas .pw-pet .pw-public-cat strong {grid-column:2;grid-row:1;justify-self:start}
 .pwb .pw-grid-canvas .pw-pet .pw-public-cat-status {grid-column:2;grid-row:2;justify-self:start}
 @container pw-card (max-width:330px) {.pwb .pw-grid-canvas .pw-pet .pw-public-cat-art {width:88px;height:88px}}
@@ -2652,7 +2659,7 @@ html[data-platform="darwin"] .pwb .pw-head {
           const items=list(data?.plan?.items),remaining=items.filter(item=>!checkedFor(item));
           const high=list(data?.tasks?.items).find(item=>item.dueDate===today&&item.priority==='high'&&item.status!=='done');
           const first=high||remaining[0];
-          return h('section',{className:'pw-today-overview'},h('h2',null,'今日概况'),h('p',null,first?(high?'今天重点：':'接下来：')+(first.title||first.text):items.length?'今天的计划都完成了。':'还没有安排，和我聊聊今天想做什么。'),h('p',{className:'pw-overview-secondary'},items.length?'已完成 '+(items.length-remaining.length)+' / '+items.length+' 项':'可以先说：“帮我安排今天的计划”。'));
+          return h('section',{className:'pw-today-overview'},h('h2',null,'今日概况'),h('p',null,first?(high?'今天重点：':'接下来：')+(first.title||first.text)+(items.length>remaining.length?'；已完成 '+(items.length-remaining.length)+' 项计划。':''):items.length?'今天的计划都完成了。':'还没有安排，和我聊聊今天想做什么。'));
         }
         function attentionSummary() {
           if(!attention.length)return null;
