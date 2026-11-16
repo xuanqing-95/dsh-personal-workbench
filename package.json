@@ -1,6 +1,6 @@
 {
   "name": "dsh-personal-workbench",
-  "version": "0.8.0-beta.2",
+  "version": "0.8.0-beta.3",
   "type": "module",
   "description": "个人主控台：用聊天管理计划、AI 日报与项目，五区玻璃卡片自由排布。",
   "exports": {

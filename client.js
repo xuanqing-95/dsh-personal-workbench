@@ -2,7 +2,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
     const React = require('react'), h = React.createElement;
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.2";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.3";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -430,7 +430,10 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     }
     function gridCard(value,fallback,profile) {
       const minimumHeight=fallback.id==='plan'||(fallback.id==='activity'&&profile.cols!==8)?4:3;
-      const w=gridBound(value?.w,fallback.w,profile.minW,profile.cols);
+      // Existing wide layouts allow a three-column companion beside a nine-column brief.
+      // Increasing that saved width would create a collision and move unrelated cards.
+      const minimumWidth=fallback.id==='pet'&&profile.key==='wide'?3:profile.minW;
+      const w=gridBound(value?.w,fallback.w,minimumWidth,profile.cols);
       return {id:fallback.id,x:gridBound(value?.x,fallback.x,0,profile.cols-w),y:gridBound(value?.y,fallback.y,0,160),w,h:profile.collapsed&&fallback.id==='news'?2:gridBound(value?.h,fallback.h,minimumHeight,24)};
     }
     function gridOverlap(a,b) {
@@ -2011,6 +2014,18 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-task-form input{min-width:0;flex:1;padding:8px;border:1px solid var(--pw-line);border-radius:10px;background:var(--pw-paper);font:400 13px/20px var(--pw-body);color:var(--pw-ink)}
 .pwb .pw-task-form button{width:60px;height:40px;flex:none;border:1px solid var(--pw-line);border-radius:10px;background:var(--pw-paper);color:var(--pw-ink)}
 .pwb .pw-overview-secondary{font:400 12px/18px var(--pw-body);color:var(--pw-muted)}
+
+/* A saved three-column pet stays narrow; content reflows without changing the grid. */
+@container pw-card (max-width:330px) {
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {grid-template-columns:minmax(0,1fr);align-content:center;gap:12px;padding:12px}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {width:100%}
+ .pwb .pw-public-cat {display:grid;grid-template-columns:72px minmax(0,1fr);grid-template-rows:auto auto auto;gap:4px 8px;align-items:center;justify-items:center;width:100%}
+ .pwb .pw-public-cat-art {grid-column:1;grid-row:1 / span 2;width:72px;height:72px}
+ .pwb .pw-public-cat strong {grid-column:1;grid-row:3}
+ .pwb .pw-public-cat-status {grid-column:2;grid-row:1;align-self:end}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {grid-column:2;grid-row:2;align-self:start;margin:0}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {padding:10px;align-self:stretch}
+}
 
 `;
     function bindWorkbenchWheel(board) {

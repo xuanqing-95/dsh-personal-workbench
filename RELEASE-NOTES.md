@@ -1,7 +1,9 @@
-个人主控台的首次公开测试版本：五块可排布的玻璃卡片，用聊天管理自己的计划、日报与项目。
+修复已有布局在更新后发生错位的问题。
 
-安装方法与插件索引见 [分享页](https://xuanqing-95.github.io/dsh-personal-workbench/)。支持 DeepSeek Harness 0.2.2 发行线，从 rc.1 起。需要自己的 Harness 模型配置。
+- 日报占 9 栏、Data 占 3 栏时，保持原先保存的宽度与位置，今日计划不再被错误地推到下一排。
+- Data 卡片较窄时，概况移到猫咪与按钮下方，避免文字挤成细列。
+- 保留现有布局、日报收起状态与聊天；无需清除数据或恢复默认布局。
 
-下载 `.tgz` 为可安装包，`SHA256SUMS` 用于核对完整性；GitHub 自动生成的 Source code 文件不是安装包。
+安装与更新入口见 [分享页](https://xuanqing-95.github.io/dsh-personal-workbench/)。本次为 0.8.0-beta.3 公开测试版，适配 Harness 0.2.2 发行线（rc.1 起）。公开包不包含作者的个人数据、Notion / Hermes 连接或模型账号。
 
-公开包不附带作者的个人数据、Notion / Hermes 连接或订阅。Windows / Linux 尚未实测，更多边界见 README。
+下载 `.tgz` 是安装包，`SHA256SUMS` 可核对完整性。Windows / Linux 尚未实测。
