@@ -258,7 +258,7 @@ test('pet move and resize use the same save, cancel, and reopen lifecycle as oth
 
 test('upgrading a saved 9/3 layout preserves pet position through edit, viewport changes and reopening',()=>{
  const wide=[{id:'plan',x:7,y:4,w:5,h:8},{id:'news',x:0,y:0,w:9,h:4},{id:'activity',x:0,y:4,w:7,h:4},{id:'projects',x:0,y:8,w:7,h:4},{id:'pet',x:9,y:0,w:3,h:4}];
- const initial={version:2,profiles:{wide}},app=harness({initial});
+ const initial={version:2,overviewAligned:true,profiles:{wide}},app=harness({initial});
  const pet=plain(app.ui.card('pet').style),plan=plain(app.ui.card('plan').style);
  assert.equal(pet.top,0);assert.equal(pet.width,288);assert.equal(pet.left,912);
  assert.equal(plan.top,Math.max(34,(700-16*11)/12)*4+16*4);
@@ -281,4 +281,16 @@ test('horizontal resize keeps automatic height; only a vertical resize persists 
  assert.equal(app.stored().profiles.wide.find(r=>r.id==='news').fixedHeight,true);
  const reopened=harness({initial:app.stored()});assert.equal(reopened.ui.card('news')['data-fixed-height'],'true');
  assert.equal(reopened.ui.card('activity')['data-auto-height'],'true');
+});
+
+
+test('former initial overview aligns once while later custom widths remain saved',()=>{
+ const wide=[{id:'plan',x:7,y:4,w:5,h:8},{id:'news',x:0,y:0,w:9,h:4},{id:'activity',x:0,y:4,w:7,h:4},{id:'projects',x:0,y:8,w:7,h:4},{id:'pet',x:9,y:0,w:3,h:4}];
+ const app=harness({initial:{version:2,profiles:{wide}}});
+ assert.equal(app.ui.fitContent,true);assert.equal(app.stored().overviewAligned,true);
+ const rows=app.stored().profiles.wide;
+ assert.equal(rows.find(r=>r.id==='news').w,rows.find(r=>r.id==='activity').w);
+ assert.equal(rows.find(r=>r.id==='pet').w,rows.find(r=>r.id==='plan').w);
+ const later=harness({initial:{version:2,overviewAligned:true,profiles:{wide}}});
+ assert.deepEqual(later.stored().profiles.wide,wide);assert.equal(later.ui.fitContent,false);
 });

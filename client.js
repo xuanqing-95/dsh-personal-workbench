@@ -2,7 +2,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
     const React = require('react'), h = React.createElement;
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.6";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.7";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -2081,6 +2081,28 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas [data-fixed-height=true] > :is(.pw-card-content,.pw-pet-content) {height:100%;min-height:0;overflow:auto}
 .pwb .pw-grid-canvas [data-fixed-height=true] .pw-card-body {flex:0 0 auto;overflow:visible}
 
+/* Independent compact companion: the plan follows its natural height, not the news. */
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {position:relative;grid-template-columns:128px minmax(0,1fr);grid-template-rows:20px 18px auto 40px;gap:6px 16px;padding:16px;min-height:0}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-art {display:contents}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {grid-column:1;grid-row:1 / -1;align-self:center}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-launcher {position:static!important}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-name {position:absolute;left:160px;right:16px;top:16px;margin:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:600 14px/20px var(--pw-body)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-state-label {grid-column:2;grid-row:2;justify-self:start;align-self:start;margin:0;text-align:left}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {grid-column:2;grid-row:3;padding:10px;align-self:stretch;min-height:0}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview h2 {display:none}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview p {margin:0;font:400 12px/18px var(--pw-body)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions {grid-column:2;grid-row:4;align-self:start;justify-content:flex-end;margin:0}
+@container pw-card (max-width:330px) {
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {grid-template-columns:88px minmax(0,1fr);gap:6px 8px;padding:12px}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home .hbc-name {left:108px;right:12px;top:12px}
+ .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {--pw-overview-pet-size:88px;--hbc-dock-size:88px}
+}
+.pwb .pw-grid-canvas .pw-pet .pw-public-cat {display:contents}
+.pwb .pw-grid-canvas .pw-pet .pw-public-cat-art {grid-column:1;grid-row:1 / -1;align-self:center;width:120px;height:120px}
+.pwb .pw-grid-canvas .pw-pet .pw-public-cat strong {grid-column:2;grid-row:1;justify-self:start}
+.pwb .pw-grid-canvas .pw-pet .pw-public-cat-status {grid-column:2;grid-row:2;justify-self:start}
+@container pw-card (max-width:330px) {.pwb .pw-grid-canvas .pw-pet .pw-public-cat-art {width:88px;height:88px}}
+
 `;
     function bindWorkbenchWheel(board) {
       const shell = board.closest('.pwb');
@@ -2142,6 +2164,18 @@ html[data-platform="darwin"] .pwb .pw-head {
       const viewport=React.useRef(null),gesture=React.useRef(null),current=React.useRef(null);
       const editOrigin=React.useRef(null);
       const [saved,setSaved]=React.useState(gridReadPreferences),[draft,setDraft]=React.useState({}),[editing,setEditing]=React.useState(false),[active,setActive]=React.useState(null),[notice,setNotice]=React.useState('');
+      // Migrate only the former initial 9/3 overview, once. Later user layouts remain theirs.
+      React.useLayoutEffect(()=>{
+        try {
+          const raw=JSON.parse(localStorage.getItem(gridStorageKey)||'null');
+          if(raw?.overviewAligned||raw?.version!==2)return;
+          const expected={plan:[7,4,5,8],news:[0,0,9,4],activity:[0,4,7,4],projects:[0,8,7,4],pet:[9,0,3,4]};
+          const rows=raw.profiles?.wide,keys=['x','y','w','h'];
+          if(!Array.isArray(rows)||rows.length!==5||!rows.every(r=>!r.fixedHeight&&expected[r.id]&&keys.every((k,i)=>r[k]===expected[r.id][i])))return;
+          const profiles={...raw.profiles,wide:gridDefaults(gridProfile(1200))};
+          localStorage.setItem(gridStorageKey,JSON.stringify({...raw,overviewAligned:true,profiles}));setSaved(profiles);
+        }catch{}
+      },[]);
       const [size,setSize]=React.useState({width:0,height:0});
       const [contentSizes,setContentSizes]=React.useState({});
       const profile={...gridProfile(size.width),collapsed:collapsed&&!editing},gap=profile.key==='narrow'?8:16,row=Math.max(34,(size.height-gap*11)/12),column=(size.width+gap)/profile.cols;
@@ -2271,7 +2305,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         }
         const profiles={};for(const width of [390,800,1200]){const p=gridProfile(width);if(committed[p.key])profiles[p.key]=gridNormalize(committed[p.key],p);}
         setSaved(profiles);setEditing(false);
-        try{localStorage.setItem(gridStorageKey,JSON.stringify({version:2,profiles}));setNotice('布局已保存');}catch{setNotice('本次布局已应用，但无法保存到此设备');}
+        try{localStorage.setItem(gridStorageKey,JSON.stringify({version:2,overviewAligned:true,profiles}));setNotice('布局已保存');}catch{setNotice('本次布局已应用，但无法保存到此设备');}
       }
       const canvasStyle = fitContent ? {
         '--pw-overview-columns': profile.cols,
@@ -2391,27 +2425,6 @@ html[data-platform="darwin"] .pwb .pw-head {
           api('briefArchive',abort.signal,briefDay?{date:briefDay}:{}).then(value=>{if(!abort.signal.aborted)setBriefArchive({...value,selection:briefDay});}).catch(()=>{if(!abort.signal.aborted)setBriefReadError(briefDay);});
           return()=>abort.abort();},[briefDay,today,tick]);
         const grid=useWorkbenchGrid(newsFolded);
-        const expandedOverviewHeight=React.useRef(280);
-        React.useLayoutEffect(()=>{
-          const canvas=grid.viewport.current?.querySelector('.pw-grid-canvas'),news=canvas?.querySelector('.pw-news');
-          if(!canvas||!news)return;
-          const align=()=>{
-            // When the news columns stack, both cards return to natural height.
-            const match=grid.fitContent&&grid.petPlacement==='aligned'&&(news.getBoundingClientRect().width>=650||Boolean(news.querySelector('.pw-empty')));
-            canvas.toggleAttribute('data-match-overview-height',match);
-            if(!match){canvas.style.removeProperty('--pw-expanded-overview-height');return;}
-            if(!newsFolded)expandedOverviewHeight.current=Math.max(280,Math.ceil(news.getBoundingClientRect().height));
-            const value=expandedOverviewHeight.current+'px';
-            if(canvas.style.getPropertyValue('--pw-expanded-overview-height')!==value)canvas.style.setProperty('--pw-expanded-overview-height',value);
-          };
-          align();const observer=new ResizeObserver(align);observer.observe(news);
-          return()=>observer.disconnect();
-        },[grid.fitContent,grid.petPlacement,newsFolded]);
-
-        React.useLayoutEffect(() => {
-          const board = grid.viewport.current;
-          if (board) return bindWorkbenchWheel(board);
-        }, []);
         React.useLayoutEffect(()=>{
           uiUpdates.capture=()=>({selectedDate,calendarMode,briefDay,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
           return()=>{uiUpdates.capture=null;};
