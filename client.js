@@ -2,7 +2,7 @@ window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
     const React = require('react'), h = React.createElement;
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.5";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.6";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -479,19 +479,22 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return base.map(card=>placed.find(row=>row.id===card.id));
     }
     // Layout coordinates are intent; growing content only moves cards beneath it.
-    function gridContentRects(layout,{column,row,gap,foldedExtra=0},heights={}) {
+    function gridContentRects(layout,{column,row,gap,collapsed=false},heights={}) {
       const step=row+gap,placed=new Map();
       const ordered=[...layout].sort((a,b)=>a.y-b.y||a.x-b.x);
       for(const item of ordered){
-        const minimum=item.h*step-gap+(item.id==='news'?foldedExtra:0);
-        const height=item.fixedHeight?minimum:Math.max(minimum,Number.isFinite(heights[item.id])?heights[item.id]:0);
+        const folded=collapsed&&item.id==='news';
+        const minimum=folded?0:item.h*step-gap;
+        const measured=Number.isFinite(heights[item.id])?heights[item.id]:0;
+        const height=folded?(measured||96):item.fixedHeight?minimum:Math.max(minimum,measured);
         const anchors=new Set();
         for(let x=item.x;x<item.x+item.w;x++){
           const above=ordered.filter(other=>other.id!==item.id&&other.x<=x&&other.x+other.w>x&&other.y+other.h<=item.y)
             .sort((a,b)=>(b.y+b.h)-(a.y+a.h))[0];
           if(above)anchors.add(above);
         }
-        let top=item.y*step;
+        // Anchor to the original expanded layout so a fold releases only its own space.
+        let top=anchors.size?0:item.y*step;
         for(const above of anchors){const previous=placed.get(above.id);if(previous)top=Math.max(top,previous.top+previous.height+gap+(item.y-above.y-above.h)*step);}
         placed.set(item.id,{left:item.x*column,top,width:Math.max(0,item.w*column-gap),height,minimum});
       }
@@ -1698,11 +1701,11 @@ html[data-platform="darwin"] .pwb .pw-head {
 
 /* Transparent glass material: typography and spacing remain shared above. */
 .pwb {
-  --pw-glass:rgba(255,255,255,.26);
-  --pw-inner-surface:linear-gradient(135deg,rgba(255,255,255,.24),rgba(255,255,255,.10));
-  --pw-inner-hover:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.18));
-  --pw-inner-edge:rgba(255,255,255,.44);
-  --pw-inner-shadow:inset 0 1px 0 rgba(255,255,255,.50);
+  --pw-glass:rgba(255,255,255,.16);
+  --pw-inner-surface:linear-gradient(135deg,rgba(255,255,255,.50),rgba(255,255,255,.28));
+  --pw-inner-hover:linear-gradient(135deg,rgba(255,255,255,.60),rgba(255,255,255,.36));
+  --pw-inner-edge:rgba(255,255,255,.60);
+  --pw-inner-shadow:inset 0 1px 0 rgba(255,255,255,.66);
   --pw-glass-blur:blur(24px) saturate(1.12);
   --pw-glass-radius:28px;
   --pw-glass-shadow:inset 0 1px 1px rgba(255,255,255,.88),inset 0 -1px 1px rgba(255,255,255,.36),0 8px 24px -12px rgba(35,56,61,.20);
@@ -1713,7 +1716,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet) {
   border:1px solid rgba(255,255,255,.66);
   border-radius:var(--pw-glass-radius);
-  background:linear-gradient(135deg,rgba(255,255,255,.36),rgba(255,255,255,.10) 46%,rgba(255,255,255,.22)),var(--pw-glass);
+  background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.04) 46%,rgba(255,255,255,.12)),var(--pw-glass);
   box-shadow:var(--pw-glass-shadow);
   -webkit-backdrop-filter:var(--pw-glass-blur);backdrop-filter:var(--pw-glass-blur);
 }
@@ -1745,7 +1748,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 
 
 /* Compact project entry and comfortable plan navigation. */
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter {width:32px;min-width:32px;height:32px;padding:0;gap:0}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {width:32px;min-width:32px;height:32px;padding:0;gap:0}
 .pwb .pw-grid-canvas .pw-plan .pw-card-content > .pw-card-head {display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:8px}
 .pwb .pw-grid-canvas .pw-plan .pw-date-nav {justify-self:start;justify-content:flex-start;margin:0;order:0;flex-basis:auto}
 .pwb .pw-grid-canvas .pw-plan .pw-segmented {justify-self:end;gap:3px;padding:3px;border-radius:12px;background:rgba(255,255,255,.24);border-color:var(--pw-line)}
@@ -1998,7 +2001,7 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-head .pw-attention > summary {width:var(--pw-button-l);height:var(--pw-control-height)}
 .pwb .pw-head .pw-layout-edit-buttons .pw-layout-button {width:var(--pw-button-m);min-width:var(--pw-button-m);height:var(--pw-control-height);padding:8px 12px}
 .pwb .pw-assistant-feed .pw-assistant-open {width:var(--pw-button-s);min-width:var(--pw-button-s);padding:8px;flex:none}
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter,.pwb .pw-news .pw-card-head .pw-brief-toggle {
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open),.pwb .pw-news .pw-card-head .pw-brief-toggle {
  width:var(--pw-control-height);min-width:var(--pw-control-height);height:var(--pw-control-height);min-height:var(--pw-control-height);padding:0;gap:0;flex:none;box-sizing:border-box;
  display:inline-flex;align-items:center;justify-content:center;border-radius:var(--pw-control-radius);
 }
@@ -2052,19 +2055,24 @@ html[data-platform="darwin"] .pwb .pw-head {
  .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-today-overview {padding:10px;align-self:stretch}
 }
 
-/* Project navigation stays quiet until hovered, with a full-size hit target. */
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter {
+/* Card navigation shares a quiet top-right icon and a full-size hit target. */
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-open {align-self:start;justify-self:end;width:40px;min-width:40px;height:40px;padding:8px;margin-top:-4px}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-open > svg {display:block}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {
  background:transparent;border-color:transparent;box-shadow:none;color:var(--pw-muted);
  transition:background 180ms ease,color 180ms ease;
 }
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter svg {width:16px;height:16px;transition:transform 180ms ease}
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:is(:hover,:focus-visible) {background:rgba(255,255,255,.22);color:var(--pw-accent)}
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:is(:hover,:focus-visible) svg {transform:translate(2px,-2px)}
-.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) svg {width:16px;height:16px;transition:transform 180ms ease}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):is(:hover,:focus-visible) {background:rgba(255,255,255,.22);color:var(--pw-accent)}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):is(:hover,:focus-visible) svg {transform:translate(2px,-2px)}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):focus-visible {outline:2px solid var(--pw-accent);outline-offset:2px}
 @media (prefers-reduced-motion:reduce) {
- .pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter,.pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter svg {transition:none}
- .pwb .pw-grid-canvas .pw-project-tiles .pw-project-enter:is(:hover,:focus-visible) svg {transform:none}
+ .pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open),.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) svg {transition:none}
+ .pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):is(:hover,:focus-visible) svg {transform:none}
 }
+
+/* View segments are wider and flatter than primary action buttons. */
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button {box-sizing:border-box;width:48px;min-width:48px;height:30px;min-height:30px;padding:4px 10px;font:500 12px/20px var(--pw-body);border-radius:8px}
 
 /* Content grows by default. Only an explicit vertical resize opts into scrolling. */
 .pwb .pw-grid-canvas [data-auto-height=true] {contain:layout style;container-type:inline-size;height:auto;max-height:none}
@@ -2148,15 +2156,15 @@ html[data-platform="darwin"] .pwb .pw-head {
       const petPlacement = aligned ? 'aligned' : fitContent ? 'stacked' : 'custom';
       const stacked = petPlacement === 'stacked';
       const newsRow = stacked ? 2 : 1, planRow = stacked ? 3 : 2;
-      const foldedExtra = profile.collapsed && !fitContent ? Math.max(0,94-row) : 0;
+      const contentLayout=profile.collapsed&&!fitContent?gridNormalize(saved[profile.key],{...profile,collapsed:false}):layout;
       const measuredHeights={};
-      for(const item of layout){const measured=contentSizes[item.id];if(measured&&Math.abs(measured.width-(item.w*column-gap))<1)measuredHeights[item.id]=measured.height;}
-      const contentRects=gridContentRects(layout,{column,row,gap,foldedExtra},measuredHeights);
+      for(const item of contentLayout){const measured=contentSizes[item.id];if(measured&&measured.collapsed===profile.collapsed&&Math.abs(measured.width-(item.w*column-gap))<1)measuredHeights[item.id]=measured.height;}
+      const contentRects=gridContentRects(contentLayout,{column,row,gap,collapsed:profile.collapsed},measuredHeights);
       current.current={profile,gap,row,column,layout,editing};
       React.useLayoutEffect(()=>{
         if(editing||fitContent)return;
         const cards=viewport.current?.querySelectorAll?.('[data-grid-id]');if(!cards?.length)return;
-        const measure=()=>{const next={};for(const node of cards){const rect=node.getBoundingClientRect();next[node.dataset.gridId]={width:rect.width,height:rect.height};}
+        const measure=()=>{const next={};for(const node of cards){const rect=node.getBoundingClientRect();next[node.dataset.gridId]={width:rect.width,height:rect.height,collapsed:profile.collapsed};}
           setContentSizes(previous=>JSON.stringify(previous)===JSON.stringify(next)?previous:next);};
         const observer=new ResizeObserver(measure);for(const card of cards)observer.observe(card);measure();
         return()=>observer.disconnect();
@@ -2222,6 +2230,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const item=layout.find(item=>item.id===id);
         if(untouched&&origin.rects[id])return {'data-grid-id':id,style:{...origin.rects[id],position:'absolute'}};
         const height = item.h * (row + gap) - gap;
+        const fixed=item.fixedHeight&&!(profile.collapsed&&id==='news');
         const contentRows = narrow ? {pet:1,news:newsRow, plan:planRow, activity:planRow+1, projects:planRow+2}
           : {pet:1,news:newsRow, activity:planRow, projects:planRow+1, plan:`${planRow} / span 2`};
         const naturalProjects = id === 'projects' && item.h === gridDefaults(profile).find(card => card.id === 'projects').h;
@@ -2233,10 +2242,10 @@ html[data-platform="darwin"] .pwb .pw-head {
           left:contentRects[id].left,
           top:editing?item.y*(row+gap):contentRects[id].top,
           width:contentRects[id].width,
-          height:editing||item.fixedHeight?height+(id==='news'?foldedExtra:0):undefined,
-          minHeight:!editing&&!item.fixedHeight?contentRects[id].minimum:undefined
+          height:editing||fixed?height:undefined,
+          minHeight:!editing&&!fixed?contentRects[id].minimum:undefined
         };
-        return {'data-grid-id':id,'data-auto-height':!editing&&!item.fixedHeight?'true':undefined,'data-fixed-height':!editing&&item.fixedHeight?'true':undefined,'data-active':active===id?'true':undefined,style};
+        return {'data-grid-id':id,'data-auto-height':!editing&&!fixed?'true':undefined,'data-fixed-height':!editing&&fixed?'true':undefined,'data-active':active===id?'true':undefined,style};
       }
       function edit(){
         const canvas=viewport.current?.querySelector?.('.pw-grid-canvas');
@@ -2269,7 +2278,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         '--pw-overview-left-columns': activity.w,
         '--pw-overview-gap': gap + 'px'
       } : {
-        height: untouched?origin.height:editing?Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap+foldedExtra:Math.max(...Object.values(contentRects).map(rect=>rect.top+rect.height)),
+        height: untouched?origin.height:editing?Math.max(12,...layout.map(item=>item.y+item.h))*(row+gap)-gap:Math.max(...Object.values(contentRects).map(rect=>rect.top+rect.height)),
         '--pw-grid-column': column+'px',
         '--pw-grid-row': (row+gap)+'px'
       };
@@ -2739,7 +2748,7 @@ html[data-platform="darwin"] .pwb .pw-head {
                 h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),
                   h('div',{className:'pw-assistant-review'},
                     result?receipt(result):h('span',{className:'pw-assistant-review-empty'},reviews.unavailable?'结果待同步':'暂无结果')))),
-              open&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':'打开'+name,onClick:open},action,h(Icon,{name:'chevron',size:11})));
+              open&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':action+name,title:action+name,onClick:open},h(Icon,{name:'arrow',size:16})));
           }
           const primary=operations[0];
           const operation=monitor?.availability!=='not_connected'&&assistantCard({
@@ -2762,7 +2771,7 @@ html[data-platform="darwin"] .pwb .pw-head {
               h('div',{className:'pw-assistant-copy'},h('div',{className:'pw-assistant-heading'},h('h3',null,agent.name),badge(running?'active':'unknown',label)),
                 agent.schedule&&h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'排期'),h('span',null,agent.schedule)),
                 h('div',{className:'pw-assistant-field'},h('span',{className:'pw-assistant-label'},'上次结果'),h('div',{className:'pw-assistant-receipt'},agent.result&&h('small',null,assistantDate(agent.result.createdAt||agent.lastRun,today,true)),agent.result?h('button',{className:'pw-quiet-link',title:agent.result.text,onClick:()=>navigate({session:agent.sessionId})},h('span',{className:'pw-assistant-result-name'},agent.result.text.split('\n').find(Boolean)),h(Icon,{name:'arrow',size:11})):h('span',null,'暂无结果')))),
-              agent.sessionId&&h('button',{className:'pw-dashboard-action pw-assistant-open','aria-label':'打开'+agent.name,onClick:()=>navigate({session:agent.sessionId})},'打开',h(Icon,{name:'arrow',size:11})));
+              agent.sessionId&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':'打开'+agent.name,title:'打开'+agent.name,onClick:()=>navigate({session:agent.sessionId})},h(Icon,{name:'arrow',size:16})));
           });
           return operation||cards.length?h('div',{className:'pw-assistant-list pw-assistant-feed'},operation,cards):empty('暂时没有进行中的任务','开始对话或建立自动化后，进度会出现在这里。','activity');
         }

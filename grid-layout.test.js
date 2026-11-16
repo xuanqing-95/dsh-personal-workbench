@@ -81,3 +81,21 @@ test('an explicitly fixed card keeps its height while neighboring automatic cont
  assert.equal(rects.news.height,248);assert.equal(rects.activity.height,400);
  assert.equal(rects.pet.top,0);assert.equal(rects.projects.top,680);
 });
+
+
+test('folded custom news hugs content and compacts only dependent columns without saving over expanded intent',()=>{
+ const base=plain(savedNineThree),metrics={column:100,row:80,gap:16};
+ const before=gridContentRects(base,metrics,{news:450});
+ const folded=gridContentRects(base,{...metrics,collapsed:true},{news:92});
+ assert.equal(folded.news.minimum,0);assert.equal(folded.news.height,92);
+ assert.equal(folded.activity.top,108);assert.equal(folded.projects.top,492);
+ assert.deepEqual(plain(folded.pet),plain(before.pet));
+ assert.equal(folded.plan.top,before.pet.top+before.pet.height+16,'spanning cards still clear the pet');
+ assert.deepEqual(base,savedNineThree);
+ assert.deepEqual(plain(gridContentRects(base,metrics,{news:450})),plain(before));
+ const fixed=base.map(r=>r.id==='news'?{...r,fixedHeight:true}:r);
+ assert.equal(gridContentRects(fixed,{...metrics,collapsed:true},{news:92}).news.height,92);
+ assert.equal(gridContentRects(fixed,metrics).news.height,368,'expanding restores manual height');
+ const gap=base.map(r=>r.id==='activity'?{...r,y:r.y+1}:r);
+ assert.equal(gridContentRects(gap,{...metrics,collapsed:true},{news:92}).activity.top,204,'intentional gap is preserved');
+});
