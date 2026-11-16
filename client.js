@@ -227,14 +227,18 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       const at=Date.parse(run.heartbeat_at||run.updated_at||run.started_at||run.created_at||'');
       return Number.isFinite(at)&&at<=now+5000&&at>=now-15*60000;
     }
+    function happenedToday(value,today,now) {
+      const at=Date.parse(value);
+      return Number.isFinite(at)&&at<=now+5000&&dateInShanghai.format(new Date(at))===today;
+    }
     function assistantOperations(monitor,today,now) {
       const synced=monitor?.availability==='connected'&&(!monitor.checkedAt||now-Date.parse(monitor.checkedAt)<45000);
-      const runs=list(monitor?.items).filter(run=>activeStatus(run.status)||recent(run.updated_at,now)||failedRun(run.status))
+      const runs=list(monitor?.items).filter(run=>activeStatus(run.status)||happenedToday(run.updated_at,today,now))
         .sort((a,b)=>Date.parse(b.updated_at)-Date.parse(a.updated_at));
       const relevant=runs.filter(run=>!failedRun(run.status)||!runTarget(run)||!runs.some(next=>
         next.status==='done'&&next.action_id===run.action_id&&runTarget(next)===runTarget(run)&&Date.parse(next.updated_at)>Date.parse(run.updated_at)));
       const visible=[...relevant.filter(run=>activeStatus(run.status)),...relevant.filter(run=>failedRun(run.status)),
-        ...relevant.filter(run=>!activeStatus(run.status)&&!failedRun(run.status)&&dateInShanghai.format(new Date(run.updated_at))===today)];
+        ...relevant.filter(run=>!activeStatus(run.status)&&!failedRun(run.status))];
       const operation=visible.sort((a,b)=>Number(activeStatus(b.status)&&runIsFresh(b,now))-Number(activeStatus(a.status)&&runIsFresh(a,now))).slice(0,5).map(run=>{
         const queued=['queued','pending'].includes(run.status),active=activeStatus(run.status);
         const stale=active&&!runIsFresh(run,now);
@@ -351,7 +355,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       for(const job of list(data?.automations?.items)) {
         if(pending(job.execution?.pendingInput))add(job.sessionId?'session:'+job.sessionId:'automation:'+job.id,{title:job.name||'自动任务',status:inputLabel(job.execution.pendingInput),action:job.sessionId?'打开对话':'查看任务',destination:job.sessionId?{session:job.sessionId}:job.source==='harness'?{panel:'schedules'}:null});
       }
-      for(const run of list(monitor?.items))if(['error','interrupted'].includes(run.status)&&recent(run.updated_at,now))add('run:'+String(run.id).toLowerCase(),{title:runLabel(run)+(run.status==='interrupted'?'已中断':'未完成'),status:'需要检查',action:'查看内容工作台',destination:{panel:'redflow-workbench'}});
+      for(const run of assistantOperations(monitor,dateInShanghai.format(new Date(now)),now).operation)if(run.state==='failed')add('run:'+String(run.id).toLowerCase(),{title:run.title+(run.label==='已中断'?'已中断':'未完成'),status:'需要检查',action:'查看内容工作台',destination:{panel:'redflow-workbench'}});
       for(const task of list(data?.tasks?.items)) {
         const due=task.dueDate;
         if(task.archived||task.owner==='ai'||task.status==='done'||!/^\d{4}-\d{2}-\d{2}$/.test(due||'')||!Number.isFinite(Date.parse(due))||new Date(due).toISOString().slice(0,10)!==due||due>=day)continue;
@@ -1854,6 +1858,21 @@ html[data-platform="darwin"] .pwb .pw-head {
 .pwb .pw-plan .pw-calendar-grid[data-mode=week] button[aria-pressed=true] {background:color-mix(in srgb,var(--pw-accent) 7%,transparent);box-shadow:none}
 
 
+/* Week tiles share the inner glass; date leads, progress is only a caption. */
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] {gap:4px}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period] {
+  background:var(--pw-inner-surface);border:1px solid var(--pw-inner-edge);border-radius:10px;
+  padding:8px 2px;min-height:76px;gap:2px;color:var(--pw-ink);font-weight:400;
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period]+button[data-period] {border-left:1px solid var(--pw-inner-edge)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period]:hover {background:var(--pw-inner-hover)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period][aria-pressed=true] {
+  background:var(--pw-inner-hover);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--pw-accent) 28%,transparent);
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button > .pw-calendar-number {font:600 14px/20px var(--pw-body);color:var(--pw-ink)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button > .pw-calendar-weekday {font:400 11px/16px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button > .pw-calendar-week-status {font:400 10px/14px var(--pw-body);color:var(--pw-muted);margin-top:2px}
+
 /* One size for agent identities and project icons, independent of action icons. */
 .pwb {--pw-entity-icon-size:32px}
 .pwb .pw-assistant-feed .pw-assistant-avatar,
@@ -2812,7 +2831,7 @@ html[data-platform="darwin"] .pwb .pw-head {
         const briefToday=briefArchive?.today||today;
         const shownBriefDate=briefDay||edition?.date||briefToday;
         const briefDateOptions=[...new Set([shownBriefDate,...[-2,-1,0,1].map(n=>new Date(Date.parse(briefToday)+n*86400000).toISOString().slice(0,10)),...list(briefArchive?.dates)])].sort().reverse();
-        const briefEdition=h('select',{className:'pw-brief-date','aria-label':'选择日报日期',value:shownBriefDate,onChange:event=>setBriefDay(event.target.value)},briefDateOptions.map(date=>h('option',{key:date,value:date},briefDateLabel(date,briefToday))));
+        const briefEdition=h('select',{className:'pw-brief-date','aria-label':'选择日报日期',value:briefDay,onChange:event=>setBriefDay(event.target.value)},h('option',{value:'',title:'自动跟随最新发布的日报'},'最新 · '+briefDateLabel(edition?.date||briefToday,briefToday).split(' · ').at(-1)),briefDateOptions.map(date=>h('option',{key:date,value:date},briefDateLabel(date,briefToday))));
         const leadImage=safeHTTPS(edition?.imageUrl);
 
         const assistants=assistantOverview(monitor),allProjects=customProjects,threadOptions=list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'}));
@@ -3008,7 +3027,8 @@ html[data-platform="darwin"] .pwb .pw-head {
                 const summary=counted&&record.count>0
                   ? (past||isToday?'完成 '+record.done+'/'+record.count:'已安排 '+record.count+' 项')
                   :knownEmpty?(past?'无记录':'未安排'):record?'有计划，详情待同步':'待同步';
-                const weekStatus=isToday?'今天':summary;
+                const weekStatus=counted&&record.count>0?(past||isToday?record.done+'/'+record.count+' 完成':record.count+' 项'):knownEmpty?'':summary;
+                const weekday=['周日','周一','周二','周三','周四','周五','周六'][new Date(date+'T12:00:00Z').getUTCDay()];
                 const state=isToday?'today':past?'past':'future';
                 return h('button',{
                   key:date,type:'button','aria-label':date+(isToday?'，今天':'')+(outside?'，相邻月份':'，'+summary)+(title?'，'+title:''),
@@ -3017,7 +3037,7 @@ html[data-platform="darwin"] .pwb .pw-head {
                   'data-period':state,'data-has-record':String(!outside&&Boolean(record)&&!knownEmpty),
                   title:outside?undefined:title?title+' · '+summary:summary,
                   onClick:()=>setSelectedDate(date)
-                },h('span',{className:'pw-calendar-number'},number),
+                },!monthView&&h('span',{className:'pw-calendar-weekday'},weekday),h('span',{className:'pw-calendar-number'},number),
                   monthView
                     ? !outside&&h(React.Fragment,null,title&&h('small',{className:'pw-calendar-preview','data-checked':String(record.first.checked)},title),
                       record&&!knownEmpty&&h('small',{className:'pw-calendar-marker'},counted?'共 '+record.count+' 项':'有计划'))

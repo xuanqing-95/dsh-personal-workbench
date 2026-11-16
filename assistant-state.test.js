@@ -15,3 +15,12 @@ test('database polling cannot keep an abandoned task running',()=>{
  monitor.items[0].heartbeat_at=new Date(now+3600000).toISOString();
  assert.equal(assistantOperations(monitor,'2026-11-16',now).operation[0].state,'unknown');
 });
+
+test('old failure does not remain current; today failure and stale live flags remain visible',()=>{
+ const now=Date.parse('2026-11-16T12:00:00Z'),today='2026-11-16';
+ const items=[{id:'old',status:'error',updated_at:'2026-11-11T00:00:00Z'},{id:'invalid',status:'error',updated_at:'invalid'}];
+ const monitor={availability:'connected',checkedAt:new Date(now).toISOString(),items};
+ assert.equal(assistantOperations(monitor,today,now).operation.length,0);
+ items.push({id:'new',status:'error',updated_at:new Date(now-1000).toISOString()});
+ assert.equal(assistantOperations(monitor,today,now).operation[0].state,'failed');
+});
