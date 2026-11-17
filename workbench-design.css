@@ -1,0 +1,711 @@
+/* Shared component system. Publish embeds this file into client.js.
+   Change tokens here, not in individual dialogs or cards. */
+body:has(.pwb) {
+  --pw-ui-accent:#076567;
+  --pw-ui-ink:#163031;
+  --pw-ui-muted:#637578;
+  --pw-ui-surface:linear-gradient(135deg,rgba(255,255,255,.86),rgba(255,255,255,.74));
+  --pw-ui-inner:rgba(255,255,255,.52);
+  --pw-ui-hover-white-strength:30%;
+  --pw-ui-hover-white-layer:color-mix(in srgb,white var(--pw-ui-hover-white-strength),transparent);
+  --pw-ui-nested-rest-start:rgba(255,255,255,.30);
+  --pw-ui-nested-rest-end:rgba(255,255,255,.30);
+  --pw-ui-nested-hover-start:color-mix(in srgb,white var(--pw-ui-hover-white-strength),var(--pw-ui-nested-rest-start));
+  --pw-ui-nested-hover-end:color-mix(in srgb,white var(--pw-ui-hover-white-strength),var(--pw-ui-nested-rest-end));
+  --pw-ui-card-surface:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 46%,rgba(255,255,255,.10)),rgba(255,255,255,.10);
+  --pw-ui-edge:rgba(255,255,255,.78);
+  --pw-ui-line:rgba(50,65,68,.14);
+  --pw-ui-hover:rgba(255,255,255,.80);
+  --pw-ui-down:rgba(255,255,255,.42);
+  --pw-ui-shadow:0 20px 60px rgba(20,35,40,.18),inset 0 1px 0 rgba(255,255,255,.85);
+  --pw-ui-blur:blur(24px) saturate(1.08);
+  --pw-ui-radius-dialog:24px;
+  --pw-ui-radius-card:20px;
+  --pw-ui-radius-field:14px;
+  --pw-ui-radius-button:14px;
+  --pw-ui-radius-icon:12px;
+  --pw-ui-space-dialog:24px;
+  --pw-ui-control-size:36px;
+  --pw-ui-motion:200ms cubic-bezier(.2,.7,.2,1);
+  --pw-ui-space-content:24px;
+  --pw-ui-space-field:12px;
+  --pw-ui-selected:rgba(255,255,255,.76);
+  --pw-ui-selected-edge:rgba(255,255,255,.92);
+  --pw-ui-item-hover:rgba(255,255,255,.24);
+  --pw-ui-primary-hover:color-mix(in srgb,var(--pw-ui-accent) 82%,white);
+  --pw-ui-primary-down:color-mix(in srgb,var(--pw-ui-accent) 82%,black);
+}
+.pwb {
+  --pw-accent:var(--pw-ui-accent);--pw-blue:var(--pw-ui-accent);
+  --pw-control-radius:var(--pw-ui-radius-button);
+  --pw-card-radius-inner:var(--pw-ui-radius-card);
+  --pw-control-hover:var(--pw-ui-hover);--pw-control-down:var(--pw-ui-down);
+  --pw-overlay-surface:var(--pw-ui-surface);
+}
+
+/* Outer containers are quieter than the readable inner content surfaces. */
+.pwb .pw-grid-canvas [data-grid-id]:not(.pw-pet) {background:var(--pw-ui-card-surface)}
+@media(prefers-reduced-transparency:reduce) {body:has(.pwb) {--pw-ui-card-surface:#f4f6f5}}
+@supports not (backdrop-filter:blur(1px)) {body:has(.pwb) {--pw-ui-card-surface:#f4f6f5}}
+
+/* All workbench dialogs, including the assistant's body portal. */
+.pwb .pw-project-dialog:is(.pw-project-detail,.pw-appearance-dialog,.pw-usage-dialog),
+.pwb .pw-avatar-lightbox,
+body:has(.pwb) .hbc-profile-modal.hbc-profile-simple {
+  background:var(--pw-ui-surface);color:var(--pw-ui-ink);
+  border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-dialog);
+  box-shadow:var(--pw-ui-shadow);backdrop-filter:var(--pw-ui-blur);-webkit-backdrop-filter:var(--pw-ui-blur);
+}
+.pwb .pw-project-dialog :is(input,textarea,select),
+body:has(.pwb) .hbc-profile-simple :is(input.hbc-nickname,textarea) {
+  background:var(--pw-ui-inner);color:var(--pw-ui-ink);
+  border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field);
+}
+body:has(.pwb) .hbc-modal-backdrop {background:rgba(22,43,48,.28);backdrop-filter:blur(8px)}
+body:has(.pwb) .hbc-profile-simple {position:relative;font-family:Inter,"PingFang SC",-apple-system,sans-serif}
+body:has(.pwb) .hbc-profile-simple p {color:var(--pw-ui-muted)}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-preview {position:static;background:rgba(255,255,255,.18);border-color:var(--pw-ui-line)}
+/* Shared title row and field rhythm; the name input begins at the content label, not the textarea. */
+body:has(.pwb) .hbc-profile-simple .hbc-profile-editor {padding:var(--pw-ui-space-dialog);gap:var(--pw-ui-space-field)}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-editor h2 {font-size:18px;line-height:36px;margin:0 0 calc(var(--pw-ui-space-content) - var(--pw-ui-space-field));padding-right:36px}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-editor > label {line-height:20px}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-preview {padding:calc(var(--pw-ui-space-dialog) + 36px + var(--pw-ui-space-content)) var(--pw-ui-space-dialog) var(--pw-ui-space-dialog)}
+body:has(.pwb) .hbc-profile-simple input.hbc-nickname {font:500 16px/24px Inter,"PingFang SC",sans-serif;text-align:left;padding:10px 12px}
+body:has(.pwb) .hbc-profile-simple :is(input.hbc-nickname,textarea):focus-visible {outline:2px solid var(--pw-ui-accent);outline-offset:2px}
+body:has(.pwb) .hbc-profile-simple .hbc-skin-option {background:var(--pw-ui-inner);border:1px solid transparent;border-radius:var(--pw-ui-radius-card)}
+body:has(.pwb) .hbc-profile-simple .hbc-skin-option:has(input:checked) {border-color:var(--pw-ui-accent);box-shadow:inset 0 0 0 1px var(--pw-ui-accent)}
+body:has(.pwb) .hbc-profile-simple .hbc-skin-option:hover {background:var(--pw-ui-hover)}
+
+/* Soft rectangles for actions; segmented switches retain their capsule track. */
+.pwb .pw-head .pw-head-actions :is(button,.pw-attention>summary),
+.pwb .pw-project-dialog button:not(.pw-background-card),
+.pwb .pw-date-nav button,
+.pwb .pw-usage-toolbar :is(button,select),
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button,
+body:has(.pwb) .hbc-profile-simple button {border-radius:var(--pw-ui-radius-button)}
+.pwb .pw-head .pw-head-actions .pw-account-button,
+.pwb .pw-date-nav button,
+.pwb .pw-project-dialog .pw-requirement-controls button {border-radius:var(--pw-ui-radius-icon)}
+.pwb .pw-head .pw-account-avatar {border-radius:10px}
+.pwb .pw-project-dialog button:where(:not(.pw-background-card,.pw-dialog-close)),
+body:has(.pwb) .hbc-profile-simple button:where(:not(.hbc-profile-close)) {
+  background:var(--pw-ui-inner);border:1px solid var(--pw-ui-line);color:var(--pw-ui-ink);
+  transition:background-color var(--pw-ui-motion),box-shadow var(--pw-ui-motion);
+}
+.pwb .pw-project-dialog button:where(:not(.pw-background-card,.pw-dialog-close)):hover:not(:disabled),
+body:has(.pwb) .hbc-profile-simple button:where(:not(.hbc-profile-close)):hover:not(:disabled) {background:var(--pw-ui-hover)}
+.pwb .pw-project-dialog button:where(:not(.pw-background-card,.pw-dialog-close)):active:not(:disabled),
+body:has(.pwb) .hbc-profile-simple button:where(:not(.hbc-profile-close)):active:not(:disabled) {background:var(--pw-ui-down)}
+
+/* One shared close control, including the native dialog and assistant portal. */
+.pwb [role=dialog] > header .pw-dialog-close,
+.pwb .pw-avatar-lightbox .pw-dialog-close,
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close {
+  display:grid;place-items:center;flex:none;width:var(--pw-ui-control-size);height:var(--pw-ui-control-size);
+  min-width:var(--pw-ui-control-size);min-height:var(--pw-ui-control-size);padding:0;
+  border:1px solid transparent;border-radius:var(--pw-ui-radius-icon);background:transparent;
+  color:var(--pw-ui-ink);box-shadow:none;cursor:pointer;
+  transition:background-color var(--pw-ui-motion),border-color var(--pw-ui-motion);
+}
+.pwb [role=dialog] > header .pw-dialog-close:is(:hover,:focus-visible):not(:disabled),
+.pwb .pw-avatar-lightbox .pw-dialog-close:is(:hover,:focus-visible),
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close:is(:hover,:focus-visible):not(:disabled) {
+  background:var(--pw-ui-hover);border-color:var(--pw-ui-line);
+}
+.pwb [role=dialog] > header .pw-dialog-close:active:not(:disabled),
+.pwb .pw-avatar-lightbox .pw-dialog-close:active,
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close:active:not(:disabled) {background:var(--pw-ui-down)}
+.pwb .pw-avatar-lightbox {padding:0;overflow:hidden}
+.pwb .pw-avatar-lightbox > header {display:flex;justify-content:flex-end;padding:var(--pw-ui-space-dialog) var(--pw-ui-space-dialog) 12px}
+.pwb .pw-avatar-lightbox .pw-dialog-close {position:static}
+.pwb .pw-avatar-lightbox img {width:calc(100% - 2 * var(--pw-ui-space-dialog));margin:0 var(--pw-ui-space-dialog) var(--pw-ui-space-dialog);height:min(640px,calc(100dvh - 132px))}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close {top:var(--pw-ui-space-dialog);right:var(--pw-ui-space-dialog);font-size:0}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close::before,
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close::after {content:'';position:absolute;width:14px;height:1.5px;border-radius:1px;background:currentColor;transform:rotate(45deg)}
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close::after {transform:rotate(-45deg)}
+
+/* Secondary actions share one state contract, including the pet action. */
+.pwb .pw-head .pw-head-actions :is(.pw-attention>summary,.pw-layout-button:not(.is-primary),.pw-refresh,.pw-account-button),
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:first-child:not(:last-child) {
+ background:rgba(255,255,255,.34);border-color:rgba(255,255,255,.6);
+ color:var(--pw-ui-ink);box-shadow:none;
+ transition:background-color var(--pw-ui-motion),border-color var(--pw-ui-motion),color var(--pw-ui-motion),box-shadow var(--pw-ui-motion),opacity var(--pw-ui-motion);
+}
+.pwb .pw-head .pw-head-actions :is(.pw-attention>summary,.pw-layout-button:not(.is-primary),.pw-refresh,.pw-account-button):is(:hover,:focus-visible):not(:disabled),
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:first-child:not(:last-child):is(:hover,:focus-visible):not(:disabled) {
+ background:var(--pw-ui-hover);border-color:rgba(255,255,255,.6);
+ color:var(--pw-ui-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+}
+.pwb .pw-head .pw-head-actions :is(.pw-attention>summary,.pw-layout-button:not(.is-primary),.pw-refresh,.pw-account-button):active:not(:disabled),
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:first-child:not(:last-child):active:not(:disabled) {
+ background:var(--pw-ui-down);border-color:rgba(255,255,255,.6);
+ color:var(--pw-ui-ink);box-shadow:inset 0 1px 3px rgba(30,40,44,.10);
+}
+
+/* Primary actions share the same three states. */
+.pwb .pw-head .pw-head-actions :is(.pw-layout-button.is-primary,.pw-chat-shortcut),
+.pwb .pw-project-dialog .is-primary,
+.pwb .pw-appearance-dialog .pw-appearance-save,
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:last-child,
+body:has(.pwb) .hbc-profile-simple .hbc-profile-save {
+  background:var(--pw-ui-accent);color:#fff;border-color:transparent;box-shadow:none;
+  transition:background-color var(--pw-ui-motion),box-shadow var(--pw-ui-motion);
+}
+.pwb .pw-head .pw-head-actions :is(.pw-layout-button.is-primary,.pw-chat-shortcut):hover:not(:disabled),
+.pwb .pw-project-dialog .is-primary:hover:not(:disabled),
+.pwb .pw-appearance-dialog .pw-appearance-save:hover:not(:disabled),
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:last-child:hover:not(:disabled),
+body:has(.pwb) .hbc-profile-simple .hbc-profile-save:hover:not(:disabled) {
+  background:var(--pw-ui-primary-hover);color:#fff;border-color:transparent;box-shadow:inset 0 1px 0 #ffffff38;
+}
+.pwb .pw-head .pw-head-actions :is(.pw-layout-button.is-primary,.pw-chat-shortcut):active:not(:disabled),
+.pwb .pw-project-dialog .is-primary:active:not(:disabled),
+.pwb .pw-appearance-dialog .pw-appearance-save:active:not(:disabled),
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button:last-child:active:not(:disabled),
+body:has(.pwb) .hbc-profile-simple .hbc-profile-save:active:not(:disabled) {
+  background:var(--pw-ui-primary-down);color:#fff;border-color:transparent;box-shadow:inset 0 1px 3px #00000029;
+}
+
+/* Arrow-only controls: visible feedback without a colored tile. */
+.pwb .pw-grid-canvas :is(.pw-card-link,.pw-project-enter,.pw-assistant-open,.pw-date-nav button) {transition:color var(--pw-ui-motion),opacity var(--pw-ui-motion)}
+.pwb .pw-grid-canvas :is(.pw-card-link,.pw-project-enter,.pw-assistant-open,.pw-date-nav button) svg {transition:translate var(--pw-ui-motion),opacity var(--pw-ui-motion);opacity:.65}
+.pwb .pw-grid-canvas :is(.pw-card-link,.pw-project-enter,.pw-assistant-open,.pw-date-nav button):is(:hover,:focus-visible):not(:disabled) {color:var(--pw-ui-ink);background:transparent;box-shadow:none;border-color:transparent}
+.pwb .pw-grid-canvas :is(.pw-card-link,.pw-project-enter,.pw-assistant-open,.pw-date-nav button):is(:hover,:focus-visible):not(:disabled) svg {opacity:1;translate:1px -1px}
+.pwb .pw-grid-canvas .pw-news .pw-card-head .pw-brief-toggle:is(:hover,:focus-visible) {color:var(--pw-ui-ink);background:transparent}
+.pwb .pw-grid-canvas .pw-brief-toggle:is(:hover,:focus-visible) svg {translate:0 -2px}
+.pwb .pw-grid-canvas .pw-date-nav button:is(:hover,:focus-visible):not(:disabled) svg {translate:2px 0}
+.pwb .pw-grid-canvas .pw-date-nav button:first-child:is(:hover,:focus-visible):not(:disabled) svg {translate:-2px 0}
+
+/* Week/month share one surface, header rhythm and date marker.
+   Hover identifies the clickable block; selection marks only the date itself. */
+.pwb .pw-plan :is(.pw-week-board,.pw-calendar-grid[data-mode=month]) {
+ --pw-calendar-inset:8px;--pw-calendar-text-inset:8px;
+ background:var(--pw-inner-surface);border:0;border-radius:14px;padding:6px;
+ box-shadow:none;overflow:hidden;
+}
+.pwb .pw-plan .pw-week-column-backdrops {display:grid}
+.pwb .pw-plan .pw-week-board .pw-week-column-backdrops span:is([data-selected],[data-hover]) {background:transparent;box-shadow:none;border-radius:8px}
+.pwb .pw-plan .pw-week-board .pw-week-column-backdrops span[data-hover=true] {background:var(--pw-ui-hover-white-layer)}
+.pwb .pw-plan .pw-week-day:hover {background:transparent;box-shadow:none}
+.pwb .pw-plan .pw-week-board .pw-week-column:is([data-selected],[data-hover],:focus-within),
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period],
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period][aria-pressed=true] {background:transparent;box-shadow:none;border-radius:0}
+.pwb .pw-plan .pw-week-board > .pw-week-columns:not(.pw-week-single-days) {position:relative}
+.pwb .pw-plan .pw-week-board > .pw-week-columns:not(.pw-week-single-days)::after {
+ content:'';position:absolute;left:0;right:0;top:32px;height:1px;
+ background:var(--pw-divider);pointer-events:none;
+}
+.pwb .pw-plan .pw-week-day {align-items:flex-start;text-align:left;padding:0 0 8px var(--pw-calendar-text-inset);gap:4px;border-radius:6px;transition:background-color var(--pw-ui-motion)}
+.pwb .pw-plan .pw-week-day > span {padding:6px 0 10px;border:0;text-align:left;color:var(--pw-muted);font:400 11px/16px var(--pw-body)}
+.pwb .pw-plan .pw-week-day > small {align-self:flex-start;text-align:left}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-week-label {padding:6px var(--pw-calendar-inset) 10px calc(var(--pw-calendar-inset) + var(--pw-calendar-text-inset));text-align:left;font:400 11px/16px var(--pw-body)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button[data-period] {padding-left:calc(var(--pw-calendar-inset) + var(--pw-calendar-text-inset))}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-task-list {margin-left:calc(-1 * var(--pw-calendar-text-inset))}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event {padding-left:6px}
+.pwb .pw-plan .pw-week-day > strong,
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period] > .pw-calendar-number {
+ position:relative;isolation:isolate;display:block;width:max-content;min-width:0;height:26px;min-height:26px;
+ padding:0;margin:0;text-align:left;align-self:flex-start;border-radius:0;
+ font:600 16px/26px var(--pw-body);background:transparent;color:inherit;
+ transition:color var(--pw-ui-motion);
+}
+.pwb .pw-plan .pw-week-day > strong {margin-top:3px;color:var(--pw-ui-ink)}
+.pwb .pw-plan .pw-week-day > strong::before,
+.pwb .pw-plan .pw-calendar-grid button[data-period] > .pw-calendar-number::before {
+ content:'';position:absolute;inset:0 -5px;z-index:-1;border-radius:7px;background:transparent;
+ transition:background-color var(--pw-ui-motion);pointer-events:none;
+}
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period]:hover:not([aria-pressed=true]),
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period][aria-pressed=true]:hover {background:var(--pw-ui-hover-white-layer);box-shadow:none}
+.pwb .pw-plan .pw-week-day:is(:hover,[aria-pressed=true]) > span {color:var(--pw-muted)}
+.pwb .pw-plan .pw-week-day[aria-pressed=true] > strong,
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period][aria-pressed=true] > .pw-calendar-number {color:#fff;font-weight:600}
+.pwb .pw-plan .pw-week-day[aria-pressed=true] > strong::before,
+.pwb .pw-plan .pw-calendar-grid button[data-period][aria-pressed=true] > .pw-calendar-number::before {background:var(--pw-ui-accent)}
+.pwb .pw-plan .pw-week-day[aria-current=date] > strong::after,
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period].is-today > .pw-calendar-number::after {content:'';display:block;position:absolute;width:4px;height:4px;margin:0;right:-10px;top:1px;border-radius:50%;background:var(--pw-ui-accent);opacity:.65}
+@container pw-card (max-width:620px) {.pwb .pw-plan :is(.pw-week-board,.pw-calendar-grid[data-mode=month]) {--pw-calendar-inset:6px}}
+@container pw-card (max-width:380px) {
+ .pwb .pw-plan :is(.pw-week-board,.pw-calendar-grid[data-mode=month]) {--pw-calendar-inset:3px;padding:4px}
+ .pwb .pw-plan .pw-week-day > strong,.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period] > .pw-calendar-number {font-size:14px}
+}
+/* A single sliding plate, with the exact same geometry as the hit regions.
+   The 3 px gutter includes the track border; hover never adds another outline. */
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented {
+ width:186px;height:32px;padding:3px;gap:0;border:0;border-radius:16px;
+ background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
+}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented::before {
+ left:3px;top:3px;width:calc((100% - 6px)/3);height:calc(100% - 6px);
+ border:0;border-radius:13px;background:var(--pw-ui-selected);
+ box-shadow:inset 0 0 0 1px var(--pw-ui-selected-edge),0 1px 3px rgba(30,45,46,.06);
+}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button {
+ height:26px;min-height:26px;padding:3px 10px;border:0;border-radius:13px;
+ background:transparent;box-shadow:none;color:var(--pw-ui-muted);font-weight:500;
+ transform:none;translate:none;scale:none;
+ transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion);
+}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button:is(:hover,:focus-visible):not(:disabled) {
+ background:rgba(255,255,255,.18);box-shadow:none;color:var(--pw-ui-accent);font-weight:500;
+}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button[aria-pressed=true] {background:transparent;color:var(--pw-ui-accent);font-weight:600}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button[aria-pressed=true]:hover {background:rgba(255,255,255,.12);font-weight:600}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button:active:not(:disabled) {background:rgba(255,255,255,.3)}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented button:focus-visible {outline:2px solid var(--pw-ui-ink);outline-offset:-2px}
+
+/* State badges in both entity card types share geometry, type and spacing. */
+.pwb .pw-grid-canvas :is(.pw-assistant-feed .pw-assistant-meta,.pw-project-tiles .pw-project-meta) > .pw-state {
+ display:inline-flex;align-items:center;min-height:22px;padding:2px 8px;margin:0;
+ border:1px solid rgba(255,255,255,.4);border-radius:6px;
+ font:400 11px/16px var(--pw-body);letter-spacing:0;max-width:100%;
+ white-space:normal;overflow-wrap:anywhere;box-shadow:none;
+ transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion),border-color var(--pw-ui-motion);
+}
+
+/* Task hover accents text and the existing left rule, gently brightening glass.
+   Keep geometry and the other three edges unchanged. */
+.pwb .pw-plan .pw-week-planner a.pw-week-task,
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event {
+ transition:background-color var(--pw-ui-motion),border-left-color var(--pw-ui-motion),color var(--pw-ui-motion);
+}
+.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible),
+.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span[href]:is(:hover,:focus-visible),
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:hover {
+ background:var(--pw-ui-item-hover);color:var(--pw-ui-accent);
+ border-left-color:var(--pw-ui-accent);box-shadow:none;
+}
+.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible) .pw-week-task-title {color:inherit}
+.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible) small {color:var(--pw-muted)}
+.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:active,
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:active {background:rgba(255,255,255,.38)}
+
+/* Weekly labels remain visible at rest, including the complete multi-day span.
+   Header copy and task copy share an 8 px text inset (2 px rule + 6 px padding). */
+.pwb .pw-plan .pw-week-planner {--pw-week-label:rgba(255,255,255,.56);--pw-week-label-hover:rgba(255,255,255,.74);--pw-week-text-inset:8px}
+.pwb .pw-plan .pw-week-tasks {gap:4px}
+.pwb .pw-plan .pw-week-spans {row-gap:4px;padding:0 0 4px}
+.pwb .pw-plan .pw-week-planner a.pw-week-task,
+.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span {
+ min-height:22px;padding:4px 6px;border:0;border-left:2px solid rgba(84,92,96,.22);
+ border-radius:5px;background:var(--pw-week-label);color:var(--pw-ui-ink);
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);font:400 10px/14px var(--pw-body);
+}
+.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible),
+.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span[href]:is(:hover,:focus-visible) {
+ background:var(--pw-week-label-hover);border-left-color:var(--pw-ui-accent);
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);color:var(--pw-ui-accent);
+}
+.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:active {background:rgba(255,255,255,.84)}
+
+/* The card is one action. Only hovering its ellipsis highlights that local
+   target; keyboard focus remains on the card, with its existing focus ring. */
+.pwb .pw-finance-cards .pw-spend-card .pw-usage-more {
+ display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;
+ flex:0 0 28px;border-radius:var(--pw-ui-radius-icon);border:1px solid transparent;
+ color:var(--pw-ui-muted);background:transparent;
+ transition:color var(--pw-ui-motion),background-color var(--pw-ui-motion),border-color var(--pw-ui-motion);
+}
+.pwb .pw-finance-cards .pw-spend-card .pw-usage-more:hover {
+ color:var(--pw-ui-accent);background:var(--pw-ui-hover);border-color:var(--pw-ui-edge);
+}
+.pwb .pw-finance-cards .pw-spend-card .pw-usage-more:active {background:var(--pw-ui-down);color:var(--pw-ui-accent)}
+
+/* Navigation errors are transient and never change a card's layout. */
+body:has(.pwb) .pw-navigation-notice {position:fixed;z-index:1100;top:calc(var(--dsh-frame-top-clearance,0px) + 20px);left:50%;transform:translateX(-50%);max-width:calc(100vw - 32px);padding:10px 18px;border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-button);background:var(--pw-ui-surface);color:var(--pw-ui-ink);box-shadow:var(--pw-ui-shadow);backdrop-filter:var(--pw-ui-blur);font:400 13px/20px Inter,"PingFang SC",sans-serif;pointer-events:none}
+
+/* Feedback settles gently without resizing controls or adding card bounce. */
+.pwb .pw-head .pw-head-actions :is(button,.pw-attention>summary),
+.pwb .pw-project-dialog button,
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-dock-actions button,
+body:has(.pwb) .hbc-profile-simple :is(button,input,textarea,.hbc-skin-option),
+.pwb .pw-plan .pw-week-column-backdrops span,
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period] {
+ transition:background-color var(--pw-ui-motion),border-color var(--pw-ui-motion),color var(--pw-ui-motion),box-shadow var(--pw-ui-motion),opacity var(--pw-ui-motion);
+}
+.pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented::before {transition:transform 280ms cubic-bezier(.2,.7,.2,1),background-color var(--pw-ui-motion),border-color var(--pw-ui-motion)}
+
+@media(max-width:600px) {body:has(.pwb) {--pw-ui-space-dialog:16px} body:has(.pwb) .hbc-profile-editor h2 {padding-right:40px} body:has(.pwb) .hbc-profile-simple .hbc-profile-preview {padding:var(--pw-ui-space-content) var(--pw-ui-space-dialog) var(--pw-ui-space-dialog)}}
+@media(prefers-reduced-motion:reduce) {.pwb .pw-grid-canvas :is(.pw-card-link,.pw-project-enter,.pw-assistant-open,.pw-date-nav button) svg {transition:none;translate:none!important}}
+@media(prefers-reduced-motion:reduce) {
+ body:has(.pwb) {--pw-ui-motion:0s linear}
+ .pwb .pw-grid-canvas .pw-plan .pw-card-head .pw-segmented::before {transition:none}
+}
+@media(prefers-reduced-transparency:reduce) {
+ body:has(.pwb) {--pw-ui-surface:#f4f5f5;--pw-ui-inner:#fff;--pw-ui-blur:none;--pw-ui-selected:#fff;--pw-ui-item-hover:#f6f7f7}
+}
+@supports not (backdrop-filter:blur(1px)) {body:has(.pwb) {--pw-ui-surface:#f4f5f5;--pw-ui-inner:#fff}}
+
+/* Compact date navigation: retain 28 x 30 px arrow targets, remove the extra
+   gaps around the date, and keep Today/Latest a separate trailing action. */
+.pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav {gap:0}
+.pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav > span {padding-inline:0;min-width:0;white-space:nowrap}
+.pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav .pw-today {margin-left:4px}
+
+/* Clear opal: localized cyan and lilac light over the shared glass surface.
+   Most of the card stays clear; no warm tint or overlapping full-card wash. */
+body:has(.pwb) {
+ --pw-ui-pet-surface:var(--pw-ui-card-surface);
+}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {
+ background:var(--pw-ui-pet-surface);isolation:isolate;
+ border-color:rgba(255,255,255,.72);box-shadow:inset 0 1px 1px rgba(255,255,255,.76);
+}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-opal {
+ position:absolute;inset:0;width:100%;height:100%;z-index:-1;
+ border-radius:inherit;pointer-events:none;user-select:none;
+}
+@media(prefers-reduced-transparency:reduce) {
+ body:has(.pwb) {--pw-ui-pet-surface:#f3f7f7}
+ .pwb .pw-pet-opal {display:none}
+}
+@supports not (backdrop-filter:blur(1px)) {body:has(.pwb) {--pw-ui-pet-surface:#f3f7f7}}
+
+/* The selected date already identifies today; avoid a duplicate dot. */
+.pwb .pw-plan .pw-week-day[aria-current=date][aria-pressed=true] > strong::after,
+.pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period].is-today[aria-pressed=true] > .pw-calendar-number::after {display:none}
+
+/* Interpolate glass stops instead of swapping non-interpolable gradient images. */
+@property --pw-card-blend {syntax:'<percentage>';inherits:false;initial-value:0%}
+body:has(.pwb) {--pw-ui-surface-motion:320ms cubic-bezier(.2,.7,.2,1)}
+.pwb .pw-finance-cards .pw-spend-card {
+ --pw-card-blend:0%;
+ --pw-smooth-card:linear-gradient(135deg,
+   color-mix(in srgb,rgba(255,255,255,.60) var(--pw-card-blend),rgba(255,255,255,.16)),
+   color-mix(in srgb,rgba(255,255,255,.4896) var(--pw-card-blend),rgba(255,255,255,.04)) 46%,
+   color-mix(in srgb,rgba(255,255,255,.36) var(--pw-card-blend),rgba(255,255,255,.10))),
+   color-mix(in srgb,transparent var(--pw-card-blend),rgba(255,255,255,.10));
+ background:var(--pw-smooth-card);
+ transition:--pw-card-blend var(--pw-ui-surface-motion),border-color var(--pw-ui-surface-motion),box-shadow var(--pw-ui-surface-motion);
+}
+.pwb .pw-finance-cards .pw-spend-card:is(:hover,:focus-visible) {--pw-card-blend:100%;background:var(--pw-smooth-card)}
+.pwb .pw-finance-cards .pw-spend-card:active {background:var(--pw-ui-down)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] {
+ --pw-card-blend:0%;
+ --pw-smooth-card:linear-gradient(135deg,
+   color-mix(in srgb,var(--pw-ui-nested-hover-start) var(--pw-card-blend),var(--pw-ui-nested-rest-start)),
+   color-mix(in srgb,var(--pw-ui-nested-hover-end) var(--pw-card-blend),var(--pw-ui-nested-rest-end)));
+ background:var(--pw-smooth-card);
+ transition:--pw-card-blend var(--pw-ui-surface-motion),border-color var(--pw-ui-surface-motion),box-shadow var(--pw-ui-surface-motion);
+}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) {--pw-card-blend:100%;background:var(--pw-smooth-card)}
+@keyframes pw-hint-appear {from {opacity:0} to {opacity:1}}
+.pwb .pw-usage-column-tooltip {animation:pw-hint-appear 160ms ease-out both}
+@media(prefers-reduced-motion:reduce) {
+ body:has(.pwb) {--pw-ui-surface-motion:0s linear}
+ .pwb .pw-usage-column-tooltip {animation:none}
+}
+@media(prefers-reduced-transparency:reduce) {
+ .pwb .pw-finance-cards .pw-spend-card,
+ .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] {--pw-smooth-card:#f4f6f5}
+}
+/* Date hover pairs the shared glass highlight with accent numerals. */
+.pwb .pw-plan .pw-week-board .pw-week-column[data-hover=true] .pw-week-day:not([aria-pressed=true]) > strong,
+.pwb .pw-plan .pw-week-day:is(:hover,:focus-visible):not([aria-pressed=true]) > strong,
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] button[data-period]:is(:hover,:focus-visible):not([aria-pressed=true]) > .pw-calendar-number {color:var(--pw-ui-accent)}
+
+/* Thin glass edges: a single light-dependent stroke, without stacked white inset rings. */
+body:has(.pwb) {
+ --pw-ui-card-edge:linear-gradient(145deg,rgba(255,255,255,.78) 0%,rgba(255,255,255,.36) 28%,rgba(255,255,255,.10) 58%,rgba(255,255,255,.30) 100%);
+ --pw-ui-card-shadow:0 8px 24px -12px rgba(35,56,61,.16);
+ --pw-ui-lime-background:#c9e55e;
+}
+.pwb:not([data-editing=true]) .pw-grid-canvas :is([data-grid-id]:not(.pw-pet):not(.pw-finance-module),.pw-assistant-group,.pw-project-row,.pw-spend-card),
+.pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {
+ border:1px solid transparent;box-shadow:var(--pw-ui-card-shadow);
+}
+.pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-project-row,.pw-spend-card) {position:relative}
+.pwb:not([data-editing=true]) .pw-grid-canvas :is([data-grid-id]:not(.pw-pet):not(.pw-finance-module),.pw-assistant-group,.pw-project-row,.pw-spend-card)::before,
+.pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content::before {
+ content:'';position:absolute;inset:0;z-index:1;border:0;border-radius:inherit;padding:1px;
+ background:var(--pw-ui-card-edge);pointer-events:none;
+ -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+ -webkit-mask-composite:xor;mask-composite:exclude;
+}
+.pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-project-row) {--pw-ui-card-shadow:0 2px 8px -6px rgba(35,56,61,.12)}
+@media(forced-colors:active) {
+ .pwb .pw-grid-canvas :is(.pw-card,.pw-assistant-group,.pw-project-row,.pw-spend-card,.pw-pet-content) {border:1px solid CanvasText!important}
+}
+/* Appearance choices share the same neutral glass surface; four columns on desktop. */
+.pwb .pw-project-dialog.pw-appearance-dialog {width:min(680px,100%)}
+.pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(4,minmax(0,1fr))}
+.pwb[data-lime-background],.pwb .pw-background-thumb.is-lime {background:var(--pw-ui-lime-background)}
+@container pw-root (max-width:720px) {.pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container pw-root (max-width:520px) {.pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Equal-level panels share one corner geometry; inset content uses the inner radius. */
+body:has(.pwb) {--pw-ui-radius-panel:28px}
+.pwb {--pw-glass-radius:var(--pw-ui-radius-panel)}
+.pwb .pw-grid-canvas [data-grid-id],
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card,
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {border-radius:var(--pw-ui-radius-panel)}
+.pwb .pw-grid-canvas :is(.pw-assistant-group,.pw-project-row) {border-radius:var(--pw-ui-radius-card)}
+
+/* One typography role for contextual labels, dates and secondary metadata. */
+.pwb {--pw-ui-meta-font:400 12px/18px var(--pw-body);--pw-ui-meta-color:var(--pw-ui-muted)}
+.pwb .pw-grid-canvas .pw-project-tiles :is(.pw-project-field-label,.pw-project-version),
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-group :is(.pw-assistant-label,.pw-assistant-result-time),
+.pwb .pw-grid-canvas .pw-plan :is(.pw-group-title,.pw-plan-meta,.pw-plan-time,.pw-plan-note),
+.pwb .pw-grid-canvas .pw-plan .pw-plan-annotations .pw-plan-note,
+.pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav > span {
+ font:var(--pw-ui-meta-font);color:var(--pw-ui-meta-color);letter-spacing:normal;text-transform:none;
+}
+
+/* Related label/value pairs stay close; separators get their own breathing room. */
+.pwb {--pw-ui-field-gap:4px;--pw-ui-field-separation:12px}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-field,
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-field {
+ row-gap:var(--pw-ui-field-gap);padding-block:var(--pw-ui-field-separation);align-content:start;
+}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-field:first-child,
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-field:first-child {padding-top:0}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-field:last-child,
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-field:last-child {padding-bottom:0}
+/* The whole writable to-do row is a target, with a neutral glass hover. */
+.pwb .pw-plan .pw-plan-row[data-checkable=true] {
+ cursor:pointer;border-radius:var(--pw-ui-radius-icon);background:transparent;
+ margin-inline:-8px;padding-inline:8px;
+ transition:background-color var(--pw-ui-motion),box-shadow var(--pw-ui-motion);
+}
+.pwb .pw-plan .pw-plan-row[data-checkable=true]:is(:hover,:focus-within) {background:rgba(255,255,255,.38);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+.pwb .pw-plan .pw-plan-row[data-checkable=true]:active {background:rgba(255,255,255,.52)}
+@media(prefers-reduced-motion:reduce) {.pwb .pw-plan .pw-plan-row[data-checkable=true] {transition:none}}
+
+/* One inset scale for every dashboard panel, with a smaller inset for nested cards. */
+body:has(.pwb) {--pw-ui-panel-inset-x:24px;--pw-ui-panel-inset-y:16px;--pw-ui-content-inset:16px}
+.pwb {--pw-card-padding:var(--pw-ui-panel-inset-x);--pw-card-bottom:var(--pw-ui-panel-inset-y)}
+.pwb .pw-grid-canvas .pw-card .pw-card-content > .pw-card-head {padding:var(--pw-ui-panel-inset-y) var(--pw-ui-panel-inset-x) var(--pw-card-content-gap)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content,
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {padding:var(--pw-ui-panel-inset-y) var(--pw-ui-panel-inset-x)}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {align-content:start}
+.pwb .pw-grid-canvas :is(.pw-assistant-feed .pw-assistant-group,.pw-project-tiles .pw-project-row) {padding:var(--pw-ui-content-inset)}
+@container pw-root (max-width:560px) {
+ .pwb .pw-grid-canvas {--pw-ui-panel-inset-x:16px;--pw-ui-panel-inset-y:12px;--pw-ui-content-inset:12px;--pw-card-padding:var(--pw-ui-panel-inset-x);--pw-card-bottom:var(--pw-ui-panel-inset-y)}
+}
+
+/* A task title and its annotations share one complete hover/click surface. */
+.pwb .pw-plan .pw-plan-row .pw-plan-annotations {margin:2px 0 0;padding:0}
+.pwb .pw-plan .pw-plan-row .pw-plan-annotations .pw-plan-note {margin:0}
+
+/* Four semantic badge palettes; descriptive states retain their wording. */
+body:has(.pwb) {
+ --pw-ui-status-idle:#637578;--pw-ui-status-idle-bg:rgba(99,117,120,.10);
+ --pw-ui-status-normal:#076567;--pw-ui-status-normal-bg:rgba(7,101,103,.12);
+ --pw-ui-status-success:#21664f;--pw-ui-status-success-bg:rgba(54,135,103,.12);
+ --pw-ui-status-error:#994342;--pw-ui-status-error-bg:rgba(190,76,73,.13);
+}
+.pwb :is(.pw-state,.pw-attention-tag)[data-tone] {color:var(--pw-ui-status-idle);background:var(--pw-ui-status-idle-bg)}
+.pwb :is(.pw-state,.pw-attention-tag):is([data-tone=active],[data-tone=ready],[data-tone=waiting],[data-tone=review],[data-tone=updated]) {color:var(--pw-ui-status-normal);background:var(--pw-ui-status-normal-bg)}
+.pwb :is(.pw-state,.pw-attention-tag)[data-tone=done] {color:var(--pw-ui-status-success);background:var(--pw-ui-status-success-bg)}
+.pwb :is(.pw-state,.pw-attention-tag):is([data-tone=failed],[data-tone=attention]) {color:var(--pw-ui-status-error);background:var(--pw-ui-status-error-bg)}
+/* Direct arrow hover identifies the local button inside the clickable card. */
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {
+ border-radius:var(--pw-ui-radius-icon);transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion),box-shadow var(--pw-ui-motion);
+}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):is(:hover,:focus-visible):not(:disabled) {
+ background:var(--pw-ui-hover);color:var(--pw-ui-accent);box-shadow:none;
+}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):active:not(:disabled) {background:var(--pw-ui-down)}
+@media(prefers-reduced-motion:reduce) {.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {transition:none}}
+
+/* Compact navigation targets: the icon stays centered during direct hover. */
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {
+ display:grid;place-items:center;align-self:center;justify-self:end;width:32px;height:32px;min-width:32px;min-height:32px;padding:0;margin:0;border-radius:10px;
+}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible) svg {transform:none;translate:none}
+
+/* Clear edges and full finance content at every saved height. */
+body:has(.pwb) {--pw-ui-card-edge:linear-gradient(145deg,rgba(255,255,255,.94),rgba(255,255,255,.72) 35%,rgba(255,255,255,.52) 65%,rgba(255,255,255,.72))}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-finance-module > .pw-card-content {height:100%;min-height:180px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {height:auto;min-height:180px;flex:1 0 auto;position:relative}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-heading {min-height:28px;padding-right:32px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more {position:absolute;top:12px;right:12px;margin:0}
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {align-self:start}
+.pwb[data-editing=true] .pw-grid-canvas .pw-finance-module > .pw-card-content {min-height:0;height:100%}
+
+/* One icon-only control for more, navigate and close. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more,
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open),
+.pwb .pw-project-dialog[role=dialog] .pw-dialog-close,
+.pwb .pw-avatar-lightbox .pw-dialog-close,
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close {width:32px;height:32px;min-width:32px;min-height:32px;flex:0 0 32px;padding:0;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:10px;box-shadow:none;background:transparent;color:var(--pw-ui-muted);transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion),border-color var(--pw-ui-motion)}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more:is(:hover,:focus-visible):not(:disabled),
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):is(:hover,:focus-visible):not(:disabled),
+.pwb .pw-project-dialog[role=dialog] .pw-dialog-close:is(:hover,:focus-visible):not(:disabled),
+.pwb .pw-avatar-lightbox .pw-dialog-close:is(:hover,:focus-visible):not(:disabled),
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close:is(:hover,:focus-visible):not(:disabled) {background:rgba(255,255,255,.8);border-color:transparent;box-shadow:none;color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more:active:not(:disabled),
+.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):active:not(:disabled),
+.pwb .pw-project-dialog[role=dialog] .pw-dialog-close:active:not(:disabled),
+.pwb .pw-avatar-lightbox .pw-dialog-close:active:not(:disabled),
+body:has(.pwb) .hbc-profile-simple .hbc-profile-close:active:not(:disabled) {background:var(--pw-ui-down);color:var(--pw-ui-accent)}
+@container pw-finance (max-width:160px) {
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary {flex-wrap:nowrap;gap:4px}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-quota-copy {flex-basis:auto;min-width:0;flex:1}
+}
+
+/* Stretch the visible finance surfaces, not just their invisible grid wrappers. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-finance-module {display:flex;flex-direction:column}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-finance-module > .pw-card-content {height:auto;flex:1 1 auto;align-self:stretch}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {flex:1 0 auto}
+/* Compact two-column screens flow naturally below the pet, independent of news length. */
+.pwb .pw-grid-canvas[data-fit-content=true][data-grid-profile=medium] .pw-companion-stack {height:auto;min-height:0}
+.pwb .pw-grid-canvas[data-fit-content=true][data-grid-profile=medium] .pw-companion-stack .pw-finance-cards {flex:0 0 auto}
+
+/* A long headline must not enlarge the whole overview. */
+.pwb .pw-grid-canvas .pw-brief-copy h3 {min-width:0;max-width:100%;margin:0;flex:none}
+.pwb .pw-grid-canvas .pw-brief-copy h3 .pw-news-title {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-overflow:ellipsis;max-height:2.9em}
+/* Metrics keep the shared panel inset and the established larger usage / smaller quota split. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more {top:calc(var(--pw-ui-panel-inset-y) - 4px);right:calc(var(--pw-ui-panel-inset-x) - 8px)}
+/* Text owns the card's intrinsic size; the ring occupies available space only. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary {display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:30px minmax(30px,1fr);align-content:stretch;align-items:start;gap:4px;min-height:64px;flex:1 0 auto;margin-top:4px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-copy {display:contents}
+.pwb .pw-grid-canvas .pw-finance-cards :is(.pw-daily-summary,.pw-quota-copy) .pw-spend-value {font-size:22px;line-height:30px;white-space:nowrap;overflow-wrap:normal}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-copy .pw-spend-value {grid-column:1;grid-row:1}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-reset {grid-column:1;grid-row:2;justify-self:start;width:max-content;max-width:100%}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-ring-space {position:relative;grid-column:1;grid-row:1 / span 2;align-self:stretch;min-width:0;min-height:0;pointer-events:none}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary .pw-usage-ring {position:absolute;right:0;top:50%;transform:translateY(-50%);width:var(--pw-quota-ring-size,0px);height:var(--pw-quota-ring-size,0px);margin:0}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-card {container-type:normal;min-height:160px}
+/* The reader link and quick-review list reach the shared fixed bottom inset. */
+.pwb .pw-grid-canvas .pw-news[data-folded=false] > .pw-card-content {display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+.pwb .pw-grid-canvas .pw-news[data-folded=false] .pw-card-body {display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+.pwb .pw-grid-canvas .pw-news[data-folded=false] .pw-brief-layout {flex:1 1 auto}
+.pwb .pw-grid-canvas .pw-news .pw-brief-layout .pw-news-quick {align-content:stretch;grid-auto-rows:minmax(40px,1fr);margin-block:0}
+.pwb .pw-assistant-content-link {color:inherit;text-decoration:none;transition:color var(--pw-ui-motion)}
+.pwb .pw-assistant-content-link:is(:hover,:focus-visible) {color:var(--pw-ui-accent);text-decoration:underline;text-underline-offset:3px}
+.pwb .pw-assistant-content-link svg {display:inline-block;vertical-align:baseline}
+
+/* Chart and reset details share the panel's fixed bottom inset. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-daily-card .pw-spend-trend {margin-top:auto;padding-top:5px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-reset {align-self:end}
+
+/* Once the brief stacks vertically, the companion column flows on its own. */
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack[data-compact=true] {height:auto;min-height:0}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack[data-compact=true] .pw-finance-cards {flex:0 0 auto}
+
+/* One quiet dark wash over the page wallpaper, below every card and dialog. */
+.pwb {--pw-ui-wallpaper-wash:rgba(0,0,0,.05)}
+.pwb::after {content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:var(--pw-ui-wallpaper-wash)}
+/* The edge must follow the actual border box and host corner geometry. */
+.pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content::before {inset:-1px;box-sizing:border-box;corner-shape:inherit}
+
+/* Scrolled navigation: fade material in without moving controls or changing height. */
+.pwb .pw-head {isolation:isolate}
+.pwb .pw-head::before {
+  content:'';position:absolute;inset:0 calc(-1 * var(--pw-gutter,24px));z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.48),rgba(255,255,255,.32));
+  backdrop-filter:blur(24px) saturate(1.04);-webkit-backdrop-filter:blur(24px) saturate(1.04);
+  border-bottom:1px solid rgba(255,255,255,.36);box-shadow:0 5px 16px rgba(22,48,49,.045);
+  opacity:0;transition:opacity 220ms cubic-bezier(.2,.7,.2,1);
+}
+.pwb[data-scrolled=true] .pw-head::before {opacity:1}
+@media(prefers-reduced-motion:reduce) {.pwb .pw-head::before {transition:none}}
+@media(prefers-reduced-transparency:reduce) {.pwb .pw-head::before {background:#edf4f3;backdrop-filter:none;-webkit-backdrop-filter:none}}
+
+/* Card scrolling continues into the page at either edge, including native momentum. */
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan .pw-plan-view,
+.pwb .pw-homeboard [data-grid-id],
+.pwb .pw-homeboard [data-grid-id] :is(.pw-plan-view,.pw-card-body,.pw-card-content) {overscroll-behavior-y:auto}
+
+/* One entry motion per card; moving onto its arrow never moves the glyph again. */
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open) svg {translate:none;transition:transform var(--pw-ui-motion),opacity var(--pw-ui-motion)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible) svg {transform:translate(2px,-2px);translate:none}
+.pwb .pw-grid-canvas .pw-news .pw-card-head .pw-brief-toggle {justify-content:center;padding:0;margin-right:-3px;border:1px solid transparent;border-radius:var(--pw-ui-radius-icon);background:transparent;box-shadow:none;transform:none;translate:none;transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion)}
+.pwb .pw-grid-canvas .pw-news .pw-card-head .pw-brief-toggle:is(:hover,:focus-visible) {background:var(--pw-ui-hover);color:var(--pw-ui-accent);border-color:transparent;box-shadow:none}
+.pwb .pw-grid-canvas .pw-news .pw-card-head .pw-brief-toggle:active {background:var(--pw-ui-down)}
+.pwb .pw-grid-canvas .pw-news .pw-card-head .pw-brief-toggle svg,
+.pwb .pw-grid-canvas .pw-news .pw-card-head .pw-brief-toggle:is(:hover,:focus-visible,:active) svg {transform:none;translate:none;transition:opacity var(--pw-ui-motion)}
+@media(prefers-reduced-motion:reduce) {.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible) svg {transform:none}}
+
+/* Navigation glyph and local hover surface travel together; target remains stable. */
+body:has(.pwb) {--pw-ui-link-motion:180ms cubic-bezier(.2,.7,.2,1)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open),
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible,:active):not(:disabled) {position:relative;background:transparent;box-shadow:none;isolation:isolate}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open)::after {content:'';position:absolute;inset:-1px;border-radius:inherit;background:transparent;transform:translate(0,0);pointer-events:none;z-index:-1;transition:transform var(--pw-ui-link-motion),background-color var(--pw-ui-link-motion)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open)::after {transform:translate(2px,-2px)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible):not(:disabled)::after {background:var(--pw-ui-hover)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open):active:not(:disabled)::after {background:var(--pw-ui-down)}
+.pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open) svg,
+.pwb .pw-grid-canvas :is(.pw-brief-read,.pw-assistant-content-link,.pw-assistant-receipt a) > svg {transition:transform var(--pw-ui-link-motion),opacity var(--pw-ui-link-motion);translate:none}
+.pwb .pw-grid-canvas :is(.pw-brief-read,.pw-assistant-content-link,.pw-assistant-receipt a):is(:hover,:focus-visible) > svg {transform:translate(2px,-2px)}
+@media(prefers-reduced-motion:reduce) {
+ .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open)::after,
+ .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open)::after,
+ .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open) svg,
+ .pwb .pw-grid-canvas :is(.pw-brief-read,.pw-assistant-content-link,.pw-assistant-receipt a) > svg {transition:none;transform:none!important;translate:none!important}
+}
+
+/* During scrolling, content follows the page without starting hover/reveal motion.
+   Interaction remains enabled; pointerdown restores normal feedback immediately. */
+.pwb[data-scrolling=true] .pw-grid-canvas *,
+.pwb[data-scrolling=true] .pw-grid-canvas *::before,
+.pwb[data-scrolling=true] .pw-grid-canvas *::after {transition:none!important;animation-play-state:paused!important}
+.pwb[data-scrolling=true] .pw-flow-shape {animation-play-state:paused!important}
+
+/* Public package adapters: shared material, public data and local-only onboarding. */
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-group {display:grid;grid-template-columns:32px minmax(0,1fr) 32px;grid-template-rows:auto auto 1fr;gap:6px 10px;align-items:start;min-height:220px}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-avatar {grid-column:1;grid-row:1;width:32px;height:32px}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-heading {grid-column:2;grid-row:1;min-width:0;align-self:center;padding:0;display:block}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-meta {grid-column:1 / -1;grid-row:2;display:flex;margin:0}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-copy {grid-column:1 / -1;grid-row:3;display:flex;flex-direction:column;gap:0;min-width:0;margin:12px 0 0}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-open {grid-column:3;grid-row:1;align-self:start}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-field {display:block;min-width:0;margin:0;border:0}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-field + .pw-assistant-field {margin-top:12px;border-top:1px solid var(--pw-ui-line)}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-label {display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:0 0 4px}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-result-time {text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-value {margin:0;font:400 13px/21px var(--pw-body);color:var(--pw-soft);min-width:0}
+.pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-context,.pw-assistant-receipt,.pw-assistant-receipt .pw-quiet-link) {margin:0;font:inherit;color:inherit;min-width:0}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-context {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-result-name {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pwb .pw-grid-canvas :is(.pw-assistant-heading h3,.pw-project-heading h3) {font:600 15px/22px var(--pw-body);color:var(--pw-ui-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pwb .pw-grid-canvas .pw-project-field-value {font:400 13px/21px var(--pw-body);color:var(--pw-soft)}
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-field[data-field=progress] .pw-project-field-value {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:21px;height:42px;min-height:42px;max-height:42px;overflow:hidden;text-overflow:ellipsis}
+.pwb .pw-grid-canvas .pw-project-facts {margin-top:16px;gap:0}
+.pwb .pw-grid-canvas .pw-state {font:400 11px/16px var(--pw-body);padding:2px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.4)}
+.pwb .pw-grid-canvas .pw-news-quick li + li {border-top:1px solid var(--pw-ui-line)}
+.pwb .pw-grid-canvas .pw-news-quick li > a {padding-block:8px;min-height:40px;box-shadow:none}
+.pwb .pw-grid-canvas .pw-news-quick li > a:hover {background:transparent;box-shadow:none;color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-brief-copy h3 {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.4}
+.pwb .pw-grid-canvas .pw-brief-copy .pw-news-summary {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;font:400 14px/22px var(--pw-body)}
+.pwb .pw-grid-canvas .pw-brief-copy {display:flex;flex-direction:column;min-width:0;gap:12px}
+.pwb .pw-grid-canvas .pw-brief-copy .pw-brief-read {margin-top:auto;padding-top:8px}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;background:var(--pw-inner-surface);border-radius:14px;padding:6px;overflow:hidden}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] .pw-week-label {display:none}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] > button {display:flex;flex-direction:column;gap:4px;align-items:flex-start;min-height:150px;min-width:0;padding:6px 8px 10px;border:0;border-radius:8px!important;text-align:left}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] .pw-calendar-weekday {display:block;padding:0 0 10px;width:100%;border-bottom:1px solid var(--pw-ui-line);font:400 11px/16px var(--pw-body);color:var(--pw-muted)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] .pw-calendar-number {margin-top:2px!important}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] .pw-calendar-task-list {display:flex;flex-direction:column;gap:4px;width:100%;margin-top:6px;min-width:0}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] .pw-calendar-event {display:block;min-width:0;border:1px solid rgba(255,255,255,.7);border-left:2px solid rgba(84,92,96,.22);border-radius:5px;background:rgba(255,255,255,.56);padding:3px 4px}
+.pwb .pw-plan .pw-calendar-grid .pw-calendar-event:hover {color:var(--pw-ui-accent);border-left-color:var(--pw-ui-accent);background:rgba(255,255,255,.74)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] .pw-calendar-preview {display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 10px/14px var(--pw-body);color:inherit}
+.pwb .pw-plan .pw-calendar-grid[data-mode=week] button[data-period]:is(:hover,:focus-visible):not([aria-pressed=true]) .pw-calendar-number {color:var(--pw-ui-accent)}
+.pwb .pw-plan .pw-calendar-grid button[data-period] {transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion)}
+.pwb .pw-grid-canvas .pw-task-form {display:flex;flex:none;gap:8px;padding:12px var(--pw-ui-panel-inset-x) var(--pw-ui-panel-inset-y)}
+.pwb .pw-task-form input {flex:1;min-width:0;padding:8px 10px;background:var(--pw-ui-inner);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field);font:400 13px/20px var(--pw-body)}
+.pwb .pw-task-form button {padding:8px 14px;border:0;border-radius:var(--pw-ui-radius-button);background:var(--pw-ui-accent);color:white;transition:background-color var(--pw-ui-motion)}
+.pwb .pw-task-form button:hover:not(:disabled) {background:var(--pw-ui-primary-hover)}
+.pwb .pw-task-form button:active:not(:disabled) {background:var(--pw-ui-primary-down)}
+.pwb .pw-task-form button:disabled {opacity:.45}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {background:radial-gradient(ellipse at 12% 30%,rgba(150,215,220,.20),transparent 65%),radial-gradient(ellipse at 95% 90%,rgba(182,182,218,.12),transparent 60%),rgba(255,255,255,.2)}
+.pwb .pw-welcome {display:flex;gap:16px;align-items:start;padding:16px 20px;margin-bottom:20px;border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-card);background:rgba(255,255,255,.3)}
+.pwb .pw-welcome strong {font:600 14px/22px var(--pw-body)}
+.pwb .pw-welcome p {margin:4px 0 0;font:400 12px/18px var(--pw-body);color:var(--pw-ui-muted)}
+.pwb .pw-welcome > button {flex:none;margin-left:auto;width:32px;height:32px;padding:0;display:grid;place-items:center;background:transparent;border:0;border-radius:10px;color:var(--pw-ui-muted);cursor:pointer;transition:background-color var(--pw-ui-motion)}
+.pwb .pw-welcome > button:hover {background:var(--pw-ui-hover);color:var(--pw-ui-accent)}
+.pwb .pw-credit {gap:0;flex-wrap:wrap}
+/* Assistant is bundled with this public package; it uses the same neutral controls. */
+body:has(.pwb) .pw-assistant-dock .hbc-drawer {background:var(--pw-ui-surface);color:var(--pw-ui-ink);backdrop-filter:var(--pw-ui-blur)}
+body:has(.pwb) .pw-assistant-dock .hbc-settings {background:transparent;color:var(--pw-ui-ink);border-color:var(--pw-ui-line)}
+body:has(.pwb) .pw-assistant-dock .hbc-settings p {color:var(--pw-ui-muted)}
+body:has(.pwb) .pw-assistant-dock .hbc-settings textarea {background:var(--pw-ui-inner);color:var(--pw-ui-ink);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field);font:400 13px/21px var(--pw-body)}
+body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button) {color:var(--pw-ui-ink);background:rgba(255,255,255,.34);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-button);transition:background-color var(--pw-ui-motion)}
+body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button):hover {background:var(--pw-ui-hover)}
+body:has(.pwb) .pw-assistant-dock .hbc-drawer-head button:last-child {width:32px;height:32px;padding:0;border-color:transparent;border-radius:10px}
+@container pw-root (max-width:560px) {.pwb .pw-welcome{padding:12px;margin-bottom:16px}.pwb .pw-plan .pw-calendar-grid[data-mode=week]>button{padding-inline:4px}}
+@media(prefers-reduced-motion:reduce) {.pwb *,body:has(.pwb) .pw-assistant-dock *{scroll-behavior:auto!important;transition-duration:0s!important;animation-duration:0s!important}}
+.pwb .pw-credit-help {padding:2px 6px;margin-left:10px;background:transparent;border:0;border-radius:6px;color:inherit;font:inherit;cursor:pointer;transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion)}
+.pwb .pw-credit-help:is(:hover,:focus-visible) {background:var(--pw-ui-hover);color:var(--pw-ui-accent)}
+/* Week dates share one calendar board. Only the hovered column receives a wash. */
+.pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period] {background:transparent;border:0;box-shadow:none;transform:none}
+.pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period]:is(:hover,:focus-visible) {background:var(--pw-ui-hover-white-layer);border:0;box-shadow:none;transform:none}
+.pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period]:active {background:rgba(255,255,255,.42)}

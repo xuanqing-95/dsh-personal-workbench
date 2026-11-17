@@ -1,12 +1,15 @@
 # 个人主控台 · Personal Workbench
 
-把今天的安排、AI 的进度、每日资讯和开发项目放在一个页面。由玄清设计，运行于 DeepSeek Harness。
+把今天的安排、AI 的进度、每日资讯和开发项目放在一个页面。由 XUANQING（玄清）设计，运行于 DeepSeek Harness。
 
 [安装与使用](https://xuanqing-95.github.io/dsh-personal-workbench/) · [下载版本](https://github.com/xuanqing-95/dsh-personal-workbench/releases) · [问题反馈](https://github.com/xuanqing-95/dsh-personal-workbench/issues)
 
-当前为 **0.8.0-beta.6 公开测试版**。适配 DeepSeek Harness **0.2.2 发行线（rc.1 起）**；宿主仍处于预览阶段。本次在 macOS 独立配置验证，Windows / Linux 尚未实测。界面目前以中文为主。
+当前为 **0.8.0-beta.7 预览版**。适配 DeepSeek Harness **0.2.2 发行线（rc.1 起）**；宿主仍处于预览阶段。本次在 macOS 独立配置验证，Windows / Linux 尚未实测。界面目前以中文为主。
 
 ## 安装
+
+已经装好 DeepSeek Harness？请先看 [新手上手说明](./START-HERE.md)：无需改代码，先添加一条待办，再按需使用 AI。
+
 
 在 Harness「插件」中启用实验性的「自定义插件索引」，打开「发现 → 添加索引源」，填入：
 
@@ -16,7 +19,7 @@ https://xuanqing-95.github.io/dsh-personal-workbench/index.json
 
 搜索 **个人主控台**、**玄清** 或 **dsh-personal-workbench**，核对作者和仓库后安装，再点击侧栏「个人主控台」。**Harness 不内置索引源，需先添加上述地址才能在“发现”中搜索。**
 
-如果没有“发现”，从 [Releases](https://github.com/xuanqing-95/dsh-personal-workbench/releases) 下载 `.tgz`，在「插件 → 添加插件」选择文件，或输入其完整本地路径。不要用 GitHub 自动生成的 Source code 压缩包代替安装包。
+如果没有“发现”，从 [Releases](https://github.com/xuanqing-95/dsh-personal-workbench/releases) 下载 `.tgz`，在「插件 → 添加插件」输入其完整本地路径。不要用 GitHub 自动生成的 Source code 压缩包代替安装包。
 
 免费安装、使用和原样分享；请保留作者署名。源代码公开展示，本版不采用开源许可，修改后再发布等权限需另行联系作者。
 
@@ -37,7 +40,7 @@ AI 会使用插件工具读取和记录信息。若未出现，先在原聊天�
 
 | 区域 | 行为 |
 | --- | --- |
-| 每日 AI 日报 | 自己的头条、摘要、HTTPS 配图和最多五条简讯；按日期阅读。默认显示最近已发布的一期，选择今天时会如实显示尚未发布。配图保持比例，加载失败保留文字。 |
+| AI 产品日报 | 自己的头条、摘要、HTTPS 配图和最多五条简讯；按日期阅读。默认显示最近已发布的一期，选择今天时会如实显示尚未发布。配图保持比例，加载失败保留文字。 |
 | Data 助手 | 独立的 Harness 聊天，沿用自己的模型与权限；可设置角色提示词。 |
 | AI Agents | 当前 Harness 配置内可读的会话、自动化状态与排期，有结果时提供对应对话入口。未连接的运营插件不虚构任务。 |
 | 今日计划 | 内置个人待办，日、周、月切换；先响应勾选再保存，失败时恢复并提示。 |
@@ -61,3 +64,9 @@ AI 会使用插件工具读取和记录信息。若未出现，先在原聊天�
 任务、项目、记录和日报存在当前 Harness profile；布局、收起状态、阅读链接和助手入口在当前浏览器 / 桌面的本地存储。卸载不会主动清空记录；清理 profile 或浏览器数据会丢失对应内容。升级前可备份自己的 profile。限额：500 条待办（含归档）、366 期日报、每项目 100 条记录；超限拒绝写入，不自动删旧数据。
 
 [隐私](./PRIVACY.md) · [许可](./LICENSE) · [更新记录](./CHANGELOG.md) · [维护与发布](./RELEASING.md) · [设计规范](./DESIGN.md)
+
+### 三种内置背景
+
+本版内置 **柔和流动玻璃**、**静态浅青** 与 **晨光绢雾**。点击右上角头像 → 工作台设置 → 背景，选择后点击「保存」。默认使用柔和流动玻璃，选择保存在当前设备，也可上传自己的图片。三种内置背景随插件打包，无需额外下载；系统开启减少动态效果时动画自动停止。
+
+- **晨光绢雾**：浅蓝绢面与暖黄晨光的静态背景；使用完整原图，随插件内置，不依赖个人上传记录或网络。选择后点击「保存」记住当前设备的偏好。

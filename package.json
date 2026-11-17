@@ -37,7 +37,10 @@
     "plan-tools.js",
     "LICENSE",
     "PRIVACY.md",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "workbench-design.css",
+    "sync-design.mjs",
+    "START-HERE.md"
   ],
   "dependencies": {
     "zod": "4.6.7"
@@ -78,9 +81,11 @@
     "test": "node --test *.test.js",
     "publish:ui": "node publish-ui.mjs",
     "release:seal": "node scripts/release.mjs seal",
-    "release:verify": "node scripts/release.mjs verify"
+    "release:verify": "node scripts/release.mjs verify",
+    "sync:design": "node sync-design.mjs",
+    "check:design": "node sync-design.mjs --check"
   },
-  "author": "玄清",
+  "author": "XUANQING（玄清）",
   "homepage": "https://xuanqing-95.github.io/dsh-personal-workbench/",
   "repository": {
     "type": "git",

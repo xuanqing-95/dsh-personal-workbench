@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="由玄清设计的个人主控台。将今日计划、AI 日报、助手动态和项目放在一处，适用于 DeepSeek Harness。免费安装与原样分享。保留自定义布局与卡片位置。">
+<meta name="description" content="由 XUANQING（玄清）设计的个人主控台。将今日计划、AI 日报、助手动态和项目放在一处，适用于 DeepSeek Harness。免费安装与原样分享。保留自定义布局与卡片位置。">
 <meta name="theme-color" content="#e8f2ef">
 <title>个人主控台 · 玄清</title>
 <style>
@@ -14,10 +14,10 @@
     <p class="eyebrow">DSH-PERSONAL-WORKBENCH</p>
     <h1>个人主控台</h1>
     <p class="lead">今天的安排，AI 的进度，项目的下一步。<br>打开一页，就在手边。</p>
-    <p class="muted">由玄清设计 · DeepSeek Harness 插件 · 公开测试版</p>
+    <p class="muted">由 XUANQING（玄清）设计 · DeepSeek Harness 插件 · 公开测试版</p>
     <div class="actions"><a class="button primary" href="#install">安装到 Harness</a><a class="button" href="https://github.com/xuanqing-95/dsh-personal-workbench/releases">查看版本 ↗</a></div>
   </section>
-  <figure class="preview"><img src="preview.png" width="1660" height="1000" alt="个人主控台示例：AI 日报、Data 助手、今日计划、AI Agents 和项目卡片" loading="eager"><figcaption>实际界面 · 图中为演示数据，首次安装从空白开始。</figcaption></figure>
+  <figure class="preview"><img src="preview.png" width="1512" height="1000" alt="个人主控台示例：AI 日报、Data 助手、今日计划、AI Agents 和项目卡片" loading="eager"><figcaption>实际界面 · 图中为演示数据，首次安装从空白开始。</figcaption></figure>
   <section class="features" aria-label="主要功能">
     <div class="glass"><h3>用聊天管理事务</h3><p>让 Data 记录计划、项目和想法。待办可直接勾选，项目可回到对应对话。</p></div>
     <div class="glass"><h3>一眼看到进展</h3><p>阅读自己的日报，查看 Harness 自动化排期和结果，追踪关联仓库的更新。</p></div>
@@ -25,7 +25,7 @@
   </section>
   <section class="glass install" id="install">
     <h2>安装只需一个索引地址</h2>
-    <p class="muted">需先安装 DeepSeek Harness 0.2.2（rc.1 起）。插件免费使用，AI 聊天使用你自己配置的模型。</p>
+    <p class="muted">适用于已安装 DeepSeek Harness 0.2.2（rc.1 起）的用户。插件免费使用，AI 聊天使用你自己配置的模型。</p>
     <ol>
       <li>打开 Harness「插件」，启用实验性的「自定义插件索引」。</li>
       <li>在「发现 → 添加索引源」粘贴下面的地址。</li>
@@ -33,13 +33,13 @@
     </ol>
     <div class="address"><code id="index-url">https://xuanqing-95.github.io/dsh-personal-workbench/index.json</code><button type="button" id="copy">复制地址</button></div>
     <p id="copy-status" role="status" aria-live="polite"></p>
-    <p class="muted">没有“发现”？从 <a href="https://github.com/xuanqing-95/dsh-personal-workbench/releases">版本页面</a> 下载 <code>.tgz</code> 安装包，在「添加插件」选择该文件。Harness 没有默认索引源，添加上方地址后才能搜索到此插件。</p>
+    <p class="muted">没有“发现”？从 <a href="https://github.com/xuanqing-95/dsh-personal-workbench/releases">版本页面</a> 下载 <code>.tgz</code> 安装包，在「添加插件」输入该文件的完整路径。Harness 没有默认索引源，添加上方地址后才能搜索到此插件。</p>
   </section>
   <section class="notes">
-    <div><h3>开始使用</h3><p>配置好模型后点「聊聊」，说“把明天下午准备演示加入计划”，或“把这个项目加入主控台”。日报由你自己的助手制作并保存，不附带作者的私人订阅。</p><a href="https://github.com/xuanqing-95/dsh-personal-workbench#第一次使用">查看使用说明 ↗</a></div>
+    <div><h3>开始使用</h3><p>先在「今日计划」添加一条待办，无需模型配置。想用 AI 时，配置好模型后点「聊聊」，说“把明天下午准备演示加入计划”，或“把这个项目加入主控台”。日报由你自己的助手制作并保存，不附带作者的私人订阅。</p><a href="https://github.com/xuanqing-95/dsh-personal-workbench#第一次使用">查看使用说明 ↗</a></div>
     <div><h3>公开测试，逐步完善</h3><p>已在 macOS 独立配置测试。Windows / Linux 尚未实测；Notion 双向同步和作者的本机连接不在本公开包中。更新前先完成正在进行的聊天。</p><a href="https://github.com/xuanqing-95/dsh-personal-workbench/issues">反馈问题 ↗</a></div>
   </section>
 </main>
-<footer><div class="footer"><span>Designed by 玄清 · © 2026</span><span><a href="https://github.com/xuanqing-95/dsh-personal-workbench/blob/main/PRIVACY.md">隐私</a> · <a href="https://github.com/xuanqing-95/dsh-personal-workbench/blob/main/LICENSE">使用许可</a> · 非 DeepSeek 官方产品</span></div></footer>
+<footer><div class="footer"><span>DSH · Designed by XUANQING · © 2026</span><span><a href="https://github.com/xuanqing-95/dsh-personal-workbench/blob/main/PRIVACY.md">隐私</a> · <a href="https://github.com/xuanqing-95/dsh-personal-workbench/blob/main/LICENSE">使用许可</a> · 非 DeepSeek 官方产品</span></div></footer>
 <script>document.querySelector('#copy').addEventListener('click',async()=>{const status=document.querySelector('#copy-status');try{await navigator.clipboard.writeText(document.querySelector('#index-url').textContent);status.textContent='已复制，回到 Harness 添加索引源即可。'}catch{status.textContent='请选中上面的地址并复制。'}});</script>
 </html>

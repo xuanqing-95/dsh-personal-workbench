@@ -5,6 +5,7 @@ const pkg=JSON.parse(await readFile('package.json','utf8'));
 const sha=value=>createHash('sha256').update(value).digest('hex');
 const action=process.argv[2]||'verify';
 if(action==='seal'){
+  execFileSync(process.execPath,['sync-design.mjs'],{stdio:'inherit'});
   let code=await readFile('client.js','utf8');
   const helper=(await readFile('ui-update-client.js','utf8')).replaceAll('export function ','function ');
   code=code.replace(/\/\/ BEGIN SAFE UI UPDATER[\s\S]*?\/\/ END SAFE UI UPDATER/,()=> '// BEGIN SAFE UI UPDATER\n'+helper+'// END SAFE UI UPDATER');
@@ -13,6 +14,8 @@ if(action==='seal'){
   await writeFile('client.js',code);
   await writeFile('ui-release.json',JSON.stringify({protocol:1,moduleId:pkg.name,build,sha256:sha(code),publishedAt:new Date().toISOString()})+'\n');
 }else if(action==='verify'){
+  execFileSync(process.execPath,['sync-design.mjs','--check'],{stdio:'inherit'});
+  if((await readFile('icon.svg')).byteLength>256*1024)throw Error('Plugin icon exceeds host limit of 256 KiB');
   const code=await readFile('client.js','utf8'),release=JSON.parse(await readFile('ui-release.json','utf8'));
   if(release.sha256!==sha(code)||release.build!=='release-'+pkg.version)throw Error('Unsealed client: run npm run release:seal before tagging');
   const files=JSON.parse(execFileSync('npm',['pack','--dry-run','--json','--ignore-scripts'],{encoding:'utf8'}))[0].files;
