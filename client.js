@@ -7160,7 +7160,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             h('button',{type:'button',className:'pw-spend-card pw-quota-card'+(multi?' has-sources':''),'aria-label':'剩余额度，'+(primary?primary.label+' '+primary.value+'，查看或连接更多额度':'连接额度来源'),'aria-haspopup':'dialog',onClick:e=>{setQuotaForm(null);openUsageAt(e,'quota');}},
               h('span',{className:'pw-spend-heading'},'剩余额度',h('span',{className:'pw-quota-connect'},accounts.length?'管理来源':'连接额度')),
               h('span',{className:'pw-quota-summary'},h('span',{className:'pw-quota-copy'},h('strong',{className:'pw-spend-value'},primary?.value||'—'),
-              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,w?'Codex · 重置时间':primary?.label||accounts[0]?.detail||'选择你的额度来源'),h('span',null,w?reset:multi?summaries.length+' 个来源':''))),w&&h('span',{className:'pw-quota-ring-space'},usageRing(w.remaining,true,'Codex'))),
+              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,w?'Codex · 重置时间':primary?.label||accounts[0]?.detail||'选择你的额度来源'),h('span',null,w?reset:''))),w&&h('span',{className:'pw-quota-ring-space'},usageRing(w.remaining,true,'Codex'))),
               multi&&h('span',{className:'pw-quota-other-count'},'共 '+summaries.length+' 个来源'),
               multi&&h('span',{className:'pw-quota-other-list'},...summaries.slice(1,4).map((a,i)=>h('span',{key:i},a.label+' · '+a.value)),summaries.length>4&&h('span',null,'另有 '+(summaries.length-4)+' 个来源'))))));
         }
