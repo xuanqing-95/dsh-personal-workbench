@@ -1,63 +1,161 @@
 <!doctype html>
 <html lang="zh-CN">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="{{descriptionZh}}">
-<meta name="theme-color" content="#e8f2ef">
-<title>{{titleZh}} · XUANQING</title>
-<style>
-:root{color-scheme:light;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;color:#183d38;background:#edf4f1;font-size:16px;line-height:1.65}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 8% 8%,#bedfd5,transparent 50%),radial-gradient(ellipse at 100% 70%,#d1e1d8,transparent 50%)}main,footer{max-width:1120px;margin:auto;padding:40px 32px}nav{display:flex;align-items:center;justify-content:space-between;gap:24px}nav a{color:inherit;font-size:14px}a{color:#18665a;text-underline-offset:4px}a:focus-visible,button:focus-visible{outline:3px solid #18665a;outline-offset:4px}h1{font-size:clamp(36px,7vw,68px);line-height:1.15;letter-spacing:-2px;margin:16px 0 24px;font-weight:650}h2{font-size:24px;line-height:1.4;margin:0 0 16px;font-weight:600}h3{font-size:17px;margin:0 0 8px}p{margin:0 0 16px}.hero{padding:72px 0 40px;max-width:800px}.eyebrow{font-size:12px;letter-spacing:2px;color:#526f68}.lead{font-size:20px;max-width:620px;color:#45645d}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.button,button{font:inherit;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;border:1px solid #9ebfb5;border-radius:12px;color:#234c43;background:#ffffff80;text-decoration:none;cursor:pointer}.primary{color:white;background:#256e5c;border-color:#256e5c}.preview{margin:12px 0 56px;padding:12px;border:1px solid #ffffffc0;background:#ffffff50;border-radius:24px;box-shadow:0 20px 60px #264c4012}.preview img{display:block;width:100%;height:auto;border-radius:14px}.preview figcaption{font-size:12px;color:#546b64;margin:10px 8px 0}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:0 0 56px}.glass{padding:28px;background:#ffffff69;border:1px solid #ffffffc7;border-radius:20px}.features p{font-size:14px;color:#48675e;margin:0}.install{scroll-margin-top:24px}ol{padding-left:24px;margin-bottom:0}li{margin:14px 0}code{font-size:13px;overflow-wrap:anywhere}.address{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0;padding:16px;background:#ffffff80;border-radius:12px}.address code{flex:1;min-width:min(200px,100%);overflow-wrap:anywhere}.address button{font-size:14px;min-width:96px;padding:8px 16px}.muted{color:#536e65;font-size:14px}.notes{padding:36px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:32px}.notes p{font-size:14px;color:#48675e}.footer{border-top:1px solid #809d9226;color:#627a71;font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.footer a{color:inherit}#copy-status{font-size:13px;min-height:22px;margin:0;color:#296658}@media(max-width:700px){main,footer{padding:24px 20px}.hero{padding-top:48px}.features,.notes{grid-template-columns:1fr}.features{gap:12px}.glass{padding:24px}.preview{margin-bottom:32px}.lead{font-size:18px}.features{margin-bottom:32px}}
-.button:hover,button:hover{background:#fff}.primary:hover{background:#20564c;color:white}details{margin-top:24px}summary{cursor:pointer}details p{margin:8px 0 0}
-</style>
-<main>
-  <nav><span class="eyebrow">XUANQING</span><a href="{{repository}}">GitHub ↗</a></nav>
-  <section class="hero">
-    <p class="eyebrow" lang="en">{{titleEn}}</p>
-    <h1>{{titleZh}}</h1>
-    <p class="lead">{{descriptionZh}}</p>
-    <p class="muted">DeepSeek Harness 插件 · {{version}} · {{author}}</p>
-    <div class="actions"><a class="button primary" href="#install">安装到 DeepSeek Harness</a><a class="button" href="{{releaseUrl}}">查看本版更新 ↗</a></div>
-  </section>
-  <figure class="preview"><img src="preview.png" width="1512" height="1000" alt="个人 AI 工作台预览，包含 AI 每日精选、桌面助手、今日用量、剩余额度、AI 助手任务进展和项目进展" loading="eager"><figcaption>工作台实际界面，使用示例数据。安装后展示你自己的内容。</figcaption></figure>
-  <section class="features" aria-label="主要功能">
-    <div class="glass"><h3>今日计划</h3><p>按日、周或月查看安排，点击待办勾选完成。也可以和 Data 聊天，把新任务放进计划。</p></div>
-    <div class="glass"><h3>AI 每日精选与项目进展</h3><p>读自己的日报，从助手卡片打开已生成的内容，或从项目卡回到原来的开发对话。</p></div>
-    <div class="glass"><h3>今日用量与剩余额度</h3><p>接入支持的数据源后，查看模型用量和额度。两个指标卡都能在「编辑布局」里单独移动或调整大小。</p></div>
-  </section>
-  <section class="glass install" id="install">
-    <h2>把工作台添加到 Harness</h2>
-    <p class="muted">适用于已安装 DeepSeek Harness 的用户。此版本兼容的宿主版本范围为 <code>{{engines}}</code>。</p>
-    <ol>
-      <li>点击「复制安装包地址」。</li>
-      <li>打开 DeepSeek Harness，进入「插件」，点击「添加插件」。</li>
-      <li>粘贴地址，点击「安装」。完成后从侧栏打开「<strong>{{titleZh}}</strong>」。</li>
-    </ol>
-    <div class="address"><code id="package-url">{{packageUrl}}</code><button class="primary" type="button" id="copy">复制安装包地址</button></div>
-    <p id="copy-status" role="status" aria-live="polite"></p>
-    <p class="muted">也可以<a href="{{packageUrl}}">下载同一份安装包</a>，再将 <code>.tgz</code> 文件的完整路径粘贴到「添加插件」。</p>
-    <details><summary>通过插件索引安装</summary><p>启用「自定义插件索引」，在「发现 → 添加索引源」粘贴 <a href="{{indexUrl}}">{{indexUrl}}</a>，然后搜索「{{titleZh}}」。</p></details>
-  </section>
-  <section class="notes">
-    <div><h3>从一条待办开始</h3><p>在「今日计划」添加第一条任务。已在 Harness 配好模型时，也可以点击「聊聊」，输入“把明天下午准备演示加入计划”。</p><a href="{{repository}}#第一次使用">查看使用说明 ↗</a></div>
-    <div><h3>接入自己的数据</h3><p>项目、日报和外部服务随个人配置显示。已有关联项目时，可以从「项目进展」打开对应记录。</p><a href="{{repository}}/issues">反馈问题 ↗</a></div>
-  </section>
-</main>
-<footer><div class="footer"><span>DSH · XUANQING</span><span><a href="{{repository}}/blob/main/PRIVACY.md">隐私</a> · <a href="{{repository}}/blob/main/LICENSE">使用许可</a> · 非 DeepSeek 官方产品</span></div></footer>
-<script>
-document.getElementById('copy').addEventListener('click', async () => {
-  const message = document.getElementById('copy-status');
-  const address = document.getElementById('package-url');
-  try {
-    await navigator.clipboard.writeText(address.textContent);
-    message.textContent = '地址已复制，请粘贴到 Harness 的「添加插件」。';
-  } catch {
-    const range = document.createRange();
-    range.selectNodeContents(address);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-    message.textContent = '已选中安装包地址，请使用系统的复制功能。';
-  }
-});
-</script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在 DeepSeek Harness 中查看需要你处理的 AI 任务、助手交付的成果和项目下一步，并把要跟进的事排进今天。">
+  <meta name="theme-color" content="#f1f5ef">
+  <title>{{titleZh}} · DeepSeek Harness 插件</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #173831;
+      background: #f5f6f0;
+      --ink: #173831;
+      --muted: #47635b;
+      --brand: #076360;
+      --line: #c5d1c8;
+    }
+    * { box-sizing: border-box }
+    body { margin: 0; line-height: 1.65 }
+    h1, h2, h3, p, figure, ol { margin: 0 }
+    .wrap { width: min(1280px, 100%); padding-inline: clamp(20px, 5vw, 72px); margin-inline: auto }
+    a { color: var(--brand); text-underline-offset: .22em }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px }
+    .mast { background: radial-gradient(ellipse at 85% 10%, #d4e8e6 0, transparent 57%), radial-gradient(ellipse at 11% 92%, #f4ebd3 0, transparent 50%), #f0f4ed; border-bottom: 1px solid var(--line) }
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 0; border-bottom: 1px solid var(--line) }
+    .brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 650; font-size: 17px; color: var(--ink); text-decoration: none }
+    .brand img { width: 30px; height: 30px }
+    .nav-links { display: flex; gap: 24px; align-items: center; font-size: 14px }
+    .nav-links a { color: var(--muted); text-decoration: none }
+    .nav-links a:hover, footer a:hover { color: var(--brand); text-decoration: underline }
+    .hero { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); align-items: center; gap: clamp(24px, 4vw, 64px); padding: clamp(56px, 7vw, 104px) 0 }
+    .platform { font-size: 13px; color: var(--brand); font-weight: 600; margin-bottom: 15px }
+    h1 { font-size: clamp(34px, 3.7vw, 49px); font-weight: 650; line-height: 1.22; letter-spacing: -.045em }
+    h1 span { display: block }
+    .lead { max-width: 34em; margin-top: 19px; font-size: clamp(16px, 1.3vw, 19px); color: var(--muted); line-height: 1.85 }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 26px }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 10px 20px; border: 1px solid var(--brand); border-radius: 10px; color: #fff; background: var(--brand); font: inherit; font-weight: 600; text-decoration: none; cursor: pointer; transition: background-color .2s ease }
+    .button:hover { background: #074e4c }
+    .quiet { font-size: 14px; color: var(--muted) }
+    figcaption { margin-top: 10px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px }
+    .preview-link { display: block; border: 1px solid #fff; border-radius: 14px; overflow: hidden; background: #f4f7f2; box-shadow: 0 16px 38px #284a3a20; cursor: zoom-in }
+    .preview-link img { width: 100%; height: auto; display: block }
+    .section { padding-block: clamp(48px, 6vw, 84px) }
+    h2 { font-size: clamp(25px, 3vw, 37px); font-weight: 630; line-height: 1.35; letter-spacing: -.035em }
+    .use-cases { margin-top: 30px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px) }
+    .use-cases article { border-top: 2px solid #9ebdb2; padding-top: 17px }
+    h3 { font-size: 19px; font-weight: 630; line-height: 1.5 }
+    article p, .install-intro p { color: var(--muted); margin-top: 10px }
+    #install { scroll-margin-top: 16px; margin-bottom: clamp(50px, 7vw, 96px) }
+    .install-box { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: start; border: 1px solid #c4d7cb; border-radius: 20px; padding: clamp(22px, 4vw, 52px); background: #e7f0e6 }
+    ol { padding-left: 1.5em }
+    li { padding-left: .2em; margin-bottom: 6px }
+    li::marker { font-weight: 650; color: var(--brand) }
+    code { font-family: ui-monospace, monospace; font-size: 13px; overflow-wrap: anywhere }
+    .address { margin-top: 16px; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: #f9fbf6 }
+    .address code { flex: 1; min-width: 0; line-height: 1.5; color: #38534a }
+    .address button { flex: none; font-size: 14px }
+    .status { font-size: 14px; color: var(--brand); margin-top: 8px }
+    .status:empty { margin: 0 }
+    .help { margin-top: 12px; font-size: 14px; color: var(--muted) }
+    details { margin-top: 15px; font-size: 14px; color: var(--muted) }
+    summary { width: fit-content; color: var(--brand); cursor: pointer }
+    details p { margin-top: 8px; overflow-wrap: anywhere }
+    footer { padding: 21px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px }
+    .footer-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px 18px; flex-wrap: wrap }
+    footer a { color: inherit }
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; padding: 44px 0; gap: 32px }
+      h1 span { display: inline }
+      h1 { max-width: 15em }
+      .use-cases { gap: 20px }
+      .install-box { grid-template-columns: 1fr; gap: 22px }
+    }
+    @media (max-width: 600px) {
+      .brand { font-size: 15px }
+      .nav-links { gap: 12px }
+      nav { padding-block: 16px }
+      .use-cases { grid-template-columns: 1fr; margin-top: 22px; gap: 22px }
+      .use-cases article { border-top-width: 1px; padding-top: 15px }
+      .address { flex-wrap: wrap; padding: 12px }
+      .address code { flex-basis: 100% }
+      .address button { width: 100% }
+    }
+    @media (prefers-reduced-motion: reduce) { .button { transition: none } }
+  </style>
+</head>
+<body>
+  <header class="mast">
+    <div class="wrap">
+      <nav aria-label="主导航">
+        <a class="brand" href="./"><img src="icons/workbench.svg" alt="">{{titleZh}}</a>
+        <div class="nav-links"><a href="#install">安装</a><a href="{{repository}}">GitHub ↗</a></div>
+      </nav>
+      <div class="hero">
+        <div>
+          <p class="platform">DeepSeek Harness 插件</p>
+          <h1><span>AI 做到哪一步，</span><span>接下来该你做什么？</span></h1>
+          <p class="lead">如果你同时盯着几个项目，可以在一页里看清哪些事等你确认、助手刚交付了什么，再把要跟进的事排到今天。</p>
+          <div class="actions"><a class="button" href="#install">免费安装到 Harness</a><a class="quiet" href="{{releaseUrl}}">查看本版更新 ↗</a></div>
+        </div>
+        <figure>
+          <a class="preview-link" href="preview.png" aria-label="放大工作台界面"><img src="preview.png" width="1512" height="1000" alt="实际工作台界面：左侧为每日精选、助手任务和项目进展，右侧为 Data、用量与今日计划。"></a>
+          <figcaption><span>实际界面 · 示例数据</span><a href="preview.png">查看大图 ↗</a></figcaption>
+        </figure>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="section" aria-labelledby="use-title">
+      <h2 id="use-title">从需要你处理的事开始</h2>
+      <div class="use-cases">
+        <article><h3>找到卡住的任务</h3><p>打开「需要你处理」，查看等你回复的会话或执行异常。点进对应事项，回到原对话或日报里处理。</p></article>
+        <article><h3>打开助手交付的原稿</h3><p>接入内容工作台后，「AI 助手任务进展」会区分文案已生成和配图未完成。点击成果就能回到对应稿件。</p></article>
+        <article><h3>把项目的下一步排进今天</h3><p>在「项目进展」看上次推进到哪里，从卡片回到关联对话。要继续跟进的事，可以加进「今日计划」。</p></article>
+      </div>
+    </section>
+    <section id="install" class="install-box" aria-labelledby="install-title">
+      <div class="install-intro">
+        <h2 id="install-title">装好后，先加一条待办</h2>
+        <p>你需要先安装 DeepSeek Harness 0.2.2（从 rc.1 起）。日常待办可以直接使用，模型、日报和用量沿用你自己的账号与记录。</p>
+        <p class="quiet">插件版本 {{version}} · <a href="{{repository}}/blob/main/START-HERE.md">首次使用指南</a></p>
+      </div>
+      <div>
+        <ol>
+          <li>复制下面的安装包地址。</li>
+          <li>打开 Harness 的「插件 → 添加插件」，粘贴地址，点击「安装」并启用。</li>
+          <li>从侧栏进入「{{titleZh}}」，在「今日计划」选日期、写待办，点击「添加」。</li>
+        </ol>
+        <div class="address"><code id="package-url">{{packageUrl}}</code><button class="button" type="button" id="copy">复制安装包地址</button></div>
+        <p id="copy-status" class="status" role="status" aria-live="polite"></p>
+        <details>
+          <summary>其他安装方式与兼容版本</summary>
+          <p>也可以<a href="{{packageUrl}}">下载同一份安装包</a>，将 .tgz 文件的完整路径粘贴到「添加插件」。使用自定义索引时，在「发现 → 添加索引源」粘贴<a href="{{indexUrl}}">插件索引地址</a>，搜索「{{titleZh}}」。</p>
+          <p>本版支持的 Harness 版本范围为 <code>{{engines}}</code>。</p>
+        </details>
+        <p class="help"><a href="{{repository}}/blob/main/START-HERE.md#按需连接自己的工具">连接自己的计划、日报与项目 ↗</a></p>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-row"><span>DSH · XUANQING</span><span><a href="{{repository}}/blob/main/PRIVACY.md">隐私</a> · <a href="{{repository}}/blob/main/LICENSE">使用许可</a> · <a href="{{repository}}/issues">反馈问题</a> · 非 DeepSeek 官方产品</span></div></footer>
+  <script>
+    document.getElementById('copy').addEventListener('click', async () => {
+      const message = document.getElementById('copy-status');
+      const address = document.getElementById('package-url');
+      try {
+        await navigator.clipboard.writeText(address.textContent);
+        message.textContent = '地址已复制，请粘贴到 Harness 的「添加插件」。';
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(address);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        message.textContent = '已选中安装包地址，请使用系统的复制功能。';
+      }
+    });
+  </script>
+</body>
 </html>

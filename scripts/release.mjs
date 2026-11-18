@@ -44,7 +44,7 @@ if(action==='seal'){
   const releaseUrl=repository+'/releases/tag/'+encodeURIComponent(tag);
   const packageUrl=repository+'/releases/download/'+encodeURIComponent(tag)+'/'+encodeURIComponent(filename);
   const indexUrl=new URL('index.json',pkg.homepage.replace(/\/?$/,'/')).href;
-  const index={format:1,title:{en:'Xuanqing Plugins',zh:'玄清的插件'},description:{en:'Personal tools designed by Xuanqing',zh:'由玄清设计的个人效率工具'},plugins:[{
+  const index={format:1,title:{en:'Personal AI Workspace plugins',zh:'个人 AI 工作台插件索引'},description:{en:'Install the personal workspace for plans, AI progress and project results in DeepSeek Harness.',zh:'在 DeepSeek Harness 安装个人 AI 工作台，查看今日计划、AI 进展和项目成果。'},plugins:[{
     name:pkg.name,title:titles,description:descriptions,author,icon:'icons/workbench.svg',homepage:pkg.homepage,repository:{url:repository},metadata:{keywords:pkg.keywords},
     versions:[{version:pkg.version,publishTimestamp:Math.floor(Date.parse(release.publishedAt)/1000),source:{type:'git',url:repository,commit},engines:{dsh:pkg.engines.dsh}}]
   }]};

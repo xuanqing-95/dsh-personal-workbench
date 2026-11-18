@@ -2,6 +2,7 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 permissions:
   contents: write
   pages: write
@@ -14,27 +15,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
       - run: npm ci --ignore-scripts
       - run: npm test
       - run: npm run release:verify
-      - name: Package and index
+      - name: Package release
+        if: github.event_name == 'push'
         run: |
           node -e 'if("v"+require("./package.json").version!==process.env.GITHUB_REF_NAME)process.exit(1)'
           mkdir -p dist
           npm pack --ignore-scripts --pack-destination dist
           cd dist
           sha256sum *.tgz > SHA256SUMS
-          cd ..
-          node scripts/release.mjs site "$(git rev-parse HEAD)"
       - name: Publish package
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           release_title="$(node -p 'require("./locale/zh.json").meta.title') $GITHUB_REF_NAME"
           gh release create "$GITHUB_REF_NAME" dist/*.tgz dist/SHA256SUMS --verify-tag --title "$release_title" --notes-file RELEASE-NOTES.md --prerelease
+      - name: Build installation page for the published plugin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="v$(node -p 'require("./package.json").version')"
+          gh release view "$tag" --json isDraft --jq '.isDraft' | grep -Fx false
+          node scripts/release.mjs site "$(git rev-parse "${tag}^{commit}")"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
