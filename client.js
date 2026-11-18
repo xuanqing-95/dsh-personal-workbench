@@ -6979,6 +6979,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           try{
             const value=await api(action,undefined,input);
             setQuotaData(value);setQuotaForm(null);
+            requestAnimationFrame(()=>{if(document.activeElement===document.body)usageDialog.current?.querySelector('header button')?.focus();});
           }catch(error){setQuotaError(error.message);}
           finally{quotaSaving.current=false;setQuotaBusy(false);}
         }
@@ -7038,6 +7039,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           if(!usageOpen)return;
           const dialog=usageDialog.current;dialog?.querySelector('button')?.focus();
           function key(event){
+            if(event.defaultPrevented||!dialog||(event.target!==document.body&&!dialog.contains(event.target)))return;
             if(event.key==='Escape'){event.preventDefault();if(event.target.closest?.('.pw-block-column')&&dialog.querySelector('#pw-usage-column-tooltip')){event.stopPropagation();clearUsageHint('detail');return;}setUsageOpen(false);requestAnimationFrame(()=>usageTrigger.current?.focus());}
             if(event.key==='Tab'){
               const nodes=[...dialog.querySelectorAll('button,input,select,a[href],summary,[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);
@@ -7046,7 +7048,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
             }
           }
-          dialog?.addEventListener('keydown',key);return()=>dialog?.removeEventListener('keydown',key);
+          document.addEventListener('keydown',key);return()=>document.removeEventListener('keydown',key);
         },[usageOpen]);
         function closeUsage(){setUsageOpen(false);requestAnimationFrame(()=>usageTrigger.current?.focus());}
         const usageNumber=n=>typeof n==='number'&&Number.isFinite(n)?new Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(n):'—';
