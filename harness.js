@@ -38,7 +38,7 @@ function destination(entry) {
 }
 function scheduleLabel(entry) {
   switch (entry.kind) {
-    case 'daily': return `每天 ${safeText(entry.time, 30)} · ${safeText(entry.timeZone || 'Asia/Shanghai', 80)}`;
+    case 'daily': return `每天 ${safeText(entry.time, 30)} · ${safeText(entry.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone, 80)}`;
     case 'weekly': return `每周 ${Array.isArray(entry.weekdays) ? entry.weekdays.slice(0, 7).map(x => safeText(String(x), 10)).join('、') : ''} ${safeText(entry.time, 30)} · ${safeText(entry.timeZone || '', 80)}`;
     case 'every': return Number.isFinite(entry.everySeconds) ? `每 ${entry.everySeconds} 秒` : '周期任务';
     case 'after': case 'at': return instant(entry.scheduledAt) || '单次任务';
@@ -80,20 +80,23 @@ function eventList(page) {
 }
 function latestReply(events, delivery) {
   let candidates = events;
+  let currentDelivery;
   if (delivery) {
     const anchor = events.find(e => e.type === 'user/message' && e.surfaceOp === 'append' && e.data?.id === delivery.messageId);
     if (!anchor) return { error: failures.RESULT_UNVERIFIED };
     // Stop at the next user input: a later unrelated turn is not this delivery's result.
     const next = events.find(e => e.seq > anchor.seq && e.type === 'user/message' && e.surfaceOp === 'append');
+    currentDelivery = !next;
     candidates = events.filter(e => e.seq > anchor.seq && (!next || e.seq < next.seq));
   }
+  const turn = delivery ? { currentDelivery } : {};
   for (let i = candidates.length - 1; i >= 0; i--) {
     const event = candidates[i];
     if (event.type !== 'assistant/message' || event.surfaceOp !== 'append' || !Array.isArray(event.data?.message?.content)) continue;
     const text = safeText(event.data.message.content.filter(b => b?.type === 'text' && typeof b.text === 'string').map(b => b.text).join('\n')).trim();
-    if (text) return { result: { text, ...(instant(event.time) ? { createdAt: instant(event.time) } : {}) } };
+    if (text) return { ...turn, result: { text, ...(instant(event.time) ? { createdAt: instant(event.time) } : {}) } };
   }
-  return {};
+  return turn;
 }
 async function mapLimit(values, concurrency, fn) {
   const results = new Array(values.length); let index = 0;
@@ -135,8 +138,13 @@ export function createHarnessAdapter({ schedule, controller }) {
     const stateKnown = !requiresState || (sessionId === currentTarget && observation?.execution);
     const error = uncertain.has(entry.id) ? failures.DISPATCH_UNKNOWN : sessionId && !observation ? failures.NOT_CHECKED : observation?.error;
     const result = lastDelivery && observation?.events ? latestReply(observation.events, lastDelivery) : {};
+    // Active Harness rules advance scheduledAt after dispatch; an ended rule retains its last occurrence.
+    const nextRunAt = !['ended','paused'].includes(entry.status)
+      ? instant(entry.nextRunAt) || (entry.status === 'active' ? instant(entry.scheduledAt) : undefined)
+      : undefined;
     return { id: entry.id, name: safeText(entry.title || '未命名自动化', 120), prompt: safeText(entry.prompt), status: safeText(entry.status, 30),
-      scheduleLabel: scheduleLabel(entry), source: 'harness',
+      scheduleLabel: scheduleLabel(entry), source: 'harness', timeZone:safeText(entry.timeZone,80)||undefined,
+      ...(nextRunAt ? {nextRunAt} : {}),
       canRun: typeof service(schedule)?.run === 'function' && !occupied && !locks.has(entry.id) && !uncertain.has(entry.id)
         && !(dispatchedUntil.get(entry.id) > Date.now()) && Boolean(stateKnown) && (!requiresState || !busy(observation.execution)),
       canToggle: typeof service(schedule)?.edit === 'function' && !locks.has(entry.id),

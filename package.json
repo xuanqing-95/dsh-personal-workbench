@@ -1,8 +1,8 @@
 {
   "name": "dsh-personal-workbench",
-  "version": "0.8.0-beta.7",
+  "version": "0.8.0-beta.9",
   "type": "module",
-  "description": "个人主控台：用聊天管理计划、AI 日报与项目，五区玻璃卡片自由排布。",
+  "description": "一眼查看今日计划、每日 AI 资讯与正在进行的事，点击进入对应页面或对话。",
   "exports": {
     ".": "./index.js",
     "./package.json": "./package.json",
@@ -40,7 +40,25 @@
     "THIRD_PARTY_NOTICES.md",
     "workbench-design.css",
     "sync-design.mjs",
-    "START-HERE.md"
+    "START-HERE.md",
+    "automation-sources.js",
+    "project-store.js",
+    "connect-chrome-store.mjs",
+    "codex-catalog.js",
+    "usage.js",
+    "usage-core.js",
+    "usage-worker.js",
+    "weekly-plan.js",
+    "notion-api.js",
+    "notion-plans.js",
+    "notion-plan-check.js",
+    "weixin-meetings.js",
+    "weixin-notifications.js",
+    "weixin-notification-host.js",
+    "local-plan-file.js",
+    "brief-image.js",
+    "organization-host.js",
+    "organization.js"
   ],
   "dependencies": {
     "zod": "4.6.7"
@@ -75,7 +93,7 @@
     "AI",
     "任务管理",
     "AI日报",
-    "个人主控台"
+    "个人 AI 工作台"
   ],
   "scripts": {
     "test": "node --test *.test.js",

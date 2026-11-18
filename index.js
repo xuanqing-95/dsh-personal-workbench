@@ -8,10 +8,16 @@ import { createTasks } from './tasks.js';
 import { createHarnessAdapter } from './harness.js';
 import { validUIWrite } from './request.js';
 import { attachAssistant } from './assistant-host.js';
-import { calendarMonth, dates, planDay } from './planning.js';
+import { dates } from './planning.js';
+import { createExternalSources } from './automation-sources.js';
+import { createPlanReader } from './notion-plans.js';
+import { createWeeklyPlanReader, validateWeek } from './weekly-plan.js';
+import { createUsageReader } from './usage.js';
+import { installWeixinNotifications } from './weixin-notification-host.js';
+import { attachPersonalOrganization } from './organization-host.js';
 
 export const inject = ['connection', 'storageDomain', 'tools'];
-const title = '个人主控台';
+const title = '个人 AI 工作台';
 
 export function apply(ctx) {
 
@@ -19,7 +25,9 @@ export function apply(ctx) {
   ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
   const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
   const projects=attachProjects(ctx);
-  const content=attachContent(ctx,projects);
+  const external=createExternalSources();
+  const content=attachContent(ctx,projects,external);
+  const notifications=installWeixinNotifications(ctx);
   const openCodexThread=createCodexThreadOpener();
   let pendingStore;
   function store() {
@@ -27,7 +35,7 @@ export function apply(ctx) {
       const record = z.object({
         id: z.string().uuid(), title: z.string().min(1).max(400),
         status: z.enum(['todo', 'doing', 'waiting', 'done']), priority: z.enum(['high', 'normal', 'low']),
-        owner: z.enum(['human', 'ai']), dueDate: z.string().nullable(), link: z.null(),
+        owner: z.enum(['human', 'ai']), dueDate: z.string().nullable(), link:z.object({kind:z.enum(['redflow-run','redflow-original','redflow-rewrite']),id:z.string().uuid()}).strict().nullable(),
         revision: z.number().int().positive(), createdAt: z.number().int(), updatedAt: z.number().int(), archived: z.boolean(),
       }).strict();
       const attempt = ctx.storageDomain.open({
@@ -45,38 +53,54 @@ export function apply(ctx) {
     async write(value) { await (await store()).global.set(value); return {ok: true}; },
   }});
   ctx.effect(()=>ctx.tools.register(planTool(tasks)));
+  const organization = attachPersonalOrganization(ctx,tasks);
+  const listTasks = () => tasks.list();
+  const plans = createPlanReader({listTasks, updateTask: input => tasks.update(input)});
+  const weeklyPlan = createWeeklyPlanReader({listTasks});
+  const usage = createUsageReader();
+  ctx.effect(() => () => usage.close());
   let schedule, controller;
   ctx.inject(['schedule'], child => { schedule = child.schedule; child.effect(() => () => { schedule = undefined; }); });
   ctx.inject(['sessionController'], child => { controller = child.sessionController; child.effect(() => () => { controller = undefined; }); });
   ctx.inject(['agents','sessionController'], child => { void attachAssistant(child).catch(() => {}); });
   const live = createHarnessAdapter({schedule: () => schedule, controller: () => controller});
   async function assistants() {
-    const {ai, automations} = await live.snapshot();
-    // Only distribute the display fields and latest result excerpt used by this profile dashboard.
-    const state = ({running, pendingInput, queue}) => ({running, pendingInput, queue});
+    const [{ai, automations}, remote, brief] = await Promise.all([
+      live.snapshot(), external.readExternalAutomations(), content.readBrief(),
+    ]);
+    const local = automations.items.map(({prompt, ...display}) => display);
     return {
-      ai: {availability:ai.availability, items:ai.items.map(item=>({id:item.id,title:item.title,...state(item)}))},
-      automations: {availability:automations.availability, items:automations.items.map(item=>({
-        id:item.id,name:item.name,source:item.source,sessionId:item.sessionId,
-        status:item.status,scheduleLabel:item.scheduleLabel,lastRun:item.lastRun,
-        result:item.result,execution:item.execution && state(item.execution),
-      }))},
+      ai: {...ai, items:ai.items.map(({result, ...display}) => display)},
+      automations: {...automations, items:[...local, ...remote.items],
+        availability:automations.availability === 'unavailable' && remote.items.length ? 'partial' : automations.availability},
+      brief,
     };
   }
   async function dashboard() {
-    const [records, activity, brief] = await Promise.all([tasks.list(), assistants(), content.archive()]);
-    return {today:records.today, checkedAt:new Date().toISOString(), tasks:records,
-      plan:planDay(records.items,records.today), brief:brief.edition, threads:activity.ai.items.map(({id,title})=>({id,title})), ...activity};
+    const [records, archived, activity, plan, organized] = await Promise.all([
+      tasks.list(), tasks.list({view:'archived'}), assistants(), plans.readPlan(), organization.list(),
+    ]);
+    return {today:records.today, checkedAt:new Date().toISOString(), tasks:{...records,archived:archived.items},
+      plan, organization:organized, canOpenTodayPlan:organized.canOpenTodayPlan,
+      threads:activity.ai.items.map(({id,title})=>({id,title})), ...activity};
   }
-  async function change(input) {
-    const request = z.discriminatedUnion('action', [
-      z.object({action:z.literal('addPlanTask'),input:z.object({title:z.string().trim().min(1).max(200),date:z.string().refine(dates.day)}).strict()}).strict(),
-      z.object({action:z.literal('checkPlanTask'),input:z.object({id:z.string().uuid(),revision:z.number().int().positive(),checked:z.boolean()}).strict()}).strict(),
-    ]).safeParse(input);
-    if (!request.success) throw new Error('请检查任务名称、日期和当前状态。');
-    const {action, input: value} = request.data;
-    if (action === 'addPlanTask') return tasks.create({title:value.title, dueDate:value.date, priority:'normal'});
-    return tasks.update({id:value.id, expectedRevision:value.revision, patch:{status:value.checked?'done':'todo'}});
+  const newTask = z.object({title:z.string().trim().min(1).max(200),date:z.string().refine(dates.day)}).strict();
+  async function change(body) {
+    if (!body || typeof body !== 'object' || Object.keys(body).some(key=>!['action','input'].includes(key))) throw Error('操作格式有误。');
+    const input=body.input;
+    switch(body.action) {
+      case 'addPlanTask': {
+        const value=newTask.parse(input);
+        return tasks.create({title:value.title,dueDate:value.date,priority:'normal'});
+      }
+      case 'checkPlanTask': return plans.checkPlanTask(input);
+      case 'projectShortcuts': return projects.change(input);
+      case 'projectNotes': return content.changeProjectNotes(input);
+      case 'openCodexThread': return openCodexThread(input);
+      case 'openHermesDaily': return external.openHermesDaily(input);
+      case 'openTodayPlan': return organization.openTodayPlan(input);
+      default: throw Error('未知操作。');
+    }
   }
   const headers = {'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
   const reply = (value,status=200) => new Response(JSON.stringify(value),{status,headers});
@@ -84,25 +108,37 @@ export function apply(ctx) {
     path:'/api/dsh-personal-workbench',methods:['GET','POST'],requestBody:'buffered',async fetch(request) {
       try {
         if (request.method === 'POST') {
-          if (!validUIWrite(request)) return reply({error:'请从主控台内操作。'},403);
+          if (!validUIWrite(request)) return reply({error:'请从工作台内操作。'},403);
           const raw = await request.text();
-          if (raw.length > 16384) return reply({error:'任务内容过长。'},413);
+          if (raw.length > 65536) return reply({error:'任务内容过长。'},413);
           const body=JSON.parse(raw);
-          return reply({value:body.action==='projectShortcuts'?await projects.change(body.input):body.action==='openCodexThread'?await openCodexThread(body.input):await change(body)});
+          return reply({value:await change(body)});
         }
         const query = new URL(request.url).searchParams;
         switch (query.get('action')) {
           case 'uiRelease': return reply({value:await readUIRelease()});
+          case 'usage': return reply({value:usage.read((await projects.change({action:'list'})).items)});
+          case 'projectNotes': return reply({value:await content.changeProjectNotes({action:'list'})});
+          case 'organization': return reply({value:await organization.list()});
+          case 'notificationStatus': return reply({value:await notifications.status()});
+          case 'weeklyPlan': return reply({value:await weeklyPlan(validateWeek(query.get('week')))});
+          case 'briefImage': {
+            const image=await external.readBriefImage(query.get('date'),query.get('v'),query.get('archive')==='1');
+            return image ? new Response(image.data,{headers:{'Content-Type':image.mime,'Cache-Control':'private, max-age=300','X-Content-Type-Options':'nosniff'}}) : new Response(null,{status:404});
+          }
           case 'projects': return reply({value:{...await projects.read(),notes:await content.projectNotes()}});
           case 'briefArchive': return reply({value:await content.archive(query.get('date')||undefined)});
           case 'export': return reply({value:{format:1,exportedAt:new Date().toISOString(),tasks:await tasks.list(),projects:await projects.read(),content:await content.export()}});
           case 'dashboard': return reply({value:await dashboard()});
           case 'assistants': return reply({value:await assistants()});
-          case 'plan': return reply({value:planDay((await tasks.list()).items,query.get('date'))});
-          case 'calendar': return reply({value:calendarMonth((await tasks.list()).items,query.get('month'))});
+          case 'plan': return reply({value:await plans.readPlan(query.get('date') || undefined)});
+          case 'calendar': return reply({value:await plans.readCalendar(query.get('month'),query.get('week'))});
           default: return reply({error:'未知的读取操作。'},400);
         }
       } catch (error) {
+        if (error.code?.startsWith('PLAN_')) return reply({error:error.message},
+          error.code==='PLAN_CHECK_PERMISSION' ? 403 : error.code==='PLAN_CHECK_CONFLICT' ? 409 : error.code==='PLAN_CHECK_UNKNOWN' ? 503 : 400);
+        if (['APP_OPEN_FAILED','APP_UNAVAILABLE'].includes(error.code)) return reply({error:error.message},400);
         if (error.code === 'REVISION_CONFLICT') return reply({error:'任务刚刚有变化，请刷新后再试。'},409);
         if (['STORE_WRITE_UNKNOWN','STORE_WRITE_BLOCKED'].includes(error.code)) return reply({error:'保存结果待核对，请刷新查看，避免重复添加。'},503);
         return reply({error:'暂时无法读取或保存，请检查输入后重试。'},400);
@@ -110,15 +146,14 @@ export function apply(ctx) {
     },
   }));
   ctx.effect(() => ctx.tools.register({
-    name:'personal_home',description:'读取此 Harness 配置中的个人主控台、指定日期的计划或月份安排。只读。',
+    name:'personal_home',description:'读取此 Harness 配置中的个人 AI 工作台、指定日期的计划或月份安排。只读。',
     parameters:{type:'object',properties:{view:{enum:['today','plan','calendar','projects']},date:{type:'string'},month:{type:'string'}},required:['view'],additionalProperties:false},
     output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
     async execute(args) {
       if (args.view === 'today') return dashboard();
       if (args.view === 'projects') return projects.read();
-      const {items} = await tasks.list();
-      if (args.view === 'plan') return planDay(items,args.date);
-      if (args.view === 'calendar') return calendarMonth(items,args.month);
+      if (args.view === 'plan') return plans.readPlan(args.date);
+      if (args.view === 'calendar') return plans.readCalendar(args.month);
       throw new Error(`${title}：未知的读取操作。`);
     },
   }));

@@ -38,7 +38,7 @@ function harness({ width = 1200, height = 700, initial, failWrite = false, rects
     },
     useEffect: effect, useLayoutEffect: effect,
   };
-  const sandbox = { React, h: (type, props, ...children) => ({ type, props, children }),
+  const sandbox = { setTimeout:callback=>{callback();return 1;},clearTimeout:()=>{},React, h: (type, props, ...children) => ({ type, props, children }),
     localStorage: { getItem: key => values.get(key) ?? null, setItem: (key, value) => { if (failWrite) throw new Error('Blocked storage'); values.set(key, value); } },
     ResizeObserver: class { constructor(callback) { this.callback = callback; observers.push(this); } observe() {} disconnect() {} },
     window: { addEventListener(type, callback) { if (!listeners.has(type)) listeners.set(type, new Set()); listeners.get(type).add(callback); }, removeEventListener(type, callback) { listeners.get(type)?.delete(callback); } },
@@ -129,10 +129,10 @@ test('saved default projects still fit content; an intentional taller project ca
 });
 
 test('entering editing preserves rendered card bounds and Done without changes preserves the content layout',()=>{
-  const rects={news:{left:0,top:0,width:685,height:208},activity:{left:0,top:220,width:685,height:245},projects:{left:0,top:477,width:685,height:280},plan:{left:701,top:150,width:499,height:1400},pet:{left:701,top:0,width:499,height:138}};
+  const rects={news:{left:0,top:0,width:685,height:208},activity:{left:0,top:220,width:685,height:245},projects:{left:0,top:477,width:685,height:280},plan:{left:701,top:290,width:499,height:1400},pet:{left:701,top:0,width:499,height:138},usage:{left:701,top:150,width:320,height:128},quota:{left:1033,top:150,width:167,height:128}};
   const app=harness({rects});
   app.act(ui=>ui.edit());
-  for(const id of ['news','activity','projects','plan','pet']){
+  for(const id of ['news','activity','projects','plan','pet','usage','quota']){
     const actual=plain(app.ui.card(id).style);delete actual.position;assert.deepEqual(actual,rects[id]);
   }
   assert.equal(app.ui.card('pet').style.top,0);
@@ -251,9 +251,9 @@ test('pet move and resize use the same save, cancel, and reopen lifecycle as oth
  app.control('pet','resize').key('ArrowDown');
  const moved=plain(app.ui.card('pet').style);assert.notDeepEqual(moved,initial);assert(moved.height>initial.height);
  assert.equal(app.stored(),undefined);app.act(ui=>ui.finish());
- const reopened=harness({initial:app.stored()});assert.deepEqual(plain(reopened.ui.card('pet').style),moved);
+ const reopened=harness({initial:app.stored()});for(const key of ['left','top','width','height'])assert.equal(reopened.ui.card('pet').style[key],moved[key]);
  reopened.act(ui=>ui.edit());reopened.control('pet').key('ArrowDown');reopened.act(ui=>ui.cancel());
- assert.deepEqual(plain(reopened.ui.card('pet').style),moved);
+ for(const key of ['left','top','width','height'])assert.equal(reopened.ui.card('pet').style[key],moved[key]);
 });
 
 test('upgrading a saved 9/3 layout preserves pet position through edit, viewport changes and reopening',()=>{
@@ -261,13 +261,14 @@ test('upgrading a saved 9/3 layout preserves pet position through edit, viewport
  const initial={version:2,overviewAligned:true,profiles:{wide}},app=harness({initial});
  const pet=plain(app.ui.card('pet').style),plan=plain(app.ui.card('plan').style);
  assert.equal(pet.top,0);assert.equal(pet.width,288);assert.equal(pet.left,912);
- assert.equal(plan.top,Math.max(34,(700-16*11)/12)*4+16*4);
+ const usage=app.ui.card('usage').style;
+ assert.ok(usage.top>pet.top);assert.ok(plan.top>=usage.top+usage.minHeight);
  app.act(ui=>ui.edit());app.act(ui=>ui.cancel());
  assert.deepEqual(plain(app.ui.card('pet').style),pet);
  app.resize(800);app.resize(1200);
  assert.deepEqual(plain(app.ui.card('pet').style),pet);
  app.act(ui=>ui.edit());app.act(ui=>ui.finish());
- assert.deepEqual(app.stored(),initial);
+ assert.ok(app.stored().profiles.wide.some(card=>card.id==='usage'));
  const reopened=harness({initial:app.stored()});
  assert.deepEqual(plain(reopened.ui.card('pet').style),pet);
  assert.deepEqual(plain(reopened.ui.card('plan').style),plan);

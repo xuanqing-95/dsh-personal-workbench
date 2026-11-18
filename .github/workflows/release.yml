@@ -28,15 +28,17 @@ jobs:
           cd dist
           sha256sum *.tgz > SHA256SUMS
           cd ..
-          node scripts/release.mjs site "$GITHUB_SHA"
+          node scripts/release.mjs site "$(git rev-parse HEAD)"
       - name: Publish package
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.tgz dist/SHA256SUMS --title "个人主控台 $GITHUB_REF_NAME" --notes-file RELEASE-NOTES.md --prerelease
+        run: |
+          release_title="$(node -p 'require("./locale/zh.json").meta.title') $GITHUB_REF_NAME"
+          gh release create "$GITHUB_REF_NAME" dist/*.tgz dist/SHA256SUMS --verify-tag --title "$release_title" --notes-file RELEASE-NOTES.md --prerelease
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: dist/site
   pages:
     needs: package
     environment:

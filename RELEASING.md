@@ -2,6 +2,8 @@
 
 GitHub 是版本记录的主仓。本机只保留开发副本和一次受控回退，不积累多份安装包。当前作者个人版是另一个包，不应将它的目录、凭据、日报或头像整体复制到本公开包。
 
+工作台对外使用「个人 AI 工作台」。准备新版时先核对当前安装版的侧栏、首页和卡片标题，再核对功能和默认布局。安装页、插件索引和 Release 标题从插件语言文件生成。示例截图使用测试账号的数据。新版深浅主题切换暂不随公开版发布。
+
 1. 修改源码与 DESIGN.md；公共样式只改 workbench-design.css，执行 npm run sync:design 嵌入客户端，npm run check:design 核对。在全新 Harness profile 试装，验证布局、聊天入口、计划、日报和项目。不要用个人的生产数据测试写入。
 2. 更新 package.json 版本、README、CHANGELOG、RELEASE-NOTES 和分享页。安装包只允许 files 白名单。
 3. 执行 `npm ci --ignore-scripts`、`npm test`、`node --check client.js`，再 `npm run release:seal`、`npm run release:verify`。提交 client.js 与 ui-release.json 同一批；禁止只复制 client.js 到已安装工作台。

@@ -1,7 +1,9 @@
 import {createHash} from 'node:crypto';
 import {readProjectGitHub} from './project-github.js';
-import {createRepositoryResolver} from './project-repository.js';
-export function createProjectTracking({resolveRepository=createRepositoryResolver(),readGitHub=readProjectGitHub,loadSnapshot,saveSnapshot,now=()=>Date.now()}={}){
+import {createProjectStoreTracker} from './project-store.js';
+import {createRepositoryResolver,readProjectAppearance} from './project-repository.js';
+export function createProjectTracking({resolveRepository=createRepositoryResolver(),readGitHub=readProjectGitHub,readStore,loadSnapshot,saveSnapshot,now=()=>Date.now()}={}){
+  const store=createProjectStoreTracker({readStore,now});
   const cache=new Map(),resolutions=new Map();
   async function resolve(entry){
     const key=JSON.stringify([entry.source,entry.threadId,entry.repository,entry.projectPath]);
@@ -38,7 +40,9 @@ export function createProjectTracking({resolveRepository=createRepositoryResolve
         // Specialized sources retain their product-specific scope (e.g. browser vs Mac).
         if(entry.github){result[index]=entry;continue;}
         const association=await resolve(entry);
-        result[index]={...entry,...association,...(association.repository?{github:await github(association.repository)}:{})};
+        const [repo,chrome,appearance]=await Promise.all([association.repository?github(association.repository):null,store(entry.chromeStore),
+          readProjectAppearance(entry.projectPath||association.projectPath)]);
+        result[index]={...entry,...association,...appearance,version:entry.version||appearance.version||'',...(repo?{github:repo}:{}),...chrome};
       }
     }));
     return result;

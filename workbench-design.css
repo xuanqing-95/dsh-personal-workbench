@@ -342,6 +342,21 @@ body:has(.pwb) .hbc-profile-simple :is(button,input,textarea,.hbc-skin-option),
 .pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav > span {padding-inline:0;min-width:0;white-space:nowrap}
 .pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav .pw-today {margin-left:4px}
 
+/* Companion and usage share the dashboard card material. The total right-hand
+   group aligns with the brief; the compact pet retains its localized glow. */
+.pwb .pw-finance-cards .pw-spend-card {
+ background:var(--pw-ui-card-surface);border-color:rgba(255,255,255,.66);
+ border-radius:var(--pw-ui-radius-card);box-shadow:var(--pw-glass-shadow);
+ transition:background var(--pw-ui-motion),border-color var(--pw-ui-motion),box-shadow var(--pw-ui-motion);
+}
+.pwb .pw-finance-cards .pw-spend-card:hover {background:var(--pw-inner-hover);border-color:var(--pw-ui-edge)}
+.pwb .pw-finance-cards .pw-spend-card:active {background:var(--pw-ui-down)}
+@container pw-card (min-width:481px) {
+ .pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {--pw-pet-art-width:76px;min-height:104px}
+ .pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {--pw-overview-pet-size:76px;--hbc-dock-size:76px}
+}
+@media(prefers-reduced-motion:reduce) {.pwb .pw-finance-cards .pw-spend-card {transition:none}}
+
 /* Clear opal: localized cyan and lilac light over the shared glass surface.
    Most of the card stays clear; no warm tint or overlapping full-card wash. */
 body:has(.pwb) {
@@ -361,6 +376,24 @@ body:has(.pwb) {
 }
 @supports not (backdrop-filter:blur(1px)) {body:has(.pwb) {--pw-ui-pet-surface:#f3f7f7}}
 
+/* Default desktop columns share a bottom edge; only the plan body scrolls. */
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] > .pw-overview-right {
+  contain:size layout;align-self:stretch;min-height:0;
+  grid-template-rows:max-content minmax(0,1fr);grid-auto-rows:auto;
+}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan {
+  align-self:stretch;min-height:0;height:100%;overflow:hidden;
+}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan > .pw-card-content {
+  flex:1 1 auto;min-height:0;height:100%;overflow:hidden;
+}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan .pw-plan-view {
+  flex:1 1 0;min-height:0;height:auto;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:var(--pw-line) transparent;overscroll-behavior-y:contain;
+}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan .pw-plan-view > * {
+  flex-shrink:0;
+}
 /* The selected date already identifies today; avoid a duplicate dot. */
 .pwb .pw-plan .pw-week-day[aria-current=date][aria-pressed=true] > strong::after,
 .pwb .pw-plan .pw-calendar-grid:is([data-mode=week],[data-mode=month]) button[data-period].is-today[aria-pressed=true] > .pw-calendar-number::after {display:none}
@@ -403,6 +436,36 @@ body:has(.pwb) {--pw-ui-surface-motion:320ms cubic-bezier(.2,.7,.2,1)}
 .pwb .pw-plan .pw-week-board .pw-week-column[data-hover=true] .pw-week-day:not([aria-pressed=true]) > strong,
 .pwb .pw-plan .pw-week-day:is(:hover,:focus-visible):not([aria-pressed=true]) > strong,
 .pwb .pw-plan .pw-calendar-grid[data-mode=month] button[data-period]:is(:hover,:focus-visible):not([aria-pressed=true]) > .pw-calendar-number {color:var(--pw-ui-accent)}
+
+/* Finance metrics are independent editable areas; the default composition
+   still groups them visually without binding their saved coordinates. */
+.pwb .pw-companion-stack {display:contents}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack {
+ display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;align-self:start;
+}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=stacked] .pw-companion-stack {grid-column:1/-1;grid-row:1}
+.pwb .pw-grid-canvas .pw-pet.pw-overview-pet {min-height:0}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack > .pw-pet {flex:0 0 auto;align-self:stretch;height:auto;min-height:0}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack > .pw-pet .pw-pet-content{flex:0 0 auto;min-height:112px;height:auto}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack .pw-finance-cards{flex:0 0 auto;grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=stacked] .pw-companion-stack{grid-column:1/-1;grid-row:1;width:100%;justify-self:stretch}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack .pw-finance-module{position:relative!important;inset:auto!important;width:auto!important;height:auto!important;min-height:0!important;grid-row:auto!important;grid-column:auto!important}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack .pw-finance-module>.pw-card-content{height:auto}
+.pwb .pw-finance-cards > .pw-finance-module {min-width:0;box-sizing:border-box;border-radius:var(--pw-ui-radius-card)}
+.pwb .pw-finance-cards > .pw-finance-module > .pw-card-content {height:100%;min-height:0}
+.pwb .pw-finance-cards .pw-spend-card {width:100%;height:100%;box-sizing:border-box}
+.pwb .pw-grid-canvas[data-fit-content=false] .pw-finance-cards {display:contents;pointer-events:auto}
+.pwb .pw-grid-canvas[data-fit-content=false] .pw-finance-module {position:absolute;container-type:inline-size;container-name:pw-card}
+.pwb .pw-grid-canvas .pw-finance-module[data-grid-id] {background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border:0;padding:0}
+.pwb[data-editing=true] .pw-grid-canvas .pw-finance-module[data-grid-id] {
+ padding-top:32px;border:1px dashed rgba(255,255,255,.85);overflow:hidden;
+ background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+}
+.pwb[data-editing=true] .pw-finance-module > .pw-card-content {height:100%;overflow:auto;pointer-events:none}
+.pwb[data-editing=true] .pw-finance-module :is(.pw-grid-move,.pw-grid-resize) {pointer-events:auto;z-index:2}
+.pwb .pw-grid-canvas .pw-finance-module[data-fixed-height=true] > .pw-card-content {overflow:auto}
+/* The peer height belongs to the whole stack, never to its pet child. */
+.pwb .pw-grid-canvas .pw-companion-stack > .pw-pet.pw-overview-pet {--pw-news-peer-height:0px;min-height:0}
 
 /* Thin glass edges: a single light-dependent stroke, without stacked white inset rings. */
 body:has(.pwb) {
@@ -483,6 +546,11 @@ body:has(.pwb) {--pw-ui-panel-inset-x:24px;--pw-ui-panel-inset-y:16px;--pw-ui-co
  .pwb .pw-grid-canvas {--pw-ui-panel-inset-x:16px;--pw-ui-panel-inset-y:12px;--pw-ui-content-inset:12px;--pw-card-padding:var(--pw-ui-panel-inset-x);--pw-card-bottom:var(--pw-ui-panel-inset-y)}
 }
 
+/* Keep the pet artwork inside its inset, and retain the paired dashboard height. */
+.pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {--pw-pet-art-width:80px}
+.pwb:not([data-editing=true]) .pw-grid-canvas .pw-pet.pw-overview-pet .hbc-home {--pw-overview-pet-size:80px;--hbc-dock-size:80px}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-news[data-folded=false] {min-height:282px}
+
 /* A task title and its annotations share one complete hover/click surface. */
 .pwb .pw-plan .pw-plan-row .pw-plan-annotations {margin:2px 0 0;padding:0}
 .pwb .pw-plan .pw-plan-row .pw-plan-annotations .pw-plan-note {margin:0}
@@ -508,11 +576,38 @@ body:has(.pwb) {
 .pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open):active:not(:disabled) {background:var(--pw-ui-down)}
 @media(prefers-reduced-motion:reduce) {.pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {transition:none}}
 
+/* Finance cards stay readable at their own width, including custom layouts. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-finance-module {container-type:inline-size;container-name:pw-finance;align-self:stretch}
+.pwb .pw-grid-canvas .pw-finance-cards,
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack .pw-finance-cards {grid-template-columns:minmax(0,2fr) minmax(120px,1fr);align-items:stretch}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-finance-module > .pw-card-content {display:flex;flex-direction:column;min-width:0}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {flex:1;min-width:0;min-height:150px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-daily-time-axis {min-width:0;gap:4px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-daily-time-axis small {flex:none;white-space:nowrap}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary {min-width:0}
+@container pw-finance (max-width:260px) {
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {padding:var(--pw-ui-panel-inset-y) var(--pw-ui-panel-inset-x)}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-daily-time-axis small:nth-child(2),
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-daily-time-axis small:nth-child(4) {display:none}
+}
+@container pw-finance (max-width:160px) {
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {padding:var(--pw-ui-panel-inset-y) var(--pw-ui-panel-inset-x)}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-daily-time-axis small:nth-child(3) {display:none}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary {flex-wrap:wrap}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-quota-copy {flex-basis:100%}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-quota-reset > span:last-child {white-space:normal}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary .pw-usage-ring {margin-left:auto}
+ .pwb .pw-grid-canvas .pw-finance-cards .pw-spend-value {font-size:20px;white-space:normal;overflow-wrap:anywhere}
+}
 /* Compact navigation targets: the icon stays centered during direct hover. */
 .pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {
  display:grid;place-items:center;align-self:center;justify-self:end;width:32px;height:32px;min-width:32px;min-height:32px;padding:0;margin:0;border-radius:10px;
 }
 .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible) svg {transform:none;translate:none}
+
+/* Paint the selected background on the card itself, above all backing surfaces. */
+.pwb {--pw-ui-pet-surface:rgba(255,255,255,.12)}
+@media(prefers-reduced-transparency:reduce) {.pwb {--pw-ui-pet-surface:#f3f7f7}}
 
 /* Clear edges and full finance content at every saved height. */
 body:has(.pwb) {--pw-ui-card-edge:linear-gradient(145deg,rgba(255,255,255,.94),rgba(255,255,255,.72) 35%,rgba(255,255,255,.52) 65%,rgba(255,255,255,.72))}
@@ -522,6 +617,18 @@ body:has(.pwb) {--pw-ui-card-edge:linear-gradient(145deg,rgba(255,255,255,.94),r
 .pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more {position:absolute;top:12px;right:12px;margin:0}
 .pwb .pw-grid-canvas :is(.pw-project-tiles .pw-project-enter,.pw-assistant-feed .pw-assistant-open) {align-self:start}
 .pwb[data-editing=true] .pw-grid-canvas .pw-finance-module > .pw-card-content {min-height:0;height:100%}
+
+/* Initial overview is one aligned composition, with finance always below the pet. */
+.pwb .pw-grid-canvas .pw-finance-cards .pw-finance-module > .pw-card-content,
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {min-height:160px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card {padding:var(--pw-ui-panel-inset-y) var(--pw-ui-panel-inset-x)}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-spend-heading {min-height:24px;white-space:nowrap}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-daily-card .pw-spend-trend svg {height:34px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-summary {min-height:66px}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-companion-stack {height:var(--pw-news-peer-height,284px);min-height:284px;align-self:start}
+.pwb .pw-grid-canvas[data-fit-content=true] .pw-companion-stack > .pw-pet {flex:0 0 auto}
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-companion-stack .pw-finance-cards {flex:1;min-height:160px}
+.pwb[data-editing=true] .pw-grid-canvas .pw-finance-module > .pw-card-content {min-height:0}
 
 /* One icon-only control for more, navigate and close. */
 .pwb .pw-grid-canvas .pw-finance-cards .pw-spend-card .pw-usage-more,
@@ -602,11 +709,6 @@ body:has(.pwb) .hbc-profile-simple .hbc-profile-close:active:not(:disabled) {bac
 @media(prefers-reduced-motion:reduce) {.pwb .pw-head::before {transition:none}}
 @media(prefers-reduced-transparency:reduce) {.pwb .pw-head::before {background:#edf4f3;backdrop-filter:none;-webkit-backdrop-filter:none}}
 
-/* Card scrolling continues into the page at either edge, including native momentum. */
-.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan .pw-plan-view,
-.pwb .pw-homeboard [data-grid-id],
-.pwb .pw-homeboard [data-grid-id] :is(.pw-plan-view,.pw-card-body,.pw-card-content) {overscroll-behavior-y:auto}
-
 /* One entry motion per card; moving onto its arrow never moves the glyph again. */
 .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action] :is(.pw-project-enter,.pw-assistant-open) svg {translate:none;transition:transform var(--pw-ui-motion),opacity var(--pw-ui-motion)}
 .pwb:not([data-editing=true]) .pw-grid-canvas [data-card-action]:is(:hover,:focus-within) :is(.pw-project-enter,.pw-assistant-open):is(:hover,:focus-visible) svg {transform:translate(2px,-2px);translate:none}
@@ -635,6 +737,11 @@ body:has(.pwb) {--pw-ui-link-motion:180ms cubic-bezier(.2,.7,.2,1)}
  .pwb .pw-grid-canvas :is(.pw-brief-read,.pw-assistant-content-link,.pw-assistant-receipt a) > svg {transition:none;transform:none!important;translate:none!important}
 }
 
+/* Card scrolling continues into the page at either edge, including native momentum. */
+.pwb .pw-grid-canvas[data-fit-content=true][data-pet-placement=aligned] .pw-plan .pw-plan-view,
+.pwb .pw-homeboard [data-grid-id],
+.pwb .pw-homeboard [data-grid-id] :is(.pw-plan-view,.pw-card-body,.pw-card-content) {overscroll-behavior-y:auto}
+
 /* During scrolling, content follows the page without starting hover/reveal motion.
    Interaction remains enabled; pointerdown restores normal feedback immediately. */
 .pwb[data-scrolling=true] .pw-grid-canvas *,
@@ -642,6 +749,71 @@ body:has(.pwb) {--pw-ui-link-motion:180ms cubic-bezier(.2,.7,.2,1)}
 .pwb[data-scrolling=true] .pw-grid-canvas *::after {transition:none!important;animation-play-state:paused!important}
 .pwb[data-scrolling=true] .pw-flow-shape {animation-play-state:paused!important}
 
+/* Project progress always reserves two body lines, including short summaries. */
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-field[data-field=progress] .pw-project-field-value {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:21px;height:42px;min-height:42px;max-height:42px;overflow:hidden;text-overflow:ellipsis}
+
+/* Optional orange shader wallpaper; original glass tokens and card materials are preserved. */
+.pwb .pw-orange-wave {display:none;position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;contain:strict;background:radial-gradient(ellipse at 28% 38%,#ff7414 0%,transparent 72%),radial-gradient(ellipse at 85% 75%,#f34c08 0%,transparent 78%),#fa5e0e}
+.pwb[data-orange-background] {background-color:#fa5e0e}
+.pwb[data-orange-background] .pw-orange-wave {display:block}
+.pwb[data-orange-background] .pw-flow {display:none}
+.pwb .pw-orange-wave canvas {display:block;width:100%;height:100%;opacity:0}
+.pwb .pw-orange-wave canvas[data-renderer=webgl] {opacity:1}
+.pwb .pw-orange-wave-grid {position:absolute;inset:0 4.5%;display:flex;justify-content:space-between;pointer-events:none}
+.pwb .pw-orange-wave-grid i {position:relative;width:.75px;height:100%;background:rgba(255,241,222,.14)}
+.pwb .pw-orange-wave-grid i::before,.pwb .pw-orange-wave-grid i::after {content:'';position:absolute;left:-1.125px;width:3px;height:3px;background:rgba(255,241,222,.22)}
+.pwb .pw-orange-wave-grid i::before {top:0}.pwb .pw-orange-wave-grid i::after {bottom:0}
+.pwb .pw-background-thumb.is-orange-wave {background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - .75px),rgba(255,241,222,.14) calc(10% - .75px),rgba(255,241,222,.14) 10%),linear-gradient(100deg,#fc6517,#fd711a 40%,#fa5013 76%,#fb6618)}
+
+/* A failure with a usable result occupies two lines: reason, then result. */
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-value:has(> .pw-assistant-context + .pw-assistant-receipt) {display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-value:has(> .pw-assistant-context + .pw-assistant-receipt) > .pw-assistant-context {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:unset;margin:0;line-height:inherit}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-value:has(> .pw-assistant-context + .pw-assistant-receipt) > .pw-assistant-receipt {display:block;min-width:0;max-width:100%;line-height:inherit}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-value:has(> .pw-assistant-context + .pw-assistant-receipt) > .pw-assistant-receipt a {width:100%;min-width:0;line-height:inherit;white-space:nowrap}
+
+/* Error copy uses one readable line; the title retains the full explanation. */
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-context[data-error=true] {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:unset;min-width:0;max-width:100%}
+/* The attention popover is the expanded explanation: show all lines. */
+.pwb .pw-attention-item > .pw-attention-reason {display:block;white-space:normal;overflow:visible;overflow-wrap:anywhere;text-overflow:clip;-webkit-line-clamp:unset;max-height:none;min-width:0;max-width:100%}
+
+/* BEGIN TONAL TEXT ROLES
+   One deep teal text base; hierarchy comes from color alpha, never parent opacity.
+   Interaction and semantic status colors remain independent roles. */
+body:has(.pwb) {
+ --pw-ui-text-rgb:22 48 49;
+ --pw-ui-ink:rgb(var(--pw-ui-text-rgb) / 1);
+ --pw-ui-body:rgb(var(--pw-ui-text-rgb) / .85);
+ --pw-ui-muted:rgb(var(--pw-ui-text-rgb) / .70);
+ --pw-ui-disabled:rgb(var(--pw-ui-text-rgb) / .42);
+ --pw-ui-status-idle:var(--pw-ui-muted);
+ --pw-ui-status-idle-bg:rgb(var(--pw-ui-text-rgb) / .10);
+}
+.pwb.pwb.pwb {
+ --pw-ink:var(--pw-ui-ink);--pw-muted:var(--pw-ui-muted);
+ --pw-plan-ink:var(--pw-ui-ink);--pw-plan-muted:var(--pw-ui-muted);
+ --pw-on-dark:var(--pw-ui-ink);--pw-muted-on-dark:var(--pw-ui-muted);
+}
+.pwb .pw-grid-canvas .pw-brief-copy .pw-news-summary,
+.pwb .pw-grid-canvas .pw-project-tiles .pw-project-field-value,
+.pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-context,.pw-assistant-value),
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-receipt a,
+.pwb .pw-grid-canvas .pw-plan .pw-plan-text,
+.pwb .pw-grid-canvas .pw-news .pw-news-quick a,
+.pwb .pw-grid-canvas .pw-news .pw-brief-read {color:var(--pw-ui-body)}
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-review .pw-assistant-receipt .pw-quiet-link {color:var(--pw-ui-body)}
+.pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-content-link,.pw-assistant-receipt a):is(:hover,:focus-visible),
+.pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-review .pw-assistant-receipt .pw-quiet-link:is(:hover,:focus-visible),
+.pwb .pw-grid-canvas .pw-news :is(.pw-brief-read,.pw-news-quick a):is(:hover,:focus-visible) {color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-project-tiles :is(.pw-project-field-label,.pw-project-version),
+.pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-label,.pw-assistant-next,.pw-assistant-result-time,.pw-assistant-placeholder,.pw-assistant-review-empty),
+.pwb .pw-grid-canvas .pw-plan :is(.pw-group-title,.pw-plan-meta,.pw-plan-time,.pw-plan-note),
+.pwb .pw-grid-canvas .pw-plan .is-done .pw-plan-text,
+.pwb .pw-grid-canvas :is(.pw-date-nav,.pw-spend-title,.pw-spend-caption,.pw-spend-ticks,.pw-quota-reset),
+.pwb .pw-plugin-name,.pwb .pw-credit {color:var(--pw-ui-muted)}
+.pwb .pw-plugin-name,.pwb .pw-credit {opacity:1}
+/* Disabled dates are text, not faded containers with faded borders. */
+.pwb .pw-grid-canvas :is(.pw-plan,.pw-news) .pw-date-nav button:disabled {color:var(--pw-ui-disabled);opacity:1}
+/* END TONAL TEXT ROLES */
 /* Public package adapters: shared material, public data and local-only onboarding. */
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-group {display:grid;grid-template-columns:32px minmax(0,1fr) 32px;grid-template-rows:auto auto 1fr;gap:6px 10px;align-items:start;min-height:220px}
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-avatar {grid-column:1;grid-row:1;width:32px;height:32px}
@@ -709,3 +881,30 @@ body:has(.pwb) .pw-assistant-dock .hbc-drawer-head button:last-child {width:32px
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period] {background:transparent;border:0;box-shadow:none;transform:none}
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period]:is(:hover,:focus-visible) {background:var(--pw-ui-hover-white-layer);border:0;box-shadow:none;transform:none}
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period]:active {background:rgba(255,255,255,.42)}
+
+/* The public companion reuses the workbench dialog, field, close and action tokens. */
+body:has(.pwb) dialog.pw-public-profile {
+  position:fixed;inset:0;width:min(780px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:0;overflow:auto;
+}
+.pwb .pw-plan-source {display:inline-flex;align-items:center;gap:6px;margin:8px var(--pw-ui-panel-inset-x) 0;color:var(--pw-ui-accent);background:transparent;border:0;padding:0;text-decoration:none;font:inherit;font-size:12px;cursor:pointer}
+.pwb .pw-plan-source:hover {text-decoration:underline}
+body:has(.pwb) .pw-public-profile .hbc-profile-close {position:absolute}
+.pw-public-profile::backdrop {background:rgba(22,43,48,.28);backdrop-filter:blur(8px)}
+.pw-public-profile form {display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+.pw-public-profile .hbc-profile-editor,.pw-public-profile .hbc-profile-preview {min-width:0;display:flex;flex-direction:column}
+.pw-public-profile .hbc-profile-preview {border-left:1px solid var(--pw-ui-line);gap:12px}
+.pw-public-profile .hbc-profile-editor textarea {resize:vertical;padding:12px;min-height:120px;font:inherit}
+.pw-public-profile .hbc-profile-editor p,.pw-public-profile .hbc-profile-preview p {margin:0;font-size:12px}
+.pw-public-profile .pw-pet-choices {display:flex;gap:8px}
+.pw-public-profile .pw-pet-choices button {min-width:72px;display:grid;justify-items:center;padding:6px}
+.pw-public-profile .pw-pet-choices button[aria-pressed=true] {box-shadow:inset 0 0 0 2px var(--pw-ui-accent)}
+.pw-public-profile .pw-pet-choices svg {width:38px;height:42px}
+.pw-public-profile .pw-pet-preview-art {flex:1;display:grid;place-items:center}
+.pw-public-profile .pw-pet-preview-art svg {width:min(100%,150px);height:auto}
+body:has(.pwb) .pw-public-profile .pw-profile-save {background:var(--pw-ui-accent);color:#fff;padding:10px 16px}
+body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {background:var(--pw-ui-primary-hover)}
+@media(max-width:570px){
+ .pw-public-profile form {grid-template-columns:minmax(0,1fr)}
+ body:has(.pwb) .pw-public-profile .hbc-profile-preview {border-left:0;padding:0 var(--pw-ui-space-dialog) var(--pw-ui-space-dialog)}
+ .pw-public-profile .pw-pet-preview-art {display:none}
+}

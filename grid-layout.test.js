@@ -6,22 +6,23 @@ const source=readFileSync(new URL('./client.js',import.meta.url),'utf8');
 const sandbox={};vm.runInNewContext(source.split('/* GRID_GEOMETRY_START */')[1].split('/* GRID_GEOMETRY_END */')[0]+'\nglobalThis.api={gridProfile,gridDefaults,gridNormalize,gridArrange,gridContentRects};',sandbox);
 const {gridProfile,gridDefaults,gridNormalize,gridArrange,gridContentRects}=sandbox.api;
 const plain=v=>JSON.parse(JSON.stringify(v));
-const ids=['plan','news','activity','projects','pet'];
+const ids=['plan','news','activity','projects','pet','usage','quota'];
 const overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
-function valid(layout,p){assert.deepEqual(plain(layout.map(x=>x.id)),ids);for(const r of layout){for(const k of ['x','y','w','h'])assert.ok(Number.isInteger(r[k]));assert.ok(r.x>=0&&r.x+r.w<=p.cols);assert.ok(r.w>=(r.id==='pet'&&p.key==='wide'?3:p.minW)&&r.y>=0&&r.y<=160);assert.ok(r.h>=(p.collapsed&&r.id==='news'?1:r.id==='plan'||(r.id==='activity'&&p.key!=='medium')?4:3)&&r.h<=24);}for(let i=0;i<layout.length;i++)for(let j=i+1;j<layout.length;j++)assert.ok(!overlap(layout[i],layout[j]));}
+function valid(layout,p){assert.deepEqual(plain(layout.map(x=>x.id)),ids);for(const r of layout){for(const k of ['x','y','w','h'])assert.ok(Number.isInteger(r[k]));assert.ok(r.x>=0&&r.x+r.w<=p.cols);assert.ok(r.w>=(['usage','quota'].includes(r.id)?2:r.id==='pet'&&p.key==='wide'?3:p.minW)&&r.y>=0&&r.y<=160);assert.ok(r.h>=(['usage','quota'].includes(r.id)||p.collapsed&&r.id==='news'?2:r.id==='plan'||(r.id==='activity'&&p.key!=='medium')?4:3)&&r.h<=24);}for(let i=0;i<layout.length;i++)for(let j=i+1;j<layout.length;j++)assert.ok(!overlap(layout[i],layout[j]));}
 test('news and pet share the top row, with independent plan and left-column stacks',()=>{
  for(const width of [390,640,999,1000,1280]){
-  const p=gridProfile(width),l=gridDefaults(p);valid(l,p);const [plan,news,activity,projects,pet]=l;
+  const p=gridProfile(width),l=gridDefaults(p);valid(l,p);const [plan,news,activity,projects,pet,usage,quota]=l;
+  assert.equal(usage.y,pet.y+pet.h);assert.equal(quota.y,usage.y);assert.equal(quota.h,usage.h);
   assert.equal(pet.y,0);assert.equal(news.w,p.key==='wide'?7:4);
-  assert.equal(plan.y,p.key==='narrow'?pet.h+news.h:pet.h);
-  assert.equal(news.y,p.key==='narrow'?pet.h:0);
+  assert.equal(plan.y,p.key==='narrow'?pet.h+usage.h+news.h:pet.h+usage.h);
+  assert.equal(news.y,p.key==='narrow'?pet.h+usage.h:0);
   assert.equal(activity.y,p.key==='narrow'?plan.y+plan.h:news.h);
   assert.equal(projects.y,activity.y+activity.h);
   assert.deepEqual(plain(gridNormalize(l,p)),plain(l));
  }
 });
-test('unknown and corrupted saved data cannot hide any of the five areas',()=>{const p=gridProfile(1280);for(const v of [null,{},[],[{id:'other'}]])assert.deepEqual(plain(gridNormalize(v,p)),plain(gridDefaults(p)));valid(gridNormalize(ids.map(id=>({id,x:Infinity,y:99999,w:-1,h:NaN,unsafe:'ignored'})),p),p);});
-test('five full-width maximum cards fit after collision repair even near the boundary',()=>{const p=gridProfile(390);valid(gridNormalize(ids.map(id=>({id,x:0,y:160,w:4,h:24})),p),p);});
+test('unknown and corrupted saved data cannot hide any of the seven areas',()=>{const p=gridProfile(1280);for(const v of [null,{},[],[{id:'other'}]])assert.deepEqual(plain(gridNormalize(v,p)),plain(gridDefaults(p)));valid(gridNormalize(ids.map(id=>({id,x:Infinity,y:99999,w:-1,h:NaN,unsafe:'ignored'})),p),p);});
+test('seven full-width maximum cards fit after collision repair even near the boundary',()=>{const p=gridProfile(390);valid(gridNormalize(ids.map(id=>({id,x:0,y:160,w:4,h:24})),p),p);});
 test('shrinking daily news compacts the left column while preserving the original saved layout',()=>{const p=gridProfile(1280),base=gridDefaults(p),before=plain(base),folded=gridNormalize(base,{...p,collapsed:true});valid(folded,{...p,collapsed:true});assert.equal(folded.find(r=>r.id==='news').h,2);assert.equal(folded.find(r=>r.id==='activity').y,2);assert.equal(folded.find(r=>r.id==='projects').y,8);assert.equal(folded.find(r=>r.id==='plan').y,5);assert.deepEqual(plain(folded.find(r=>r.id==='pet')),plain(base.find(r=>r.id==='pet')));assert.equal(folded.find(r=>r.id==='plan').h,12);assert.deepEqual(plain(base),before);assert.deepEqual(plain(gridNormalize(base,p)),before);});
 test('active resize stays anchored and does not change the dimensions of neighboring areas',()=>{const p=gridProfile(1280),base=gridDefaults(p),next=gridArrange(base,'news',{w:12,h:9},p);valid(next,p);assert.equal(next[1].w,12);assert.equal(next[1].h,9);for(const r of next.filter(x=>x.id!=='news')){const old=base.find(x=>x.id===r.id);assert.equal(r.w,old.w);assert.equal(r.h,old.h);assert.ok(r.y>=9);}});
 test('a dragged area does not snap back while other areas fill its previous space',()=>{const p=gridProfile(390),next=gridArrange(gridDefaults(p),'news',{y:30},p);valid(next,p);assert.equal(next[1].y,30);assert.equal(next.find(x=>x.id==='pet').y,0);});
@@ -49,9 +50,10 @@ const savedNineThree = [
 test('saved nine-column news and three-column pet retain every position on upgrade',()=>{
  for(const width of [1000,1200,1512]){
   const p=gridProfile(width),before=plain(savedNineThree),next=gridNormalize(savedNineThree,p);
-  valid(next,p);assert.deepEqual(plain(next),before);
-  assert.deepEqual(plain(gridNormalize(next,p)),before);
-  assert.deepEqual(plain(gridArrange(next,'pet',{},p)),before);
+  valid(next,p);
+  for(const original of before){const migrated=next.find(r=>r.id===original.id);assert.equal(migrated.w,original.w);assert.equal(migrated.h,original.h);assert.equal(migrated.x,original.x);assert.ok(migrated.y>=original.y);}
+  assert.deepEqual(plain(gridNormalize(next,p)),plain(next));
+  assert.deepEqual(plain(gridArrange(next,'pet',{},p)),plain(next));
   assert.deepEqual(plain(gridNormalize(next,{...p,collapsed:true}).find(r=>r.id==='pet')),before.find(r=>r.id==='pet'));
   assert.deepEqual(plain(savedNineThree),before);
  }
@@ -59,7 +61,7 @@ test('saved nine-column news and three-column pet retain every position on upgra
 test('a companion can be resized back to three columns without changing other card sizes',()=>{
  const p=gridProfile(1512),wider=gridArrange(savedNineThree,'pet',{w:4},p);
  const next=gridArrange(wider,'pet',{x:9,y:0,w:3},p);valid(next,p);
- assert.deepEqual(plain(next),savedNineThree);
+ assert.equal(next.find(card=>card.id==='pet').w,3);assert.equal(next.find(card=>card.id==='pet').x,9);
  for(const width of [390,800]){
   const profile=gridProfile(width),pet=gridArrange(gridDefaults(profile),'pet',{w:3},profile).find(r=>r.id==='pet');
   assert.equal(pet.w,4,'medium and narrow cards retain their safe minimum');
