@@ -137,14 +137,14 @@ export function attachContent(ctx,projects,external){
     projectExists:async id=>projects.has?projects.has(id):(await projects.read()).shortcuts.some(item=>item.id===id)});
   ctx.effect(()=>async()=>{if(pending)await(await pending.catch(()=>null))?.close();});
   ctx.effect(()=>ctx.tools.register({
-    name:'personal_daily_brief',description:'读取或保存当前用户自己的 AI 每日精选。publish 只在用户要求将已完成的日报放到主控台时调用，不负责搜索或定时制作。先 read 相同日期取得 revision（没有时用 0）。items 第一条为头条，其余最多五条简讯；引用可信原文，不编造新闻、图片和链接。图片仅接受可公开读取的 HTTPS 地址，不上传本地文件。定时制作请使用 Harness 自身的定时任务，并在其任务说明中调用本工具交付。',
+    name:'personal_daily_brief',description:'读取或保存当前用户自己的 AI 每日精选。publish 只在用户要求将已完成的日报放到个人 AI 工作台时调用，不负责搜索或定时制作。先 read 相同日期取得 revision（没有时用 0）。items 第一条为头条，其余最多五条简讯；引用可信原文，不编造新闻、图片和链接。图片仅接受可公开读取的 HTTPS 地址，不上传本地文件。定时制作请使用 Harness 自身的定时任务，并在其任务说明中调用本工具交付。',
     parameters:{type:'object',properties:{action:{enum:['read','publish']},date:{type:'string'},expectedRevision:{type:'integer',minimum:0},
       edition:{type:'object',properties:{date:{type:'string'},title:{type:'string'},url:{type:'string'},imageUrl:{type:'string'},items:{type:'array',minItems:1,maxItems:6,items:{type:'object',properties:{title:{type:'string'},summary:{type:'string'},url:{type:'string'}},required:['title'],additionalProperties:false}}},required:['date','title','items'],additionalProperties:false}},required:['action'],additionalProperties:false},
     output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
     execute:args=>args.action==='read'?service.archive(args.date):service.change({action:args.action,expectedRevision:args.expectedRevision,edition:args.edition}),isConcurrencySafe:()=>false
   }));
   ctx.effect(()=>ctx.tools.register({
-    name:'personal_project_notes',description:'通过聊天为主控台的项目记录需求和进展。可使用 addRequirement 配合 title 添加一条需求；也可用 save 仅修改 progress。先 list 取得项目 ID 与记录 revision。save 需要完整保留未被用户要求修改的记录，每条包含 uuid、title、done、createdAt。不要把想法标为已完成或自动开始开发。没有记录的项目不显示空的记录区。',
+    name:'personal_project_notes',description:'通过聊天为个人 AI 工作台的项目记录需求和进展。可使用 addRequirement 配合 title 添加一条需求；也可用 save 仅修改 progress。先 list 取得项目 ID 与记录 revision。save 需要完整保留未被用户要求修改的记录，每条包含 uuid、title、done、createdAt。不要把想法标为已完成或自动开始开发。没有记录的项目不显示空的记录区。',
     parameters:{type:'object',properties:{action:{enum:['list','save','addRequirement']},projectId:{type:'string'},title:{type:'string'},progress:{type:'string'},expectedRevision:{type:'integer',minimum:0},requirements:{type:'array',maxItems:100,items:{type:'object',properties:{id:{type:'string'},title:{type:'string'},done:{type:'boolean'},createdAt:{type:'integer'}},required:['id','title','done','createdAt'],additionalProperties:false}}},required:['action'],additionalProperties:false},
     output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
     execute:async args=>args.action==='list'?{projects:(await projects.read()).shortcuts,notes:await service.projectNotes()}:

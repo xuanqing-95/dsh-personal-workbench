@@ -8,10 +8,12 @@ import { createTasks } from './tasks.js';
 import { createHarnessAdapter } from './harness.js';
 import { validUIWrite } from './request.js';
 import { attachAssistant } from './assistant-host.js';
+import {attachPlanConnection,pickPlanLocation} from './plan-connection.js';
 import { dates } from './planning.js';
 import { createExternalSources } from './automation-sources.js';
 import { createPlanReader } from './notion-plans.js';
 import { createWeeklyPlanReader, validateWeek } from './weekly-plan.js';
+import {attachQuotaConnections} from './quota-connections.js';
 import { createUsageReader } from './usage.js';
 import { installWeixinNotifications } from './weixin-notification-host.js';
 import { attachPersonalOrganization } from './organization-host.js';
@@ -55,9 +57,12 @@ export function apply(ctx) {
   ctx.effect(()=>ctx.tools.register(planTool(tasks)));
   const organization = attachPersonalOrganization(ctx,tasks);
   const listTasks = () => tasks.list();
-  const plans = createPlanReader({listTasks, updateTask: input => tasks.update(input)});
-  const weeklyPlan = createWeeklyPlanReader({listTasks});
+  const connection=attachPlanConnection(ctx);
+  const plans = createPlanReader({listTasks,readConnection:connection.read, updateTask: input => tasks.update(input)});
+  const weeklyPlan = createWeeklyPlanReader({listTasks,readConnection:connection.read});
   const usage = createUsageReader();
+  const readUsage=async()=>usage.read((await projects.change({action:'list'})).items);
+  const quotas=attachQuotaConnections(ctx,{readUsage});
   ctx.effect(() => () => usage.close());
   let schedule, controller;
   ctx.inject(['schedule'], child => { schedule = child.schedule; child.effect(() => () => { schedule = undefined; }); });
@@ -89,6 +94,11 @@ export function apply(ctx) {
     if (!body || typeof body !== 'object' || Object.keys(body).some(key=>!['action','input'].includes(key))) throw Error('操作格式有误。');
     const input=body.input;
     switch(body.action) {
+      case 'connectQuota': return quotas.connect(input);
+      case 'disconnectQuota': return quotas.disconnect(input);
+      case 'connectPlan': return connection.connect(input);
+      case 'disconnectPlan': return connection.disconnect();
+      case 'pickPlanLocation': return pickPlanLocation(input);
       case 'addPlanTask': {
         const value=newTask.parse(input);
         return tasks.create({title:value.title,dueDate:value.date,priority:'normal'});
@@ -116,8 +126,10 @@ export function apply(ctx) {
         }
         const query = new URL(request.url).searchParams;
         switch (query.get('action')) {
+          case 'quotaConnections': return reply({value:await quotas.status()});
+          case 'planConnection': return reply({value:await connection.status()});
           case 'uiRelease': return reply({value:await readUIRelease()});
-          case 'usage': return reply({value:usage.read((await projects.change({action:'list'})).items)});
+          case 'usage': return reply({value:await readUsage()});
           case 'projectNotes': return reply({value:await content.changeProjectNotes({action:'list'})});
           case 'organization': return reply({value:await organization.list()});
           case 'notificationStatus': return reply({value:await notifications.status()});
@@ -136,6 +148,7 @@ export function apply(ctx) {
           default: return reply({error:'未知的读取操作。'},400);
         }
       } catch (error) {
+        if (error.code?.startsWith('QUOTA_'))return reply({error:error.message},400);
         if (error.code?.startsWith('PLAN_')) return reply({error:error.message},
           error.code==='PLAN_CHECK_PERMISSION' ? 403 : error.code==='PLAN_CHECK_CONFLICT' ? 409 : error.code==='PLAN_CHECK_UNKNOWN' ? 503 : 400);
         if (['APP_OPEN_FAILED','APP_UNAVAILABLE'].includes(error.code)) return reply({error:error.message},400);

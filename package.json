@@ -1,6 +1,6 @@
 {
   "name": "dsh-personal-workbench",
-  "version": "0.8.0-beta.9",
+  "version": "0.8.0-beta.10",
   "type": "module",
   "description": "一眼查看今日计划、每日 AI 资讯与正在进行的事，点击进入对应页面或对话。",
   "exports": {
@@ -58,7 +58,11 @@
     "local-plan-file.js",
     "brief-image.js",
     "organization-host.js",
-    "organization.js"
+    "organization.js",
+    "plan-connection.js",
+    "plan-file-connection.js",
+    "plan-service-connection.js",
+    "quota-connections.js"
   ],
   "dependencies": {
     "zod": "4.6.7"

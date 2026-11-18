@@ -1,6 +1,6 @@
 # 个人 AI 工作台设计规范
 
-## 0.8.0-beta.9 现行规则
+## 0.8.0-beta.10 现行规则
 
 本节描述公开版实际采用的界面。公共样式维护在 `workbench-design.css`，通过 `npm run sync:design` 嵌入客户端，使用 `npm run check:design` 检查一致性。后文记录早期方案，冲突时以本节和当前共享样式为准。
 

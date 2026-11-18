@@ -1,4 +1,4 @@
-export const DEFAULT_PROMPT = '你是用户在个人主控台中的私人助理。用自然、简洁的中文交流。把用户交代的事情梳理成明确的下一步，区分建议、待办和已实际执行的结果。需要查看项目或任务时先读取现有信息；只有用户要求安排、创建或修改时才执行，并遵守所有权限与确认机制。缺少关键日期、对象或范围时先问清楚，不虚构已创建的任务、提醒或执行成果。不要仅因修改角色提示词就开始执行工作。';
+export const DEFAULT_PROMPT = '你是用户在个人 AI 工作台中的私人助理。用自然、简洁的中文交流。把用户交代的事情梳理成明确的下一步，区分建议、待办和已实际执行的结果。需要查看项目或任务时先读取现有信息；只有用户要求安排、创建或修改时才执行，并遵守所有权限与确认机制。缺少关键日期、对象或范围时先问清楚，不虚构已创建的任务、提醒或执行成果。不要仅因修改角色提示词就开始执行工作。';
 export function createAssistantService({domain,resolveAgent,attach}) {
   let tail=Promise.resolve();
   const serial=fn=>{const work=tail.then(fn);tail=work.catch(()=>{});return work;};

@@ -16,24 +16,25 @@
 | 助手交付的内容在哪里？ | 在「AI 助手任务进展」查看最新进展和上次成果。连接兼容的内容工作台后，可以分清文案已生成、配图尚未完成，也可以点进对应稿件。 |
 | 几个项目之间，下一步该跟哪一个？ | 在「项目进展」查看最新进展和下一步，点箭头回到关联对话。转到「今日计划」加入待办，按日、周或月查看安排。 |
 
-「AI每日精选」保留自己的日报刊期和原文入口。点击「今日用量」可看本机支持的模型用量记录，「剩余额度」显示 Codex 最近返回的限额窗口。你还可以通过「编辑布局」调整这些卡片的位置和大小。
+「AI每日精选」保留自己的日报刊期和原文入口。点击「今日用量」可看本机支持的模型用量记录，「剩余额度」可以并列查看 Codex 的套餐百分比、已连接的 DeepSeek Harness 账户余额，以及自己记录的其他助手额度。你还可以通过「编辑布局」调整这些卡片的位置和大小。
 
 ## 安装并记下第一条待办
 
-适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。当前插件版本为 **0.8.0-beta.9**。
+适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。当前插件版本为 **0.8.0-beta.10**。
 
 1. 在 Harness 左侧打开 **插件 → 添加插件**。
 2. 把下面整行地址粘贴到安装框，点击「安装」并按提示启用。
 3. 从侧栏打开「个人 AI 工作台」，在「今日计划」选一个日期，写下要跟进的事，点击「添加」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.9/dsh-personal-workbench-0.8.0-beta.9.tgz
+https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.10/dsh-personal-workbench-0.8.0-beta.10.tgz
 ```
 
-也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.9/dsh-personal-workbench-0.8.0-beta.9.tgz)
+也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.10/dsh-personal-workbench-0.8.0-beta.10.tgz)
 
 ## 接上你正在用的工具
 
+- **连接自己的计划**。在「今日计划」点「连接我的计划」，选择 Notion、飞书多维表格、Obsidian 日记或本地计划文件。读取成功后即可在日历里查看。
 - **和 Data 聊天**。在 Harness 配好自己的模型后，点击「聊聊」，试试“把明天准备演示加入计划”。回到工作台就能核对保存结果。
 - **查看已有项目和自动化**。关联自己的项目后可回到原对话，连接 GitHub 后可查看提交、PR 和版本。已有的 Notion 计划、Hermes 日报任务，以及兼容内容工作台的任务与成果也可按需接入。[连接指南](./START-HERE.md#按需连接自己的工具)
 - **了解数据如何使用**。待办保存在当前 Harness 配置中。模型和第三方服务沿用你自己的账号、权限和额度。[隐私与权限](./PRIVACY.md)

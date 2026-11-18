@@ -53,6 +53,11 @@ export function createNotionAPI({id,token,fetchImpl=fetch,timeoutMs=20000}) {
     throw Error('计划分页读取不完整。');
   }
   return {
+    async database(){
+      const database=await request('databases/'+id);
+      if(database?.object!=='database'||compactId(database.id)!==compactId(id)||!Array.isArray(database.data_sources))throw Error('Notion 数据库不匹配。');
+      return database;
+    },
     async schema(){
       const schema=await request('data_sources/'+id);
       if(schema?.object!=='data_source'||compactId(schema.id)!==compactId(id))throw Error('Notion 数据源不匹配。');

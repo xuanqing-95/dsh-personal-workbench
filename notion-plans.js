@@ -47,14 +47,15 @@ async function buildDay(api,page,date,title,canCheck){
   for(const block of visible){const node=await walk(block,0);if(node)nodes.push(node);}
   return {...base,url:pageURL(page.id),items,groups:nodes.length?[{title,tasks:items,items:nodes}]:[],canCheck,availability:nodes.length?'connected':'empty'};
 }
-export function createPlanReader({listTasks,updateTask,env=process.env,fetchImpl=fetch,now=Date.now}={}) {
+export function createPlanReader({listTasks,updateTask,readConnection,env=process.env,fetchImpl=fetch,now=Date.now}={}) {
   const id=env.DSH_WORKBENCH_NOTION_DAILY_SOURCE_ID, token=env.DSH_WORKBENCH_NOTION_TOKEN;
   const sectionTitle=env.DSH_WORKBENCH_NOTION_DAILY_SECTION?.trim()||'今日计划';
   const allowWrite=env.DSH_WORKBENCH_NOTION_CHECKBOX_WRITE==='1';
   const pending=new Map(),cache=new Map();let writeChain=Promise.resolve(),version=0;
   const fileTasks=createLocalPlanFile(env.DSH_WORKBENCH_LOCAL_PLAN_FILE);
-  async function local(){
+  async function local(connection){
     const value=await listTasks(),profile=(value?.items||value||[]).map(t=>({...t,source:'profile'}));
+    if(connection)return {rows:[...profile,...connection.rows],issue:connection.issue};
     try{return {rows:[...profile,...await fileTasks()],issue:null};}
     catch{return {rows:profile,issue:'无法读取选定的今日计划文件。'};}
   }
@@ -66,7 +67,7 @@ export function createPlanReader({listTasks,updateTask,env=process.env,fetchImpl
     const items=base.items.map(item=>{
       const record=lookup.get(item.id);
       const source=record.source;
-      const groupTitle=source==='local'?(record.group||'本机计划'):'工作台待办';
+      const groupTitle=(source==='local'||source==='connection')?(record.group||'本机计划'):'工作台待办';
       const projected={...item,text:item.title,source,canCheck:source==='profile'};
       if(!groups.has(groupTitle))groups.set(groupTitle,{title:groupTitle,tasks:[],items:[]});
       const group=groups.get(groupTitle);group.tasks.push(projected);
@@ -74,8 +75,8 @@ export function createPlanReader({listTasks,updateTask,env=process.env,fetchImpl
       return projected;
     });
     const hasRemote=day.source==='notion'&&(day.groups.length>0||day.items.length>0);
-    const source=hasRemote&&items.length?'mixed':hasRemote?day.source:items.some(t=>t.source==='local')?'local':items.length?'profile':day.source;
-    const showGroups=hasRemote||items.some(t=>t.source==='local');
+    const source=items.some(t=>t.source==='connection')?'connection':hasRemote&&items.length?'mixed':hasRemote?day.source:items.some(t=>t.source==='local')?'local':items.length?'profile':day.source;
+    const showGroups=hasRemote||source==='connection'||items.some(t=>t.source==='local');
     return {...day,source,availability:items.length?'connected':issue&&!hasRemote?'unavailable':day.availability,
       items:[...day.items,...items],groups:[...day.groups,...(showGroups?[...groups.values()]:[])],
       ...(issue?{reason:[day.reason,issue].filter(Boolean).join(' ')}:{})};
@@ -112,9 +113,10 @@ export function createPlanReader({listTasks,updateTask,env=process.env,fetchImpl
   }
   async function readPlan(date=todayLabel()){
     if(!dates.day(date))throw Error('请选择有效日期。');
-    const loaded=await local();
+    const connection=await readConnection?.(date,date);
+    const loaded=await local(connection);
     let day={...planDay([],date),canCheck:true};
-    if(id){
+    if(id&&!connection){
       try{day=await memo(date,()=>remoteDay(api(),date));}
       catch{day={...day,availability:'unavailable',reason:'Notion 日计划暂时无法读取，仅显示本机待办。'};}
     }
@@ -127,13 +129,14 @@ export function createPlanReader({listTasks,updateTask,env=process.env,fetchImpl
       validateWeek(week);if(week>=end||nextDate(week,7)<=start)throw Error('请选择当月的一周。');
       start=start>week?start:week;end=end<nextDate(week,7)?end:nextDate(week,7);
     }
+    const connection=await readConnection?.(start,nextDate(end,-1));
     const localMonth=async()=>{
-      const {rows,issue}=await local(), summary=calendarMonth(rows,month);
+      const {rows,issue}=await local(connection), summary=calendarMonth(rows,month);
       summary.days=Object.fromEntries(Object.entries(summary.days).filter(([day])=>day>=start&&day<end));
       if(issue){summary.availability=Object.keys(summary.days).length?'partial':'unavailable';summary.reason=issue;}
       return summary;
     };
-    if(!id)return localMonth();
+    if(!id||connection)return localMonth();
     const localData=await localMonth();
     try{
       const remote=await memo(month+':'+(week||''),async()=>{

@@ -14,7 +14,7 @@ export function createProjectShortcuts({store,z,resolveRepository}) {
   const schema=shortcutSchema(z);let queue=Promise.resolve(),blocked=false;
   const fail=(code,message)=>{throw Object.assign(new Error(message),{code});};
   const serial=fn=>{const result=queue.then(fn);queue=result.catch(()=>{});return result;};
-  async function commit(state){if(blocked)fail('WRITE_UNCERTAIN','上次保存结果不确定，请重启主控台后核对。');try{await store.write(state);}catch(error){blocked=true;throw error;}}
+  async function commit(state){if(blocked)fail('WRITE_UNCERTAIN','上次保存结果不确定，请重启个人 AI 工作台后核对。');try{await store.write(state);}catch(error){blocked=true;throw error;}}
   return {
     async list(){await queue;return {...structuredClone(await store.read()),writeBlocked:blocked};},
     run(action,input){return serial(async()=>{

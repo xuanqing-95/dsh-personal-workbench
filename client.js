@@ -1,11 +1,12 @@
 window.__ModuleLoader__.load({
   id: 'dsh-personal-workbench',
   factory(require) {
+    const workbenchName = '个人 AI 工作台';
     // OpenAI service mark, SVG from lobehub/lobe-icons (MIT); trademark belongs to OpenAI.
     const QUOTA_OPENAI_LOGO = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMTExMTExIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGhlaWdodD0iMWVtIiBzdHlsZT0iZmxleDpub25lO2xpbmUtaGVpZ2h0OjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjFlbSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+T3BlbkFJPC90aXRsZT48cGF0aCBkPSJNOS4yMDUgOC42NTh2LTIuMjZjMC0uMTkuMDcyLS4zMzMuMjM4LS40MjhsNC41NDMtMi42MTZjLjYxOS0uMzU3IDEuMzU2LS41MjMgMi4xMTctLjUyMyAyLjg1NCAwIDQuNjYyIDIuMjEyIDQuNjYyIDQuNTY2IDAgLjE2NyAwIC4zNTctLjAyNC41NDdsLTQuNzEtMi43NTlhLjc5Ny43OTcgMCAwMC0uODU2IDBsLTUuOTcgMy40NzN6bTEwLjYwOSA4LjhWMTIuMDZjMC0uMzMzLS4xNDMtLjU3LS40MjktLjczN2wtNS45Ny0zLjQ3MyAxLjk1LTEuMTE4YS40MzMuNDMzIDAgMDEuNDc2IDBsNC41NDMgMi42MTdjMS4zMDkuNzYgMi4xODkgMi4zNzggMi4xODkgMy45NDggMCAxLjgwOC0xLjA3IDMuNDczLTIuNzYgNC4xNjN6TTcuODAyIDEyLjcwM2wtMS45NS0xLjE0MmMtLjE2Ny0uMDk1LS4yMzktLjIzOC0uMjM5LS40MjhWNS44OTljMC0yLjU0NSAxLjk1LTQuNDcyIDQuNTkxLTQuNDcyIDEgMCAxLjkyNy4zMzMgMi43MTIuOTI4TDguMjMgNS4wNjdjLS4yODUuMTY2LS40MjguNDA0LS40MjguNzM3djYuODk4ek0xMiAxNS4xMjhsLTIuNzk1LTEuNTd2LTMuMzNMMTIgOC42NThsMi43OTUgMS41N3YzLjMzTDEyIDE1LjEyOHptMS43OTYgNy4yM2MtMSAwLTEuOTI3LS4zMzItMi43MTItLjkyN2w0LjY4Ni0yLjcxMmMuMjg1LS4xNjYuNDI4LS40MDQuNDI4LS43Mzd2LTYuODk4bDEuOTc0IDEuMTQyYy4xNjcuMDk1LjIzOC4yMzguMjM4LjQyOHY1LjIzM2MwIDIuNTQ1LTEuOTc0IDQuNDcyLTQuNjE0IDQuNDcyem0tNS42MzctNS4zMDNsLTQuNTQ0LTIuNjE3Yy0xLjMwOC0uNzYxLTIuMTg4LTIuMzc4LTIuMTg4LTMuOTQ4QTQuNDgyIDQuNDgyIDAgMDE0LjIxIDYuMzI3djUuNDIzYzAgLjMzMy4xNDMuNTcxLjQyOC43MzhsNS45NDcgMy40NDktMS45NSAxLjExOGEuNDMyLjQzMiAwIDAxLS40NzYgMHptLS4yNjIgMy45Yy0yLjY4OCAwLTQuNjYyLTIuMDIxLTQuNjYyLTQuNTE5IDAtLjE5LjAyNC0uMzguMDQ3LS41N2w0LjY4NiAyLjcxYy4yODYuMTY3LjU3MS4xNjcuODU2IDBsNS45Ny0zLjQ0OHYyLjI2YzAgLjE5LS4wNy4zMzMtLjIzNy40MjhsLTQuNTQzIDIuNjE2Yy0uNjE5LjM1Ny0xLjM1Ni41MjMtMi4xMTcuNTIzem01Ljg5OSAyLjgzYTUuOTQ3IDUuOTQ3IDAgMDA1LjgyNy00Ljc1NkMyMi4yODcgMTguMzM5IDI0IDE1Ljg0IDI0IDEzLjI5NmMwLTEuNjY1LS43MTMtMy4yODItMS45OTgtNC40NDguMTE5LS41LjE5LS45OTkuMTktMS40OTggMC0zLjQwMS0yLjc1OS01Ljk0Ny01Ljk0Ni01Ljk0Ny0uNjQyIDAtMS4yNi4wOTUtMS44OC4zMUE1Ljk2MiA1Ljk2MiAwIDAwMTAuMjA1IDBhNS45NDcgNS45NDcgMCAwMC01LjgyNyA0Ljc1N0MxLjcxMyA1LjQ0NyAwIDcuOTQ1IDAgMTAuNDljMCAxLjY2Ni43MTMgMy4yODMgMS45OTggNC40NDgtLjExOS41LS4xOSAxLS4xOSAxLjQ5OSAwIDMuNDAxIDIuNzU5IDUuOTQ2IDUuOTQ2IDUuOTQ2LjY0MiAwIDEuMjYtLjA5NSAxLjg4LS4zMDlhNS45NiA1Ljk2IDAgMDA0LjE2MiAxLjcxM3oiPjwvcGF0aD48L3N2Zz4=';
     const React = require('react'), h = React.createElement;
     const WORKBENCH_PORTRAIT = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"0 0 128 128\"><rect x=\"4\" y=\"4\" width=\"120\" height=\"120\" rx=\"30\" fill=\"#e6f1ef\"/><rect x=\"22\" y=\"25\" width=\"48\" height=\"78\" rx=\"12\" fill=\"#086b6d\"/><rect x=\"78\" y=\"25\" width=\"28\" height=\"32\" rx=\"10\" fill=\"#69a6a2\"/><rect x=\"78\" y=\"65\" width=\"28\" height=\"38\" rx=\"10\" fill=\"#b0ceca\"/><path d=\"m35 63 8 8 15-18\" fill=\"none\" stroke=\"#fff\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>");
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.9";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.10";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -2046,7 +2047,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return {title,timing:parts.join(' · '),label:content.title};
     }
     async function api(action, signal, input={}) {
-      const opening = ['addPlanTask','checkPlanTask','projectShortcuts','projectNotes','openHermesDaily','openCodexThread','openTodayPlan'].includes(action);
+      const opening = ['addPlanTask','checkPlanTask','connectQuota','disconnectQuota','connectPlan','disconnectPlan','pickPlanLocation','projectShortcuts','projectNotes','openHermesDaily','openCodexThread','openTodayPlan'].includes(action);
       const response = await fetch('/api/dsh-personal-workbench'+(opening?'':'?'+new URLSearchParams({action,...input})),{method:opening?'POST':'GET',credentials:'same-origin',cache:'no-store',signal,headers:opening?{'Content-Type':'application/json','X-Personal-UI':'1'}:undefined,body:opening?JSON.stringify({action,input}):undefined});
       const result = await response.json();
       if(!response.ok || result.error) throw new Error(text(result.error) || '暂时无法读取，请稍后再试。');
@@ -4944,7 +4945,7 @@ body:has(.pwb) {
 @supports not (backdrop-filter:blur(1px)) {body:has(.pwb) {--pw-ui-card-surface:#f4f6f5}}
 
 /* All workbench dialogs, including the assistant's body portal. */
-.pwb .pw-project-dialog:is(.pw-project-detail,.pw-appearance-dialog,.pw-usage-dialog),
+.pwb .pw-project-dialog:is(.pw-project-detail,.pw-appearance-dialog,.pw-usage-dialog,.pw-plan-connection),
 .pwb .pw-avatar-lightbox,
 body:has(.pwb) .hbc-profile-modal.hbc-profile-simple {
   background:var(--pw-ui-surface);color:var(--pw-ui-ink);
@@ -5783,6 +5784,23 @@ body:has(.pwb) dialog.pw-public-profile {
 }
 .pwb .pw-plan-source {display:inline-flex;align-items:center;gap:6px;margin:8px var(--pw-ui-panel-inset-x) 0;color:var(--pw-ui-accent);background:transparent;border:0;padding:0;text-decoration:none;font:inherit;font-size:12px;cursor:pointer}
 .pwb .pw-plan-source:hover {text-decoration:underline}
+.pwb .pw-connection-entry {align-self:flex-start;min-height:28px}
+.pwb .pw-project-dialog.pw-plan-connection {display:flex;flex-direction:column;width:min(460px,100%);max-height:100%;min-height:0;overflow:hidden;padding:0}
+.pwb .pw-plan-connection .pw-dialog-body {overflow-wrap:anywhere}
+.pwb .pw-plan-connection label {display:block;margin:16px 0 0;color:var(--pw-ui-ink);font:600 13px/20px var(--pw-body)}
+.pwb .pw-plan-connection :is(input,select) {width:100%;min-width:0;font:400 14px/20px var(--pw-body)}
+.pwb .pw-connection-location {display:flex;align-items:center;gap:8px;margin-top:6px}
+.pwb .pw-plan-connection .pw-connection-location input {flex:1 1 0;margin:0}
+.pwb .pw-connection-location button {flex:none}
+.pwb .pw-plan-connection .pw-connection-hint {display:block;margin:6px 0 0;font:400 12px/18px var(--pw-body);color:var(--pw-ui-muted)}
+.pwb .pw-plan-connection details {margin-top:16px}
+.pwb .pw-plan-connection summary {width:fit-content;cursor:pointer;font:400 13px/20px var(--pw-body);color:var(--pw-ui-body)}
+.pwb .pw-plan-connection summary:hover {color:var(--pw-ui-accent)}
+.pwb .pw-plan-connection pre {margin:6px 0 0;white-space:pre-wrap}
+.pwb .pw-connection-summary {display:flex;align-items:flex-start;gap:8px;padding:14px;background:var(--pw-ui-inner);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field)}
+.pwb .pw-connection-summary svg {flex:none;margin-top:2px;color:var(--pw-ui-accent)}
+.pwb .pw-connection-summary p {margin:4px 0 0;color:var(--pw-ui-muted)}
+.pwb .pw-plan-connection .pw-connection-error {margin:12px 0 0;color:var(--pw-ui-status-error,var(--pw-ui-ink))}
 body:has(.pwb) .pw-public-profile .hbc-profile-close {position:absolute}
 .pw-public-profile::backdrop {background:rgba(22,43,48,.28);backdrop-filter:blur(8px)}
 .pw-public-profile form {display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
@@ -5803,6 +5821,23 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  body:has(.pwb) .pw-public-profile .hbc-profile-preview {border-left:0;padding:0 var(--pw-ui-space-dialog) var(--pw-ui-space-dialog)}
  .pw-public-profile .pw-pet-preview-art {display:none}
 }
+
+.pwb .pw-spend-heading .pw-quota-connect {margin-inline-start:auto;color:var(--pw-ui-accent);font-size:11px}
+.pwb .pw-quota-card .pw-quota-other-list {display:none}
+.pwb .pw-quota-other-count,.pwb .pw-quota-other-list {font-size:12px;color:var(--pw-ui-body)}
+@container pw-finance (min-width:300px) {
+ .pwb .pw-quota-card.has-sources .pw-quota-other-list {display:flex;flex-wrap:wrap;gap:4px 12px}
+ .pwb .pw-quota-card.has-sources .pw-quota-other-count {display:none}
+}
+.pwb .pw-quota-manager,.pwb .pw-quota-account {display:grid;gap:8px}
+.pwb .pw-quota-manager {gap:16px}
+.pwb .pw-quota-account {padding-block-end:12px;border-bottom:1px solid var(--pw-ui-border,rgba(22,48,49,.14))}
+.pwb .pw-quota-account-title,.pwb .pw-quota-entry {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pwb .pw-quota-account button,.pwb .pw-quota-manual button {width:fit-content;justify-self:start}
+.pwb .pw-quota-manager small {color:var(--pw-ui-muted)}
+.pwb .pw-quota-manual {display:flex;flex-wrap:wrap;align-items:end;gap:10px}
+.pwb .pw-quota-manual label {display:grid;gap:4px;max-width:100%}
+.pwb .pw-quota-manual :is(input,select) {max-width:100%;min-height:34px;font:inherit}
 
 /* END SHARED DESIGN SYSTEM */
 `;
@@ -6130,7 +6165,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               h('p',{className:'pw-appearance-hint'},'支持 PNG、JPG、WebP，单张不超过 8 MB。')),
             h('footer',null,h('p',{className:'pw-appearance-hint'},'保存后应用到当前设备'),(error||!ready||busy)&&h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':'正在处理…')),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试'),h('div',{className:'pw-appearance-footer-actions'},h('button',{type:'button',disabled:busy,onClick:close},'取消'),h('button',{type:'button',className:'pw-appearance-save',disabled:!ready||busy,onClick:()=>void commitAppearance()},'保存'))))),root.current):null;
       return h(React.Fragment,null,
-        h('div',{className:'pw-personal-tools',role:'group','aria-label':'个人工作台'},
+        h('div',{className:'pw-personal-tools',role:'group','aria-label':workbenchName},
           h('button',{type:'button',className:'pw-chat-shortcut',title:'AI个人助手','aria-label':'AI个人助手','aria-expanded':assistantOpen,onClick:onChat},h(Icon,{name:'ai',size:18}),h('span',null,'AI个人助手')),
           h('button',{ref:trigger,type:'button',className:'pw-account-button',title:'工作台设置','aria-label':'打开工作台设置','aria-haspopup':'dialog','aria-expanded':open,onClick:()=>{setNotice('');setOpen(true);}},h('img',{className:'pw-account-avatar',src:assets.avatar,alt:'',width:32,height:32,decoding:'async'}))),settings,
         open&&root.current&&require('react-dom').createPortal(h('dialog',{ref:avatarPreview,className:'pw-avatar-lightbox','aria-label':'头像大图',onClick:event=>{if(event.target===event.currentTarget)avatarPreview.current?.close();},onKeyDown:event=>event.stopPropagation()},
@@ -6420,8 +6455,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
       return {viewport,editing,active,notice,profile,handles,card,edit,cancel,reset,finish,fitContent,petPlacement,canvasStyle};
     }
     return {inject:['slots','locale','layout'],apply(ctx) {
-      ctx.effect(()=>ctx.locale.register('personalWorkbench','zh',{title:'个人 AI 工作台'}));
-      ctx.effect(()=>ctx.locale.register('personalWorkbench','en',{title:'Personal home'}));
+      ctx.effect(()=>ctx.locale.register('personalWorkbench','zh',{title:workbenchName}));
+      ctx.effect(()=>ctx.locale.register('personalWorkbench','en',{title:'Personal AI Workspace'}));
       const t=ctx.locale.bind('personalWorkbench');
       ctx.inject(['slots','locale','sessions','remote','remote.session'], ctx=>{
         const en={pet:'Pet the cat; drag to move',small:'Minimize',restore:'Show the cat',home:'Reset position',hello:'Meow. I live here now.',purr:'Purrr…',one:'I am keeping you company.',two:'A little head scratch, please.',three:'You work. I will watch.'};
@@ -6836,8 +6871,146 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
       const uiUpdates=installWorkbenchUpdates(ctx,{moduleId:"dsh-personal-workbench",endpoint:"/api/dsh-personal-workbench?action=uiRelease",petNamespace:"dsh-personal-workbench-cat",build:WORKBENCH_UI_BUILD});
       let sessionNav;
       ctx.inject?.(['uiWorkspace','sessions','workspaces'],nav=>{sessionNav=nav;nav.effect(()=>()=>{if(sessionNav===nav)sessionNav=undefined;});});
+      const planSources={
+        notion:{name:'Notion',field:'任务数据库链接',placeholder:'粘贴数据库链接或 ID',hint:'打开每行一项待办的数据库，复制它的链接。每项待办需要有日期。'},
+        feishu:{name:'飞书',field:'多维表格链接',placeholder:'粘贴选中数据表后的链接',hint:'在多维表格里点开存放待办的数据表，再复制地址栏中带 table= 的链接。每项待办需要有日期。'},
+        obsidian:{name:'Obsidian',field:'日记文件夹',placeholder:'粘贴日记文件夹的完整路径',hint:'选择存放每日笔记的文件夹。工作台会按日期打开 YYYY-MM-DD.md，把里面的待办列到对应日期。'},
+        file:{name:'其他文件',field:'计划文件',placeholder:'粘贴文件的完整路径',hint:'选择 Markdown 待办清单或 JSON 计划文件。'}
+      };
+      function PlanConnectionDialog({connection,readError,retry,onSaved,onClose}){
+        const [provider,setProvider]=React.useState('notion'),[editing,setEditing]=React.useState(false);
+        const [location,setLocation]=React.useState(''),[token,setToken]=React.useState(''),[dateField,setDateField]=React.useState('');
+        const [busy,setBusy]=React.useState(''),[error,setError]=React.useState('');
+        const dialog=React.useRef(null),lock=React.useRef(false);
+        const current=Boolean(connection?.provider)&&!editing;
+        const source=planSources[provider],file=provider==='file'||provider==='obsidian';
+        React.useEffect(()=>{dialog.current?.querySelector('.pw-dialog-close')?.focus();},[]);
+        React.useEffect(()=>{document.addEventListener('keydown',keyDown);return()=>document.removeEventListener('keydown',keyDown);},[onClose]);
+        function selectSource(value){setProvider(value);setLocation('');setToken('');setDateField('');setError('');}
+        function close(){if(!lock.current)onClose();}
+        function keyDown(event){
+          if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close();return;}
+          if(event.key!=='Tab')return;
+          const controls=[...dialog.current.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),summary,a[href]')].filter(node=>node.getClientRects().length);
+          const first=controls[0],last=controls.at(-1);
+          if(!dialog.current.contains(document.activeElement)){event.preventDefault();(event.shiftKey?last:first)?.focus();}
+          else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+          else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+        }
+        async function act(action){
+          if(lock.current)return;
+          lock.current=true;setBusy(action);setError('');
+          try{
+            if(action==='pickPlanLocation'){
+              const picked=await api(action,undefined,{provider});
+              if(picked?.location)setLocation(picked.location);
+            }else{
+              const input=action==='disconnectPlan'?{}:{provider,location:location.trim(),...(!file&&dateField.trim()?{dateField:dateField.trim()}:{}),...(provider==='notion'&&token.trim()?{token:token.trim()}:{})};
+              const result=await api(action,undefined,input);
+              onSaved(result?.connection||result);
+              setToken('');setEditing(false);
+              if(action==='disconnectPlan')onClose();
+            }
+          }catch(err){setError(text(err.message)||'读取失败，请检查来源后重试。');}
+          finally{lock.current=false;setBusy('');}
+        }
+        const lastRead=connection?.lastReadAt&&new Date(connection.lastReadAt);
+        const lastReadText=lastRead&&Number.isFinite(lastRead.getTime())?lastRead.toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}):'';
+        const formReady=connection&&!readError&&!current;
+        return h('div',{className:'pw-modal-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
+          h('form',{ref:dialog,className:'pw-project-dialog pw-plan-connection',role:'dialog','aria-modal':true,'aria-labelledby':'pw-connect-title',onSubmit:event=>{event.preventDefault();if(formReady&&location.trim())void act('connectPlan');}},
+            h('header',null,h('h2',{id:'pw-connect-title'},current?'我的计划来源':'连接我的计划'),h('button',{className:'pw-dialog-close',type:'button',onClick:close,'aria-label':'关闭计划来源设置','aria-disabled':Boolean(busy)},h(Icon,{name:'dismiss',size:16}))),
+            h('div',{className:'pw-dialog-body','aria-busy':Boolean(busy)},
+              readError?h('div',{role:'alert'},h('p',null,readError),h('button',{type:'button',onClick:retry},'重新读取')):!connection?h('p',{role:'status'},'正在读取计划来源…'):current?h(React.Fragment,null,
+                h('div',{className:'pw-connection-summary',role:'status'},h(Icon,{name:'check',size:18}),h('div',null,h('strong',null,'已连接 '+(planSources[connection.provider]?.name||'计划来源')),
+                  connection.detail&&h('p',null,connection.detail))),
+                lastReadText&&h('p',null,'连接时读取 · '+lastReadText),
+                Number.isInteger(connection.itemCount)&&h('p',null,connection.itemCount===0?'连接成功，试读范围内暂无待办。':'连接时读到了 '+connection.itemCount+' 项待办。'),
+                h('p',null,'完成状态请在来源中修改。断开后，原来的计划仍保存在那里。')):h(React.Fragment,null,
+                h('p',null,'把已有待办带进「今日计划」。在原来的工具里更新，工作台刷新后就能看到。'),
+                h('label',null,'计划存在哪里？',h('select',{value:provider,disabled:Boolean(busy),onChange:event=>selectSource(event.target.value)},Object.entries(planSources).map(([key,item])=>h('option',{key,value:key},item.name)))),
+                h('label',{htmlFor:'pw-connection-location'},source.field),h('div',{className:'pw-connection-location'},h('input',{id:'pw-connection-location',value:location,disabled:Boolean(busy),required:true,placeholder:source.placeholder,autoComplete:'off',spellCheck:false,onChange:event=>setLocation(event.target.value)}),
+                  file&&connection.canPick&&h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act('pickPlanLocation')},busy==='pickPlanLocation'?'选择中…':provider==='obsidian'?'选择文件夹':'选择文件')),
+                h('p',{className:'pw-connection-hint'},source.hint),
+                provider==='notion'&&h(React.Fragment,null,
+                  h('label',null,'Notion 集成密钥',h('input',{type:'password',value:token,disabled:Boolean(busy),required:!connection.hasNotionToken,placeholder:connection.hasNotionToken?'已配置，可留空':'粘贴有权读取这张表的密钥',autoComplete:'off',spellCheck:false,onChange:event=>setToken(event.target.value)})),
+                  h('p',{className:'pw-connection-hint'},'密钥只需在这里填写，试读成功后保存在本机插件配置中。'),
+                  h('p',{className:'pw-connection-hint'},'创建只读集成，再到数据库的「连接」中添加它。',h('a',{href:'https://www.notion.so/developers/connections',target:'_blank',rel:'noopener noreferrer'},'打开 Notion 集成管理'))),
+                provider==='feishu'&&h('p',{className:'pw-connection-hint'},'首次使用请先安装飞书 CLI，并用自己的飞书账号授权读取多维表格。',h('a',{href:'https://github.com/larksuite/cli/blob/main/README.zh.md#安装与快速开始',target:'_blank',rel:'noopener noreferrer'},'查看飞书官方安装与登录指南')),
+                !file&&h('details',{key:provider},h('summary',null,'表里有多个日期列？'),h('label',null,'按哪一列安排日期',h('input',{value:dateField,disabled:Boolean(busy),placeholder:'填写表里的列名，例如「到期日期」',onChange:event=>setDateField(event.target.value)}))),
+                file&&h('details',{key:provider},h('summary',null,'支持的待办格式'),h('p',{className:'pw-connection-hint'},provider==='file'?'Markdown 可在日期标题下写待办。JSON 支持 tasks 数组，每项填写 title 和 dueDate。':'在每天的笔记中，用 Markdown 复选框记录待办。'),h('pre',null,provider==='file'?'# 2026-11-19\n- [ ] 整理会议笔记':'- [ ] 整理会议笔记\n- [x] 确认会议时间'))),
+              error&&h('p',{role:'alert',className:'pw-connection-error'},error)),
+            h('footer',null,current?h(React.Fragment,null,
+              h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act('disconnectPlan')},busy?'断开中…':'断开连接'),
+              h('button',{type:'button',className:'is-primary',disabled:Boolean(busy),onClick:()=>{selectSource(connection.provider);setEditing(true);}},'更换来源')):
+              formReady?h(React.Fragment,null,h('button',{type:'button',disabled:Boolean(busy),onClick:close},'取消'),h('button',{type:'submit',className:'is-primary',disabled:Boolean(busy)||!location.trim()},busy==='connectPlan'?'正在读取…':'读取并连接')):null)));
+      }
       function Panel({renderFactorySlot}={}) {
+        const [connectionOpen,setConnectionOpen]=React.useState(false),[connection,setConnection]=React.useState(null),[connectionError,setConnectionError]=React.useState('');
+        const [connectionRetry,setConnectionRetry]=React.useState(0),connectionTrigger=React.useRef(null);
+        React.useEffect(()=>{
+          const abort=new AbortController();
+          setConnectionError('');
+          api('planConnection',abort.signal).then(result=>{if(!abort.signal.aborted)setConnection(result);}).catch(()=>{if(!abort.signal.aborted)setConnectionError('暂时无法读取已保存的计划来源。');});
+          return()=>abort.abort();
+        },[connectionOpen,connectionRetry]);
+        function openPlanConnection(event){connectionTrigger.current=event.currentTarget;setConnectionOpen(true);}
+        function closePlanConnection(){setConnectionOpen(false);requestAnimationFrame(()=>connectionTrigger.current?.focus());}
         const [usage,setUsage]=React.useState(null),[usageOpen,setUsageOpen]=React.useState(false),[usageView,setUsageView]=React.useState('models');
+        const [quotaData,setQuotaData]=React.useState(null),[quotaError,setQuotaError]=React.useState('');
+        const [quotaBusy,setQuotaBusy]=React.useState(false),[quotaForm,setQuotaForm]=React.useState(null);
+        const quotaSerial=React.useRef(0),quotaSaving=React.useRef(false);
+        React.useEffect(()=>{
+          const abort=new AbortController();
+          async function load(){
+            if(quotaSaving.current)return;
+            const request=++quotaSerial.current;
+            try{
+              const value=await api('quotaConnections',abort.signal);
+              if(request===quotaSerial.current&&!abort.signal.aborted){setQuotaData(value);setQuotaError('');}
+            }catch{if(!abort.signal.aborted&&request===quotaSerial.current)setQuotaError('暂时无法读取额度来源。');}
+          }
+          void load();const timer=setInterval(load,60000);
+          return()=>{abort.abort();clearInterval(timer);};
+        },[usageOpen]);
+        async function changeQuota(action,input){
+          if(quotaSaving.current)return;
+          quotaSaving.current=true;quotaSerial.current++;setQuotaBusy(true);setQuotaError('');
+          try{
+            const value=await api(action,undefined,input);
+            setQuotaData(value);setQuotaForm(null);
+          }catch(error){setQuotaError(error.message);}
+          finally{quotaSaving.current=false;setQuotaBusy(false);}
+        }
+        function quotaAmount(entry){
+          if(entry==null||entry.value==null)return '—';
+          const value=String(entry.value);
+          if(entry.unit==='CNY')return '¥'+value;
+          if(entry.unit==='USD')return '$'+value;
+          return value+(entry.unit==='%'?'%':' '+entry.unit);
+        }
+        function quotaManager(codex){
+          const accounts=list(quotaData?.accounts).filter(a=>a.provider!=='codex');
+          const harness=accounts.some(a=>a.provider==='harness');
+          const codexText=codex?'最近记录 · '+usageTime(codex.observedAt):'在这台电脑登录并使用 Codex，收到套餐额度后会自动显示。';
+          return h('div',{className:'pw-quota-manager'},
+            quotaError&&h('p',{role:'alert'},quotaError),
+            ...accounts.map(a=>h('section',{key:a.id,className:'pw-quota-account'},
+              h('div',{className:'pw-quota-account-title'},h('strong',null,a.label),
+                h('button',{type:'button',disabled:quotaBusy,'aria-label':'移除 '+a.label,onClick:()=>void changeQuota('disconnectQuota',{id:a.id})},'移除')),
+              ...list(a.entries).map((e,i)=>h('div',{key:i,className:'pw-quota-entry'},h('span',null,e.label),h('strong',null,quotaAmount(e)))),
+              h('small',null,(a.detail||(a.provider==='manual'?'手动记录':'最近读取'))+(a.observedAt?' · '+usageTime(a.observedAt):'')),
+              a.provider==='manual'&&h('button',{type:'button',disabled:quotaBusy,onClick:()=>setQuotaForm({id:a.id,label:a.label,value:String(a.entries[0].value),unit:a.entries[0].unit})},'更新数值'))),
+            h('div',{className:'pw-quota-account'},h('strong',null,'Codex 套餐'),h('small',null,codexText),
+              ...list(codex?.windows).map(w=>h('div',{key:w.id,className:'pw-usage-window'},usageRing(w.expired?null:w.remaining),h('div',null,h('span',null,w.minutes===10080?'每周额度':w.minutes===300?'5 小时额度':'套餐额度'),h('strong',null,w.expired?'等待更新':w.remaining+'% 剩余'),h('small',null,usageTime(w.resetAt)+' 重置'))))),
+            !harness&&h('div',{className:'pw-quota-account'},h('strong',null,'DeepSeek Harness 余额'),h('small',null,'读取当前登录账号的充值余额和赠金。'),h('button',{type:'button',disabled:quotaBusy||!quotaData?.canConnectHarness,onClick:()=>void changeQuota('connectQuota',{provider:'harness'})},quotaData?.canConnectHarness?'连接当前账号':'请在支持账号余额的 Harness 中打开')),
+            quotaForm?h('form',{className:'pw-quota-manual',onSubmit:e=>{e.preventDefault();void changeQuota('connectQuota',{provider:'manual',...quotaForm,value:Number(quotaForm.value)});}},
+              h('label',null,'助手名称',h('input',{required:true,maxLength:60,value:quotaForm.label,onChange:e=>setQuotaForm({...quotaForm,label:e.target.value})})),
+              h('label',null,'剩余额度',h('input',{required:true,type:'number',min:0,max:quotaForm.unit==='%'?100:undefined,step:'any',value:quotaForm.value,onChange:e=>setQuotaForm({...quotaForm,value:e.target.value})})),
+              h('label',null,'单位',h('select',{value:quotaForm.unit,onChange:e=>setQuotaForm({...quotaForm,unit:e.target.value})},...['%','次','token','CNY','USD'].map(unit=>h('option',{key:unit,value:unit},unit)))),
+              h('button',{type:'button',disabled:quotaBusy,onClick:()=>setQuotaForm(null)},'取消'),h('button',{type:'submit',disabled:quotaBusy},'保存额度')):
+              h('div',{className:'pw-quota-account'},h('button',{type:'button',disabled:quotaBusy,onClick:()=>setQuotaForm({label:'',value:'',unit:'次'})},'记录其他助手额度'),h('small',null,'也可以告诉 Data「帮我记下设计助手还剩 30 次」。手动记录会标明更新时间。')));
+        }
         const usageTrigger=React.useRef(null),usageDialog=React.useRef(null);
         const [usageSource,setUsageSource]=React.useState('Codex'),[usageScope,setUsageScope]=React.useState('day');
         const [usageDate,setUsageDate]=React.useState('');
@@ -6867,7 +7040,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           function key(event){
             if(event.key==='Escape'){event.preventDefault();if(event.target.closest?.('.pw-block-column')&&dialog.querySelector('#pw-usage-column-tooltip')){event.stopPropagation();clearUsageHint('detail');return;}setUsageOpen(false);requestAnimationFrame(()=>usageTrigger.current?.focus());}
             if(event.key==='Tab'){
-              const nodes=[...dialog.querySelectorAll('button,a[href],summary,[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);
+              const nodes=[...dialog.querySelectorAll('button,input,select,a[href],summary,[tabindex="0"]')].filter(n=>!n.disabled&&n.getClientRects().length);
               const first=nodes[0],last=nodes.at(-1);
               if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
               else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
@@ -6975,14 +7148,19 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const windows=list(q?.windows).filter(w=>!w.expired&&Date.parse(w.resetAt)>Date.now());
           const w=windows.find(w=>w.minutes===300)||windows[0];
           const stale=q&&(q.stale||Date.now()-Date.parse(q.observedAt)>600000);
-          const label=w?.minutes===300?'5 小时额度':w?.minutes===10080?'每周额度':'套餐额度';
+          const accounts=list(quotaData?.accounts).filter(a=>a.provider!=='codex');
+          const summaries=[...(w?[{label:'Codex',value:w.remaining+'%'}]:[]),...accounts.filter(a=>a.entries?.length).map(a=>({label:a.provider==='harness'?a.label+' · '+a.entries[0].label:a.label,value:quotaAmount(a.entries[0])}))];
+          const primary=summaries[0],multi=summaries.length>1;
+          const reset=w?new Date(w.resetAt).toLocaleString('zh-CN',{timeZone:usageZone,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):'';
           return h('div',{className:'pw-finance-cards','aria-label':'今日用量与剩余额度'},
             h('section',{...grid.card('usage'),className:'pw-finance-module','aria-label':'今日用量'},grid.handles('usage','今日用量'),h('div',contentProps,usageOverview())),
             h('section',{...grid.card('quota'),className:'pw-finance-module','aria-label':'剩余额度'},grid.handles('quota','剩余额度'),h('div',contentProps,
-            h('button',{type:'button',className:'pw-spend-card pw-quota-card','aria-label':'OpenAI Codex 剩余额度'+(w?' '+w.remaining+'%':'暂未获取')+'，查看套餐明细',title:'Codex · '+label+(stale?' · 上次记录':''),'aria-haspopup':'dialog',onClick:e=>openUsageAt(e,'quota')},
-              h('span',{className:'pw-spend-heading'},'剩余额度',h('span',{className:'pw-usage-more','aria-hidden':true,title:'查看额度明细'},'···')),
-              h('span',{className:'pw-quota-summary'},h('span',{className:'pw-quota-copy'},h('strong',{className:'pw-spend-value'},w?w.remaining+'%':'—'),
-              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,'重置时间'),h('span',null,w?new Date(w.resetAt).toLocaleString('zh-CN',{timeZone:usageZone,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):'暂未获取'))),h('span',{className:'pw-quota-ring-space'},usageRing(w?.remaining,true,'Codex')))))));
+            h('button',{type:'button',className:'pw-spend-card pw-quota-card'+(multi?' has-sources':''),'aria-label':'剩余额度，'+(primary?primary.label+' '+primary.value+'，查看或连接更多额度':'连接额度来源'),'aria-haspopup':'dialog',onClick:e=>{setQuotaForm(null);openUsageAt(e,'quota');}},
+              h('span',{className:'pw-spend-heading'},'剩余额度',h('span',{className:'pw-quota-connect'},accounts.length?'管理来源':'连接额度')),
+              h('span',{className:'pw-quota-summary'},h('span',{className:'pw-quota-copy'},h('strong',{className:'pw-spend-value'},primary?.value||'—'),
+              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,w?'Codex · 重置时间':primary?.label||accounts[0]?.detail||'选择你的额度来源'),h('span',null,w?reset:multi?summaries.length+' 个来源':''))),w&&h('span',{className:'pw-quota-ring-space'},usageRing(w.remaining,true,'Codex'))),
+              multi&&h('span',{className:'pw-quota-other-count'},'共 '+summaries.length+' 个来源'),
+              multi&&h('span',{className:'pw-quota-other-list'},...summaries.slice(1,4).map((a,i)=>h('span',{key:i},a.label+' · '+a.value)),summaries.length>4&&h('span',null,'另有 '+(summaries.length-4)+' 个来源'))))));
         }
         function usageRing(value,compact=false,provider=null){
           const known=typeof value==='number'&&Number.isFinite(value),amount=known?Math.max(0,Math.min(100,value)):0;
@@ -7055,11 +7233,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           return h('div',{className:'pw-modal-backdrop',onClick:event=>{if(event.target===event.currentTarget)closeUsage();}},
             h('section',{className:'pw-project-dialog pw-usage-dialog pw-usage-simple',ref:usageDialog,role:'dialog','aria-modal':true,'aria-labelledby':'pw-usage-title'},
               h('header',null,h('h2',{id:'pw-usage-title'},quotaOnly?'剩余额度':costOnly?'费用':'用量明细'),h('button',{type:'button',className:'pw-dialog-close','aria-label':'关闭用量明细',onClick:closeUsage},h(Icon,{name:'dismiss',size:18}))),
-              h('div',{className:'pw-dialog-body'},costOnly?h('p',null,'暂未接入费用账单。'):quotaOnly?h('section',{className:'pw-usage-quota'},
-                q?h(React.Fragment,null,h('p',null,'Codex '+(q.plan||'')),...list(q.windows).map(w=>{
-                  const expired=w.expired||Date.parse(w.resetAt)<=Date.now();
-                  return h('div',{className:'pw-usage-window',key:w.id},usageRing(expired?null:w.remaining),h('div',null,h('span',null,w.minutes===10080?'每周额度':w.minutes===300?'5 小时额度':'套餐额度'),h('strong',null,expired?'等待更新':w.remaining+'% 剩余'),h('small',null,expired?'上次额度周期已结束':usageTime(w.resetAt)+' 恢复')));
-                }),h('p',{className:'pw-usage-note'},(q.stale?'上次记录 · ':'更新于 ')+usageTime(q.observedAt))):h('p',null,'暂未读取到额度')):
+              h('div',{className:'pw-dialog-body'},costOnly?h('p',null,'暂未接入费用账单。'):quotaOnly?quotaManager(q):
               h(React.Fragment,null,
                 h('div',{className:'pw-usage-toolbar'},h('div',{role:'group','aria-label':'统计时段'},...[["day","按日"],["all","累计"]].map(([key,name])=>h('button',{key,type:'button','aria-pressed':usageScope===key,onClick:()=>{setUsageScope(key);if(key==='day'&&usageSource==='Hermes')setUsageSource('Codex');}},name))),h('div',{className:'pw-source-tabs',role:'tablist','aria-label':'用量来源'},...daySourceOptions.map((source,index)=>h('button',{key:source,id:'pw-source-'+source,type:'button',role:'tab','aria-selected':usageSource===source,'aria-controls':'pw-source-panel',tabIndex:usageSource===source?0:-1,onClick:()=>setUsageSource(source),onKeyDown:event=>{let next;if(event.key==='ArrowRight'||event.key==='ArrowLeft')next=(index+1)%2;else if(event.key==='Home')next=0;else if(event.key==='End')next=1;else return;event.preventDefault();setUsageSource(daySourceOptions[next]);event.currentTarget.parentElement.querySelectorAll('[role=tab]')[next]?.focus();}},source==='Harness'?(hostIcon?h('img',{src:hostIcon,alt:'',width:20,height:20,draggable:false,onError:event=>{event.currentTarget.hidden=true;}}):h(Icon,{name:'chat',size:18})):h('img',{src:QUOTA_OPENAI_LOGO,alt:'',width:20,height:20,draggable:false}),source==='Harness'?'DeepSeek Harness':source)))),
                 h('section',{className:'pw-usage-hero',id:'pw-source-panel',role:'tabpanel','aria-labelledby':'pw-source-'+usageSource},h('div',{className:'pw-usage-hero-heading'},h('div',null,h('span',{className:'pw-usage-eyebrow'},usageScope==='day'?(date===today?'今日总用量':'当日总用量'):'累计用量'),h('div',{className:'pw-usage-hero-total'},usageNumber(total),h('small',null,'Token'))),usageScope==='day'?dateNav:h('span',{className:'pw-usage-period'},usageSource)),
@@ -7331,7 +7505,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         function empty(title,description,icon='clock'){return h('div',{className:'pw-empty'},h(Icon,{name:icon,size:27}),h('strong',null,title),h('p',null,description));}
         function skeleton(){return h('div',{'aria-label':'正在读取'},[1,2,3].map(i=>h('div',{key:i,className:'pw-loading'})));}
         const notionTask=task=>task.source==='notion'||(!task.source&&plan?.source==='notion');
-        const canCheckTask=task=>task.canCheck!==false&&(!notionTask(task)||plan?.canCheck===true);
+        const canCheckTask=task=>task.source!=='connection'&&!String(task.source||'').startsWith('external-')&&task.canCheck!==false&&(!notionTask(task)||plan?.canCheck===true);
         async function checkTask(task) {
           if(pendingChecks.current.has(task.id)||!canCheckTask(task))return;
           const checked=!task.checked;
@@ -7401,18 +7575,18 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         function planBody() {
           if((!data&&loading)||planPending)return skeleton();
           const extra=viewDate>today?list(futureSource(viewDate)?.days?.[viewDate]).filter(item=>!planItems.some(task=>task.id===item.id)):[];
-          if(!planConnected&&!planEmpty&&!extra.length)return empty('计划暂时没有同步过来','请稍后点击右上角刷新，已有待办不会被清空。','calendar');
+          if(!planConnected&&!planEmpty&&!extra.length)return empty('计划暂时没有同步过来',plan?.reason||'请稍后点击右上角刷新，已有待办不会被清空。','calendar');
           const futureRows=extra.map(item=>h('p',{className:'pw-plan-note',key:item.id},safeHTTPS(item.url)?h('a',{className:'pw-quiet-link',href:safeHTTPS(item.url),target:'_blank',rel:'noopener noreferrer'},item.title,h(Icon,{name:'arrow',size:12})):item.title));
           if(!planItems.length && !list(plan?.groups).some(g=>list(g.items).length)&&!extra.length)return empty(viewDate===today?'今天还没有安排':'这天还没有安排','可以在卡片下方添加待办。','calendar');
           const groups=list(plan?.groups);
           const local=groups.length?groups.map((group,i)=>h('div',{className:'pw-plan-group',key:i},group.title&&group.title!==plan.title&&h('h3',{className:'pw-group-title'},group.title),planNodes(list(group.items).length?group.items:list(group.tasks).map(task=>({type:'task',task}))))):planItems.map((task,i)=>planRow(task,task.id||i));
-          return [...local,...futureRows];
+          return [connection?.provider&&plan?.reason&&h('p',{key:'plan-source-issue',className:'pw-plan-note',role:'status'},plan.reason),...local,...futureRows];
         }
         function newsBody() {
           if(!edition&&briefReadError===briefDay)return empty('日报暂未同步',null,'news');
           if(!edition&&!currentArchive)return skeleton();
           if(!news.length&&reader)return h('div',{className:'pw-brief-layout'},h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer'},'打开已保存的日报',h(Icon,{name:'arrow',size:12})));
-          if(!news.length)return empty(briefDay===briefToday?'今日尚未发布':briefDay>briefToday?'这天尚未到来':briefDay?'这天没有已发布的日报':'暂无已发布日报','跟助手说“把今天的日报放到主控台”，制作完成后即可在这里阅读。','news');
+          if(!news.length)return empty(briefDay===briefToday?'今日尚未发布':briefDay>briefToday?'这天尚未到来':briefDay?'这天没有已发布的日报':'暂无已发布日报','跟助手说“把今天的日报放到'+t('title')+'”，制作完成后即可在这里阅读。','news');
           const [lead,...quick]=news;
           function storyTitle(item) {
             const title=item.title||'今日资讯',url=safeURL(item.url);
@@ -7773,7 +7947,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 pending.length>0&&h('button',{type:'button',className:'pw-layout-button is-primary',disabled:handingOff,onClick:()=>void handoff(activeProject,pending)},h('span',{className:'pw-action-label'},'复制待办并打开对话')))));
         }
         function projectBody() {
-          if(!allProjects.length)return empty('把项目放在手边','在聊天中说“把这个项目加入主控台”，之后可直接回到开发对话。','grid');
+          if(!allProjects.length)return empty('把项目放在手边','在聊天中说“把这个项目加入'+t('title')+'”，之后可直接回到开发对话。','grid');
           const field=(key,label,value)=>h('div',{className:'pw-project-field','data-field':key},
             h('dt',{className:'pw-project-field-label'},label),
             h('dd',{className:'pw-project-field-value',title:value||undefined},value||'—'));
@@ -7806,9 +7980,9 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         }
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 或 Codex 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title+' · '+(item.source==='codex'?'Codex':'Harness'))))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
-        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden',position:'relative',containerType:'inline-size',containerName:'pw-frame'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h(FlowBackground,{root}),h(OrangeWaveBackground,{root}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject||usageOpen||!!node.closest('.pwb')?.querySelector('.pw-appearance-dialog'));}},
-          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,'个人 AI 工作台')),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))),personalTools())),
-          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},showWelcome&&h('aside',{className:'pw-welcome','aria-label':'开始使用'},h('div',null,h('strong',null,'从今天的一件事开始'),h('p',null,'在「今日计划」添加待办即可开始。想用 AI？先在 DeepSeek 中配置模型，再点击「AI个人助手」。日报和项目会在你添加内容后出现。')),h('button',{type:'button',className:'pw-dialog-close','aria-label':'收起使用提示',onClick:closeWelcome},h(Icon,{name:'dismiss',size:16}))),h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,'data-grid-profile':grid.profile.key,'data-pet-placement':grid.petPlacement,style:grid.canvasStyle},
+        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden',position:'relative',containerType:'inline-size',containerName:'pw-frame'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h(FlowBackground,{root}),h(OrangeWaveBackground,{root}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject||usageOpen||connectionOpen||!!node.closest('.pwb')?.querySelector('.pw-appearance-dialog'));}},
+          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,t('title'))),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))),personalTools())),
+          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},showWelcome&&h('aside',{className:'pw-welcome','aria-label':'开始使用'},h('div',null,h('strong',null,'从今天的一件事开始'),h('p',null,'可以直接添加待办，也可以在「今日计划」点「连接我的计划」，导入已有安排。想用 AI？先在 DeepSeek 中配置模型，再点击「AI个人助手」。日报和项目会在你添加内容后出现。')),h('button',{type:'button',className:'pw-dialog-close','aria-label':'收起使用提示',onClick:closeWelcome},h(Icon,{name:'dismiss',size:16}))),h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,'data-grid-profile':grid.profile.key,'data-pet-placement':grid.petPlacement,style:grid.canvasStyle},
             h('div',{className:'pw-overview-column pw-overview-left'},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'AI每日精选'},grid.handles('news','AI每日精选'),h('div',contentProps,
               h('header',{className:'pw-card-head'},
@@ -7833,12 +8007,13 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 h('div',{className:'pw-progress'},h('div',{className:'pw-progress-track',role:'progressbar','aria-label':'计划完成进度','aria-valuemin':0,'aria-valuemax':Math.max(planItems.length,1),'aria-valuenow':done},h('div',{className:'pw-progress-value',style:{width:planItems.length?Math.round(done/planItems.length*100)+'%':'0%'}})),h('span',{className:'pw-progress-count'},planConnected||planEmpty?calendarMode==='day'?(planItems.length-done)+' 项待办':done+' / '+planItems.length:'—')),
                 h('div',{className:'pw-card-body'},planBody())),
               data?.organization?.canOpenTodayPlan&&(plan?.source==='local'||planItems.some(item=>item.source==='local'))&&h('button',{type:'button',className:'pw-plan-source',onClick:()=>api('openTodayPlan',undefined,{}).catch(()=>setError('暂时无法打开今日计划。'))},'在今日计划中打开',h(Icon,{name:'arrow',size:11})),
-              safeHTTPS(plan?.url)&&h('a',{className:'pw-plan-source',href:safeHTTPS(plan.url),target:'_blank',rel:'noopener noreferrer'},h(Icon,{name:'check',size:13}),'已同步到 Notion',h(Icon,{name:'arrow',size:11})),
+              plan?.source!=='connection'&&safeHTTPS(plan?.url)&&h('a',{className:'pw-plan-source',href:safeHTTPS(plan.url),target:'_blank',rel:'noopener noreferrer'},h(Icon,{name:'check',size:13}),'已同步到 Notion',h(Icon,{name:'arrow',size:11})),
+              h('button',{type:'button',className:'pw-plan-source pw-connection-entry','aria-haspopup':'dialog',onClick:openPlanConnection},h(Icon,{name:'calendar',size:14}),connection?.provider?'管理计划来源':'连接我的计划'),
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
                 h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
           h('footer',{className:'pw-credit','aria-label':'DSH · Designed by XUANQING'},h('span',null,'DSH'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'XUANQING'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'),h('button',{type:'button',className:'pw-credit-help',onClick:()=>{setShowWelcome(true);grid.viewport.current?.scrollTo({top:0,behavior:'smooth'});}},'使用帮助'))),
-          h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail(),usageDetail()),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
+          h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail(),usageDetail(),connectionOpen&&h(PlanConnectionDialog,{connection,readError:connectionError,retry:()=>setConnectionRetry(value=>value+1),onSaved:next=>{setConnection(next);setTick(value=>value+1);},onClose:closePlanConnection})),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(SidebarAvatar)));
       ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'personal-workbench'},Panel));

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
-import {mkdtemp,rm} from 'node:fs/promises';
+import {mkdtemp,rm,writeFile} from 'node:fs/promises';
 import {setTimeout as pause} from 'node:timers/promises';
 import {apply} from './index.js';
 
@@ -126,4 +126,40 @@ test('beta.7 profile data, links, notes and task revisions survive an HTTP upgra
     assert.equal((await app.get('briefArchive',{date:day})).edition.title,'已有日报');
     assert.equal((await app.get('organization')).projects[0].title,'发布前验收');
   }finally{await app.close();}
+});
+
+test('selected plan source reaches dashboard, day, week, month and assistant and survives reload',async t=>{
+  await isolate(t);
+  const folder=await mkdtemp(path.join(os.tmpdir(),'workbench-plan-test-'));
+  t.after(()=>rm(folder,{recursive:true,force:true}));
+  const data=new Map(),date='2026-11-17',week='2026-11-16';
+  const file=path.join(folder,date+'.md');
+  const app=harness(data);
+  try{
+    await writeFile(file,'- [ ] 演示外部计划');
+    const today=(await app.get('dashboard')).today;
+    if(today!==date)await writeFile(path.join(folder,today+'.md'),'- [ ] 今日外部计划');
+    assert.equal((await app.get('planConnection')).provider,null);
+    await app.post('addPlanTask',{title:'本机计划',date});
+    const connected=await app.post('connectPlan',{provider:'obsidian',location:folder});
+    assert.equal(connected.provider,'obsidian');
+    assert.ok(!(JSON.stringify(connected).includes(folder)));
+    const day=await app.get('plan',{date});
+    assert.equal(day.items.length,2);
+    assert.equal(day.items.find(item=>item.title==='演示外部计划').canCheck,false);
+    assert.ok((await app.get('dashboard')).plan.items.some(t=>t.source==='connection'));
+    assert.ok((await app.get('weeklyPlan',{week})).days[date].some(t=>t.title==='演示外部计划'));
+    assert.equal((await app.get('calendar',{month:date.slice(0,7)})).days[date].count,2);
+    const grid=await app.tools.get('personal_home').execute({view:'plan',date});
+    assert.equal(grid.items.length,2);
+    assert.equal((await app.request({},{action:'connectPlan',input:{provider:'file',location:path.join(folder,'missing.md')}})).status,400);
+    assert.equal((await app.get('planConnection')).provider,'obsidian');
+    assert.ok(!JSON.stringify(await app.get('export')).includes(folder));
+  }finally{await app.close();}
+  const second=harness(data);
+  try{
+    assert.equal((await second.get('planConnection')).provider,'obsidian');
+    await second.post('disconnectPlan',{});
+    assert.deepEqual((await second.get('plan',{date})).items.map(t=>t.title),['本机计划']);
+  }finally{await second.close();}
 });

@@ -30,7 +30,7 @@ export async function attachAssistant(ctx) {
       const headers={'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
       try {
         if (request.method === 'GET') return new Response(JSON.stringify(await service.operation({action:'read'})),{headers});
-        if (!validUIWrite(request)) return new Response(JSON.stringify({error:'请通过主控台设置助手。'}),{headers,status:403});
+        if (!validUIWrite(request)) return new Response(JSON.stringify({error:'请通过个人 AI 工作台设置助手。'}),{headers,status:403});
         const raw = await request.text();
         if(raw.length > 16000) throw new Error('提示词过长。');
         const input = JSON.parse(raw);

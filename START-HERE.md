@@ -9,14 +9,31 @@
 3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.9/dsh-personal-workbench-0.8.0-beta.9.tgz
+https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.10/dsh-personal-workbench-0.8.0-beta.10.tgz
 ```
 
-如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载 0.8.0-beta.9](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.9/dsh-personal-workbench-0.8.0-beta.9.tgz)
+如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载 0.8.0-beta.10](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.10/dsh-personal-workbench-0.8.0-beta.10.tgz)
 
 ## 先加一条待办
 
 在「今日计划」底部写「明天准备演示」，点「添加」。这条记录属于卡片上当前选中的日期。想排到明天，可以先在周视图点明天，再添加。点击整条待办或复选框可以完成或取消完成，点任务里的链接会打开链接。
+
+## 让已有的计划出现在工作台
+
+在「今日计划」点「连接我的计划」，选择你平时使用的工具，然后点「读取并连接」。连接窗口会显示试读结果。以后从同一个入口可以更换来源或断开。
+
+| 你的计划在哪里 | 需要选择什么 |
+| --- | --- |
+| Obsidian | 选择保存日记的文件夹，例如每天一篇 `YYYY-MM-DD.md`。工作台读取日期范围内笔记中的 `- [ ]` 和 `- [x]` 待办。 |
+| Notion | 复制一行一件事的数据库链接。数据库需要标题和日期列。首次使用时在 Notion 把数据库共享给自己的集成，在连接窗口填写集成密钥。本机已配置该令牌时可留空。 |
+| 飞书 | 打开多维表格的具体数据表或视图，复制链接。电脑需要安装官方飞书 CLI 并以有权查看该表的个人账号登录。 |
+| 其他工具 | 选择一个带日期的 Markdown 或 JSON 计划文件。可以先导出一次试用；原文件更新后，刷新工作台即可重新读取。 |
+
+外部计划在原工具中编辑。工作台自己添加的待办也能继续使用。
+
+## 查看不同助手的剩余额度
+
+点「剩余额度」上的「连接额度」。Codex 的套餐记录会自动出现。有 DeepSeek Harness 账号的用户可以点「连接当前账号」，读取充值余额和赠金。其他助手可以按次、百分比、Token 或货币金额手动记录，也可以告诉 Data「帮我记下设计助手还剩 30 次」。手动额度会显示记录时间。卡片较宽时会同时预览多个来源，点卡片可以看全部。
 
 ## 和你的 Data 聊天
 
