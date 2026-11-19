@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { probeServicePlan, readServicePlan } from './plan-service-connection.js';
+import { createWeeklyPlanReader } from './weekly-plan.js';
 
 const database = '11'.repeat(16), source = '22'.repeat(16), task = '33'.repeat(16);
 const span = { start:'2026-11-17',end:'2026-11-18' };
@@ -51,6 +52,9 @@ test('Notion resolves a copied database URL, disregards its view ID and preserve
   assert.deepEqual(calls,['/v1/databases/'+database,'/v1/data_sources/'+source,'/v1/data_sources/'+source+'/query']);
   assert.deepEqual(result.items.map(x=>[x.title,x.dueDate,x.status,x.canCheck]),[['周报',span.start,'done',false],['周报',span.end,'done',false]]);
   assert.equal(result.items[0].url,'https://www.notion.so/'+task);
+  const week=await createWeeklyPlanReader({env:{},listTasks:async()=>[],readConnection:async()=>({rows:result.items})})('2026-11-16');
+  assert.equal(week.days[span.start][0].id,week.days[span.end][0].id);
+  assert.equal(week.days[span.start][0].url,result.items[0].url);
   assert.deepEqual(await probeServicePlan(notion,options),{label:'工作计划',count:1});
 });
 test('Notion accepts direct source IDs and explicit local tokens and rejects ambiguous databases',async()=>{

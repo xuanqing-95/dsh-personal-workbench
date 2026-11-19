@@ -58,9 +58,10 @@ async function notionPlan(config, span, options) {
   for (const { start, end, item } of fromNotion(pages, schema, field)) {
     if (!start || start > span.end || end < span.start) continue;
     const last = end < span.end ? end : span.end;
+    const weeklyId = 'notion:'+compactId(item.id);
     for (let day = start > span.start ? start : span.start; day <= last; day = nextDate(day)) {
       if (items.length >= 6000) throw Error('这段日期的计划过多，请缩小日期范围。');
-      items.push({ id: 'notion:'+compactId(item.id)+':'+day, title: item.title, dueDate: day,
+      items.push({ id: weeklyId+':'+day, weeklyId, title: item.title, dueDate: day,
         status: item.checked ? 'done' : 'todo', url: item.url, source:'notion', canCheck:false });
     }
   }

@@ -6,7 +6,7 @@ window.__ModuleLoader__.load({
     const QUOTA_OPENAI_LOGO = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMTExMTExIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGhlaWdodD0iMWVtIiBzdHlsZT0iZmxleDpub25lO2xpbmUtaGVpZ2h0OjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjFlbSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+T3BlbkFJPC90aXRsZT48cGF0aCBkPSJNOS4yMDUgOC42NTh2LTIuMjZjMC0uMTkuMDcyLS4zMzMuMjM4LS40MjhsNC41NDMtMi42MTZjLjYxOS0uMzU3IDEuMzU2LS41MjMgMi4xMTctLjUyMyAyLjg1NCAwIDQuNjYyIDIuMjEyIDQuNjYyIDQuNTY2IDAgLjE2NyAwIC4zNTctLjAyNC41NDdsLTQuNzEtMi43NTlhLjc5Ny43OTcgMCAwMC0uODU2IDBsLTUuOTcgMy40NzN6bTEwLjYwOSA4LjhWMTIuMDZjMC0uMzMzLS4xNDMtLjU3LS40MjktLjczN2wtNS45Ny0zLjQ3MyAxLjk1LTEuMTE4YS40MzMuNDMzIDAgMDEuNDc2IDBsNC41NDMgMi42MTdjMS4zMDkuNzYgMi4xODkgMi4zNzggMi4xODkgMy45NDggMCAxLjgwOC0xLjA3IDMuNDczLTIuNzYgNC4xNjN6TTcuODAyIDEyLjcwM2wtMS45NS0xLjE0MmMtLjE2Ny0uMDk1LS4yMzktLjIzOC0uMjM5LS40MjhWNS44OTljMC0yLjU0NSAxLjk1LTQuNDcyIDQuNTkxLTQuNDcyIDEgMCAxLjkyNy4zMzMgMi43MTIuOTI4TDguMjMgNS4wNjdjLS4yODUuMTY2LS40MjguNDA0LS40MjguNzM3djYuODk4ek0xMiAxNS4xMjhsLTIuNzk1LTEuNTd2LTMuMzNMMTIgOC42NThsMi43OTUgMS41N3YzLjMzTDEyIDE1LjEyOHptMS43OTYgNy4yM2MtMSAwLTEuOTI3LS4zMzItMi43MTItLjkyN2w0LjY4Ni0yLjcxMmMuMjg1LS4xNjYuNDI4LS40MDQuNDI4LS43Mzd2LTYuODk4bDEuOTc0IDEuMTQyYy4xNjcuMDk1LjIzOC4yMzguMjM4LjQyOHY1LjIzM2MwIDIuNTQ1LTEuOTc0IDQuNDcyLTQuNjE0IDQuNDcyem0tNS42MzctNS4zMDNsLTQuNTQ0LTIuNjE3Yy0xLjMwOC0uNzYxLTIuMTg4LTIuMzc4LTIuMTg4LTMuOTQ4QTQuNDgyIDQuNDgyIDAgMDE0LjIxIDYuMzI3djUuNDIzYzAgLjMzMy4xNDMuNTcxLjQyOC43MzhsNS45NDcgMy40NDktMS45NSAxLjExOGEuNDMyLjQzMiAwIDAxLS40NzYgMHptLS4yNjIgMy45Yy0yLjY4OCAwLTQuNjYyLTIuMDIxLTQuNjYyLTQuNTE5IDAtLjE5LjAyNC0uMzguMDQ3LS41N2w0LjY4NiAyLjcxYy4yODYuMTY3LjU3MS4xNjcuODU2IDBsNS45Ny0zLjQ0OHYyLjI2YzAgLjE5LS4wNy4zMzMtLjIzNy40MjhsLTQuNTQzIDIuNjE2Yy0uNjE5LjM1Ny0xLjM1Ni41MjMtMi4xMTcuNTIzem01Ljg5OSAyLjgzYTUuOTQ3IDUuOTQ3IDAgMDA1LjgyNy00Ljc1NkMyMi4yODcgMTguMzM5IDI0IDE1Ljg0IDI0IDEzLjI5NmMwLTEuNjY1LS43MTMtMy4yODItMS45OTgtNC40NDguMTE5LS41LjE5LS45OTkuMTktMS40OTggMC0zLjQwMS0yLjc1OS01Ljk0Ny01Ljk0Ni01Ljk0Ny0uNjQyIDAtMS4yNi4wOTUtMS44OC4zMUE1Ljk2MiA1Ljk2MiAwIDAwMTAuMjA1IDBhNS45NDcgNS45NDcgMCAwMC01LjgyNyA0Ljc1N0MxLjcxMyA1LjQ0NyAwIDcuOTQ1IDAgMTAuNDljMCAxLjY2Ni43MTMgMy4yODMgMS45OTggNC40NDgtLjExOS41LS4xOSAxLS4xOSAxLjQ5OSAwIDMuNDAxIDIuNzU5IDUuOTQ2IDUuOTQ2IDUuOTQ2LjY0MiAwIDEuMjYtLjA5NSAxLjg4LS4zMDlhNS45NiA1Ljk2IDAgMDA0LjE2MiAxLjcxM3oiPjwvcGF0aD48L3N2Zz4=';
     const React = require('react'), h = React.createElement;
     const WORKBENCH_PORTRAIT = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"0 0 128 128\"><rect x=\"4\" y=\"4\" width=\"120\" height=\"120\" rx=\"30\" fill=\"#e6f1ef\"/><rect x=\"22\" y=\"25\" width=\"48\" height=\"78\" rx=\"12\" fill=\"#086b6d\"/><rect x=\"78\" y=\"25\" width=\"28\" height=\"32\" rx=\"10\" fill=\"#69a6a2\"/><rect x=\"78\" y=\"65\" width=\"28\" height=\"38\" rx=\"10\" fill=\"#b0ceca\"/><path d=\"m35 63 8 8 15-18\" fill=\"none\" stroke=\"#fff\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>");
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.10";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.11";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -7380,15 +7380,26 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           })().catch(()=>{if(!abort.signal.aborted)setReadError('项目暂时未同步，已保留上次内容');});
           return()=>abort.abort();
         },[tick]);
-        React.useEffect(()=>{if(viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick]);
         const weekStart=calendarMode==='week'?calendarDates(viewDate,'week')[0]:'';
         const calendarKey=weekStart||monthKey;
         const [weeklyPlan,setWeeklyPlan]=React.useState(null),[hoverWeekDay,setHoverWeekDay]=React.useState(-1);
-        const plannedWeeks=[...new Set((calendarMode==='day'?[viewDate]:calendarDates(viewDate,calendarMode)).filter(d=>d>today&&(calendarMode!=='month'||d.startsWith(monthKey))).map(d=>calendarDates(d,'week')[0]))].join(',');
-        React.useEffect(()=>{const abort=new AbortController();setWeeklyPlan({});for(const week of plannedWeeks.split(',').filter(Boolean))api('weeklyPlan',abort.signal,{week}).catch(()=>({week,availability:'unavailable'})).then(v=>{if(!abort.signal.aborted)setWeeklyPlan(prev=>({...prev,[week]:v}));});return()=>abort.abort();},[plannedWeeks,tick]);
-        const futureSource=d=>weeklyPlan?.[calendarDates(d,'week')[0]];
+        const weekSource=weeklyPlan?.[weekStart];
+        const useWeekPlan=calendarMode==='week'&&weekSource?.dayPlanFallback!==true;
+        const plannedWeeks=weekStart||[...new Set((calendarMode==='day'?[viewDate]:calendarDates(viewDate,calendarMode)).filter(d=>d>today&&(calendarMode!=='month'||d.startsWith(monthKey))).map(d=>calendarDates(d,'week')[0]))].join(',');
         React.useEffect(()=>{
-          if(calendarMode==='day')return;
+          const abort=new AbortController(),weeks=plannedWeeks.split(',').filter(Boolean);
+          setWeeklyPlan(previous=>Object.fromEntries(weeks.filter(week=>previous?.[week]).map(week=>[week,previous[week]])));
+          for(const week of weeks){
+            api('weeklyPlan',abort.signal,{week}).catch(()=>({week,availability:'unavailable'})).then(value=>{
+              if(!abort.signal.aborted)setWeeklyPlan(previous=>({...previous,[week]:value}));
+            });
+          }
+          return()=>abort.abort();
+        },[plannedWeeks,tick]);
+        const futureSource=d=>weeklyPlan?.[calendarDates(d,'week')[0]];
+        React.useEffect(()=>{if(useWeekPlan||viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick,useWeekPlan]);
+        React.useEffect(()=>{
+          if(calendarMode==='day'||useWeekPlan)return;
           const abort=new AbortController();
           const months=weekStart?[...new Set(calendarDates(weekStart,'week').map(date=>date.slice(0,7)))]:[calendarKey];
           for(const month of months){
@@ -7401,7 +7412,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               });
           }
           return()=>abort.abort();
-        },[calendarKey,calendarMode,tick]);
+        },[calendarKey,calendarMode,tick,useWeekPlan]);
         React.useEffect(()=>{
           let stopped=false,busy=false,abort;
           async function refreshAssistants(){if(stopped||busy||document.hidden||!root.current?.getClientRects().length||reading.current)return;busy=true;abort=new AbortController();
@@ -7528,6 +7539,11 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               const update=plan=>plan?.date===item.dueDate?{...plan,items:list(plan.items).map(row=>row.id===item.id?{...row,checked,revision:item.revision}:row)}:plan;
               setData(previous=>previous?{...previous,plan:update(previous.plan)}:previous);
               setDayPlan(update);
+              setWeeklyPlan(previous=>{
+                const week=calendarDates(item.dueDate,'week')[0],cached=previous?.[week],rows=cached?.days?.[item.dueDate];
+                if(!rows)return previous;
+                return {...previous,[week]:{...cached,days:{...cached.days,[item.dueDate]:rows.map(row=>row.id===item.id?{...row,checked,status:item.status,revision:item.revision}:row)}}};
+              });
             }
           } catch(error) {
             if(alive.current)setError(text(error.message)||'无法保存，请刷新查看。');
@@ -7574,7 +7590,18 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             return h(React.Fragment,{key},planNodes(node.children,depth+1));
           });
         }
+        const selectedWeekItems=list(weekSource?.days?.[viewDate]);
+        const sourceURL=safeHTTPS(useWeekPlan?weekSource?.sourceURL:plan?.source!=='connection'&&plan?.url);
         function planBody() {
+          if(useWeekPlan){
+            if(!weekSource)return skeleton();
+            if(!selectedWeekItems.length)return weekSource.availability==='connected'?empty(viewDate===today?'今天还没有安排':'这天还没有安排','可以在卡片下方添加待办。','calendar'):null;
+            return selectedWeekItems.map(task=>{
+              if(task.source==='profile')return planRow(task,task.id);
+              const url=safeHTTPS(task.url);
+              return h('p',{key:task.id,className:'pw-plan-note'},url?h('a',{className:'pw-quiet-link',href:url,target:'_blank',rel:'noopener noreferrer'},task.title,h(Icon,{name:'arrow',size:12})):task.title);
+            });
+          }
           if((!data&&loading)||planPending)return skeleton();
           const extra=viewDate>today?list(futureSource(viewDate)?.days?.[viewDate]).filter(item=>!planItems.some(task=>task.id===item.id)):[];
           if(!planConnected&&!planEmpty&&!extra.length)return empty('计划暂时没有同步过来',plan?.reason||'请稍后点击右上角刷新，已有待办不会被清空。','calendar');
@@ -7699,26 +7726,37 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             h('button',{type:'button',className:'pw-today',onClick:()=>setSelectedDate(''),disabled:viewDate===today,'aria-label':'回到今天'},'今天'));
         }
         function weeklyBody(){
-          const future=weeklyPlan?.[weekStart],datesInWeek=calendarDates(viewDate,'week');
-          const historical=d=>{const record=calendarData?.key===calendarKey?calendarData.months?.[d.slice(0,7)]?.days?.[d]:null;const live=d===viewDate&&planConnected?planItems:null;return (live||record?.items||(record?.first?[record.first]:[])).map((item,i)=>({...item,id:d+':'+i}));};
-          const source={days:Object.fromEntries(datesInWeek.map(d=>[d,d<=today?historical(d):list(future?.days?.[d])])),unscheduled:future?.unscheduled||[]};const connected=!plannedWeeks||['connected','partial'].includes(future?.availability);
+          const dates=calendarDates(viewDate,'week');
+          const months=calendarData?.key===calendarKey?calendarData.months:{};
+          const connected=['connected','partial'].includes(weekSource?.availability);
+          const days={...weekSource?.days},counts={};
+          if(!useWeekPlan){
+            for(const date of dates){
+              const record=months?.[date.slice(0,7)]?.days?.[date];
+              const live=date===viewDate&&(planConnected||planEmpty)?planItems:null;
+              const items=live||record?.items||(record?.first?[record.first]:null);
+              if(items)days[date]=items.map((task,index)=>({...task,id:date+':'+index}));
+              counts[date]=live?live.length:record?.count;
+            }
+          }
           const taskLink=(item,date)=>{
             const url=safeHTTPS(item.url);
             return h(url?'a':date?'button':'span',{key:item.id,href:url||undefined,target:url?'_blank':undefined,rel:url?'noopener noreferrer':undefined,type:!url&&date?'button':undefined,onClick:!url&&date?()=>setSelectedDate(date):undefined,className:'pw-week-task',title:item.title},h('span',{className:'pw-week-task-title'},item.title));
           };
-          const dates=calendarDates(viewDate,'week'),occurrences=new Map();
-          dates.forEach((date,index)=>list(source?.days?.[date]).forEach(item=>{const row=occurrences.get(item.id)||{item,indices:[]};row.indices.push(index);occurrences.set(item.id,row);}));
+          const occurrences=new Map();
+          dates.forEach((date,index)=>list(days[date]).forEach(item=>{const row=occurrences.get(item.id)||{item,indices:[]};row.indices.push(index);occurrences.set(item.id,row);}));
           const spans=[...occurrences.values()].filter(row=>row.indices.length>1);
           const spanning=new Set(spans.map(row=>row.item.id));
           return h('div',{className:'pw-calendar pw-week-planner'},
-            future?.availability==='partial'&&h('p',{className:'pw-calendar-status',role:'status'},'已显示本机安排，周计划来源暂未同步'),
-            !connected&&h('p',{className:'pw-calendar-status',role:'status'},!future?'正在读取周计划…':'周计划暂未同步，请稍后刷新'),
+            weekSource?.availability==='partial'&&h('p',{className:'pw-calendar-status',role:'status'},weekSource.reason||'已显示本机安排，周计划来源暂未同步'),
+            !connected&&h('p',{className:'pw-calendar-status',role:'status'},weekSource?(weekSource.reason||'周计划暂未同步，请稍后刷新'):'正在读取周计划…'),
+            !useWeekPlan&&Object.values(months).some(month=>month.availability!=='connected')&&h('p',{className:'pw-calendar-status',role:'status'},'部分日计划暂未同步，请稍后刷新'),
             h('div',{className:'pw-week-board',onMouseMove:event=>{const rect=event.currentTarget.querySelector('.pw-week-column-backdrops').getBoundingClientRect();setHoverWeekDay(Math.max(0,Math.min(6,Math.floor((event.clientX-rect.left)/(rect.width/7)))));},onMouseLeave:()=>setHoverWeekDay(-1)},
               h('div',{className:'pw-week-column-backdrops','aria-hidden':true},dates.map((date,index)=>h('span',{key:date,'data-hover':String(index===hoverWeekDay),'data-selected':String(date===viewDate)}))),
-              h('div',{className:'pw-week-columns'},dates.map((date,index)=>{const items=list(source?.days?.[date]);return h('section',{key:date,className:'pw-week-column','data-hover':String(index===hoverWeekDay),'data-selected':String(date===viewDate),onMouseEnter:()=>setHoverWeekDay(index)},h('button',{type:'button',className:'pw-week-day','aria-pressed':date===viewDate,'aria-current':date===today?'date':undefined,onFocus:()=>setHoverWeekDay(index),onBlur:()=>setHoverWeekDay(-1),onClick:()=>setSelectedDate(date)},h('span',null,['周一','周二','周三','周四','周五','周六','周日'][index]),h('strong',null,Number(date.slice(8))),items.length>0&&h('small',null,items.length+'项')));})),
+              h('div',{className:'pw-week-columns'},dates.map((date,index)=>{const count=counts[date]??list(days[date]).length;return h('section',{key:date,className:'pw-week-column','data-hover':String(index===hoverWeekDay),'data-selected':String(date===viewDate),onMouseEnter:()=>setHoverWeekDay(index)},h('button',{type:'button',className:'pw-week-day','aria-pressed':date===viewDate,'aria-current':date===today?'date':undefined,onFocus:()=>setHoverWeekDay(index),onBlur:()=>setHoverWeekDay(-1),onClick:()=>setSelectedDate(date)},h('span',null,['周一','周二','周三','周四','周五','周六','周日'][index]),h('strong',null,Number(date.slice(8))),count>0&&h('small',null,count+'项')));})),
               spans.length>0&&h('div',{className:'pw-week-spans'},spans.map((row,index)=>h('a',{key:row.item.id,href:safeHTTPS(row.item.url)||undefined,target:'_blank',rel:'noopener noreferrer',className:'pw-week-task pw-week-span',onFocus:()=>setHoverWeekDay(row.indices[0]),onBlur:()=>setHoverWeekDay(-1),style:{gridColumn:(row.indices[0]+1)+' / '+(row.indices[row.indices.length-1]+2),gridRow:index+1},title:row.item.title},h('span',{className:'pw-week-task-title'},row.item.title)))),
-              h('div',{className:'pw-week-columns pw-week-single-days'},dates.map((date,index)=>h('div',{key:date,className:'pw-week-column',onMouseEnter:()=>setHoverWeekDay(index)},h('div',{className:'pw-week-tasks'},list(source?.days?.[date]).filter(item=>!spanning.has(item.id)).map(item=>taskLink(item,date))))))),
-            connected&&list(source.unscheduled).length>0&&h('div',{className:'pw-week-unscheduled'},h('h3',null,'本周待安排'),source.unscheduled.map(item=>taskLink(item))));
+              h('div',{className:'pw-week-columns pw-week-single-days'},dates.map((date,index)=>h('div',{key:date,className:'pw-week-column',onMouseEnter:()=>setHoverWeekDay(index)},h('div',{className:'pw-week-tasks'},list(days[date]).filter(item=>!spanning.has(item.id)).map(item=>taskLink(item,date))))))),
+            connected&&list(weekSource?.unscheduled).length>0&&h('div',{className:'pw-week-unscheduled'},h('h3',null,'本周待安排'),weekSource.unscheduled.map(item=>taskLink(item))));
         }
         function calendarBody() {
           if(calendarMode==='day')return null;
@@ -8002,14 +8040,14 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             h('div',{className:'pw-overview-column pw-overview-right'},
             h('div',{className:'pw-companion-stack'},
             h('section',{...grid.card('pet'),className:'pw-card pw-pet pw-overview-pet','aria-label':'猫咪个人助手'},grid.handles('pet','Data 助手'),h('div',{...contentProps,className:'pw-pet-content',ref:node=>{if(node){contentProps.ref(node);paintPetBackdrop(root.current,node);}}},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',null,'助手连接中')),todayOverview())),financeCards()),
-            h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':planItems.length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
+            h('section',{...grid.card('plan'),className:'pw-card pw-plan','data-density':(useWeekPlan?selectedWeekItems:planItems).length>9?'compact':'normal','aria-labelledby':'pw-plan-title'},grid.handles('plan','今日计划'),h('div',contentProps,
               h('header',{className:'pw-card-head'},h('h2',{id:'pw-plan-title'},'今日计划'),planDateNav(),planViewSelector()),
               h('div',{className:'pw-plan-view','data-mode':calendarMode},calendarBody(),
                 calendarMode!=='day'&&h('h3',{className:'pw-selected-plan'},viewDate===today?'今天的安排':Number(viewDate.slice(5,7))+' 月 '+Number(viewDate.slice(8))+' 日'+(viewDate<today?' · 计划记录':' · 计划安排')),
-                h('div',{className:'pw-progress'},h('div',{className:'pw-progress-track',role:'progressbar','aria-label':'计划完成进度','aria-valuemin':0,'aria-valuemax':Math.max(planItems.length,1),'aria-valuenow':done},h('div',{className:'pw-progress-value',style:{width:planItems.length?Math.round(done/planItems.length*100)+'%':'0%'}})),h('span',{className:'pw-progress-count'},planConnected||planEmpty?calendarMode==='day'?(planItems.length-done)+' 项待办':done+' / '+planItems.length:'—')),
+                !useWeekPlan&&h('div',{className:'pw-progress'},h('div',{className:'pw-progress-track',role:'progressbar','aria-label':'计划完成进度','aria-valuemin':0,'aria-valuemax':Math.max(planItems.length,1),'aria-valuenow':done},h('div',{className:'pw-progress-value',style:{width:planItems.length?Math.round(done/planItems.length*100)+'%':'0%'}})),h('span',{className:'pw-progress-count'},planConnected||planEmpty?calendarMode==='day'?(planItems.length-done)+' 项待办':done+' / '+planItems.length:'—')),
                 h('div',{className:'pw-card-body'},planBody())),
-              data?.organization?.canOpenTodayPlan&&(plan?.source==='local'||planItems.some(item=>item.source==='local'))&&h('button',{type:'button',className:'pw-plan-source',onClick:()=>api('openTodayPlan',undefined,{}).catch(()=>setError('暂时无法打开今日计划。'))},'在今日计划中打开',h(Icon,{name:'arrow',size:11})),
-              plan?.source!=='connection'&&safeHTTPS(plan?.url)&&h('a',{className:'pw-plan-source',href:safeHTTPS(plan.url),target:'_blank',rel:'noopener noreferrer'},h(Icon,{name:'check',size:13}),'已同步到 Notion',h(Icon,{name:'arrow',size:11})),
+              data?.organization?.canOpenTodayPlan&&(useWeekPlan?selectedWeekItems.some(item=>item.source==='local'):plan?.source==='local'||planItems.some(item=>item.source==='local'))&&h('button',{type:'button',className:'pw-plan-source',onClick:()=>api('openTodayPlan',undefined,{}).catch(()=>setError('暂时无法打开今日计划。'))},'在今日计划中打开',h(Icon,{name:'arrow',size:11})),
+              sourceURL&&h('a',{className:'pw-plan-source',href:sourceURL,target:'_blank',rel:'noopener noreferrer'},h(Icon,{name:'check',size:13}),'已同步到 Notion',h(Icon,{name:'arrow',size:11})),
               h('button',{type:'button',className:'pw-plan-source pw-connection-entry','aria-haspopup':'dialog',onClick:openPlanConnection},h(Icon,{name:'calendar',size:14}),connection?.provider?'管理计划来源':'连接我的计划'),
               h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),

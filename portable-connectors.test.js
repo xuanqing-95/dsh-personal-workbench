@@ -55,6 +55,22 @@ test('optional weekly data source reads paged date ranges and backlog; cached re
   assert.equal((await read('2026-11-23')).unscheduled.length,1);assert.equal(requests,3);
   const failure=await createWeeklyPlanReader({env,listTasks,fetchImpl:async()=>new Response('',{status:403})})(week);
   assert.equal(failure.availability,'partial');assert.equal(failure.days[today][0].source,'profile');
+  assert.notEqual(failure.dayPlanFallback,true);
+});
+
+test('a daily-only Notion setup can supply the week, while an empty weekly source stays authoritative',async()=>{
+  const dailyOnly={DSH_WORKBENCH_NOTION_DAILY_SOURCE_ID:DS};
+  const emptyTasks=async()=>[];
+  const read=(options)=>createWeeklyPlanReader({env:dailyOnly,listTasks:emptyTasks,...options})(week);
+  assert.equal((await read({})).dayPlanFallback,true);
+  const emptyWeek=await read({env,fetchImpl:async url=>res(url.endsWith(DS)?schema:lf([]))});
+  assert.equal(emptyWeek.source,'notion');
+  assert.deepEqual(emptyWeek.days[today],[]);
+  assert.notEqual(emptyWeek.dayPlanFallback,true);
+  const connected=await read({readConnection:async()=>({rows:[]})});
+  assert.equal(connected.source,'connection');
+  assert.notEqual(connected.dayPlanFallback,true);
+  assert.notEqual((await read({env:{}})).dayPlanFallback,true);
 });
 
 test('Notion day and past month honor section boundaries; check only a freshly read, user-enabled checkbox',async()=>{

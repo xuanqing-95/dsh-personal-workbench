@@ -51,12 +51,16 @@ export function createWeeklyPlanReader({listTasks,readConnection,env=process.env
     if(connection)rows.push(...connection.rows);
     else try{rows.push(...await fileTasks());}catch{fileIssue=true;}
     for(const t of rows){
-      const item={id:t.id,title:t.title,url:null,status:t.status,checked:t.status==='done',revision:t.revision,source:t.source||'profile',canCheck:t.canCheck};
+      const item={id:t.weeklyId||t.id,title:t.title,url:t.url||null,status:t.status,checked:t.status==='done',revision:t.revision,source:t.source||'profile',canCheck:t.canCheck};
       if(!t.dueDate)unscheduled.push(item);else if(days[t.dueDate])days[t.dueDate].push(item);
     }
     const base={week,days,unscheduled,source:'profile',availability:'connected',checkedAt:new Date(now()).toISOString()};
     if(connection)return {...base,source:'connection',...(connection.issue?{reason:connection.issue,availability:rows.length?'partial':'unavailable'}:{})};
-    if(!id)return fileIssue?{...base,availability:rows.length?'partial':'unavailable',reason:'本地计划文件暂不可读。'}:base;
+    if(!id){
+      return {...base,
+        ...(env.DSH_WORKBENCH_NOTION_DAILY_SOURCE_ID?{dayPlanFallback:true}:{}),
+        ...(fileIssue?{availability:rows.length?'partial':'unavailable',reason:'本地计划文件暂不可读。'}:{})};
+    }
     try{
       for(const {start,end,item} of await readNotion()){
         if(!start)unscheduled.push(item);else for(const day of Object.keys(days))if(day>=start&&day<=end)days[day].push(item);

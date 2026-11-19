@@ -20,17 +20,17 @@
 
 ## 安装并记下第一条待办
 
-适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。当前插件版本为 **0.8.0-beta.10**。
+适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。当前插件版本为 **0.8.0-beta.11**。
 
 1. 在 Harness 左侧打开 **插件 → 添加插件**。
 2. 把下面整行地址粘贴到安装框，点击「安装」并按提示启用。
 3. 从侧栏打开「个人 AI 工作台」，在「今日计划」选一个日期，写下要跟进的事，点击「添加」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.10/dsh-personal-workbench-0.8.0-beta.10.tgz
+https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.11/dsh-personal-workbench-0.8.0-beta.11.tgz
 ```
 
-也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.10/dsh-personal-workbench-0.8.0-beta.10.tgz)
+也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.11/dsh-personal-workbench-0.8.0-beta.11.tgz)
 
 ## 接上你正在用的工具
 
