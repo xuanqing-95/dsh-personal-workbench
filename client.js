@@ -6,7 +6,7 @@ window.__ModuleLoader__.load({
     const QUOTA_OPENAI_LOGO = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMTExMTExIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGhlaWdodD0iMWVtIiBzdHlsZT0iZmxleDpub25lO2xpbmUtaGVpZ2h0OjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjFlbSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+T3BlbkFJPC90aXRsZT48cGF0aCBkPSJNOS4yMDUgOC42NTh2LTIuMjZjMC0uMTkuMDcyLS4zMzMuMjM4LS40MjhsNC41NDMtMi42MTZjLjYxOS0uMzU3IDEuMzU2LS41MjMgMi4xMTctLjUyMyAyLjg1NCAwIDQuNjYyIDIuMjEyIDQuNjYyIDQuNTY2IDAgLjE2NyAwIC4zNTctLjAyNC41NDdsLTQuNzEtMi43NTlhLjc5Ny43OTcgMCAwMC0uODU2IDBsLTUuOTcgMy40NzN6bTEwLjYwOSA4LjhWMTIuMDZjMC0uMzMzLS4xNDMtLjU3LS40MjktLjczN2wtNS45Ny0zLjQ3MyAxLjk1LTEuMTE4YS40MzMuNDMzIDAgMDEuNDc2IDBsNC41NDMgMi42MTdjMS4zMDkuNzYgMi4xODkgMi4zNzggMi4xODkgMy45NDggMCAxLjgwOC0xLjA3IDMuNDczLTIuNzYgNC4xNjN6TTcuODAyIDEyLjcwM2wtMS45NS0xLjE0MmMtLjE2Ny0uMDk1LS4yMzktLjIzOC0uMjM5LS40MjhWNS44OTljMC0yLjU0NSAxLjk1LTQuNDcyIDQuNTkxLTQuNDcyIDEgMCAxLjkyNy4zMzMgMi43MTIuOTI4TDguMjMgNS4wNjdjLS4yODUuMTY2LS40MjguNDA0LS40MjguNzM3djYuODk4ek0xMiAxNS4xMjhsLTIuNzk1LTEuNTd2LTMuMzNMMTIgOC42NThsMi43OTUgMS41N3YzLjMzTDEyIDE1LjEyOHptMS43OTYgNy4yM2MtMSAwLTEuOTI3LS4zMzItMi43MTItLjkyN2w0LjY4Ni0yLjcxMmMuMjg1LS4xNjYuNDI4LS40MDQuNDI4LS43Mzd2LTYuODk4bDEuOTc0IDEuMTQyYy4xNjcuMDk1LjIzOC4yMzguMjM4LjQyOHY1LjIzM2MwIDIuNTQ1LTEuOTc0IDQuNDcyLTQuNjE0IDQuNDcyem0tNS42MzctNS4zMDNsLTQuNTQ0LTIuNjE3Yy0xLjMwOC0uNzYxLTIuMTg4LTIuMzc4LTIuMTg4LTMuOTQ4QTQuNDgyIDQuNDgyIDAgMDE0LjIxIDYuMzI3djUuNDIzYzAgLjMzMy4xNDMuNTcxLjQyOC43MzhsNS45NDcgMy40NDktMS45NSAxLjExOGEuNDMyLjQzMiAwIDAxLS40NzYgMHptLS4yNjIgMy45Yy0yLjY4OCAwLTQuNjYyLTIuMDIxLTQuNjYyLTQuNTE5IDAtLjE5LjAyNC0uMzguMDQ3LS41N2w0LjY4NiAyLjcxYy4yODYuMTY3LjU3MS4xNjcuODU2IDBsNS45Ny0zLjQ0OHYyLjI2YzAgLjE5LS4wNy4zMzMtLjIzNy40MjhsLTQuNTQzIDIuNjE2Yy0uNjE5LjM1Ny0xLjM1Ni41MjMtMi4xMTcuNTIzem01Ljg5OSAyLjgzYTUuOTQ3IDUuOTQ3IDAgMDA1LjgyNy00Ljc1NkMyMi4yODcgMTguMzM5IDI0IDE1Ljg0IDI0IDEzLjI5NmMwLTEuNjY1LS43MTMtMy4yODItMS45OTgtNC40NDguMTE5LS41LjE5LS45OTkuMTktMS40OTggMC0zLjQwMS0yLjc1OS01Ljk0Ny01Ljk0Ni01Ljk0Ny0uNjQyIDAtMS4yNi4wOTUtMS44OC4zMUE1Ljk2MiA1Ljk2MiAwIDAwMTAuMjA1IDBhNS45NDcgNS45NDcgMCAwMC01LjgyNyA0Ljc1N0MxLjcxMyA1LjQ0NyAwIDcuOTQ1IDAgMTAuNDljMCAxLjY2Ni43MTMgMy4yODMgMS45OTggNC40NDgtLjExOS41LS4xOSAxLS4xOSAxLjQ5OSAwIDMuNDAxIDIuNzU5IDUuOTQ2IDUuOTQ2IDUuOTQ2LjY0MiAwIDEuMjYtLjA5NSAxLjg4LS4zMDlhNS45NiA1Ljk2IDAgMDA0LjE2MiAxLjcxM3oiPjwvcGF0aD48L3N2Zz4=';
     const React = require('react'), h = React.createElement;
     const WORKBENCH_PORTRAIT = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"0 0 128 128\"><rect x=\"4\" y=\"4\" width=\"120\" height=\"120\" rx=\"30\" fill=\"#e6f1ef\"/><rect x=\"22\" y=\"25\" width=\"48\" height=\"78\" rx=\"12\" fill=\"#086b6d\"/><rect x=\"78\" y=\"25\" width=\"28\" height=\"32\" rx=\"10\" fill=\"#69a6a2\"/><rect x=\"78\" y=\"65\" width=\"28\" height=\"38\" rx=\"10\" fill=\"#b0ceca\"/><path d=\"m35 63 8 8 15-18\" fill=\"none\" stroke=\"#fff\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>");
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.11";
+    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.12";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -2047,7 +2047,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return {title,timing:parts.join(' · '),label:content.title};
     }
     async function api(action, signal, input={}) {
-      const opening = ['addPlanTask','checkPlanTask','connectQuota','disconnectQuota','connectPlan','disconnectPlan','pickPlanLocation','projectShortcuts','projectNotes','openHermesDaily','openCodexThread','openTodayPlan'].includes(action);
+      const opening = ['addPlanTask','checkPlanTask','connectQuota','disconnectQuota','connectPlan','disconnectPlan','connectBrief','disconnectBrief','pickPlanLocation','projectShortcuts','projectNotes','openHermesDaily','openCodexThread','openTodayPlan'].includes(action);
       const response = await fetch('/api/dsh-personal-workbench'+(opening?'':'?'+new URLSearchParams({action,...input})),{method:opening?'POST':'GET',credentials:'same-origin',cache:'no-store',signal,headers:opening?{'Content-Type':'application/json','X-Personal-UI':'1'}:undefined,body:opening?JSON.stringify({action,input}):undefined});
       const result = await response.json();
       if(!response.ok || result.error) throw new Error(text(result.error) || '暂时无法读取，请稍后再试。');
@@ -5822,7 +5822,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  .pw-public-profile .pw-pet-preview-art {display:none}
 }
 
-.pwb .pw-spend-heading .pw-quota-connect {margin-inline-start:auto;color:var(--pw-ui-accent);font-size:11px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-card .pw-spend-heading {padding-inline-end:0;flex-wrap:wrap;gap:2px 8px;min-width:0}
+.pwb .pw-finance-cards .pw-quota-card .pw-quota-connect {color:var(--pw-ui-accent);font-size:11px;line-height:16px}
 .pwb .pw-quota-card .pw-quota-other-list {display:none}
 .pwb .pw-quota-other-count,.pwb .pw-quota-other-list {font-size:12px;color:var(--pw-ui-body)}
 @container pw-finance (min-width:300px) {
@@ -5833,11 +5834,14 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
 .pwb .pw-quota-manager {gap:16px}
 .pwb .pw-quota-account {padding-block-end:12px;border-bottom:1px solid var(--pw-ui-border,rgba(22,48,49,.14))}
 .pwb .pw-quota-account-title,.pwb .pw-quota-entry {display:flex;align-items:center;justify-content:space-between;gap:12px}
-.pwb .pw-quota-account button,.pwb .pw-quota-manual button {width:fit-content;justify-self:start}
+.pwb .pw-quota-account button {width:fit-content;justify-self:start}
 .pwb .pw-quota-manager small {color:var(--pw-ui-muted)}
-.pwb .pw-quota-manual {display:flex;flex-wrap:wrap;align-items:end;gap:10px}
-.pwb .pw-quota-manual label {display:grid;gap:4px;max-width:100%}
-.pwb .pw-quota-manual :is(input,select) {max-width:100%;min-height:34px;font:inherit}
+
+.pwb .pw-brief-source-short {display:none}
+@container pw-card (max-width:360px) {
+ .pwb .pw-brief-source-full {display:none}
+ .pwb .pw-brief-source-short {display:inline}
+}
 
 /* END SHARED DESIGN SYSTEM */
 `;
@@ -6877,13 +6881,16 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         obsidian:{name:'Obsidian',field:'日记文件夹',placeholder:'粘贴日记文件夹的完整路径',hint:'选择存放每日笔记的文件夹。工作台会按日期打开 YYYY-MM-DD.md，把里面的待办列到对应日期。'},
         file:{name:'其他文件',field:'计划文件',placeholder:'粘贴文件的完整路径',hint:'选择 Markdown 待办清单或 JSON 计划文件。'}
       };
-      function PlanConnectionDialog({connection,readError,retry,onSaved,onClose}){
-        const [provider,setProvider]=React.useState('notion'),[editing,setEditing]=React.useState(false);
+      function SourceConnectionDialog({kind,connection,readError,retry,onSaved,onClose}){
+        const brief=kind==='brief',noun=brief?'日报':'计划';
+        const connect=brief?'connectBrief':'connectPlan',disconnect=brief?'disconnectBrief':'disconnectPlan';
+        const [provider,setProvider]=React.useState(brief?'brief':'notion'),[editing,setEditing]=React.useState(false);
         const [location,setLocation]=React.useState(''),[token,setToken]=React.useState(''),[dateField,setDateField]=React.useState('');
         const [busy,setBusy]=React.useState(''),[error,setError]=React.useState('');
         const dialog=React.useRef(null),lock=React.useRef(false);
         const current=Boolean(connection?.provider)&&!editing;
-        const source=planSources[provider],file=provider==='file'||provider==='obsidian';
+        const source=brief?{field:'日报归档文件夹',placeholder:'选择文件夹或粘贴完整路径',hint:'支持按日期保存的工作台日报 JSON 归档。也可以连接空文件夹，等待助手写入。'}:planSources[provider];
+        const file=brief||provider==='file'||provider==='obsidian';
         React.useEffect(()=>{dialog.current?.querySelector('.pw-dialog-close')?.focus();},[]);
         React.useEffect(()=>{document.addEventListener('keydown',keyDown);return()=>document.removeEventListener('keydown',keyDown);},[onClose]);
         function selectSource(value){setProvider(value);setLocation('');setToken('');setDateField('');setError('');}
@@ -6905,11 +6912,11 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               const picked=await api(action,undefined,{provider});
               if(picked?.location)setLocation(picked.location);
             }else{
-              const input=action==='disconnectPlan'?{}:{provider,location:location.trim(),...(!file&&dateField.trim()?{dateField:dateField.trim()}:{}),...(provider==='notion'&&token.trim()?{token:token.trim()}:{})};
+              const input=action===disconnect?{}:brief?{location:location.trim()}:{provider,location:location.trim(),...(!file&&dateField.trim()?{dateField:dateField.trim()}:{}),...(provider==='notion'&&token.trim()?{token:token.trim()}:{})};
               const result=await api(action,undefined,input);
               onSaved(result?.connection||result);
               setToken('');setEditing(false);
-              if(action==='disconnectPlan')onClose();
+              if(action===disconnect)onClose();
             }
           }catch(err){setError(text(err.message)||'读取失败，请检查来源后重试。');}
           finally{lock.current=false;setBusy('');}
@@ -6918,19 +6925,19 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         const lastReadText=lastRead&&Number.isFinite(lastRead.getTime())?lastRead.toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}):'';
         const formReady=connection&&!readError&&!current;
         return h('div',{className:'pw-modal-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
-          h('form',{ref:dialog,className:'pw-project-dialog pw-plan-connection',role:'dialog','aria-modal':true,'aria-labelledby':'pw-connect-title',onSubmit:event=>{event.preventDefault();if(formReady&&location.trim())void act('connectPlan');}},
-            h('header',null,h('h2',{id:'pw-connect-title'},current?'我的计划来源':'连接我的计划'),h('button',{className:'pw-dialog-close',type:'button',onClick:close,'aria-label':'关闭计划来源设置','aria-disabled':Boolean(busy)},h(Icon,{name:'dismiss',size:16}))),
+          h('form',{ref:dialog,className:'pw-project-dialog pw-plan-connection',role:'dialog','aria-modal':true,'aria-labelledby':'pw-connect-title',onSubmit:event=>{event.preventDefault();if(formReady&&location.trim())void act(connect);}},
+            h('header',null,h('h2',{id:'pw-connect-title'},current?'我的'+noun+'来源':'连接我的'+noun),h('button',{className:'pw-dialog-close',type:'button',onClick:close,'aria-label':'关闭'+noun+'来源设置','aria-disabled':Boolean(busy)},h(Icon,{name:'dismiss',size:16}))),
             h('div',{className:'pw-dialog-body','aria-busy':Boolean(busy)},
-              readError?h('div',{role:'alert'},h('p',null,readError),h('button',{type:'button',onClick:retry},'重新读取')):!connection?h('p',{role:'status'},'正在读取计划来源…'):current?h(React.Fragment,null,
-                h('div',{className:'pw-connection-summary',role:'status'},h(Icon,{name:'check',size:18}),h('div',null,h('strong',null,'已连接 '+(planSources[connection.provider]?.name||'计划来源')),
+              readError?h('div',{role:'alert'},h('p',null,readError),h('button',{type:'button',onClick:retry},'重新读取')):!connection?h('p',{role:'status'},'正在读取'+noun+'来源…'):current?h(React.Fragment,null,
+                h('div',{className:'pw-connection-summary',role:'status'},h(Icon,{name:'check',size:18}),h('div',null,h('strong',null,'已连接 '+(brief?'日报归档':planSources[connection.provider]?.name||'计划来源')),
                   connection.detail&&h('p',null,connection.detail))),
                 lastReadText&&h('p',null,'连接时读取 · '+lastReadText),
                 Number.isInteger(connection.itemCount)&&h('p',null,connection.itemCount===0?'连接成功，试读范围内暂无待办。':'连接时读到了 '+connection.itemCount+' 项待办。'),
-                h('p',null,'完成状态请在来源中修改。断开后，原来的计划仍保存在那里。')):h(React.Fragment,null,
-                h('p',null,'把已有待办带进「今日计划」。在原来的工具里更新，工作台刷新后就能看到。'),
-                h('label',null,'计划存在哪里？',h('select',{value:provider,disabled:Boolean(busy),onChange:event=>selectSource(event.target.value)},Object.entries(planSources).map(([key,item])=>h('option',{key,value:key},item.name)))),
+                h('p',null,brief?(connection.managed?'此目录由 Harness 配置管理。新刊发布后会自动显示。':'新刊发布后会自动显示，原文件保存在这个文件夹。'):'完成状态请在来源中修改。断开后，原来的计划仍保存在那里。')):h(React.Fragment,null,
+                h('p',null,brief?'选择助手保存日报的文件夹。发布后，「AI每日精选」和「日报助手」会一起更新。':'把已有待办带进「今日计划」。在原来的工具里更新，日、周、月视图会自动跟进。'),
+                !brief&&h('label',null,'计划存在哪里？',h('select',{value:provider,disabled:Boolean(busy),onChange:event=>selectSource(event.target.value)},Object.entries(planSources).map(([key,item])=>h('option',{key,value:key},item.name)))),
                 h('label',{htmlFor:'pw-connection-location'},source.field),h('div',{className:'pw-connection-location'},h('input',{id:'pw-connection-location',value:location,disabled:Boolean(busy),required:true,placeholder:source.placeholder,autoComplete:'off',spellCheck:false,onChange:event=>setLocation(event.target.value)}),
-                  file&&connection.canPick&&h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act('pickPlanLocation')},busy==='pickPlanLocation'?'选择中…':provider==='obsidian'?'选择文件夹':'选择文件')),
+                  file&&connection.canPick&&h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act('pickPlanLocation')},busy==='pickPlanLocation'?'选择中…':provider==='file'?'选择文件':'选择文件夹')),
                 h('p',{className:'pw-connection-hint'},source.hint),
                 provider==='notion'&&h(React.Fragment,null,
                   h('label',null,'Notion 集成密钥',h('input',{type:'password',value:token,disabled:Boolean(busy),required:!connection.hasNotionToken,placeholder:connection.hasNotionToken?'已配置，可留空':'粘贴有权读取这张表的密钥',autoComplete:'off',spellCheck:false,onChange:event=>setToken(event.target.value)})),
@@ -6938,27 +6945,33 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                   h('p',{className:'pw-connection-hint'},'创建只读集成，再到数据库的「连接」中添加它。',h('a',{href:'https://www.notion.so/developers/connections',target:'_blank',rel:'noopener noreferrer'},'打开 Notion 集成管理'))),
                 provider==='feishu'&&h('p',{className:'pw-connection-hint'},'首次使用请先安装飞书 CLI，并用自己的飞书账号授权读取多维表格。',h('a',{href:'https://github.com/larksuite/cli/blob/main/README.zh.md#安装与快速开始',target:'_blank',rel:'noopener noreferrer'},'查看飞书官方安装与登录指南')),
                 !file&&h('details',{key:provider},h('summary',null,'表里有多个日期列？'),h('label',null,'按哪一列安排日期',h('input',{value:dateField,disabled:Boolean(busy),placeholder:'填写表里的列名，例如「到期日期」',onChange:event=>setDateField(event.target.value)}))),
-                file&&h('details',{key:provider},h('summary',null,'支持的待办格式'),h('p',{className:'pw-connection-hint'},provider==='file'?'Markdown 可在日期标题下写待办。JSON 支持 tasks 数组，每项填写 title 和 dueDate。':'在每天的笔记中，用 Markdown 复选框记录待办。'),h('pre',null,provider==='file'?'# 2026-11-19\n- [ ] 整理会议笔记':'- [ ] 整理会议笔记\n- [x] 确认会议时间'))),
+                !brief&&file&&h('details',{key:provider},h('summary',null,'支持的待办格式'),h('p',{className:'pw-connection-hint'},provider==='file'?'Markdown 可在日期标题下写待办。JSON 支持 tasks 数组，每项填写 title 和 dueDate。':'在每天的笔记中，用 Markdown 复选框记录待办。'),h('pre',null,provider==='file'?'# 2026-11-19\n- [ ] 整理会议笔记':'- [ ] 整理会议笔记\n- [x] 确认会议时间'))),
               error&&h('p',{role:'alert',className:'pw-connection-error'},error)),
-            h('footer',null,current?h(React.Fragment,null,
-              h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act('disconnectPlan')},busy?'断开中…':'断开连接'),
+            h('footer',null,current&&connection.managed?h('button',{type:'button',onClick:close},'完成'):current?h(React.Fragment,null,
+              h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act(disconnect)},busy?'断开中…':'断开连接'),
               h('button',{type:'button',className:'is-primary',disabled:Boolean(busy),onClick:()=>{selectSource(connection.provider);setEditing(true);}},'更换来源')):
-              formReady?h(React.Fragment,null,h('button',{type:'button',disabled:Boolean(busy),onClick:close},'取消'),h('button',{type:'submit',className:'is-primary',disabled:Boolean(busy)||!location.trim()},busy==='connectPlan'?'正在读取…':'读取并连接')):null)));
+              formReady?h(React.Fragment,null,h('button',{type:'button',disabled:Boolean(busy),onClick:close},'取消'),h('button',{type:'submit',className:'is-primary',disabled:Boolean(busy)||!location.trim()},busy===connect?'正在读取…':'读取并连接')):null)));
       }
       function Panel({renderFactorySlot}={}) {
         const [connectionOpen,setConnectionOpen]=React.useState(false),[connection,setConnection]=React.useState(null),[connectionError,setConnectionError]=React.useState('');
         const [connectionRetry,setConnectionRetry]=React.useState(0),connectionTrigger=React.useRef(null);
+        const [briefConnection,setBriefConnection]=React.useState(null);
         React.useEffect(()=>{
           const abort=new AbortController();
           setConnectionError('');
-          api('planConnection',abort.signal).then(result=>{if(!abort.signal.aborted)setConnection(result);}).catch(()=>{if(!abort.signal.aborted)setConnectionError('暂时无法读取已保存的计划来源。');});
+          const load=(kind,save)=>api(kind+'Connection',abort.signal).then(result=>{if(!abort.signal.aborted)save(result);}).catch(()=>{
+            if(!abort.signal.aborted&&connectionOpen===kind)setConnectionError('暂时无法读取已保存的来源。');
+          });
+          if(connectionOpen!=='brief')void load('plan',setConnection);
+          if(connectionOpen!=='plan')void load('brief',setBriefConnection);
           return()=>abort.abort();
         },[connectionOpen,connectionRetry]);
-        function openPlanConnection(event){connectionTrigger.current=event.currentTarget;setConnectionOpen(true);}
+        function openPlanConnection(event){connectionTrigger.current=event.currentTarget;setConnectionOpen('plan');}
+        function openBriefConnection(event){connectionTrigger.current=event.currentTarget;setConnectionOpen('brief');}
         function closePlanConnection(){setConnectionOpen(false);requestAnimationFrame(()=>connectionTrigger.current?.focus());}
         const [usage,setUsage]=React.useState(null),[usageOpen,setUsageOpen]=React.useState(false),[usageView,setUsageView]=React.useState('models');
         const [quotaData,setQuotaData]=React.useState(null),[quotaError,setQuotaError]=React.useState('');
-        const [quotaBusy,setQuotaBusy]=React.useState(false),[quotaForm,setQuotaForm]=React.useState(null);
+        const [quotaBusy,setQuotaBusy]=React.useState(false);
         const quotaSerial=React.useRef(0),quotaSaving=React.useRef(false);
         React.useEffect(()=>{
           const abort=new AbortController();
@@ -6978,39 +6991,40 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           quotaSaving.current=true;quotaSerial.current++;setQuotaBusy(true);setQuotaError('');
           try{
             const value=await api(action,undefined,input);
-            setQuotaData(value);setQuotaForm(null);
+            setQuotaData(value);
             requestAnimationFrame(()=>{if(document.activeElement===document.body)usageDialog.current?.querySelector('header button')?.focus();});
           }catch(error){setQuotaError(error.message);}
           finally{quotaSaving.current=false;setQuotaBusy(false);}
         }
-        function quotaAmount(entry){
-          if(entry==null||entry.value==null)return '—';
-          const value=String(entry.value);
-          if(entry.unit==='CNY')return '¥'+value;
-          if(entry.unit==='USD')return '$'+value;
-          return value+(entry.unit==='%'?'%':' '+entry.unit);
+        const codexQuota=list(usage?.quotas).find(row=>row.provider==='Codex');
+        const harnessWallet=list(quotaData?.accounts).find(row=>row.provider==='harness'&&row.id==='harness');
+        function walletAmount(entry){
+          if(entry?.value==null)return '—';
+          if(entry.unit==='CNY')return '¥'+entry.value;
+          if(entry.unit==='USD')return '$'+entry.value;
+          return '—';
         }
-        function quotaManager(codex){
-          const accounts=list(quotaData?.accounts).filter(a=>a.provider!=='codex');
-          const harness=accounts.some(a=>a.provider==='harness');
-          const codexText=codex?'最近记录 · '+usageTime(codex.observedAt):'在这台电脑登录并使用 Codex，收到套餐额度后会自动显示。';
+        function quotaManager(){
+          let codexText='在这台电脑使用 Codex 后，套餐有额度记录时会自动显示。';
+          if(codexQuota)codexText='最近记录 · '+usageTime(codexQuota.observedAt);
+          else if(usage?.state==='unavailable')codexText='暂时无法读取本机的 Codex 额度记录。';
+          else if(!usage||usage.state==='loading')codexText='正在读取本机的 Codex 额度记录。';
           return h('div',{className:'pw-quota-manager'},
             quotaError&&h('p',{role:'alert'},quotaError),
-            ...accounts.map(a=>h('section',{key:a.id,className:'pw-quota-account'},
-              h('div',{className:'pw-quota-account-title'},h('strong',null,a.label),
-                h('button',{type:'button',disabled:quotaBusy,'aria-label':'移除 '+a.label,onClick:()=>void changeQuota('disconnectQuota',{id:a.id})},'移除')),
-              ...list(a.entries).map((e,i)=>h('div',{key:i,className:'pw-quota-entry'},h('span',null,e.label),h('strong',null,quotaAmount(e)))),
-              h('small',null,(a.detail||(a.provider==='manual'?'手动记录':'最近读取'))+(a.observedAt?' · '+usageTime(a.observedAt):'')),
-              a.provider==='manual'&&h('button',{type:'button',disabled:quotaBusy,onClick:()=>setQuotaForm({id:a.id,label:a.label,value:String(a.entries[0].value),unit:a.entries[0].unit})},'更新数值'))),
-            h('div',{className:'pw-quota-account'},h('strong',null,'Codex 套餐'),h('small',null,codexText),
-              ...list(codex?.windows).map(w=>h('div',{key:w.id,className:'pw-usage-window'},usageRing(w.expired?null:w.remaining),h('div',null,h('span',null,w.minutes===10080?'每周额度':w.minutes===300?'5 小时额度':'套餐额度'),h('strong',null,w.expired?'等待更新':w.remaining+'% 剩余'),h('small',null,usageTime(w.resetAt)+' 重置'))))),
-            !harness&&h('div',{className:'pw-quota-account'},h('strong',null,'DeepSeek Harness 余额'),h('small',null,'读取当前登录账号的充值余额和赠金。'),h('button',{type:'button',disabled:quotaBusy||!quotaData?.canConnectHarness,onClick:()=>void changeQuota('connectQuota',{provider:'harness'})},quotaData?.canConnectHarness?'连接当前账号':'请在支持账号余额的 Harness 中打开')),
-            quotaForm?h('form',{className:'pw-quota-manual',onSubmit:e=>{e.preventDefault();void changeQuota('connectQuota',{provider:'manual',...quotaForm,value:Number(quotaForm.value)});}},
-              h('label',null,'助手名称',h('input',{required:true,maxLength:60,value:quotaForm.label,onChange:e=>setQuotaForm({...quotaForm,label:e.target.value})})),
-              h('label',null,'剩余额度',h('input',{required:true,type:'number',min:0,max:quotaForm.unit==='%'?100:undefined,step:'any',value:quotaForm.value,onChange:e=>setQuotaForm({...quotaForm,value:e.target.value})})),
-              h('label',null,'单位',h('select',{value:quotaForm.unit,onChange:e=>setQuotaForm({...quotaForm,unit:e.target.value})},...['%','次','token','CNY','USD'].map(unit=>h('option',{key:unit,value:unit},unit)))),
-              h('button',{type:'button',disabled:quotaBusy,onClick:()=>setQuotaForm(null)},'取消'),h('button',{type:'submit',disabled:quotaBusy},'保存额度')):
-              h('div',{className:'pw-quota-account'},h('button',{type:'button',disabled:quotaBusy,onClick:()=>setQuotaForm({label:'',value:'',unit:'次'})},'记录其他助手额度'),h('small',null,'也可以告诉 Data「帮我记下设计助手还剩 30 次」。手动记录会标明更新时间。')));
+            h('section',{className:'pw-quota-account'},h('strong',null,'Codex 套餐额度'),h('small',null,codexText),
+              ...list(codexQuota?.windows).map(w=>{
+                const expired=w.expired||!(Date.parse(w.resetAt)>Date.now());
+                return h('div',{key:w.id,className:'pw-usage-window'},usageRing(expired?null:w.remaining),
+                  h('div',null,h('span',null,w.minutes===10080?'每周额度':w.minutes===300?'5 小时额度':'套餐额度'),
+                    h('strong',null,expired?'等待更新':w.remaining+'% 剩余'),h('small',null,usageTime(w.resetAt)+' 重置')));
+              })),
+            h('section',{className:'pw-quota-account'},
+              h('div',{className:'pw-quota-account-title'},h('strong',null,'DeepSeek Harness 账户余额'),
+                harnessWallet&&h('button',{type:'button',disabled:quotaBusy,onClick:()=>void changeQuota('disconnectQuota',{id:'harness'})},'断开连接')),
+              ...list(harnessWallet?.entries).map((entry,i)=>h('div',{key:i,className:'pw-quota-entry'},h('span',null,entry.label),h('strong',null,walletAmount(entry)))),
+              h('small',null,harnessWallet?[harnessWallet.detail,harnessWallet.observedAt&&usageTime(harnessWallet.observedAt)].filter(Boolean).join(' · '):
+                quotaData?.canConnectHarness===false?'当前 Harness 版本不支持读取账户余额。':'连接后可查看当前登录账号的充值余额和赠金。'),
+              !harnessWallet&&quotaData?.canConnectHarness&&h('button',{type:'button',disabled:quotaBusy,onClick:()=>void changeQuota('connectQuota',{provider:'harness'})},'连接当前账号')));
         }
         const usageTrigger=React.useRef(null),usageDialog=React.useRef(null);
         const [usageSource,setUsageSource]=React.useState('Codex'),[usageScope,setUsageScope]=React.useState('day');
@@ -7053,11 +7067,6 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         function closeUsage(){setUsageOpen(false);requestAnimationFrame(()=>usageTrigger.current?.focus());}
         const usageNumber=n=>typeof n==='number'&&Number.isFinite(n)?new Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(n):'—';
         const usageTime=value=>value?new Date(value).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}):'尚未读取';
-        function quotaText(){
-          const q=usage?.quotas?.[0],w=q?.windows?.find(w=>!w.expired);
-          if(!w)return usage?.state==='loading'||!usage?'正在读取':'暂不可用';
-          return (q.stale?'上次剩余 ':'剩余 ')+w.remaining+'%';
-        }
         const usageZone=usage?.day?.timeZone||Intl.DateTimeFormat().resolvedOptions().timeZone;
         const usageToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:usageZone,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
         const usageClock=value=>new Date(value).toLocaleTimeString('zh-CN',{timeZone:usageZone,hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
@@ -7146,23 +7155,26 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               h('strong',{className:'pw-spend-value'},usageNumber(trend?.total))),usageMiniBars(trend));
         }
         function financeCards(){
-          const q=usage?.quotas?.find(q=>q.provider==='Codex');
-          const windows=list(q?.windows).filter(w=>!w.expired&&Date.parse(w.resetAt)>Date.now());
+          const windows=list(codexQuota?.windows).filter(w=>!w.expired&&Date.parse(w.resetAt)>Date.now());
           const w=windows.find(w=>w.minutes===300)||windows[0];
-          const stale=q&&(q.stale||Date.now()-Date.parse(q.observedAt)>600000);
-          const accounts=list(quotaData?.accounts).filter(a=>a.provider!=='codex');
-          const summaries=[...(w?[{label:'Codex',value:w.remaining+'%'}]:[]),...accounts.filter(a=>a.entries?.length).map(a=>({label:a.provider==='harness'?a.label+' · '+a.entries[0].label:a.label,value:quotaAmount(a.entries[0])}))];
-          const primary=summaries[0],multi=summaries.length>1;
+          const stale=codexQuota&&(codexQuota.stale||Date.now()-Date.parse(codexQuota.observedAt)>600000);
+          const walletEntry=harnessWallet?.entries?.[0];
+          const walletLabel=walletEntry?'DeepSeek Harness · '+walletEntry.label:'';
+          const multi=Boolean(w&&walletEntry);
+          const value=w?w.remaining+'%':walletAmount(walletEntry);
+          const label=w?'Codex':walletLabel;
+          const action=harnessWallet?'管理来源':quotaData?.canConnectHarness===false?'查看额度':'连接额度';
+          const fallback=quotaData?.canConnectHarness===false?'暂无可用额度记录':'选择你的额度来源';
           const reset=w?new Date(w.resetAt).toLocaleString('zh-CN',{timeZone:usageZone,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):'';
           return h('div',{className:'pw-finance-cards','aria-label':'今日用量与剩余额度'},
             h('section',{...grid.card('usage'),className:'pw-finance-module','aria-label':'今日用量'},grid.handles('usage','今日用量'),h('div',contentProps,usageOverview())),
             h('section',{...grid.card('quota'),className:'pw-finance-module','aria-label':'剩余额度'},grid.handles('quota','剩余额度'),h('div',contentProps,
-            h('button',{type:'button',className:'pw-spend-card pw-quota-card'+(multi?' has-sources':''),'aria-label':'剩余额度，'+(primary?primary.label+' '+primary.value+'，查看或连接更多额度':'连接额度来源'),'aria-haspopup':'dialog',onClick:e=>{setQuotaForm(null);openUsageAt(e,'quota');}},
-              h('span',{className:'pw-spend-heading'},'剩余额度',h('span',{className:'pw-quota-connect'},accounts.length?'管理来源':'连接额度')),
-              h('span',{className:'pw-quota-summary'},h('span',{className:'pw-quota-copy'},h('strong',{className:'pw-spend-value'},primary?.value||'—'),
-              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,w?'Codex · 重置时间':primary?.label||accounts[0]?.detail||'选择你的额度来源'),h('span',null,w?reset:''))),w&&h('span',{className:'pw-quota-ring-space'},usageRing(w.remaining,true,'Codex'))),
-              multi&&h('span',{className:'pw-quota-other-count'},'共 '+summaries.length+' 个来源'),
-              multi&&h('span',{className:'pw-quota-other-list'},...summaries.slice(1,4).map((a,i)=>h('span',{key:i},a.label+' · '+a.value)),summaries.length>4&&h('span',null,'另有 '+(summaries.length-4)+' 个来源'))))));
+            h('button',{type:'button',className:'pw-spend-card pw-quota-card'+(multi?' has-sources':''),'aria-label':'剩余额度，'+(label?label+' '+value+'，':'')+action,'aria-haspopup':'dialog',onClick:e=>openUsageAt(e,'quota')},
+              h('span',{className:'pw-spend-heading'},'剩余额度',h('span',{className:'pw-quota-connect'},action)),
+              h('span',{className:'pw-quota-summary'},h('span',{className:'pw-quota-copy'},h('strong',{className:'pw-spend-value'},value),
+              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,w?'Codex · 重置时间':walletLabel||harnessWallet?.detail||fallback),h('span',null,w?reset:''))),w&&h('span',{className:'pw-quota-ring-space'},usageRing(w.remaining,true,'Codex'))),
+              multi&&h('span',{className:'pw-quota-other-count'},'共 2 个来源'),
+              multi&&h('span',{className:'pw-quota-other-list'},walletLabel+' · '+walletAmount(walletEntry))))));
         }
         function usageRing(value,compact=false,provider=null){
           const known=typeof value==='number'&&Number.isFinite(value),amount=known?Math.max(0,Math.min(100,value)):0;
@@ -7228,14 +7240,13 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const rows=list(usageScope==='day'?trend?.[usageView]:usage?.[usageView]).filter(r=>r.source===usageSource);
           const allSource=list(usage?.sources).find(r=>r.source===usageSource);
           const total=usageScope==='day'?trend?.total:allSource?.total;
-          const q=usage?.quotas?.find(q=>q.provider==='Codex');
           const partial=usageScope==='day'?trend?.state==='partial':list(usage?.coverage).find(c=>c.source===usageSource)?.state==='partial';
           const hostIcon=(()=>{try{const href=new URL(document.querySelector('link[rel~=icon]')?.href||'favicon.ico',location.origin);return href.origin===location.origin?href.href:null;}catch{return null;}})();
           const daySourceOptions=['Harness','Codex'];
           return h('div',{className:'pw-modal-backdrop',onClick:event=>{if(event.target===event.currentTarget)closeUsage();}},
             h('section',{className:'pw-project-dialog pw-usage-dialog pw-usage-simple',ref:usageDialog,role:'dialog','aria-modal':true,'aria-labelledby':'pw-usage-title'},
               h('header',null,h('h2',{id:'pw-usage-title'},quotaOnly?'剩余额度':costOnly?'费用':'用量明细'),h('button',{type:'button',className:'pw-dialog-close','aria-label':'关闭用量明细',onClick:closeUsage},h(Icon,{name:'dismiss',size:18}))),
-              h('div',{className:'pw-dialog-body'},costOnly?h('p',null,'暂未接入费用账单。'):quotaOnly?quotaManager(q):
+              h('div',{className:'pw-dialog-body'},costOnly?h('p',null,'暂未接入费用账单。'):quotaOnly?quotaManager():
               h(React.Fragment,null,
                 h('div',{className:'pw-usage-toolbar'},h('div',{role:'group','aria-label':'统计时段'},...[["day","按日"],["all","累计"]].map(([key,name])=>h('button',{key,type:'button','aria-pressed':usageScope===key,onClick:()=>{setUsageScope(key);if(key==='day'&&usageSource==='Hermes')setUsageSource('Codex');}},name))),h('div',{className:'pw-source-tabs',role:'tablist','aria-label':'用量来源'},...daySourceOptions.map((source,index)=>h('button',{key:source,id:'pw-source-'+source,type:'button',role:'tab','aria-selected':usageSource===source,'aria-controls':'pw-source-panel',tabIndex:usageSource===source?0:-1,onClick:()=>setUsageSource(source),onKeyDown:event=>{let next;if(event.key==='ArrowRight'||event.key==='ArrowLeft')next=(index+1)%2;else if(event.key==='Home')next=0;else if(event.key==='End')next=1;else return;event.preventDefault();setUsageSource(daySourceOptions[next]);event.currentTarget.parentElement.querySelectorAll('[role=tab]')[next]?.focus();}},source==='Harness'?(hostIcon?h('img',{src:hostIcon,alt:'',width:20,height:20,draggable:false,onError:event=>{event.currentTarget.hidden=true;}}):h(Icon,{name:'chat',size:18})):h('img',{src:QUOTA_OPENAI_LOGO,alt:'',width:20,height:20,draggable:false}),source==='Harness'?'DeepSeek Harness':source)))),
                 h('section',{className:'pw-usage-hero',id:'pw-source-panel',role:'tabpanel','aria-labelledby':'pw-source-'+usageSource},h('div',{className:'pw-usage-hero-heading'},h('div',null,h('span',{className:'pw-usage-eyebrow'},usageScope==='day'?(date===today?'今日总用量':'当日总用量'):'累计用量'),h('div',{className:'pw-usage-hero-total'},usageNumber(total),h('small',null,'Token'))),usageScope==='day'?dateNav:h('span',{className:'pw-usage-period'},usageSource)),
@@ -7419,7 +7430,25 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             await Promise.allSettled([production(abort.signal).then(next=>{if(!stopped)setMonitor(previous=>next.availability==='unavailable'?{...previous,availability:'unavailable'}:next);}),api('assistants',abort.signal).then(next=>{if(!stopped)setData(previous=>previous?{...previous,...next}:previous);}).catch(()=>{if(!stopped)setData(previous=>previous?{...previous,automations:{...previous.automations,availability:'unavailable',items:list(previous.automations?.items).map(item=>({...item,execution:{...item.execution,running:null,known:false}}))}}:previous);})]);busy=false;}
           const timer=setInterval(refreshAssistants,15000),visible=()=>{if(!document.hidden)void refreshAssistants();};document.addEventListener('visibilitychange',visible);return()=>{stopped=true;abort?.abort();clearInterval(timer);document.removeEventListener('visibilitychange',visible);};
         },[]);
-        React.useEffect(()=>{const interval=setInterval(()=>{if(!document.hidden && root.current?.getClientRects().length && !reading.current)setTick(v=>v+1);},60000);return()=>clearInterval(interval);},[]);
+        React.useEffect(()=>{
+          let lastCheck=0;
+          function refreshVisibleWorkbench(){
+            if(document.hidden||!root.current?.getClientRects().length||reading.current)return;
+            // Switching back to the window can fire focus and visibilitychange together.
+            const now=Date.now();
+            if(now-lastCheck<1000)return;
+            lastCheck=now;
+            setTick(value=>value+1);
+          }
+          const timer=setInterval(refreshVisibleWorkbench,60000);
+          document.addEventListener('visibilitychange',refreshVisibleWorkbench);
+          window.addEventListener('focus',refreshVisibleWorkbench);
+          return()=>{
+            clearInterval(timer);
+            document.removeEventListener('visibilitychange',refreshVisibleWorkbench);
+            window.removeEventListener('focus',refreshVisibleWorkbench);
+          };
+        },[]);
         React.useEffect(()=>{
           const abort=new AbortController(),version=planVersion.current;reading.current=true;setLoading(true);
           Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(previous=>version!==planVersion.current&&previous?.plan&&previous.plan.date===next.plan?.date?{...next,plan:previous.plan}:next);setMonitor(previous=>business.availability==='unavailable'?{...previous,availability:'unavailable'}:business);setLastRefreshedAt(Date.now());setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
@@ -7482,7 +7511,9 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           h('button',{type:'button',onClick:()=>shiftBrief(-1),'aria-label':'前一天日报'},h(Icon,{name:'left',size:14})),
           h('span',{'aria-live':'polite',title:briefDay?'正在查看所选刊期':'自动跟随最新发布的日报'},briefDateLabel(shownBriefDate,briefToday)),
           h('button',{type:'button',onClick:()=>shiftBrief(1),'aria-label':'后一天日报'},h(Icon,{name:'chevron',size:14})),
-          h('button',{type:'button',className:'pw-today',onClick:()=>selectBriefDay(''),disabled:!briefDay,'aria-label':'回到最新日报'},briefDates[0]>shownBriefDate?'查看新日报':'最新'));
+          h('button',{type:'button',className:'pw-today',onClick:()=>selectBriefDay(''),disabled:!briefDay,'aria-label':'回到最新日报'},briefDates[0]>shownBriefDate?'查看新日报':'最新'),
+          h('button',{type:'button',className:'pw-today',onClick:openBriefConnection,'aria-haspopup':'dialog','aria-label':briefConnection?.provider?'管理日报来源':'连接我的日报',title:briefConnection?.provider?'管理日报来源':'连接我的日报'},
+            h('span',{className:'pw-brief-source-full'},briefConnection?.provider?'管理来源':'连接我的日报'),h('span',{className:'pw-brief-source-short'},briefConnection?.provider?'来源':'连接')));
         const remoteLeadImage=safeHTTPS(edition?.imageUrl);
         const leadImage=/^[a-f0-9]{16}$/.test(edition?.leadImage?.revision||'')&&/^\d{4}-\d{2}-\d{2}$/.test(edition.date)?'/api/dsh-personal-workbench?'+new URLSearchParams({action:'briefImage',date:edition.date,v:edition.leadImage.revision,archive:edition.leadImage.archive?'1':'0'}):remoteLeadImage;
 
@@ -7615,7 +7646,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           if(!edition&&briefReadError===briefDay)return empty('日报暂未同步',null,'news');
           if(!edition&&!currentArchive)return skeleton();
           if(!news.length&&reader)return h('div',{className:'pw-brief-layout'},h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer'},'打开已保存的日报',h(Icon,{name:'arrow',size:12})));
-          if(!news.length)return empty(briefDay===briefToday?'今日尚未发布':briefDay>briefToday?'这天尚未到来':briefDay?'这天没有已发布的日报':'暂无已发布日报','跟助手说“把今天的日报放到'+t('title')+'”，制作完成后即可在这里阅读。','news');
+          if(!news.length)return empty(briefDay===briefToday?'今日尚未发布':briefDay>briefToday?'这天尚未到来':briefDay?'这天没有已发布的日报':'暂无已发布日报',briefConnection?.provider?(briefDay&&briefDay!==briefToday?null:'已连接日报归档，新刊发布后会自动显示。'):'可以连接已有日报，或跟助手说“把今天的日报放到'+t('title')+'”。','news');
           const [lead,...quick]=news;
           function storyTitle(item) {
             const title=item.title||'今日资讯',url=safeURL(item.url);
@@ -8053,7 +8084,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
                 h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
           h('footer',{className:'pw-credit','aria-label':'DSH · Designed by XUANQING'},h('span',null,'DSH'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'XUANQING'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'),h('button',{type:'button',className:'pw-credit-help',onClick:()=>{setShowWelcome(true);grid.viewport.current?.scrollTo({top:0,behavior:'smooth'});}},'使用帮助'))),
-          h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail(),usageDetail(),connectionOpen&&h(PlanConnectionDialog,{connection,readError:connectionError,retry:()=>setConnectionRetry(value=>value+1),onSaved:next=>{setConnection(next);setTick(value=>value+1);},onClose:closePlanConnection})),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
+          h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail(),usageDetail(),connectionOpen&&h(SourceConnectionDialog,{kind:connectionOpen,connection:connectionOpen==='brief'?briefConnection:connection,readError:connectionError,retry:()=>setConnectionRetry(value=>value+1),onSaved:next=>{if(connectionOpen==='brief'){setBriefConnection(next);setBriefDay('');}else setConnection(next);setTick(value=>value+1);},onClose:closePlanConnection})),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(SidebarAvatar)));
       ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'personal-workbench'},Panel));

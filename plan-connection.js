@@ -20,9 +20,9 @@ function safeMessage(error,fallback){
 }
 export async function pickPlanLocation(input){
   const provider=input?.provider;
-  if(!local(provider))throw fail('请选择本地计划文件或日记文件夹。');
+  if(!local(provider)&&provider!=='brief')throw fail('请选择本地文件或文件夹。');
   if(process.platform!=='darwin')throw fail('请将本机文件或文件夹的完整路径粘贴到输入框。');
-  const script=provider==='obsidian'?'POSIX path of (choose folder with prompt "选择存放每日日记的文件夹")':'POSIX path of (choose file with prompt "选择 Markdown 或 JSON 计划文件")';
+  const script=provider==='brief'?'POSIX path of (choose folder with prompt "选择日报归档文件夹")':provider==='obsidian'?'POSIX path of (choose folder with prompt "选择存放每日日记的文件夹")':'POSIX path of (choose file with prompt "选择 Markdown 或 JSON 计划文件")';
   try{return {location:(await run('/usr/bin/osascript',['-e',script],{timeout:120000,maxBuffer:8192})).stdout.trim()};}
   catch(error){if(error.stderr?.includes('(-128)'))return {location:''};throw fail('文件选择窗口未完成，请粘贴完整路径。');}
 }

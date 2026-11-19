@@ -1,6 +1,6 @@
 {
   "name": "dsh-personal-workbench",
-  "version": "0.8.0-beta.11",
+  "version": "0.8.0-beta.12",
   "type": "module",
   "description": "一眼查看今日计划、每日 AI 资讯与正在进行的事，点击进入对应页面或对话。",
   "exports": {
@@ -42,6 +42,7 @@
     "sync-design.mjs",
     "START-HERE.md",
     "automation-sources.js",
+    "brief-connection.js",
     "project-store.js",
     "connect-chrome-store.mjs",
     "codex-catalog.js",

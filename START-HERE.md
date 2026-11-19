@@ -9,10 +9,10 @@
 3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.11/dsh-personal-workbench-0.8.0-beta.11.tgz
+https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.12/dsh-personal-workbench-0.8.0-beta.12.tgz
 ```
 
-如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载 0.8.0-beta.11](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.11/dsh-personal-workbench-0.8.0-beta.11.tgz)
+如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载 0.8.0-beta.12](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.12/dsh-personal-workbench-0.8.0-beta.12.tgz)
 
 ## 先加一条待办
 
@@ -27,15 +27,15 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 | Obsidian | 选择保存日记的文件夹，例如每天一篇 `YYYY-MM-DD.md`。工作台读取日期范围内笔记中的 `- [ ]` 和 `- [x]` 待办。 |
 | Notion | 复制一行一件事的数据库链接。数据库需要标题和日期列。首次使用时在 Notion 把数据库共享给自己的集成，在连接窗口填写集成密钥。本机已配置该令牌时可留空。 |
 | 飞书 | 打开多维表格的具体数据表或视图，复制链接。电脑需要安装官方飞书 CLI 并以有权查看该表的个人账号登录。 |
-| 其他工具 | 选择一个带日期的 Markdown 或 JSON 计划文件。可以先导出一次试用；原文件更新后，刷新工作台即可重新读取。 |
+| 其他工具 | 选择一个带日期的 Markdown 或 JSON 计划文件。可以先导出一次试用；工作台会重新读取原文件中的更新。 |
 
-外部计划在原工具中编辑。工作台自己添加的待办也能继续使用。
+外部计划在原工具中编辑。工作台保持打开时会定期重读，切回工作台时也会检查更新。工作台自己添加的待办也能继续使用。
 
-如果你分别维护了日计划和周计划，点「周」会看到所选整周的安排，点其中一天，下方会列出周计划给这一天安排的事项。切到「日」，就能看到当天的日待办。只连接了日计划时，也可以在周视图按日期查看。
+连接一个计划来源，就可以按日、周或月查看其中的事项。如果你另有独立的周计划，周视图会显示那份清单。
 
-## 查看不同助手的剩余额度
+## 查看套餐额度和账户余额
 
-点「剩余额度」上的「连接额度」。Codex 的套餐记录会自动出现。有 DeepSeek Harness 账号的用户可以点「连接当前账号」，读取充值余额和赠金。其他助手可以按次、百分比、Token 或货币金额手动记录，也可以告诉 Data「帮我记下设计助手还剩 30 次」。手动额度会显示记录时间。卡片较宽时会同时预览多个来源，点卡片可以看全部。
+点「剩余额度」查看来源。使用 Codex 后，如果它在本机留下了有效的套餐限额记录，这里会显示剩余百分比和已知的重置时间。支持账户余额的 Harness 还会提供「连接当前账号」，点一下即可读取该账号的充值余额和赠金。首次使用时，尚未读到的数据会显示相应提示。卡片较宽时可以同时预览两个来源。
 
 ## 和你的 Data 聊天
 
@@ -54,7 +54,7 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 | 想查看什么 | 准备什么 |
 | --- | --- |
 | 本机用量和 Codex 额度 | 使用支持的 Harness、Codex、Hermes 客户端后，工作台会读取它们在本机已有的用量记录。自定义数据目录可用 `DSH_HOME`、`CODEX_HOME`、`HERMES_HOME` 指定。今日和七日用量按运行 Harness 的电脑所在时区计算；Hermes 只有累计账本，显示在累计明细中。剩余额度取自 Codex 最近返回的限额窗口。 |
-| 自己归档的日报 | 可用助手工具直接保存。已有兼容的日报生成流程可用 `DSH_WORKBENCH_BRIEF_DIR` 指定自己的归档目录完整路径。工作台按刊期读取 `YYYY-MM-DD.json` 与 `YYYY-MM-DD.status.json`，分别用于内容和发布结果。归档中的头图也可随刊期保存在同一归档根目录的 `assets/YYYY-MM-DD/` 中，并由该期头图的 `local_image` 或 `local_path` 引用。 |
+| 自己归档的日报 | 在「AI每日精选」点「连接我的日报」，选择已有日报的归档文件夹，或粘贴文件夹路径。也可以连接空文件夹，等日报生成流程写入。已有配置仍可用 `DSH_WORKBENCH_BRIEF_DIR` 指定归档目录。工作台按刊期读取 `YYYY-MM-DD.json` 与 `YYYY-MM-DD.status.json`，分别用于内容和发布结果。归档中的头图也可随刊期保存在同一归档根目录的 `assets/YYYY-MM-DD/` 中，并由该期头图的 `local_image` 或 `local_path` 引用。 |
 | Hermes 日报任务 | 读取自己 Hermes 中已有的定时任务。多个配置可用 `DSH_WORKBENCH_HERMES_PROFILE` 指定，多个日报任务可用 `DSH_WORKBENCH_HERMES_JOB_ID` 指定。macOS 的对话跳转需要本机 Hermes 应用及对应会话。 |
 | 独立「今日计划」应用 | 将 `DSH_WORKBENCH_LOCAL_PLAN_FILE` 指向自己的 `local-plans.json`（今日计划 v1）。工作台读取待办、分组、备注及完成状态。编辑这些记录请回到原应用，工作台新建的待办仍可在本页勾选。 |
 | Notion 日计划 | 在 Notion 将自己的数据源共享给自己的集成。设置 `DSH_WORKBENCH_NOTION_TOKEN` 与 `DSH_WORKBENCH_NOTION_DAILY_SOURCE_ID`。每个日期对应一页，工作台读取「今日计划」标题下的待办。如果有多个日期字段，设置 `DSH_WORKBENCH_NOTION_DAILY_DATE_PROPERTY`；标题不同可设 `DSH_WORKBENCH_NOTION_DAILY_SECTION`。 |

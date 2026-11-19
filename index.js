@@ -10,7 +10,7 @@ import { validUIWrite } from './request.js';
 import { attachAssistant } from './assistant-host.js';
 import {attachPlanConnection,pickPlanLocation} from './plan-connection.js';
 import { dates } from './planning.js';
-import { createExternalSources } from './automation-sources.js';
+import {attachBriefConnection} from './brief-connection.js';
 import { createPlanReader } from './notion-plans.js';
 import { createWeeklyPlanReader, validateWeek } from './weekly-plan.js';
 import {attachQuotaConnections} from './quota-connections.js';
@@ -27,7 +27,8 @@ export function apply(ctx) {
   ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
   const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
   const projects=attachProjects(ctx);
-  const external=createExternalSources();
+  const briefs=attachBriefConnection(ctx);
+  const external=briefs.external;
   const content=attachContent(ctx,projects,external);
   const notifications=installWeixinNotifications(ctx);
   const openCodexThread=createCodexThreadOpener();
@@ -99,6 +100,8 @@ export function apply(ctx) {
       case 'connectPlan': return connection.connect(input);
       case 'disconnectPlan': return connection.disconnect();
       case 'pickPlanLocation': return pickPlanLocation(input);
+      case 'connectBrief': return briefs.connect(input);
+      case 'disconnectBrief': return briefs.disconnect();
       case 'addPlanTask': {
         const value=newTask.parse(input);
         return tasks.create({title:value.title,dueDate:value.date,priority:'normal'});
@@ -128,6 +131,7 @@ export function apply(ctx) {
         switch (query.get('action')) {
           case 'quotaConnections': return reply({value:await quotas.status()});
           case 'planConnection': return reply({value:await connection.status()});
+          case 'briefConnection': return reply({value:await briefs.status()});
           case 'uiRelease': return reply({value:await readUIRelease()});
           case 'usage': return reply({value:await readUsage()});
           case 'projectNotes': return reply({value:await content.changeProjectNotes({action:'list'})});
@@ -148,7 +152,7 @@ export function apply(ctx) {
           default: return reply({error:'未知的读取操作。'},400);
         }
       } catch (error) {
-        if (error.code?.startsWith('QUOTA_'))return reply({error:error.message},400);
+        if (error.code?.startsWith('QUOTA_')||error.code==='BRIEF_CONNECTION')return reply({error:error.message},400);
         if (error.code?.startsWith('PLAN_')) return reply({error:error.message},
           error.code==='PLAN_CHECK_PERMISSION' ? 403 : error.code==='PLAN_CHECK_CONFLICT' ? 409 : error.code==='PLAN_CHECK_UNKNOWN' ? 503 : 400);
         if (['APP_OPEN_FAILED','APP_UNAVAILABLE'].includes(error.code)) return reply({error:error.message},400);

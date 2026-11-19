@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
-import {mkdtemp,rm,writeFile} from 'node:fs/promises';
+import {mkdir,mkdtemp,readFile,rm,writeFile} from 'node:fs/promises';
 import {setTimeout as pause} from 'node:timers/promises';
 import {apply} from './index.js';
 
@@ -152,6 +152,15 @@ test('selected plan source reaches dashboard, day, week, month and assistant and
     assert.equal((await app.get('calendar',{month:date.slice(0,7)})).days[date].count,2);
     const grid=await app.tools.get('personal_home').execute({view:'plan',date});
     assert.equal(grid.items.length,2);
+    // Edit the connected file outside the workbench while this same HTTP host stays open.
+    const clock=Date.now()+16000;
+    t.mock.method(Date,'now',()=>clock);
+    await writeFile(file,'- [x] 已在来源更新');
+    const updated=items=>items.some(item=>item.title==='已在来源更新'&&item.checked);
+    assert.ok(updated((await app.get('plan',{date})).items));
+    assert.ok(updated((await app.get('weeklyPlan',{week})).days[date]));
+    assert.ok(updated((await app.get('calendar',{month:date.slice(0,7)})).days[date].items));
+    assert.ok(updated((await app.tools.get('personal_home').execute({view:'plan',date})).items));
     assert.equal((await app.request({},{action:'connectPlan',input:{provider:'file',location:path.join(folder,'missing.md')}})).status,400);
     assert.equal((await app.get('planConnection')).provider,'obsidian');
     assert.ok(!JSON.stringify(await app.get('export')).includes(folder));
@@ -162,4 +171,61 @@ test('selected plan source reaches dashboard, day, week, month and assistant and
     await second.post('disconnectPlan',{});
     assert.deepEqual((await second.get('plan',{date})).items.map(t=>t.title),['本机计划']);
   }finally{await second.close();}
+});
+
+test('connecting an archive follows its local editions, receipts and images without restarting the host',async t=>{
+  await isolate(t);
+  const root=os.homedir(),folder=path.join(root,'日报归档'),other=path.join(root,'其他文件');
+  await Promise.all([mkdir(folder),mkdir(other)]);
+  await writeFile(path.join(other,'notes.md'),' unrelated ');
+  const data=new Map(),app=harness(data);
+  let today,issue;
+  try{
+    assert.equal((await app.get('briefConnection')).provider,null);
+    const picked=await app.post('connectBrief',{location:folder});
+    assert.equal(picked.detail,'日报归档');
+    assert.ok(!JSON.stringify(picked).includes(root));
+    assert.equal((await app.get('briefArchive')).edition,null);
+    const bad=await app.request({},{action:'connectBrief',input:{location:other}});
+    assert.equal(bad.status,400);
+    assert.match(bad.json.error,/没有找到可读取的日报/);
+    assert.equal((await app.get('briefConnection')).detail,'日报归档');
+    today=(await app.get('dashboard')).today;
+    issue=path.join(folder,today+'.json');
+    const image=path.join('assets',today,'main.png');
+    await mkdir(path.join(root,'assets',today),{recursive:true});
+    await writeFile(path.join(root,image),Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAFgwJ/lNWbWAAAAABJRU5ErkJggg==','base64'));
+    const write=heading=>writeFile(issue,JSON.stringify({date:today,items:[[heading,'正文','https://example.org/story']],figures:[{local_image:image,caption:'当日配图'}]}));
+    await write('第一篇');
+    assert.equal((await app.get('assistants')).brief.publicationComplete,false);
+    assert.equal((await app.get('briefArchive')).edition,null);
+    await writeFile(path.join(folder,today+'.status.json'),JSON.stringify({date:today,publication_complete:true,published_at:today+'T01:00:00Z',verified_reader_url:'https://example.org/read'}));
+    await write('原文件更新后的头条');
+    const current=await app.get('assistants');
+    assert.equal(current.brief.review.title,'原文件更新后的头条');
+    const edition=(await app.get('briefArchive')).edition;
+    assert.equal(edition.items[0].title,current.brief.review.title);
+    assert.match(edition.leadImage.revision,/^[0-9a-f]{16}$/);
+    assert.equal(edition.leadImage.alt,'当日配图');
+    assert.ok(!JSON.stringify(await app.get('export')).includes(folder));
+  }finally{await app.close();}
+  const reopened=harness(data);
+  try{
+    assert.equal((await reopened.get('briefConnection')).detail,'日报归档');
+    assert.equal((await reopened.get('dashboard')).brief.review.title,'原文件更新后的头条');
+    await reopened.post('disconnectBrief',{});
+    assert.equal((await reopened.get('briefArchive')).edition,null);
+    assert.match(await readFile(issue,'utf8'),/原文件更新后的头条/);
+  }finally{await reopened.close();}
+});
+
+test('existing Harness-configured daily report folders retain precedence',async t=>{
+  await isolate(t);
+  process.env.DSH_WORKBENCH_BRIEF_DIR=os.homedir();
+  const app=harness();
+  try{
+    assert.equal((await app.get('briefConnection')).managed,true);
+    assert.equal((await app.request({},{action:'disconnectBrief',input:{}})).status,400);
+    assert.equal((await app.request({},{action:'connectBrief',input:{location:os.homedir()}})).status,400);
+  }finally{await app.close();}
 });

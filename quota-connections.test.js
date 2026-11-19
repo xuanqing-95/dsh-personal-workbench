@@ -42,7 +42,7 @@ test('Harness is explicitly linked, forwards client metadata and filters private
   assert.equal(account.state,'ready');
   assert.ok(Number.isFinite(Date.parse(account.observedAt)));
   assert.ok(!JSON.stringify(account).includes('private-id'));
-  assert.deepEqual(stored(),{harness:true,manual:[]});
+  assert.deepEqual(stored(),{harness:true});
   await service.disconnect({id:'harness'});
   await service.status();
   assert.equal(calls.length,1);
@@ -83,34 +83,29 @@ test('simultaneous status reads share an in-flight query yet the next read obser
   assert.deepEqual((await switched).accounts[1].entries,[]);
 });
 
-test('assistant can create, list, edit and remove a labeled manual quota across sessions', async () => {
-  const {tool,stored}=setup();
-  const input={provider:'manual',label:'运营助手',unit:'token',value:200};
-  const created=await tool.execute({action:'connect',input});
-  const manual=created.accounts.find(a=>a.provider==='manual');
-  assert.equal(tool.name,'personal_quota');
-  assert.equal(manual.detail,'手动记录');
-  assert.equal(manual.entries[0].value,200);
-  assert.ok(Number.isFinite(Date.parse(manual.observedAt)));
-  const reopened=setup({stored:stored()});
-  const edited=await reopened.tool.execute({action:'connect',input:{...input,id:manual.id,unit:'%',value:35}});
-  assert.equal(edited.accounts.filter(a=>a.provider==='manual').length,1);
-  assert.deepEqual(edited.accounts[1].entries[0],{label:'剩余额度',value:35,unit:'%'});
-  assert.deepEqual((await reopened.tool.execute({action:'list'})).accounts,edited.accounts);
-  assert.equal((await reopened.tool.execute({action:'disconnect',input:{id:manual.id}})).accounts.length,1);
+test('older saved notes are not exposed as quota or erased by linking a real account',async()=>{
+  const manual=[{id:'manual-abab0000-abab-4000-8000-000000000001',label:'旧记录',unit:'次',value:23,
+    observedAt:'2026-11-18T11:00:00Z'}];
+  const {tool,service,stored}=setup({stored:{harness:false,manual},getBalance:async()=>null});
+  assert.deepEqual((await service.status()).accounts.map(row=>row.id),['codex']);
+  const linked=await tool.execute({action:'connect',input:harness});
+  assert.deepEqual(linked.accounts.map(row=>row.id),['codex','harness']);
+  assert.equal(linked.accounts[1].state,'signed-out');
+  assert.equal(JSON.stringify(await tool.execute({action:'list'})).includes('旧记录'),false);
+  assert.deepEqual(stored(),{harness:true,manual});
+  await tool.execute({action:'disconnect',input:{id:'harness'}});
+  assert.deepEqual(stored(),{harness:false,manual});
 });
 
-test('manual quotas validate values and units, bound source count under concurrent writes', async () => {
-  const {service}=setup();
-  const manual={provider:'manual',label:'编辑助手',value:0,unit:'次'};
-  for (const patch of [
-    {unit:'%',value:101},{unit:'次',value:0.5},{value:-1},{value:Infinity},{unit:'credits'},
-    {value:'3'},{label:' '},{apiKey:'not-needed'}
-  ]) await assert.rejects(service.connect({...manual,...patch}),{code:'QUOTA_CONNECTION'});
-  await Promise.all(Array.from({length:12},(_,i)=>service.connect({...manual,label:'助手 '+i})));
-  assert.equal((await service.status()).accounts.length,13);
-  await assert.rejects(service.connect(manual),/12/);
-  await assert.rejects(service.disconnect({id:'codex'}),/来源/);
+test('the account tool and service reject invented balances and unsupported sources',async()=>{
+  const {tool,service,stored}=setup({getBalance:async()=>null});
+  const unsupported={provider:'manual',label:'用户输入',value:12,unit:'次'};
+  await assert.rejects(service.connect(unsupported),{code:'QUOTA_CONNECTION'});
+  await assert.rejects(tool.execute({action:'connect',input:unsupported}),{code:'QUOTA_CONNECTION'});
+  await assert.rejects(service.connect({...harness,value:30}),{code:'QUOTA_CONNECTION'});
+  await assert.rejects(service.disconnect({id:'codex'}),{code:'QUOTA_CONNECTION'});
+  assert.deepEqual((await service.status()).accounts.map(row=>row.id),['codex']);
+  assert.deepEqual(stored(),{harness:false});
 });
 
 test('automatic Codex only displays a valid unexpired window; stale or missing snapshots remain distinguishable', async () => {

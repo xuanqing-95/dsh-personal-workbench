@@ -1,25 +1,13 @@
-import {randomUUID} from 'node:crypto';
 import {createRequire} from 'node:module';
 import path from 'node:path';
 import {z} from 'zod';
 
 const require = createRequire(import.meta.url);
-const manualLimit = 12;
-const units = ['%', '次', 'token', 'CNY', 'USD'];
-const manualId = z.string().regex(/^manual-[0-9a-f-]{36}$/i);
-const amount = z.number().finite().nonnegative().max(Number.MAX_SAFE_INTEGER);
-const fields = {
-  label: z.string().trim().min(1).max(80),
-  unit: z.enum(units),
-  value: amount,
-};
-const record = z.object({id:manualId, ...fields, observedAt:z.string().datetime()}).strict();
-const savedSchema = z.object({harness:z.boolean(), manual:z.array(record).max(manualLimit)}).strict();
-const initial = {harness:false, manual:[]};
-const connectionSchema = z.discriminatedUnion('provider', [
-  z.object({provider:z.literal('harness')}).strict(),
-  z.object({provider:z.literal('manual'), id:manualId.optional(), ...fields}).strict(),
-]);
+// Older profiles may carry saved notes. Leave them on disk when changing the wallet connection.
+const savedSchema = z.object({harness:z.boolean(), manual:z.array(z.unknown()).optional()}).strict();
+const initial = {harness:false};
+const connectionSchema = z.object({provider:z.literal('harness')}).strict();
+const disconnectionSchema = z.object({id:z.literal('harness')}).strict();
 const fail = message => Object.assign(new Error(message), {code:'QUOTA_CONNECTION'});
 
 // The official account service derives request headers from these three UI facts.
@@ -67,10 +55,6 @@ async function harnessStatus(account, clientInfo) {
   }
 }
 
-function manualStatus({id,label,value,unit,observedAt}) {
-  return {id, provider:'manual', label, entries:[{label:'剩余额度',value,unit}], observedAt, state:'ready', detail:'手动记录'};
-}
-
 async function codexStatus(readUsage) {
   const base = {id:'codex',provider:'codex',label:'Codex',entries:[],observedAt:null};
   try {
@@ -108,7 +92,7 @@ export function attachQuotaConnections(ctx, {readUsage,clientInfo=hostClient}) {
     child.effect(() => () => {if (account===child.deepseekAccount) {account=undefined; checking=undefined;}});
   });
   async function status() {
-    // No balances or account identifiers are persisted. Only explicitly linked Harness wallets are queried.
+    // Only query a wallet after it has been linked. Provider replies stay in memory.
     const value = await (await store()).global.get();
     const canConnectHarness = typeof account?.getBalance === 'function';
     if (value.harness && !checking) {
@@ -117,47 +101,31 @@ export function attachQuotaConnections(ctx, {readUsage,clientInfo=hostClient}) {
       request.finally(() => {if (checking===request) checking=undefined;});
     }
     const [codex,harness] = await Promise.all([codexStatus(readUsage),value.harness?checking:null]);
-    return {canConnectHarness, accounts:[codex,...(harness?[harness]:[]),...value.manual.map(manualStatus)]};
+    return {canConnectHarness, accounts:harness?[codex,harness]:[codex]};
   }
-  function mutate(update) {
+  function setHarnessConnected(connected) {
     const operation = queue.then(async () => {
       const {global} = await store();
-      await global.set(update(await global.get()));
+      const saved = await global.get();
+      await global.set({...saved,harness:connected});
     });
     queue = operation.catch(()=>{});
     return operation.then(status);
   }
   async function connect(input) {
-    const parsed = connectionSchema.safeParse(input);
-    if (!parsed.success) throw fail('请选择来源并填写名称、有效的剩余额度和单位。');
-    const source = parsed.data;
-    if (source.provider==='harness') {
-      if (typeof account?.getBalance !== 'function') throw fail('当前宿主没有提供账户余额服务。');
-      return mutate(value => ({...value,harness:true}));
-    }
-    if (source.unit==='%' && source.value>100) throw fail('剩余百分比应在 0 到 100 之间。');
-    if (['次','token'].includes(source.unit) && !Number.isSafeInteger(source.value)) throw fail('次数和 token 数量需要填写整数。');
-    return mutate(value => {
-      const manuals = value.manual;
-      if (source.id && !manuals.some(row => row.id===source.id)) throw fail('找不到这条手动额度，请重新查看列表。');
-      if (!source.id && manuals.some(row => row.label===source.label)) throw fail('这个来源名称已存在，可编辑原记录。');
-      if (source.id && manuals.some(row=>row.id!==source.id && row.label===source.label)) throw fail('这个来源名称已存在。');
-      if (!source.id && manuals.length>=manualLimit) throw fail('最多可记录 12 个手动额度来源。');
-      const row = {id:source.id||'manual-'+randomUUID(),label:source.label,unit:source.unit,value:source.value,observedAt:new Date().toISOString()};
-      return {...value, manual:source.id ? manuals.map(old=>old.id===source.id?row:old) : [...manuals,row]};
-    });
+    if (!connectionSchema.safeParse(input).success) throw fail('请选择支持的账户余额来源。');
+    if (typeof account?.getBalance !== 'function') throw fail('当前宿主没有提供账户余额服务。');
+    return setHarnessConnected(true);
   }
   async function disconnect(input) {
-    const parsed = z.object({id:z.union([z.literal('harness'),manualId])}).strict().safeParse(input);
-    if (!parsed.success) throw fail('请选择已连接的账户或手动额度来源。');
-    return mutate(value => parsed.data.id==='harness' ? {...value,harness:false} :
-      {...value,manual:value.manual.filter(row=>row.id!==parsed.data.id)});
+    if (!disconnectionSchema.safeParse(input).success) throw fail('请选择已连接的账户余额来源。');
+    return setHarnessConnected(false);
   }
   ctx.effect(() => ctx.tools.register({
     name:'personal_quota',
-    description:'list 查询工作台额度及来源和更新时间。仅在用户明确要求时连接已登录的 DeepSeek 余额或断开来源。记录其他助手额度时，value 和 unit 必须由用户提供；编辑手动记录请使用已有 id。Codex 配额从本机快照读取。',
+    description:'list 查询本机 Codex 套餐额度及已连接的 DeepSeek 账户余额，返回数据来源和更新时间。仅在用户明确要求时连接或断开 DeepSeek Harness 账户余额。',
     parameters:{type:'object',properties:{action:{enum:['list','connect','disconnect']},input:{type:'object',properties:{
-      provider:{enum:['harness','manual']},id:{type:'string'},label:{type:'string'},value:{type:'number'},unit:{enum:units}
+      provider:{enum:['harness']},id:{enum:['harness']}
     },additionalProperties:false}},required:['action'],additionalProperties:false},
     output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
     async execute({action,input}) {

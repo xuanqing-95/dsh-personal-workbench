@@ -926,7 +926,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  .pw-public-profile .pw-pet-preview-art {display:none}
 }
 
-.pwb .pw-spend-heading .pw-quota-connect {margin-inline-start:auto;color:var(--pw-ui-accent);font-size:11px}
+.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-card .pw-spend-heading {padding-inline-end:0;flex-wrap:wrap;gap:2px 8px;min-width:0}
+.pwb .pw-finance-cards .pw-quota-card .pw-quota-connect {color:var(--pw-ui-accent);font-size:11px;line-height:16px}
 .pwb .pw-quota-card .pw-quota-other-list {display:none}
 .pwb .pw-quota-other-count,.pwb .pw-quota-other-list {font-size:12px;color:var(--pw-ui-body)}
 @container pw-finance (min-width:300px) {
@@ -937,8 +938,11 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
 .pwb .pw-quota-manager {gap:16px}
 .pwb .pw-quota-account {padding-block-end:12px;border-bottom:1px solid var(--pw-ui-border,rgba(22,48,49,.14))}
 .pwb .pw-quota-account-title,.pwb .pw-quota-entry {display:flex;align-items:center;justify-content:space-between;gap:12px}
-.pwb .pw-quota-account button,.pwb .pw-quota-manual button {width:fit-content;justify-self:start}
+.pwb .pw-quota-account button {width:fit-content;justify-self:start}
 .pwb .pw-quota-manager small {color:var(--pw-ui-muted)}
-.pwb .pw-quota-manual {display:flex;flex-wrap:wrap;align-items:end;gap:10px}
-.pwb .pw-quota-manual label {display:grid;gap:4px;max-width:100%}
-.pwb .pw-quota-manual :is(input,select) {max-width:100%;min-height:34px;font:inherit}
+
+.pwb .pw-brief-source-short {display:none}
+@container pw-card (max-width:360px) {
+ .pwb .pw-brief-source-full {display:none}
+ .pwb .pw-brief-source-short {display:inline}
+}

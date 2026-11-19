@@ -94,8 +94,8 @@ export async function readHermesExecutions(dir,{loadSQLite=()=>import('node:sqli
   return records;
 }
 
-export function createExternalSources({env=process.env,home=os.homedir(),now=()=>new Date(),executions=readHermesExecutions,platform=process.platform,run=promisify(execFile)}={}) {
-  const dailyDir = path.isAbsolute(env.DSH_WORKBENCH_BRIEF_DIR || '') ? env.DSH_WORKBENCH_BRIEF_DIR : null;
+export function createExternalSources({env=process.env,briefDirectory=env.DSH_WORKBENCH_BRIEF_DIR,home=os.homedir(),now=()=>new Date(),executions=readHermesExecutions,platform=process.platform,run=promisify(execFile)}={}) {
+  const dailyDir = path.isAbsolute(briefDirectory || '') ? briefDirectory : null;
   const hermesDir = path.isAbsolute(env.HERMES_HOME || '') ? env.HERMES_HOME : path.join(home,'.hermes');
   const codexDir = path.join(path.isAbsolute(env.CODEX_HOME || '') ? env.CODEX_HOME : path.join(home,'.codex'),'automations');
   async function readBriefIssue(date) {
@@ -320,5 +320,5 @@ export function createExternalSources({env=process.env,home=os.homedir(),now=()=
     opening.set(id,request);
     return request;
   }
-  return {readBrief, readBriefArchive, readBriefImage, readExternalAutomations, openHermesDaily};
+  return {readBrief, readBriefArchive, readBriefImage, hasBriefIssue:async date=>Boolean(await readBriefIssue(date)), readExternalAutomations, openHermesDaily};
 }
