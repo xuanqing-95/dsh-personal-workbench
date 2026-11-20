@@ -11,11 +11,11 @@ test('agent creation, dashboard reading, legacy migration and reload share one d
  }}};
  const options={readCatalog:async()=>({availability:'connected',items:[{id:threadId,title:'当前 Codex 对话',status:'completed'}]}),resolveRepository:async()=>({repository:'demo/project',repositoryState:'linked'}),readGitHub:async()=>({pull:null,history:[{id:'commit:a',date:'2026-11-15T00:00:00Z',label:'真实提交',state:'代码已更新'}]})};
  const service=attachProjects(ctx,options);
- const record=await tools.get('personal_project_shortcuts').execute({action:'create',input:{title:'项目',threadId,source:'harness'}});
+ const record=await tools.get('dsh_personal_project_shortcuts').execute({action:'create',input:{title:'项目',threadId,source:'harness'}});
  const first=await service.read();assert.equal(first.threads[0].id,threadId);assert.equal(first.shortcuts[0].id,record.id);assert.equal(first.shortcuts[0].github.value.history[0].label,'真实提交');
  await service.change({action:'import',items:[{id:threadId,title:'旧入口',source:'harness',threadId}]});
  assert.equal((await service.read()).shortcuts.length,1);
- const prefixed=await tools.get('personal_project_shortcuts').execute({action:'create',input:{title:'当前对话',threadId:'session-'+threadId,source:'harness'}});
+ const prefixed=await tools.get('dsh_personal_project_shortcuts').execute({action:'create',input:{title:'当前对话',threadId:'session-'+threadId,source:'harness'}});
  assert.equal(prefixed.threadId,'session-'+threadId);
  await assert.rejects(service.change({action:'update',id:prefixed.id,expectedRevision:prefixed.revision,patch:{source:'codex'}}));
  const restored=attachProjects(ctx,options);assert.equal((await restored.read()).shortcuts[0].id,record.id);

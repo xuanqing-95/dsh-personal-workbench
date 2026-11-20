@@ -39,10 +39,10 @@ export function attachPersonalOrganization(ctx,tasks,{env=process.env,platform=p
       .finally(()=>{opening=undefined;});
     return opening;
   }
-  ctx.effect(()=>ctx.tools.register(planTool(tasks,'personal_tasks')));
+  ctx.effect(()=>ctx.tools.register(planTool(tasks,'dsh_personal_tasks')));
   ctx.effect(()=>ctx.tools.register({
-    name:'personal_organization',
-    description:'整理自己的软件项目、长期目标和日常事务。可按来源关联已有任务、计划或自动化，记录目标、下一步和关注日期。写入前先读 organization 查看 revision。关联记录不会修改原任务或启动执行。项目开发对话入口使用 personal_project_shortcuts。',
+    name:'dsh_personal_organization',
+    description:'整理自己的软件项目、长期目标和日常事务。可按来源关联已有任务、计划或自动化，记录目标、下一步和关注日期。写入前先读 organization 查看 revision。关联记录不会修改原任务或启动执行。项目开发对话入口使用 dsh_personal_project_shortcuts。',
     parameters:{type:'object',properties:{action:{enum:['organization',...changes]},input:{type:'object',properties:{
       ...projectFields,id:{type:'string'},expectedRevision:{type:'integer'},sourceRef,
       patch:{type:'object',properties:{...projectFields,...metaFields},additionalProperties:false}

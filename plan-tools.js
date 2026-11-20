@@ -12,7 +12,7 @@ const patch = {type:'object',properties:{...fields,status:{enum:['todo','doing',
 export function planTool(tasks,name='personal_plan'){
   return {
     name,
-    description:'管理当前用户工作台的待办。personal_plan 和 personal_tasks 操作同一份记录，同一变更只调用一次。先 list 核对已有任务和 revision。create 提供 title、priority，可关联已知的内容任务或成果 UUID。update 使用 id、expectedRevision 和 patch，archive 归档指定事项。任务状态只记录进展，不证明自动化已执行或内容已发布。',
+    description:'管理当前用户工作台的待办。personal_plan 和 dsh_personal_tasks 操作同一份记录，同一变更只调用一次。先 list 核对已有任务和 revision。create 提供 title、priority，可关联已知的内容任务或成果 UUID。update 使用 id、expectedRevision 和 patch，archive 归档指定事项。任务状态只记录进展，不证明自动化已执行或内容已发布。',
     parameters:{type:'object',properties:{action:{enum:actions},view:{enum:views},input:{type:'object',properties:{
       ...fields,view:{enum:views},id:{type:'string'},expectedRevision:{type:'integer',minimum:1},patch
     },additionalProperties:false}},required:['action'],additionalProperties:false},

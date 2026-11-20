@@ -12,7 +12,9 @@ const uuid='00000000-0000-4000-8000-000000000007';
 const other='00000000-0000-4000-8000-000000000008';
 
 function harness(data=new Map(),sessions=[]){
-  const tools=new Map(),routes=new Map(),cleanups=[];
+  // The local edition can already be active in the same host.
+  const localTools=['personal_project_shortcuts','personal_project_notes','personal_tasks','personal_home','personal_organization'];
+  const tools=new Map(localTools.map(name=>[name,{name}])),routes=new Map(),cleanups=[];
   const ctx={
     effect(fn){const dispose=fn();if(typeof dispose==='function')cleanups.push(dispose);},
     inject(names,fn){if(names.every(name=>name in ctx))fn(ctx);},
@@ -117,10 +119,10 @@ test('beta.7 profile data, links, notes and task revisions survive an HTTP upgra
     assert.equal((await app.get('plan',{date:day})).items[0].checked,true);
     assert.equal((await app.request({},{action:'checkPlanTask',input:{id:uuid,date:day,revision:1,checked:false}})).status,409);
     const added=await app.post('addPlanTask',{date:day,title:'新待办'});
-    await app.tools.get('personal_tasks').execute({action:'update',input:{id:added.id,expectedRevision:1,patch:{link:{kind:'redflow-original',id:other}}}});
+    await app.tools.get('dsh_personal_tasks').execute({action:'update',input:{id:added.id,expectedRevision:1,patch:{link:{kind:'redflow-original',id:other}}}});
     await app.post('projectNotes',{action:'save',projectId:other,expectedRevision:1,patch:{progress:'已联调'}});
-    const project=await app.tools.get('personal_organization').execute({action:'createProject',input:{title:'发布前验收',area:'software',status:'active'}});
-    await app.tools.get('personal_organization').execute({action:'setItemMeta',input:{sourceRef:{kind:'task',id:added.id},expectedRevision:0,patch:{projectId:project.id}}});
+    const project=await app.tools.get('dsh_personal_organization').execute({action:'createProject',input:{title:'发布前验收',area:'software',status:'active'}});
+    await app.tools.get('dsh_personal_organization').execute({action:'setItemMeta',input:{sourceRef:{kind:'task',id:added.id},expectedRevision:0,patch:{projectId:project.id}}});
     assert.equal((await app.get('organization')).itemMeta[0].projectId,project.id);
     await app.close();app=harness(stored);
     const result=await app.get('dashboard');
@@ -154,7 +156,7 @@ test('selected plan source reaches dashboard, day, week, month and assistant and
     assert.ok((await app.get('dashboard')).plan.items.some(t=>t.source==='connection'));
     assert.ok((await app.get('weeklyPlan',{week})).days[date].some(t=>t.title==='演示外部计划'));
     assert.equal((await app.get('calendar',{month:date.slice(0,7)})).days[date].count,2);
-    const grid=await app.tools.get('personal_home').execute({view:'plan',date});
+    const grid=await app.tools.get('dsh_personal_home').execute({view:'plan',date});
     assert.equal(grid.items.length,2);
     // Edit the connected file outside the workbench while this same HTTP host stays open.
     const clock=Date.now()+16000;
@@ -164,7 +166,7 @@ test('selected plan source reaches dashboard, day, week, month and assistant and
     assert.ok(updated((await app.get('plan',{date})).items));
     assert.ok(updated((await app.get('weeklyPlan',{week})).days[date]));
     assert.ok(updated((await app.get('calendar',{month:date.slice(0,7)})).days[date].items));
-    assert.ok(updated((await app.tools.get('personal_home').execute({view:'plan',date})).items));
+    assert.ok(updated((await app.tools.get('dsh_personal_home').execute({view:'plan',date})).items));
     assert.equal((await app.request({},{action:'connectPlan',input:{provider:'file',location:path.join(folder,'missing.md')}})).status,400);
     assert.equal((await app.get('planConnection')).provider,'obsidian');
     assert.ok(!JSON.stringify(await app.get('export')).includes(folder));

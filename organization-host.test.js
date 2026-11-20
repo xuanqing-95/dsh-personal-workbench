@@ -17,10 +17,10 @@ function setup({saved=new Map(),env={},platform='darwin',run=async()=>{throw Err
   const organization=attachPersonalOrganization(ctx,tasks,{env,platform,run});
   return {organization,saved,registry};
 }
-test('personal_tasks and personal_plan manage one revision-controlled list with exact task links',async()=>{
+test('dsh_personal_tasks and personal_plan manage one revision-controlled list with exact task links',async()=>{
   const {registry}=setup();
-  assert.deepEqual([...registry.keys()],['personal_plan','personal_tasks','personal_organization']);
-  const tasks=registry.get('personal_tasks'),plan=registry.get('personal_plan');
+  assert.deepEqual([...registry.keys()],['personal_plan','dsh_personal_tasks','dsh_personal_organization']);
+  const tasks=registry.get('dsh_personal_tasks'),plan=registry.get('personal_plan');
   const link={kind:'redflow-run',id:'00000000-0000-4000-8000-000000000001'};
   const task=await tasks.execute({action:'create',input:{title:'查看这条配图',priority:'normal',link}});
   assert.deepEqual((await plan.execute({action:'list'})).items[0].link,link);
@@ -31,7 +31,7 @@ test('personal_tasks and personal_plan manage one revision-controlled list with 
 test('organization is empty for a fresh profile and stores only its own project and references',async()=>{
   const {registry,organization,saved}=setup();
   assert.deepEqual((await organization.list()).projects,[]);
-  const tool=registry.get('personal_organization');
+  const tool=registry.get('dsh_personal_organization');
   const project=await tool.execute({action:'createProject',input:{title:'准备工作展',area:'longterm',status:'active'}});
   const sourceRef={kind:'plan',id:'2026-11-19'};
   await tool.execute({action:'setItemMeta',input:{sourceRef,expectedRevision:0,patch:{projectId:project.id,intent:'review'}}});

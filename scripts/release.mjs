@@ -39,23 +39,11 @@ if(action==='seal'){
   const repository=pkg.repository.url.replace(/^git\+/,'').replace(/\.git$/,'');
   const author=typeof pkg.author==='string'?pkg.author:pkg.author.name;
   const titles={en:locales.en.title,zh:locales.zh.title},descriptions={en:locales.en.description,zh:locales.zh.description};
-  const tag='v'+pkg.version;
-  const filename=pkg.name.replace(/^@/,'').replace('/','-')+'-'+pkg.version+'.tgz';
-  const releaseUrl=repository+'/releases/tag/'+encodeURIComponent(tag);
-  const packageUrl=repository+'/releases/download/'+encodeURIComponent(tag)+'/'+encodeURIComponent(filename);
-  const indexUrl=new URL('index.json',pkg.homepage.replace(/\/?$/,'/')).href;
   const index={format:1,title:{en:'Personal AI Workspace plugins',zh:'个人 AI 工作台插件索引'},description:{en:'Install the personal workspace for plans, AI progress and project results in DeepSeek Harness.',zh:'在 DeepSeek Harness 安装个人 AI 工作台，查看今日计划、AI 进展和项目成果。'},plugins:[{
     name:pkg.name,title:titles,description:descriptions,author,icon:'icons/workbench.svg',homepage:pkg.homepage,repository:{url:repository},metadata:{keywords:pkg.keywords},
     versions:[{version:pkg.version,publishTimestamp:Math.floor(Date.parse(release.publishedAt)/1000),source:{type:'git',url:repository,commit},engines:{dsh:pkg.engines.dsh}}]
   }]};
-  const installUrl=pkg.version.includes('-')?packageUrl:repository+'/releases/latest/download/'+pkg.name+'.tgz';
-  const fields={installUrl,titleZh:titles.zh,titleEn:titles.en,descriptionZh:descriptions.zh,author,version:pkg.version,repository,packageUrl,releaseUrl,indexUrl,engines:pkg.engines.dsh};
-  const entities={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
-  const template=await readFile('site/index.html','utf8');
-  const html=template.replace(/\{\{(\w+)\}\}/g,(_,key)=>{
-    if(!Object.hasOwn(fields,key))throw Error('Unknown installation page field: '+key);
-    return fields[key].replace(/[&<>"']/g,char=>entities[char]);
-  });
+  const html=await readFile('site/index.html','utf8');
   const output='dist/site';
   await Promise.all([mkdir(output+'/icons',{recursive:true}),mkdir('site/icons',{recursive:true})]);
   await Promise.all([
@@ -65,5 +53,5 @@ if(action==='seal'){
     copyFile('site/preview.png',output+'/preview.png'),copyFile('icon.svg',output+'/icons/workbench.svg'),
   ]);
   console.log('Installation page: '+output+'/index.html');
-  console.log('Package: '+packageUrl);
+
 }else throw Error('Unknown release action');

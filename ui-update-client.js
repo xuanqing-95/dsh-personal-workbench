@@ -8,7 +8,7 @@ export function updateBlockReason({active,quiet,editing,pending,dialog,draft,foc
   return '';
 }
 export function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
-  const key='__personalWorkbenchSafeUpdateV1';
+  const key='__dshPersonalWorkbenchSafeUpdateV1';
   const runtime=window[key]||(window[key]={lastInput:Date.now(),inFlight:false,snapshot:null});
   runtime.activeBuild=build;
   const listeners=['pointerdown','keydown','wheel','input','compositionstart','compositionend'];
@@ -27,7 +27,7 @@ export function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,buil
       // A retained cursor in an empty editor is not an unsent draft.
       let sessionId;try{sessionId=localStorage.getItem(petNamespace+'.assistantSession');}catch{return true;}
       const state=sessionId?scope.uiSession.sessionStatus.getSnapshot().get(sessionId):null;
-      return updateBlockReason({active:ctx.layout.panelInfo.getSnapshot().activePanelId==='personal-workbench'&&!document.hidden,
+      return updateBlockReason({active:ctx.layout.panelInfo.getSnapshot().activePanelId==='dsh-personal-workbench'&&!document.hidden,
         quiet:Date.now()-runtime.lastInput>=15000, ...read(),draft,focused,composing,
         sessionKnown:!sessionId||typeof state?.running==='boolean',running:state?.running,interaction:!!state?.pendingInteraction});
     }
@@ -54,7 +54,7 @@ export function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,buil
         let navigated=false;
         const stopNavigation=layout.panelInfo.subscribe(()=>{
           const id=layout.panelInfo.getSnapshot().activePanelId;
-          if(id!==null&&id!=='personal-workbench')navigated=true;
+          if(id!==null&&id!=='dsh-personal-workbench')navigated=true;
         });
         const cancelRestore=()=>{navigated=true;};
         document.addEventListener('pointerdown',cancelRestore,true);
@@ -65,7 +65,7 @@ export function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,buil
           if(runtime.activeBuild!==release.build)throw Error('宿主未激活新版模块');
           const failure=modules.entries.state.getSnapshot().failures.find(row=>row.id===moduleId);
           if(failure)throw Error(failure.message);
-          if(!navigated&&layout.panelInfo.getSnapshot().activePanelId===null)layout.selectPanel('personal-workbench');
+          if(!navigated&&layout.panelInfo.getSnapshot().activePanelId===null)layout.selectPanel('dsh-personal-workbench');
           const actual=document.querySelector('.pwb[data-ui-build]');
           if(actual&&actual.getAttribute('data-ui-build')!==release.build)throw Error('新版界面尚未加载');
           if(restoreFocus&&!navigated){

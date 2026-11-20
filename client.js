@@ -6,7 +6,7 @@ window.__ModuleLoader__.load({
     const QUOTA_OPENAI_LOGO = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMTExMTExIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGhlaWdodD0iMWVtIiBzdHlsZT0iZmxleDpub25lO2xpbmUtaGVpZ2h0OjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjFlbSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+T3BlbkFJPC90aXRsZT48cGF0aCBkPSJNOS4yMDUgOC42NTh2LTIuMjZjMC0uMTkuMDcyLS4zMzMuMjM4LS40MjhsNC41NDMtMi42MTZjLjYxOS0uMzU3IDEuMzU2LS41MjMgMi4xMTctLjUyMyAyLjg1NCAwIDQuNjYyIDIuMjEyIDQuNjYyIDQuNTY2IDAgLjE2NyAwIC4zNTctLjAyNC41NDdsLTQuNzEtMi43NTlhLjc5Ny43OTcgMCAwMC0uODU2IDBsLTUuOTcgMy40NzN6bTEwLjYwOSA4LjhWMTIuMDZjMC0uMzMzLS4xNDMtLjU3LS40MjktLjczN2wtNS45Ny0zLjQ3MyAxLjk1LTEuMTE4YS40MzMuNDMzIDAgMDEuNDc2IDBsNC41NDMgMi42MTdjMS4zMDkuNzYgMi4xODkgMi4zNzggMi4xODkgMy45NDggMCAxLjgwOC0xLjA3IDMuNDczLTIuNzYgNC4xNjN6TTcuODAyIDEyLjcwM2wtMS45NS0xLjE0MmMtLjE2Ny0uMDk1LS4yMzktLjIzOC0uMjM5LS40MjhWNS44OTljMC0yLjU0NSAxLjk1LTQuNDcyIDQuNTkxLTQuNDcyIDEgMCAxLjkyNy4zMzMgMi43MTIuOTI4TDguMjMgNS4wNjdjLS4yODUuMTY2LS40MjguNDA0LS40MjguNzM3djYuODk4ek0xMiAxNS4xMjhsLTIuNzk1LTEuNTd2LTMuMzNMMTIgOC42NThsMi43OTUgMS41N3YzLjMzTDEyIDE1LjEyOHptMS43OTYgNy4yM2MtMSAwLTEuOTI3LS4zMzItMi43MTItLjkyN2w0LjY4Ni0yLjcxMmMuMjg1LS4xNjYuNDI4LS40MDQuNDI4LS43Mzd2LTYuODk4bDEuOTc0IDEuMTQyYy4xNjcuMDk1LjIzOC4yMzguMjM4LjQyOHY1LjIzM2MwIDIuNTQ1LTEuOTc0IDQuNDcyLTQuNjE0IDQuNDcyem0tNS42MzctNS4zMDNsLTQuNTQ0LTIuNjE3Yy0xLjMwOC0uNzYxLTIuMTg4LTIuMzc4LTIuMTg4LTMuOTQ4QTQuNDgyIDQuNDgyIDAgMDE0LjIxIDYuMzI3djUuNDIzYzAgLjMzMy4xNDMuNTcxLjQyOC43MzhsNS45NDcgMy40NDktMS45NSAxLjExOGEuNDMyLjQzMiAwIDAxLS40NzYgMHptLS4yNjIgMy45Yy0yLjY4OCAwLTQuNjYyLTIuMDIxLTQuNjYyLTQuNTE5IDAtLjE5LjAyNC0uMzguMDQ3LS41N2w0LjY4NiAyLjcxYy4yODYuMTY3LjU3MS4xNjcuODU2IDBsNS45Ny0zLjQ0OHYyLjI2YzAgLjE5LS4wNy4zMzMtLjIzNy40MjhsLTQuNTQzIDIuNjE2Yy0uNjE5LjM1Ny0xLjM1Ni41MjMtMi4xMTcuNTIzem01Ljg5OSAyLjgzYTUuOTQ3IDUuOTQ3IDAgMDA1LjgyNy00Ljc1NkMyMi4yODcgMTguMzM5IDI0IDE1Ljg0IDI0IDEzLjI5NmMwLTEuNjY1LS43MTMtMy4yODItMS45OTgtNC40NDguMTE5LS41LjE5LS45OTkuMTktMS40OTggMC0zLjQwMS0yLjc1OS01Ljk0Ny01Ljk0Ni01Ljk0Ny0uNjQyIDAtMS4yNi4wOTUtMS44OC4zMUE1Ljk2MiA1Ljk2MiAwIDAwMTAuMjA1IDBhNS45NDcgNS45NDcgMCAwMC01LjgyNyA0Ljc1N0MxLjcxMyA1LjQ0NyAwIDcuOTQ1IDAgMTAuNDljMCAxLjY2Ni43MTMgMy4yODMgMS45OTggNC40NDgtLjExOS41LS4xOSAxLS4xOSAxLjQ5OSAwIDMuNDAxIDIuNzU5IDUuOTQ2IDUuOTQ2IDUuOTQ2LjY0MiAwIDEuMjYtLjA5NSAxLjg4LS4zMDlhNS45NiA1Ljk2IDAgMDA0LjE2MiAxLjcxM3oiPjwvcGF0aD48L3N2Zz4=';
     const React = require('react'), h = React.createElement;
     const WORKBENCH_PORTRAIT = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"0 0 128 128\"><rect x=\"4\" y=\"4\" width=\"120\" height=\"120\" rx=\"30\" fill=\"#e6f1ef\"/><rect x=\"22\" y=\"25\" width=\"48\" height=\"78\" rx=\"12\" fill=\"#086b6d\"/><rect x=\"78\" y=\"25\" width=\"28\" height=\"32\" rx=\"10\" fill=\"#69a6a2\"/><rect x=\"78\" y=\"65\" width=\"28\" height=\"38\" rx=\"10\" fill=\"#b0ceca\"/><path d=\"m35 63 8 8 15-18\" fill=\"none\" stroke=\"#fff\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>");
-    const WORKBENCH_UI_BUILD = "release-0.8.0";
+    const WORKBENCH_UI_BUILD = "release-0.8.1";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -18,7 +18,7 @@ function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,co
   return '';
 }
 function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
-  const key='__personalWorkbenchSafeUpdateV1';
+  const key='__dshPersonalWorkbenchSafeUpdateV1';
   const runtime=window[key]||(window[key]={lastInput:Date.now(),inFlight:false,snapshot:null});
   runtime.activeBuild=build;
   const listeners=['pointerdown','keydown','wheel','input','compositionstart','compositionend'];
@@ -37,7 +37,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       // A retained cursor in an empty editor is not an unsent draft.
       let sessionId;try{sessionId=localStorage.getItem(petNamespace+'.assistantSession');}catch{return true;}
       const state=sessionId?scope.uiSession.sessionStatus.getSnapshot().get(sessionId):null;
-      return updateBlockReason({active:ctx.layout.panelInfo.getSnapshot().activePanelId==='personal-workbench'&&!document.hidden,
+      return updateBlockReason({active:ctx.layout.panelInfo.getSnapshot().activePanelId==='dsh-personal-workbench'&&!document.hidden,
         quiet:Date.now()-runtime.lastInput>=15000, ...read(),draft,focused,composing,
         sessionKnown:!sessionId||typeof state?.running==='boolean',running:state?.running,interaction:!!state?.pendingInteraction});
     }
@@ -64,7 +64,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
         let navigated=false;
         const stopNavigation=layout.panelInfo.subscribe(()=>{
           const id=layout.panelInfo.getSnapshot().activePanelId;
-          if(id!==null&&id!=='personal-workbench')navigated=true;
+          if(id!==null&&id!=='dsh-personal-workbench')navigated=true;
         });
         const cancelRestore=()=>{navigated=true;};
         document.addEventListener('pointerdown',cancelRestore,true);
@@ -75,7 +75,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
           if(runtime.activeBuild!==release.build)throw Error('宿主未激活新版模块');
           const failure=modules.entries.state.getSnapshot().failures.find(row=>row.id===moduleId);
           if(failure)throw Error(failure.message);
-          if(!navigated&&layout.panelInfo.getSnapshot().activePanelId===null)layout.selectPanel('personal-workbench');
+          if(!navigated&&layout.panelInfo.getSnapshot().activePanelId===null)layout.selectPanel('dsh-personal-workbench');
           const actual=document.querySelector('.pwb[data-ui-build]');
           if(actual&&actual.getAttribute('data-ui-build')!==release.build)throw Error('新版界面尚未加载');
           if(restoreFocus&&!navigated){
@@ -102,7 +102,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
   return runtime;
 }
 // END SAFE UI UPDATER
-    function restoredUI(key,fallback){const value=window.__personalWorkbenchSafeUpdateV1?.snapshot;return value&&Date.now()-value.at<600000&&value[key]!==undefined?value[key]:fallback;}
+    function restoredUI(key,fallback){const value=window.__dshPersonalWorkbenchSafeUpdateV1?.snapshot;return value&&Date.now()-value.at<600000&&value[key]!==undefined?value[key]:fallback;}
 
     const { createPortal } = require('react-dom');
     const ns = 'dsh-personal-workbench-cat';
@@ -6695,9 +6695,9 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
       return {viewport,editing,active,notice,profile,handles,card,edit,cancel,reset,finish,fitContent,petPlacement,canvasStyle};
     }
     return {inject:['slots','locale','layout'],apply(ctx) {
-      ctx.effect(()=>ctx.locale.register('personalWorkbench','zh',{title:workbenchName}));
-      ctx.effect(()=>ctx.locale.register('personalWorkbench','en',{title:'Personal AI Workspace'}));
-      const t=ctx.locale.bind('personalWorkbench');
+      ctx.effect(()=>ctx.locale.register('dshPersonalWorkbench','zh',{title:workbenchName}));
+      ctx.effect(()=>ctx.locale.register('dshPersonalWorkbench','en',{title:'Personal AI Workspace'}));
+      const t=ctx.locale.bind('dshPersonalWorkbench');
       ctx.inject(['slots','locale','sessions','remote','remote.session'], ctx=>{
         const en={pet:'Pet the cat; drag to move',small:'Minimize',restore:'Show the cat',home:'Reset position',hello:'Meow. I live here now.',purr:'Purrr…',one:'I am keeping you company.',two:'A little head scratch, please.',three:'You work. I will watch.'};
         const zh={pet:'摸摸小猫；按住可拖动',small:'收起',restore:'叫出小黑猫',home:'归位',hello:'喵，我在这里陪你。',purr:'呼噜呼噜…',one:'你忙你的，我陪着。',two:'再摸一下嘛。',three:'今天也有好好陪你。'};
@@ -8456,8 +8456,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           h('footer',{className:'pw-credit','aria-label':'设计署名'},h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'玄清'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'))),
           h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),exampleDialog(),projectDialog(),projectDetail(),usageDetail(),connectionOpen&&h(SourceConnectionDialog,{kind:connectionOpen,connection:connectionOpen==='brief'?briefConnection:connection,readError:connectionError,retry:()=>setConnectionRetry(value=>value+1),onSaved:next=>{if(connectionOpen==='brief'){setBriefConnection(next);setBriefDay('');}else setConnection(next);setTick(value=>value+1);},onClose:closePlanConnection})),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
-      ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(SidebarAvatar)));
-      ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'personal-workbench'},Panel));
+      ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'dsh-personal-workbench',order:-10,label:()=>t('title')},()=>h(SidebarAvatar)));
+      ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'dsh-personal-workbench'},Panel));
     }};
   }
 });

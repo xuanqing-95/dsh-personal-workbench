@@ -189,7 +189,7 @@ export function apply(ctx) {
     },
   }));
   ctx.effect(() => ctx.tools.register({
-    name:'personal_home',description:'读取此 Harness 配置中的个人 AI 工作台、指定日期的计划或月份安排。只读。',
+    name:'dsh_personal_home',description:'读取此 Harness 配置中的个人 AI 工作台、指定日期的计划或月份安排。只读。',
     parameters:{type:'object',properties:{view:{enum:['today','plan','calendar','projects']},date:{type:'string'},month:{type:'string'}},required:['view'],additionalProperties:false},
     output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
     async execute(args) {

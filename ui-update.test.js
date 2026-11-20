@@ -25,16 +25,16 @@ test('running, waiting, unknown, drafts and current interaction all defer a swap
 });
 async function fixture({running=false,draft=false,navigateDuring=false,fail=false,focused=false}={}) {
  const source=await readFile(new URL('./ui-update-client.js',import.meta.url),'utf8');
- let tick,reloads=0,selected='personal-workbench',subscriber,cleanups=[],restores=0,focusRestored=0;
+ let tick,reloads=0,selected='dsh-personal-workbench',subscriber,cleanups=[],restores=0,focusRestored=0;
  const runtimeWindow={},events=new Map();
  const input={value:draft?'unsent message':'',disabled:false,tagName:'TEXTAREA',focus(){focusRestored++;}};
  const document={hidden:false,activeElement:focused?input:null,querySelector:selector=>selector.includes('data-ui-build')?{getAttribute:()=> 'new'}:({querySelectorAll:()=>[input],contains:el=>el===input,querySelector:()=>input}),addEventListener:(e,f)=>events.set(e,f),removeEventListener(){}};
  const sandbox={window:runtimeWindow,document,Date:class extends Date{static now(){return 60000;}},localStorage:{getItem:()=> 'pet-session'},setInterval:f=>(tick=f,1),clearInterval(){},setTimeout,console,
   fetch:async()=>({ok:true,json:async()=>({value:{available:true,build:'new',rev:'r2',moduleId:'test'}})})};
- const ctx={effect:f=>cleanups.push(f()),layout:{panelInfo:{getSnapshot:()=>({activePanelId:selected}),subscribe:f=>(subscriber=f,()=>{})},selectPanel:id=>{selected=id;restores++;}},inject:(_deps,cb)=>cb({effect:f=>cleanups.push(f()),uiSession:{sessionStatus:{getSnapshot:()=>new Map([['pet-session',{running}]])}},modules:{entries:{state:{getSnapshot:()=>({failures:fail?[{id:'test',message:'failed'}]:[]})},reload:async()=>{reloads++;runtimeWindow.__personalWorkbenchSafeUpdateV1.activeBuild='new';selected=null;subscriber();if(navigateDuring){selected='other';subscriber();}}}}})};
+ const ctx={effect:f=>cleanups.push(f()),layout:{panelInfo:{getSnapshot:()=>({activePanelId:selected}),subscribe:f=>(subscriber=f,()=>{})},selectPanel:id=>{selected=id;restores++;}},inject:(_deps,cb)=>cb({effect:f=>cleanups.push(f()),uiSession:{sessionStatus:{getSnapshot:()=>new Map([['pet-session',{running}]])}},modules:{entries:{state:{getSnapshot:()=>({failures:fail?[{id:'test',message:'failed'}]:[]})},reload:async()=>{reloads++;runtimeWindow.__dshPersonalWorkbenchSafeUpdateV1.activeBuild='new';selected=null;subscriber();if(navigateDuring){selected='other';subscriber();}}}}})};
  vm.runInNewContext(source.replaceAll('export function ','function ')+'\ninstallWorkbenchUpdates(ctx,{moduleId:"test",endpoint:"/release",petNamespace:"pet",build:"old"});',vm.createContext({...sandbox,ctx}));
  await new Promise(setImmediate);
- const runtime=runtimeWindow.__personalWorkbenchSafeUpdateV1;runtime.lastInput=0;runtime.capture=()=>({selectedDate:'2026-11-15',calendarMode:'week',boardScroll:240});
+ const runtime=runtimeWindow.__dshPersonalWorkbenchSafeUpdateV1;runtime.lastInput=0;runtime.capture=()=>({selectedDate:'2026-11-15',calendarMode:'week',boardScroll:240});
  await tick();
  return {get reloads(){return reloads;},restores,selected,runtime,tick,setRunning:value=>{running=value;},clearDraft:()=>{input.value="";},get focusRestored(){return focusRestored;},emit:type=>events.get(type)?.({type})};
 }

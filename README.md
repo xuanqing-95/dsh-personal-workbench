@@ -2,22 +2,6 @@
 
 把 AI 任务、项目进度和今天的计划放进 DeepSeek Harness 的同一页。要同时跟几个项目时，你可以先看哪些事等你处理，点开助手刚交付的成果，再把下一步排到今天。
 
-[免费安装到 DeepSeek Harness](https://xuanqing-95.github.io/dsh-personal-workbench/#install) · [第一次使用](./START-HERE.md)
-
-[![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://xuanqing-95.github.io/dsh-personal-workbench/preview.png)](https://xuanqing-95.github.io/dsh-personal-workbench/preview.png)
-
-*图中使用示例数据。首次打开即可添加自己的待办，接入的项目、日报和用量记录会显示在相应卡片。*
-
-## 什么时候值得打开它
-
-| 你想知道什么 | 在工作台怎么做 |
-| --- | --- |
-| 今天哪件事卡住了？ | 打开「需要你处理」，查看等你回复的会话或已报告的执行异常。点有入口的事项，回到对应对话或日报。 |
-| 助手交付的内容在哪里？ | 在「AI 助手任务进展」查看最新进展和上次成果。连接兼容的内容工作台后，可以分清文案已生成、配图尚未完成，也可以点进对应稿件。 |
-| 几个项目之间，下一步该跟哪一个？ | 在「项目进展」查看最新进展和下一步，点箭头回到关联对话。转到「今日计划」加入待办，按日、周或月查看安排。 |
-
-「AI每日精选」保留自己的日报刊期和原文入口。点击「今日用量」可看本机支持的模型用量记录，「剩余额度」显示 Codex 最近返回的套餐剩余百分比。在支持账户余额的 Harness 中，也可以连接当前账号查看充值余额和赠金。你还可以通过「编辑布局」调整这些卡片的位置和大小。
-
 ## 安装并记下第一条待办
 
 适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。
@@ -31,6 +15,20 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/d
 ```
 
 也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
+
+[![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://github.com/xuanqing-95/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)](https://github.com/xuanqing-95/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)
+
+*图中使用示例数据。首次打开即可添加自己的待办，接入的项目、日报和用量记录会显示在相应卡片。*
+
+## 什么时候值得打开它
+
+| 你想知道什么 | 在工作台怎么做 |
+| --- | --- |
+| 今天哪件事卡住了？ | 打开「需要你处理」，查看等你回复的会话或已报告的执行异常。点有入口的事项，回到对应对话或日报。 |
+| 助手交付的内容在哪里？ | 在「AI 助手任务进展」查看最新进展和上次成果。连接兼容的内容工作台后，可以分清文案已生成、配图尚未完成，也可以点进对应稿件。 |
+| 几个项目之间，下一步该跟哪一个？ | 在「项目进展」查看最新进展和下一步，点箭头回到关联对话。转到「今日计划」加入待办，按日、周或月查看安排。 |
+
+「AI每日精选」保留自己的日报刊期和原文入口。点击「今日用量」可看本机支持的模型用量记录，「剩余额度」显示 Codex 最近返回的套餐剩余百分比。在支持账户余额的 Harness 中，也可以连接当前账号查看充值余额和赠金。你还可以通过「编辑布局」调整这些卡片的位置和大小。
 
 ## 接上你正在用的工具
 
