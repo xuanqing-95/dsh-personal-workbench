@@ -856,14 +856,10 @@ body:has(.pwb) {
 .pwb .pw-task-form button:active:not(:disabled) {background:var(--pw-ui-primary-down)}
 .pwb .pw-task-form button:disabled {opacity:.45}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {background:radial-gradient(ellipse at 12% 30%,rgba(150,215,220,.20),transparent 65%),radial-gradient(ellipse at 95% 90%,rgba(182,182,218,.12),transparent 60%),rgba(255,255,255,.2)}
-/* Assistant is bundled with this public package; it uses the same neutral controls. */
-body:has(.pwb) .pw-assistant-dock .hbc-drawer {background:var(--pw-ui-surface);color:var(--pw-ui-ink);backdrop-filter:var(--pw-ui-blur)}
-body:has(.pwb) .pw-assistant-dock .hbc-settings {background:transparent;color:var(--pw-ui-ink);border-color:var(--pw-ui-line)}
-body:has(.pwb) .pw-assistant-dock .hbc-settings p {color:var(--pw-ui-muted)}
-body:has(.pwb) .pw-assistant-dock .hbc-settings textarea {background:var(--pw-ui-inner);color:var(--pw-ui-ink);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field);font:400 13px/21px var(--pw-body)}
-body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button) {color:var(--pw-ui-ink);background:rgba(255,255,255,.34);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-button);transition:background-color var(--pw-ui-motion)}
-body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button):hover {background:var(--pw-ui-hover)}
-body:has(.pwb) .pw-assistant-dock .hbc-drawer-head button:last-child {width:32px;height:32px;padding:0;border-color:transparent;border-radius:10px}
+/* Give short conversations the remaining height inside the native scrolling surface. */
+.pw-assistant-dock .pw-workbench-chat [data-conversation-scroll] {display:flex;flex-direction:column}
+.pw-assistant-dock .pw-workbench-chat [data-conversation-scroll]>[data-slot="conversation.session"] {flex:1 0 auto}
+.pw-assistant-dock .pw-workbench-chat [data-conversation-scroll]>[data-composer-seat] {flex:0 0 auto;margin-top:auto}
 @container pw-root (max-width:560px) {.pwb .pw-plan .pw-calendar-grid[data-mode=week]>button{padding-inline:4px}}
 @media(prefers-reduced-motion:reduce) {.pwb *,body:has(.pwb) .pw-assistant-dock *{scroll-behavior:auto!important;transition-duration:0s!important;animation-duration:0s!important}}
 /* Week dates share one calendar board. Only the hovered column receives a wash. */
@@ -873,7 +869,7 @@ body:has(.pwb) .pw-assistant-dock .hbc-drawer-head button:last-child {width:32px
 
 /* The public companion reuses the workbench dialog, field, close and action tokens. */
 body:has(.pwb) dialog.pw-public-profile {
-  position:fixed;inset:0;width:min(780px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:0;overflow:auto;
+  position:fixed;inset:0;width:min(820px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:0;overflow:auto;
 }
 .pwb .pw-plan-source {display:inline-flex;align-items:center;gap:6px;margin:8px var(--pw-ui-panel-inset-x) 0;color:var(--pw-ui-accent);background:transparent;border:0;padding:0;text-decoration:none;font:inherit;font-size:12px;cursor:pointer}
 .pwb .pw-plan-source:hover {text-decoration:underline}
@@ -889,26 +885,7 @@ body:has(.pwb) dialog.pw-public-profile {
 .pwb .pw-connection-summary svg {flex:none;margin-top:2px;color:var(--pw-ui-accent)}
 .pwb .pw-connection-summary p {margin:4px 0 0;color:var(--pw-ui-muted)}
 .pwb .pw-plan-connection .pw-connection-error {margin:12px 0 0;color:var(--pw-ui-status-error,var(--pw-ui-ink))}
-body:has(.pwb) .pw-public-profile .hbc-profile-close {position:absolute}
 .pw-public-profile::backdrop {background:rgba(22,43,48,.28);backdrop-filter:blur(8px)}
-.pw-public-profile form {display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
-.pw-public-profile .hbc-profile-editor,.pw-public-profile .hbc-profile-preview {min-width:0;display:flex;flex-direction:column}
-.pw-public-profile .hbc-profile-preview {border-left:1px solid var(--pw-ui-line);gap:12px}
-.pw-public-profile .hbc-profile-editor textarea {resize:vertical;padding:12px;min-height:120px;font:inherit}
-.pw-public-profile .hbc-profile-editor p,.pw-public-profile .hbc-profile-preview p {margin:0;font-size:12px}
-.pw-public-profile .pw-pet-choices {display:flex;gap:8px}
-.pw-public-profile .pw-pet-choices button {min-width:72px;display:grid;justify-items:center;padding:6px}
-.pw-public-profile .pw-pet-choices button[aria-pressed=true] {box-shadow:inset 0 0 0 2px var(--pw-ui-accent)}
-.pw-public-profile .pw-pet-choices svg {width:38px;height:42px}
-.pw-public-profile .pw-pet-preview-art {flex:1;display:grid;place-items:center}
-.pw-public-profile .pw-pet-preview-art svg {width:min(100%,150px);height:auto}
-body:has(.pwb) .pw-public-profile .pw-profile-save {background:var(--pw-ui-accent);color:#fff;padding:10px 16px}
-body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {background:var(--pw-ui-primary-hover)}
-@media(max-width:570px){
- .pw-public-profile form {grid-template-columns:minmax(0,1fr)}
- body:has(.pwb) .pw-public-profile .hbc-profile-preview {border-left:0;padding:0 var(--pw-ui-space-dialog) var(--pw-ui-space-dialog)}
- .pw-public-profile .pw-pet-preview-art {display:none}
-}
 
 .pwb .pw-quota-card .pw-quota-other-list {display:none}
 .pwb .pw-quota-other-count,.pwb .pw-quota-other-list {font-size:12px;color:var(--pw-ui-body)}

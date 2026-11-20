@@ -170,10 +170,13 @@ test('the personal assistant list contains only sourced or explicitly followed a
   assert.ok(locate(emptyPanel,node=>node.children?.some(child=>typeof child==='string'&&child.includes('把这个助手加入个人 AI 工作台'))));
   assert.deepEqual(groups(loadPanel({dashboard:{...dashboard,ai:{items:[{id:'chat',title:'排版助手',running:false,followed:true}]}}})()),['排版助手']);
   const render=loadPanel({dashboard:{...dashboard,
-    ai:{items:[{id:'real',title:'我的校对助手',running:false}]},
+    ai:{items:[{id:'real',title:'我的校对助手',running:true}]},
     automations:{items:[{id:'job',name:'晨间日报',source:'harness'}]}}});
-  assert.deepEqual(groups(render()),['晨间日报']);
+  assert.deepEqual(groups(render()),[]);
   const checkbox=locate(render(),node=>node.type==='input'&&node.props?.type==='checkbox');
   checkbox.props.onChange({target:{checked:true}});
+  assert.deepEqual(groups(render()),['晨间日报']);
+  const sessionOption=locate(render(),node=>node.type==='label'&&node.children?.includes('我的校对助手'));
+  sessionOption.children[0].props.onChange({target:{checked:true}});
   assert.deepEqual(groups(render()),['晨间日报','我的校对助手']);
 });
