@@ -17,6 +17,8 @@ import {attachQuotaConnections} from './quota-connections.js';
 import { createUsageReader } from './usage.js';
 import { installWeixinNotifications } from './weixin-notification-host.js';
 import { attachPersonalOrganization } from './organization-host.js';
+import {attachAssistantFollowing} from './assistant-follow.js';
+import {attachFirstRun} from './first-run.js';
 
 export const inject = ['connection', 'storageDomain', 'tools'];
 const title = '个人 AI 工作台';
@@ -27,6 +29,8 @@ export function apply(ctx) {
   ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
   const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
   const projects=attachProjects(ctx);
+  const firstRun=attachFirstRun(ctx);
+  const following=attachAssistantFollowing(ctx);
   const briefs=attachBriefConnection(ctx);
   const external=briefs.external;
   const content=attachContent(ctx,projects,external);
@@ -59,6 +63,19 @@ export function apply(ctx) {
   const organization = attachPersonalOrganization(ctx,tasks);
   const listTasks = () => tasks.list();
   const connection=attachPlanConnection(ctx);
+  ctx.effect(()=>ctx.tools.register({
+    name:'personal_plan_source',
+    description:'管理工作台的计划来源。普通待办用 personal_plan 添加。用户明确希望持续同步一份已有计划时，先用 status 核对已有连接，再根据用户给的链接或路径识别来源并 connect。仅使用用户指定的位置。断开须由用户提出。凭证通过本机配置，不在聊天中索取。',
+    parameters:{type:'object',properties:{action:{enum:['status','connect','disconnect']},provider:{enum:['notion','feishu','obsidian','file']},location:{type:'string'},dateField:{type:'string'}},required:['action'],additionalProperties:false},
+    output:{schema:{type:'object'},render:(_args,value)=>[{type:'text',text:JSON.stringify(value)}]},
+    async execute({action,provider,location,dateField}){
+      if(action==='status')return connection.status();
+      if(action==='disconnect')return connection.disconnect();
+      if(action==='connect')return connection.connect({provider,location,dateField});
+      throw Error('未知计划来源操作。');
+    },
+    isConcurrencySafe:()=>false
+  }));
   const plans = createPlanReader({listTasks,readConnection:connection.read, updateTask: input => tasks.update(input)});
   const weeklyPlan = createWeeklyPlanReader({listTasks,readConnection:connection.read});
   const usage = createUsageReader();
@@ -72,7 +89,7 @@ export function apply(ctx) {
   const live = createHarnessAdapter({schedule: () => schedule, controller: () => controller});
   async function assistants() {
     const [{ai, automations}, remote, brief] = await Promise.all([
-      live.snapshot(), external.readExternalAutomations(), content.readBrief(),
+      following.list().then(ids=>live.snapshot(ids)), external.readExternalAutomations(), content.readBrief(),
     ]);
     const local = automations.items.map(({prompt, ...display}) => display);
     return {
@@ -86,7 +103,14 @@ export function apply(ctx) {
     const [records, archived, activity, plan, organized] = await Promise.all([
       tasks.list(), tasks.list({view:'archived'}), assistants(), plans.readPlan(), organization.list(),
     ]);
-    return {today:records.today, checkedAt:new Date().toISOString(), tasks:{...records,archived:archived.items},
+    const onboarding=await firstRun.status(async()=>{
+      if(activity.ai.items.some(session=>session.followed)||records.items.length||archived.items.length||plan.items?.length||plan.groups?.some(group=>group.tasks?.length||group.items?.length)||activity.brief.items?.length||organized.projects?.length)return true;
+      const [savedProjects,savedContent,planConnection,briefConnection]=await Promise.all([
+        projects.change({action:'list'}),content.export(),connection.status(),briefs.status(),
+      ]);
+      return Boolean(savedProjects.items.length||savedContent.editions.length||Object.keys(savedContent.notes).length||planConnection.provider||briefConnection.provider);
+    });
+    return {today:records.today, checkedAt:new Date().toISOString(), onboarding, tasks:{...records,archived:archived.items},
       plan, organization:organized, canOpenTodayPlan:organized.canOpenTodayPlan,
       threads:activity.ai.items.map(({id,title})=>({id,title})), ...activity};
   }
@@ -95,6 +119,8 @@ export function apply(ctx) {
     if (!body || typeof body !== 'object' || Object.keys(body).some(key=>!['action','input'].includes(key))) throw Error('操作格式有误。');
     const input=body.input;
     switch(body.action) {
+      case 'unfollowAssistant': return following.change(input?.id,false);
+      case 'dismissExamples': return firstRun.dismiss();
       case 'connectQuota': return quotas.connect(input);
       case 'disconnectQuota': return quotas.disconnect(input);
       case 'connectPlan': return connection.connect(input);

@@ -154,7 +154,7 @@ export function createHarnessAdapter({ schedule, controller }) {
       ...result, ...(error ? { error } : {}) };
   }
   return Object.freeze({
-    async snapshot() {
+    async snapshot(followedIds=[]) {
       const sched = service(schedule), ctrl = service(controller), abort = new AbortController();
       const timer = setTimeout(() => abort.abort(), SNAPSHOT_MS);
       try {
@@ -165,7 +165,9 @@ export function createHarnessAdapter({ schedule, controller }) {
         let allSchedules, allSessions, scheduleError, sessionError;
         try { if (catalog.status === 'rejected') throw catalog.reason; if (!Array.isArray(catalog.value) || catalog.value.some(e => !identifier(e?.id))) fail('INVALID_DATA'); allSchedules = catalog.value; } catch (e) { scheduleError = reason(e); }
         try { if (sessions.status === 'rejected') throw sessions.reason; if (!Array.isArray(sessions.value?.items) || sessions.value.items.some(e => !identifier(e?.sessionId))) fail('INVALID_DATA'); allSessions = sessions.value.items; } catch (e) { sessionError = reason(e); }
-        const schedules = (allSchedules || []).slice(0, SCHEDULE_LIMIT), ai = (allSessions || []).slice(0, AI_LIMIT);
+        const followed=new Set(followedIds);
+        const sessionsByPriority=[...(allSessions||[]).filter(e=>followed.has(e.sessionId)),...(allSessions||[]).filter(e=>!followed.has(e.sessionId))];
+        const schedules = (allSchedules || []).slice(0, SCHEDULE_LIMIT), ai = sessionsByPriority.slice(0, AI_LIMIT);
         const targetIds = [...new Set(schedules.map(destination).filter(Boolean))].slice(0, TARGET_LIMIT);
         const ids = [...new Set([...ai.map(e => e.sessionId), ...targetIds])];
         const observations = new Map(await mapLimit(ids, 4, async id => [id, await observe(ctrl, id, abort.signal)]));
@@ -173,7 +175,7 @@ export function createHarnessAdapter({ schedule, controller }) {
         const aiItems = ai.map(e => {
           const observed = observations.get(e.sessionId), execution = observed?.execution;
           const title = e.projections?.values?.title ?? e.title;
-          return { id: e.sessionId, title: safeText(typeof title === 'string' ? title : title?.title || '未命名会话', 120),
+          return { id: e.sessionId, followed:followed.has(e.sessionId), title: safeText(typeof title === 'string' ? title : title?.title || '未命名会话', 120),
             ...readingStatus(observed),
             running: execution?.running ?? null, pendingInput: execution?.pendingInput ?? null, queue: execution?.queue ?? null,
             ...(observed?.events ? latestReply(observed.events) : {}),
@@ -186,7 +188,7 @@ export function createHarnessAdapter({ schedule, controller }) {
               sessionTargetLimit: TARGET_LIMIT, note: '最多展示 100 条自动化，检查 20 个关联会话；投递不代表完成。' } },
           ai: { availability: sessionError ? 'unavailable' : aiItems.some(e => e.error) ? 'partial' : 'connected', items: aiItems,
             ...(sessionError ? { reason: sessionError } : {}), coverage: { shown: ai.length, total: allSessions?.length ?? null, limit: AI_LIMIT,
-              truncated: (allSessions?.length ?? 0) > AI_LIMIT, note: '最近 20 个会话；最新回复最多 1500 字，空闲不代表完成。' } },
+              truncated: (allSessions?.length ?? 0) > AI_LIMIT, note: '最多 20 个会话，优先展示已收录助手；最新回复最多 1500 字，空闲不代表完成。' } },
         };
       } finally { clearTimeout(timer); abort.abort(); }
     },

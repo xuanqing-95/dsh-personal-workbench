@@ -12,19 +12,22 @@ function section(start,end) {
 const render=new vm.Script([
   section('function calendarDates(','function statusTone('),
   section('const weekSource=','React.useEffect('),
+  section('function planWithExamples(','function calendarWithExamples('),
+  section('const savedPlan=','const planItems='),
+  'const planItems=list(plan?.items);',
   section('const selectedWeekItems=','function newsBody('),
   section('function weeklyBody(','function calendarBody('),
   '({plannedWeeks,board:calendarMode==="week"?weeklyBody():null,detail:planBody()})'
 ].join('\n'));
 
 const today='2026-11-19',daily={id:'daily',title:'改脚本',source:'profile'},weekly={id:'span',title:'录视频',url:'https://example.com/plan',source:'notion'};
-function view({date=today,monday='2026-11-16',mode='week',days={[date]:[weekly]},availability='connected',dayPlanFallback=false}={}){
+function view({date=today,monday='2026-11-16',mode='week',days={[date]:[weekly]},availability='connected',dayPlanFallback=false,unscheduled=[],selectDate=()=>{},previewing=false,sampleDates={}}={}){
   const weekStart=mode==='week'?monday:'';
   return render.runInNewContext({
-    today,viewDate:date,monthKey:date.slice(0,7),weekStart,calendarKey:monday,calendarMode:mode,hoverWeekDay:-1,
-    weeklyPlan:{[monday]:{days,unscheduled:[],availability,dayPlanFallback}},
+    today,previewing,sampleDates,viewDate:date,monthKey:date.slice(0,7),weekStart,calendarKey:monday,calendarMode:mode,hoverWeekDay:-1,
+    setSelectedDate:selectDate,weeklyPlan:{[monday]:{days,unscheduled,availability,dayPlanFallback}},
     calendarData:{key:monday,months:{[date.slice(0,7)]:{availability:'connected',days:{[date]:{items:[daily],count:1}}}}},
-    plan:{source:'profile',items:[daily]},planItems:[daily],planConnected:true,planEmpty:false,data:{},planPending:false,connection:null,
+    dayPlan:{date,source:'profile',items:[daily]},data:{plan:{date:today,source:'profile',items:[daily]}},planConnected:true,planEmpty:false,planPending:false,connection:null,
     futureSource:()=>null,Icon:'icon',list:value=>Array.isArray(value)?value:[],safeHTTPS:value=>typeof value==='string'?value:null,
     h:(type,props,...children)=>({type,props,children}),planRow:task=>task.title,empty:title=>title
   });
@@ -62,4 +65,43 @@ test('a legacy daily-only account keeps its daily tasks in the week grid and det
   const result=view({days:{},dayPlanFallback:true});
   assert.ok(labels(result.board).includes('改脚本'));
   assert.deepEqual(labels(result.detail),['改脚本']);
+});
+
+test('weekly previews share a chip class while retaining their source-specific actions',()=>{
+  const local={id:'local',title:'本地待办'},external={...weekly,id:'external'},backlog={id:'backlog',title:'周内待安排'};
+  let selected;
+  const {board}=view({days:{[today]:[local,external,weekly],'2026-11-20':[weekly]},unscheduled:[backlog],selectDate:date=>{selected=date;}});
+  const chips=[];
+  function visit(node){
+    if(Array.isArray(node)){node.forEach(visit);return;}
+    if(node?.props?.className?.split(' ').includes('pw-week-task'))chips.push(node);
+    if(node?.children)visit(node.children);
+  }
+  visit(board);
+  const byId=Object.fromEntries(chips.map(node=>[node.props.key,node]));
+  assert.equal(byId.local.type,'button');
+  byId.local.props.onClick();
+  assert.equal(selected,today);
+  assert.equal(byId.external.type,'a');
+  assert.equal(byId.external.props.href,weekly.url);
+  assert.equal(byId.span.props.className,'pw-week-task pw-week-span');
+  assert.equal(byId.span.props.href,weekly.url);
+  assert.equal(byId.backlog.type,'span');
+  assert.equal(byId.backlog.props.onClick,undefined);
+});
+
+test('week preview displays each example once and excludes private daily and weekly records',()=>{
+  const tomorrow='2026-11-20';
+  const sampleDates={
+    [today]:{items:[{id:'sample-today',source:'example',title:'示例产品讨论'}]},
+    [tomorrow]:{items:[{id:'sample-tomorrow',source:'example',title:'示例交付'}]}
+  };
+  for(const date of [today,tomorrow]){
+    const {board,detail}=view({date,previewing:true,sampleDates});
+    assert.deepEqual(labels(detail),[sampleDates[date].items[0].title]);
+    const titles=labels(board);
+    for(const item of Object.values(sampleDates))assert.equal(titles.filter(title=>title===item.items[0].title).length,1);
+    assert.ok(!titles.includes(daily.title));
+    assert.ok(!titles.includes(weekly.title));
+  }
 });

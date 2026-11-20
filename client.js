@@ -6,7 +6,7 @@ window.__ModuleLoader__.load({
     const QUOTA_OPENAI_LOGO = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMTExMTExIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGhlaWdodD0iMWVtIiBzdHlsZT0iZmxleDpub25lO2xpbmUtaGVpZ2h0OjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjFlbSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+T3BlbkFJPC90aXRsZT48cGF0aCBkPSJNOS4yMDUgOC42NTh2LTIuMjZjMC0uMTkuMDcyLS4zMzMuMjM4LS40MjhsNC41NDMtMi42MTZjLjYxOS0uMzU3IDEuMzU2LS41MjMgMi4xMTctLjUyMyAyLjg1NCAwIDQuNjYyIDIuMjEyIDQuNjYyIDQuNTY2IDAgLjE2NyAwIC4zNTctLjAyNC41NDdsLTQuNzEtMi43NTlhLjc5Ny43OTcgMCAwMC0uODU2IDBsLTUuOTcgMy40NzN6bTEwLjYwOSA4LjhWMTIuMDZjMC0uMzMzLS4xNDMtLjU3LS40MjktLjczN2wtNS45Ny0zLjQ3MyAxLjk1LTEuMTE4YS40MzMuNDMzIDAgMDEuNDc2IDBsNC41NDMgMi42MTdjMS4zMDkuNzYgMi4xODkgMi4zNzggMi4xODkgMy45NDggMCAxLjgwOC0xLjA3IDMuNDczLTIuNzYgNC4xNjN6TTcuODAyIDEyLjcwM2wtMS45NS0xLjE0MmMtLjE2Ny0uMDk1LS4yMzktLjIzOC0uMjM5LS40MjhWNS44OTljMC0yLjU0NSAxLjk1LTQuNDcyIDQuNTkxLTQuNDcyIDEgMCAxLjkyNy4zMzMgMi43MTIuOTI4TDguMjMgNS4wNjdjLS4yODUuMTY2LS40MjguNDA0LS40MjguNzM3djYuODk4ek0xMiAxNS4xMjhsLTIuNzk1LTEuNTd2LTMuMzNMMTIgOC42NThsMi43OTUgMS41N3YzLjMzTDEyIDE1LjEyOHptMS43OTYgNy4yM2MtMSAwLTEuOTI3LS4zMzItMi43MTItLjkyN2w0LjY4Ni0yLjcxMmMuMjg1LS4xNjYuNDI4LS40MDQuNDI4LS43Mzd2LTYuODk4bDEuOTc0IDEuMTQyYy4xNjcuMDk1LjIzOC4yMzguMjM4LjQyOHY1LjIzM2MwIDIuNTQ1LTEuOTc0IDQuNDcyLTQuNjE0IDQuNDcyem0tNS42MzctNS4zMDNsLTQuNTQ0LTIuNjE3Yy0xLjMwOC0uNzYxLTIuMTg4LTIuMzc4LTIuMTg4LTMuOTQ4QTQuNDgyIDQuNDgyIDAgMDE0LjIxIDYuMzI3djUuNDIzYzAgLjMzMy4xNDMuNTcxLjQyOC43MzhsNS45NDcgMy40NDktMS45NSAxLjExOGEuNDMyLjQzMiAwIDAxLS40NzYgMHptLS4yNjIgMy45Yy0yLjY4OCAwLTQuNjYyLTIuMDIxLTQuNjYyLTQuNTE5IDAtLjE5LjAyNC0uMzguMDQ3LS41N2w0LjY4NiAyLjcxYy4yODYuMTY3LjU3MS4xNjcuODU2IDBsNS45Ny0zLjQ0OHYyLjI2YzAgLjE5LS4wNy4zMzMtLjIzNy40MjhsLTQuNTQzIDIuNjE2Yy0uNjE5LjM1Ny0xLjM1Ni41MjMtMi4xMTcuNTIzem01Ljg5OSAyLjgzYTUuOTQ3IDUuOTQ3IDAgMDA1LjgyNy00Ljc1NkMyMi4yODcgMTguMzM5IDI0IDE1Ljg0IDI0IDEzLjI5NmMwLTEuNjY1LS43MTMtMy4yODItMS45OTgtNC40NDguMTE5LS41LjE5LS45OTkuMTktMS40OTggMC0zLjQwMS0yLjc1OS01Ljk0Ny01Ljk0Ni01Ljk0Ny0uNjQyIDAtMS4yNi4wOTUtMS44OC4zMUE1Ljk2MiA1Ljk2MiAwIDAwMTAuMjA1IDBhNS45NDcgNS45NDcgMCAwMC01LjgyNyA0Ljc1N0MxLjcxMyA1LjQ0NyAwIDcuOTQ1IDAgMTAuNDljMCAxLjY2Ni43MTMgMy4yODMgMS45OTggNC40NDgtLjExOS41LS4xOSAxLS4xOSAxLjQ5OSAwIDMuNDAxIDIuNzU5IDUuOTQ2IDUuOTQ2IDUuOTQ2LjY0MiAwIDEuMjYtLjA5NSAxLjg4LS4zMDlhNS45NiA1Ljk2IDAgMDA0LjE2MiAxLjcxM3oiPjwvcGF0aD48L3N2Zz4=';
     const React = require('react'), h = React.createElement;
     const WORKBENCH_PORTRAIT = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"128\" height=\"128\" viewBox=\"0 0 128 128\"><rect x=\"4\" y=\"4\" width=\"120\" height=\"120\" rx=\"30\" fill=\"#e6f1ef\"/><rect x=\"22\" y=\"25\" width=\"48\" height=\"78\" rx=\"12\" fill=\"#086b6d\"/><rect x=\"78\" y=\"25\" width=\"28\" height=\"32\" rx=\"10\" fill=\"#69a6a2\"/><rect x=\"78\" y=\"65\" width=\"28\" height=\"38\" rx=\"10\" fill=\"#b0ceca\"/><path d=\"m35 63 8 8 15-18\" fill=\"none\" stroke=\"#fff\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>");
-    const WORKBENCH_UI_BUILD = "release-0.8.0-beta.12";
+    const WORKBENCH_UI_BUILD = "release-0.8.0";
 // BEGIN SAFE UI UPDATER
 // Embedded into client.js by publish-ui.mjs. No eval, page reload or host setting changes.
 function updateBlockReason({active,quiet,editing,pending,dialog,draft,focused,composing,sessionKnown,running,interaction}) {
@@ -2016,6 +2016,234 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
     const safeHTTPS = value => {const url=safeURL(value);return url?.startsWith('https://')?url:null;};
     const inputLabel = value => list(value).includes('approval')?'等你确认':list(value).includes('question')?'等你回复':'等待输入';
     const runLabel = run => run.action_id==='xhs.original.image.generate'?'内容配图':run.action_id==='xhs.original.text.generate'?'原创内容':run.action_id==='xhs.rewrite.pipeline'?'内容仿写':'内容制作';
+    // Published editorial content only. Account details and delivery receipts stay local.
+    const exampleEditions={
+  "2026-11-20": {
+    "cover": "https://kimi-img.kimi.ai/pub/slides/kimi-fs/weaver/assets/2e8cbbee4578e0be5d212cb96ed4cb7a.webp",
+    "alt": "Kimi官方咖啡馆示例：选中风景图片，填写“换成一张农夫人像”的修改意见。",
+    "stories": [
+      {
+        "title": "Kimi让AI的网页工作能看见、能接手、能交付",
+        "summary": "Kimi于11月19日分享两个桌面端实践：直接标注网页提出修改，以及查官方资料制作香港电车路线图。关键是让过程可见、交付物和来源一起留下。",
+        "url": "https://www.kimi.com/academy/kimi-code-built-in-browser"
+      },
+      {
+        "title": "Gemini在Mac后台跨应用做事",
+        "summary": "Gemini的Mac应用可在后台读PDF填表、整理演示稿，不占主鼠标；限美国英语、Plus及以上订阅，需Apple芯片及macOS15以上。",
+        "url": "https://blog.google/innovation-and-ai/products/gemini-app/computer-use-mac/"
+      },
+      {
+        "title": "OpenAI让AI先反驳自己的故障诊断",
+        "summary": "OpenAI披露内部修复流程：另一个AI检查诊断，曾发现图片下载仍失败、原解释却已失效；退回重查，修复上线后再核对是否恢复。",
+        "url": "https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/"
+      },
+      {
+        "title": "Lovable应用接上已有收款账户",
+        "summary": "AI应用制作工具Lovable新增Adyen、Airwallex连接器，可做售票收款、订阅；需已有商户账户，交易由支付商收费。",
+        "url": "https://docs.lovable.dev/changelog"
+      },
+      {
+        "title": "AWS让AI按预算购买付费资料",
+        "summary": "AWS的AgentCore开发服务允许AI在预算和卖家清单内购买搜索、数据；仅限支持按次支付的商城商品，费用记开发者AWS账单。",
+        "url": "https://aws.amazon.com/blogs/machine-learning/enable-ai-agents-to-pay-for-aws-marketplace-x402-products-with-amazon-bedrock-agentcore-payments/"
+      },
+      {
+        "title": "Genie 4开放开发接口，互动世界可接入应用",
+        "summary": "虚拟世界模型Genie 4新增付费API和AI Studio入口，可接入自己的交互原型；约每秒0.10美元，关网页不等于结束计费。",
+        "url": "https://blog.google/innovation-and-ai/technology/developers-tools/genie-4-in-gemini-api/"
+      }
+    ]
+  },
+  "2026-11-19": {
+    "cover": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini_4_neon__benchmarks__aa-in.width-1200.format-webp.webp",
+    "alt": "Google公布的AA智能指数成本—得分图：横轴为每任务美元成本，纵轴为评测得分；蓝色为Gemini 4 Neon。",
+    "stories": [
+      {
+        "title": "Gemini 4 Neon把复杂任务的速度、成本和可纠正性放到一起",
+        "summary": "Google于11月18日发布Gemini 4 Neon，定位是在复杂工作中兼顾推理深度、完成速度与任务成本。它能综合表格、文档、图片和音视频整理成果；这次还强调执行中途听懂修改意见，而不只是一次回答得好。",
+        "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/"
+      },
+      {
+        "title": "Project Genie边探索边修改虚拟世界",
+        "summary": "Google的虚拟世界工具Project Genie开放Genie 4，可边探索边用文字改天气、角色并生成声音；合资格Ultra用户逐步可用，仍是研究原型。",
+        "url": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/genie-4-now-available-project-genie/"
+      },
+      {
+        "title": "Figma同题比较多张图、多个模型",
+        "summary": "设计工具Figma可用同一要求生成2、4或6张图，也能让最多三个模型各出一张并排比较；使用共享AI额度。",
+        "url": "https://www.figma.com/release-notes/"
+      },
+      {
+        "title": "Stitch Loop把上线后的问题接回改版",
+        "summary": "Google的产品维护助手Stitch Loop连接代码与线上数据，找问题、提出修改并提交审核；改动需人批准，目前只开放候补登记。",
+        "url": "https://blog.google/innovation-and-ai/models-and-research/google-labs/stitch-loop/"
+      },
+      {
+        "title": "Replit用企业现有数据制作业务应用",
+        "summary": "AI应用制作工具Replit正式接入微软Fabric企业数据平台，可做业务看板、报表并沿用原权限；发布到Azure另处于早期访问。",
+        "url": "https://replit.com/blog/build-where-your-business-works-replit-at-microsoft-ignite"
+      },
+      {
+        "title": "Copilot接入项目任务和产品数据",
+        "summary": "编程助手Copilot新增ClickUp任务、Mixpanel产品分析等八项服务连接，可读取实际资料再处理工作；全套餐公开预览，企业需管理员启用。",
+        "url": "https://github.blog/changelog/2026-11-18-connect-supabase-box-calendly-and-more-to-copilot/"
+      }
+    ]
+  },
+  "2026-11-18": {
+    "cover": "https://static.xiaobot.net/file/2026-11-18/617236/06f7a9e0da81dd11d0d3c084c1d5ae01.jpeg",
+    "alt": "官方演示视频截图：建筑照片→电脑设计（12/24秒）。",
+    "stories": [
+      {
+        "title": "GPT-6.2公布：看图更懂、说话更实在，做事也更省了",
+        "summary": "OpenAI于11月17日发布GPT-6.2 Astra与Sol。这次值得关注的，不只是能做出更漂亮的成品，而是支撑这些结果的能力在改善：视觉推理更强、表达更具体，完成任务的消耗也更低。\n\n### 1、视觉推理更强，影响的不只是“识图”\n\n官方强调，Astra更能理解画面中的布局、空间和各部分之间的关系，并把这些判断用于网页、3D和游戏设计。这意味着，参考图可以不只是“照着画”的素材，还能成为分析和设计的依据。\n\n官方纸灯案例就是一个方向：从建筑照片中提取阳台的形态，转成纸灯设计，再由人手工制作。对设计师、产品经理来说，可以探索的是怎样把参考图、实际条件和任务要求一起交给AI，而不必全部翻译成文字。\n\n### 2、表达更自然，也更具体\n\n官方称，新版减少了泛泛总结和多余的话，表达更直接，也更贴合专业工作的写法。写方案、分析资料或整理报告时，这意味着不只把材料缩短，还要把重要信息和具体建议说清楚。\n\n原文用同一道题比较GPT-6 Astra与6.2 Astra：根据一家零售商的第二季度业绩公告和财报，更新第一季度的演示稿。两者都找出了关税退款对盈利增长的影响；新版把销售增长5.3%直接写进标题，拆开线上与门店的增幅，并把建议落到“畅销品不断货、预算别依赖后续退款”。新版把重点和下一步行动说得更具体。\n\n### 3、做事更省，值得看的是完成任务的总成本\n\n省下来的不只是接口单价，也包括完成任务时少走的弯路。官方用Agents’ Last Exam v1.1比较长流程专业任务：横轴是每项任务的美元成本，越靠左越便宜；纵轴是得分，越高越好。图中6.2 Astra的深蓝星形曲线，相比6 Astra的浅蓝曲线，在更低成本区间达到更高得分。\n\n团队反馈解释了这种效率可以落在哪里。会计AI团队Basis的Eros Wang说，相比GPT-6 Astra，新版更会规划长任务、合并操作，长期会计工作的平均耗时减少50%。ClickUp的Jay Hack则报告，在其内部生成应用、看板和幻灯片的盲测中，Astra略胜其生产模型，token用量约少40%、审阅轮次少30%。\n\n此外，官方GDPval v2专业任务测试中，Astra较GPT-6 Astra少用22%的输出用量；其开发接口输入和输出单价降低20%。Sol接口单价不变。",
+        "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/"
+      },
+      {
+        "title": "可灵一次生成成套商品图",
+        "summary": "AI图像工具可灵4.0可用一个要求生成最多10张同风格图片，也能做电商详情长图并分层修改；长图是图片，不是网站。",
+        "url": "https://kling.ai/quickstart/kling-image-4-user-guide"
+      },
+      {
+        "title": "AI做手机应用，能登录并保存记录",
+        "summary": "Google AI Studio应用制作工具新增登录和云端存储，数据可跨设备同步；正逐步开放，可装入个人Play库，不等于公开上架。",
+        "url": "https://developers.googleblog.com/build-full-stack-android-apps-with-gemini-in-google-ai-studio/"
+      },
+      {
+        "title": "ChatGPT串起客户资料与销售跟进",
+        "summary": "ChatGPT新增销售插件，连接客户管理和会议工具后，可准备拜访、定制提案及跟进草稿；需管理员开放，范围随套餐和地区变化。",
+        "url": "https://openai.com/index/introducing-chatgpt-for-sales/"
+      },
+      {
+        "title": "Suno为歌曲生成配套短视频",
+        "summary": "AI音乐工具Suno新增Visuals：拖入曲库歌曲，生成最长15秒视频后可延展、编辑；官方称能对齐歌词和口型，视觉额度另购。",
+        "url": "https://suno.com/blog/introducing-visuals"
+      },
+      {
+        "title": "Copilot能在浏览器里测试网页",
+        "summary": "编程助手GitHub Copilot公开预览浏览器操作，可调试网页和测试交互；需安装Chrome扩展并开启权限，默认关闭。",
+        "url": "https://github.blog/changelog/2026-11-17-let-github-copilot-interact-with-your-browser/"
+      }
+    ]
+  },
+  "2026-11-17": {
+    "cover": "https://static.xiaobot.net/file/2026-11-17/617236/57790abbbdccd0dc2cfd501b9d89ca9e.jpeg",
+    "alt": "官方演示22秒：碳元素学习页及比较按钮。",
+    "stories": [
+      {
+        "title": "Gemini把资料变成可分享的网站",
+        "summary": "Google为资料整理工具Gemini Notebook新增建站能力。资料不再只能变成文字总结，也能交给同事自行浏览、筛选。\n\n### 1、从资料到页面\n\n在笔记本聊天中输入“make me a site”并说明需求。官方演示把化学资料变成带碳元素比较按钮的学习页，把销售资料变成可选地区、期间的业绩面板；产品或业务团队可用后一种形式呈现数据。生成后可新窗口打开或分享。\n\n### 2、开放范围\n\n正向全球18岁以上网页用户逐步开放，包含Workspace用户；手机端尚未开放。",
+        "url": "https://blog.google/innovation-and-ai/products/gemini-notebook/interactive-sites/"
+      },
+      {
+        "title": "用真实流程原型测试登录体验",
+        "summary": "密码管理工具1Password先把组件和文案规范交给Figma Make，再做可实际操作的登录原型，让用户不只沿预设路线点击。",
+        "url": "https://www.figma.com/blog/1password-figma-make/"
+      },
+      {
+        "title": "Lovable让应用改版先在草稿试",
+        "summary": "AI应用制作工具Lovable新增完整应用草稿，可试预约表单与权限。独立数据库正逐步开放；接受草稿会立即改变线上后端。",
+        "url": "https://lovable.dev/blog/introducing-drafts"
+      },
+      {
+        "title": "AI写完网页，还要实际走通流程",
+        "summary": "编程助手Claude Code团队分享验收方法：让AI实际运行购物等完整流程，定位失败步骤；修三轮仍失败，就交人处理。",
+        "url": "https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/"
+      },
+      {
+        "title": "Gemini保留聊天也能退出训练",
+        "summary": "AI助手Gemini将在未来数周拆开历史与训练设置，可留聊天但不供训练；关闭历史仍保存约两个月，用于回复、反馈与安全。",
+        "url": "https://blog.google/innovation-and-ai/products/gemini-app/updated-controls/"
+      },
+      {
+        "title": "模型调用失败，平台自动换服务商",
+        "summary": "模型平台Hugging Face改用OpenRouter，语言模型调用失败可换服务商；不再支持自带服务商密钥，统一向平台账户计费。",
+        "url": "https://huggingface.co/blog/openrouter"
+      }
+    ]
+  }
+};
+    const exampleDates=Object.keys(exampleEditions).sort().reverse();
+    const exampleIssueDate=exampleDates[0];
+    const exampleStories=exampleEditions[exampleIssueDate].stories;
+    const examplePlanGroups = [
+      {title:'上午',tasks:[{id:'example-library',title:'整理团队知识库'},{id:'example-review',title:'补充本周评审材料'}]},
+      {title:'下午',tasks:[{id:'example-interview',title:'准备下一次用户访谈'},{id:'example-decisions',title:'记录今天的产品决策'}]}
+    ];
+    // Dates and IDs are shared by day, week and month so one checkbox updates every view.
+    function exampleCalendar(today,overrides) {
+      const days={};
+      const milestoneDays=[
+        [-60,'整理首轮访谈问题'],[-45,'完成体验走查提纲'],[-30,'归档第一轮反馈'],[-21,'确认知识库分类'],
+        [-14,'整理原型反馈'],[-8,'更新检索原型'],[-6,'核对访谈结论'],[-4,'完成评审提纲'],
+        [-2,'归档本周访谈'],[-1,'整理团队反馈'],[1,'复核评审结论'],[2,'整理用户访谈录音'],
+        [4,'邀请同事试用'],[6,'回顾本周试用反馈'],[12,'安排下一轮测试'],[27,'回顾项目进展']
+      ];
+      function add(date,groups,prior){
+        const mapped=groups.map(group=>({...group,tasks:group.tasks.map(task=>{
+          const id=date+'/'+task.id;
+          return {...task,id,source:'example',checked:overrides.get(id)??(prior||task.id==='example-library')};
+        })}));
+        days[date]={date,source:'example',availability:'connected',groups:mapped,items:mapped.flatMap(group=>group.tasks)};
+      }
+      for(const [offset,title] of milestoneDays){
+        const date=new Date(Date.parse(today+'T12:00:00Z')+offset*86400000).toISOString().slice(0,10);
+        add(date,[{title:'项目安排',tasks:[{id:'milestone',title}]}],offset<0);
+      }
+      add(today,examplePlanGroups,false);
+      return days;
+    }
+    function planWithExamples(real,sample) {
+      if(!sample||!real)return real;
+      const items=list(real.items),groups=list(real.groups);
+      if(!items.length&&!groups.some(g=>list(g.items).length||list(g.tasks).length)){
+        return {...real,...sample,reason:real.reason};
+      }
+      const ownGroups=groups.length?groups:[{title:'我的待办',tasks:items}];
+      return {...real,items:[...items,...sample.items],groups:[...ownGroups,...sample.groups]};
+    }
+    function calendarWithExamples(record,sample) {
+      if(!sample)return record;
+      const real=list(record?.items).length?record.items:record?.first?[record.first]:[];
+      const items=[...real,...sample.items];
+      return {count:(record?.count??real.length)+sample.items.length,done:(record?.done??0)+sample.items.filter(t=>t.checked).length,items,first:items[0]};
+    }
+    // Only illustrate an entirely empty ledger. Known zeroes and real totals take precedence.
+    function firstRunUsage(live) {
+      if(live?.state!=='ready'||!live.day?.sources?.length||list(live.sources).length||
+        [live.day,...list(live.history)].some(day=>list(day?.sources).some(row=>Number.isFinite(row.total))))return live;
+      const now=Date.now(),models=['GPT-5','DeepSeek Chat'],projects=['团队知识库','体验走查'];
+      function withTotals(day){
+        return {...day,sources:day.sources.map((row,sourceIndex)=>{
+          const buckets=row.buckets.map((slot,index)=>{
+            if(Date.parse(slot.start)>now)return {...slot,total:null,cached:null,nonCached:null};
+            const seed=(index*13+Number(day.date.slice(-2))*7+sourceIndex*11)%31;
+            const total=seed%6===0?0:(seed+2)*(sourceIndex?67:93);
+            const cached=Math.floor(total*.4);
+            return {...slot,total,cached,nonCached:total-cached};
+          });
+          const total=buckets.reduce((sum,slot)=>sum+(slot.total||0),0);
+          const entry=(name,n)=>({name,source:row.source,total:n});
+          const model=entry(models[row.source==='Codex'?0:1],total),first=Math.floor(total*.64);
+          return {...row,state:'connected',buckets,total,models:[model],sources:[entry(row.source,total)],projects:[entry(projects[0],first),entry(projects[1],total-first)]};
+        })};
+      }
+      const history=(live.history?.length?live.history:[live.day]).map(withTotals);
+      function totals(key){
+        const rows=new Map();
+        for(const day of history)for(const source of day.sources)for(const row of source[key]){
+          const id=row.source+'/'+row.name,previous=rows.get(id);
+          rows.set(id,{...row,total:(previous?.total||0)+row.total});
+        }
+        return [...rows.values()];
+      }
+      return {...live,example:true,day:history.find(day=>day.date===live.day.date)||withTotals(live.day),history,models:totals('models'),projects:totals('projects'),sources:totals('sources')};
+    }
+    const exampleProjectCards = [
+      {id:'example-knowledge',title:'团队知识库',version:'0.3.0',progress:'三轮访谈已按主题归档，团队可以按问题找原话。',phase:'试用中',tone:'active',next:'邀请两位同事试用检索'},
+      {id:'example-walkthrough',title:'体验走查',version:'0.2.1',progress:'完成了首次使用流程的走查，记录了五个需要调整的细节。',phase:'开发中',tone:'active',next:'修正首次设置入口'},
+      {id:'example-weekly',title:'产品周报',version:'1.0.0',icon:'writing',progress:'本周的决定和待办已汇总，评审材料已经定稿。',phase:'已发布',tone:'done',next:'收集同事的阅读反馈'}
+    ];
     function selectBriefEdition(selected,archived,published) {
       const editions=[archived,published].filter(edition=>edition&&(!selected||edition.date===selected));
       return editions.sort((a,b)=>b.date.localeCompare(a.date))[0]||null;
@@ -2047,7 +2275,7 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       return {title,timing:parts.join(' · '),label:content.title};
     }
     async function api(action, signal, input={}) {
-      const opening = ['addPlanTask','checkPlanTask','connectQuota','disconnectQuota','connectPlan','disconnectPlan','connectBrief','disconnectBrief','pickPlanLocation','projectShortcuts','projectNotes','openHermesDaily','openCodexThread','openTodayPlan'].includes(action);
+      const opening = ['unfollowAssistant','dismissExamples','addPlanTask','checkPlanTask','connectQuota','disconnectQuota','connectPlan','disconnectPlan','connectBrief','disconnectBrief','pickPlanLocation','projectShortcuts','projectNotes','openHermesDaily','openCodexThread','openTodayPlan'].includes(action);
       const response = await fetch('/api/dsh-personal-workbench'+(opening?'':'?'+new URLSearchParams({action,...input})),{method:opening?'POST':'GET',credentials:'same-origin',cache:'no-store',signal,headers:opening?{'Content-Type':'application/json','X-Personal-UI':'1'}:undefined,body:opening?JSON.stringify({action,input}):undefined});
       const result = await response.json();
       if(!response.ok || result.error) throw new Error(text(result.error) || '暂时无法读取，请稍后再试。');
@@ -2607,6 +2835,12 @@ function installWorkbenchUpdates(ctx,{moduleId,endpoint,petNamespace,build}) {
       const selection=window.getSelection();
       if(selection&&!selection.isCollapsed&&event.currentTarget.contains(selection.anchorNode))return;
       event.currentTarget.querySelector('.pw-project-enter,.pw-assistant-open')?.click();
+    }
+    function FinanceMore({title}){
+      // Fixed dot spacing matches the desktop glyph even when its font is unavailable.
+      return h('span',{className:'pw-usage-more','aria-hidden':true,title},
+        h('svg',{width:16,height:16,viewBox:'0 0 16 16',fill:'currentColor',focusable:'false'},
+          ...[1.75,8,14.25].map(cx=>h('circle',{key:cx,cx,cy:8,r:1.2}))));
     }
     function Icon({name='grid',size=18}) {
       const paths={ai:'m10 5 2.1 5.9L18 13l-5.9 2.1L10 21l-2.1-5.9L2 13l5.9-2.1L10 5ZM19 2l1.1 2.9L23 6l-2.9 1.1L19 10l-1.1-2.9L15 6l2.9-1.1L19 2Z',dismiss:'m6 6 12 12M18 6 6 18',grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',calendar:'M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 2v4M17 2v4M3 10h18M7 14h3M14 14h3',check:'m5 12 4 4L19 6',news:'M5 3h14v18H5zM8 7h8M8 11h8M8 15h5M8 18h7',refresh:'M20 7v5h-5M4 17v-5h5M6 6a8 8 0 0 1 13 2M18 18a8 8 0 0 1-13-2',arrow:'M7 17 17 7M7 7h10v10',chevron:'m9 5 7 7-7 7',left:'m15 5-7 7 7 7',down:'m6 9 6 6 6-6',up:'m6 15 6-6 6 6',activity:'M3 12h4l3-8 4 16 3-8h4',chat:'M21 11a8 8 0 0 1-8 8H5l-4 3V11a10 10 0 0 1 20 0z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z'};
@@ -3729,17 +3963,17 @@ html[data-platform="darwin"] .pwb .pw-head {
   display:grid;align-content:start;grid-auto-rows:40px;min-width:0;padding:0;border:0
 }
 .pwb .pw-brief-layout .pw-news-quick li {min-width:0;border:0}
-.pwb .pw-brief-layout .pw-news-quick li > :is(a,span) {
+.pwb .pw-brief-layout .pw-news-quick li > :is(a,button,span) {
   box-sizing:border-box;display:grid;height:100%;grid-template-columns:16px minmax(0,1fr) 12px;
   align-items:center;gap:6px;padding:0 8px;text-decoration:none;border:0;box-shadow:none;background:transparent
 }
 .pwb .pw-brief-layout .pw-news-quick li > span {grid-template-columns:16px minmax(0,1fr)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-number {font:500 12px/20px var(--pw-body);font-variant-numeric:tabular-nums;color:var(--pw-blue)}
-.pwb .pw-brief-layout .pw-news-quick li > a:is(:hover,:focus-visible) {
+.pwb .pw-brief-layout .pw-news-quick li > :is(a,button):is(:hover,:focus-visible) {
   background:var(--pw-inner-hover);
   box-shadow:none
 }
-.pwb .pw-brief-layout .pw-news-quick li > a:focus-visible {outline-offset:-2px}
+.pwb .pw-brief-layout .pw-news-quick li > :is(a,button):focus-visible {outline-offset:-2px}
 .pwb .pw-brief-layout .pw-news-quick svg {color:var(--pw-blue)}
 .pwb .pw-brief-layout .pw-news-quick .pw-news-title {
   display:block;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
@@ -4165,10 +4399,10 @@ html[data-platform="darwin"] .pwb .pw-head {
 
 /* Quiet reading affordances: steady text, a small directional arrow motion. */
 .pwb .pw-brief-copy .pw-brief-read {margin-top:auto;padding-top:4px}
-.pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > a) > svg {transition:transform 180ms cubic-bezier(.2,.7,.2,1)}
-.pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > a):is(:hover,:focus-visible) > svg {transform:translate(2px,-2px)}
+.pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > :is(a,button)) > svg {transition:transform 180ms cubic-bezier(.2,.7,.2,1)}
+.pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > :is(a,button)):is(:hover,:focus-visible) > svg {transform:translate(2px,-2px)}
 @media (prefers-reduced-motion:reduce) {
- .pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > a) > svg {transition:none!important;transform:none!important}
+ .pwb .pw-brief-layout :is(.pw-brief-read,.pw-news-quick li > :is(a,button)) > svg {transition:none!important;transform:none!important}
 }
 
 /* Group related tasks through proximity, rather than extra colors or callout boxes. */
@@ -5159,40 +5393,36 @@ body:has(.pwb) .hbc-profile-simple .hbc-profile-save:active:not(:disabled) {
  transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion),border-color var(--pw-ui-motion);
 }
 
-/* Task hover accents text and the existing left rule, gently brightening glass.
-   Keep geometry and the other three edges unchanged. */
-.pwb .pw-plan .pw-week-planner a.pw-week-task,
-.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event {
- transition:background-color var(--pw-ui-motion),border-left-color var(--pw-ui-motion),color var(--pw-ui-motion);
-}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible),
-.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span[href]:is(:hover,:focus-visible),
-.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:hover {
- background:var(--pw-ui-item-hover);color:var(--pw-ui-accent);
- border-left-color:var(--pw-ui-accent);box-shadow:none;
-}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible) .pw-week-task-title {color:inherit}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible) small {color:var(--pw-muted)}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:active,
-.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:active {background:rgba(255,255,255,.38)}
-
-/* Weekly labels remain visible at rest, including the complete multi-day span.
-   Header copy and task copy share an 8 px text inset (2 px rule + 6 px padding). */
+/* Task previews keep the same shape for external links, local date buttons
+   and unscheduled text. Their semantics and click actions remain independent. */
 .pwb .pw-plan .pw-week-planner {--pw-week-label:rgba(255,255,255,.56);--pw-week-label-hover:rgba(255,255,255,.74);--pw-week-text-inset:8px}
 .pwb .pw-plan .pw-week-tasks {gap:4px}
 .pwb .pw-plan .pw-week-spans {row-gap:4px;padding:0 0 4px}
-.pwb .pw-plan .pw-week-planner a.pw-week-task,
-.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span {
- min-height:22px;padding:4px 6px;border:0;border-left:2px solid rgba(84,92,96,.22);
- border-radius:5px;background:var(--pw-week-label);color:var(--pw-ui-ink);
- box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);font:400 10px/14px var(--pw-body);
+.pwb .pw-plan .pw-week-planner :is(a,button,span).pw-week-task,
+.pwb .pw-plan .pw-week-planner .pw-week-spans .pw-week-task.pw-week-span {
+ display:block;box-sizing:border-box;min-width:0;min-height:22px;padding:4px 6px;
+ border:0;border-left:2px solid rgba(84,92,96,.22);border-radius:5px;
+ background:var(--pw-week-label);color:var(--pw-ui-ink);
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);
+ font:400 10px/14px var(--pw-body);text-align:left;text-decoration:none;
 }
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible),
-.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span[href]:is(:hover,:focus-visible) {
+.pwb .pw-plan .pw-week-unscheduled .pw-week-task {margin-top:5px}
+.pwb .pw-plan .pw-week-planner .pw-week-task,
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event {
+ transition:background-color var(--pw-ui-motion),border-left-color var(--pw-ui-motion),color var(--pw-ui-motion);
+}
+.pwb .pw-plan .pw-week-planner :is(a,button,span).pw-week-task:is(:hover,:focus-visible),
+.pwb .pw-plan .pw-week-planner .pw-week-spans .pw-week-task.pw-week-span:is(:hover,:focus-visible) {
  background:var(--pw-week-label-hover);border-left-color:var(--pw-ui-accent);
  box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);color:var(--pw-ui-accent);
 }
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:active {background:rgba(255,255,255,.84)}
+.pwb .pw-plan .pw-week-planner .pw-week-task:is(:hover,:focus-visible) .pw-week-task-title {color:inherit}
+.pwb .pw-plan .pw-week-planner .pw-week-task:is(:hover,:focus-visible) small {color:var(--pw-muted)}
+.pwb .pw-plan .pw-week-planner :is(a[href],button).pw-week-task:active {background:rgba(255,255,255,.84)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:hover {
+ background:var(--pw-ui-item-hover);color:var(--pw-ui-accent);border-left-color:var(--pw-ui-accent);box-shadow:none;
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:active {background:rgba(255,255,255,.38)}
 
 /* The card is one action. Only hovering its ellipsis highlights that local
    target; keyboard focus remains on the card, with its existing focus ring. */
@@ -5387,6 +5617,7 @@ body:has(.pwb) {
 }
 /* Appearance choices share the same neutral glass surface; four columns on desktop. */
 .pwb .pw-project-dialog.pw-appearance-dialog {width:min(680px,100%)}
+.pwb .pw-appearance-dialog > .pw-dialog-body {scrollbar-gutter:auto}
 .pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(4,minmax(0,1fr))}
 .pwb[data-lime-background],.pwb .pw-background-thumb.is-lime {background:var(--pw-ui-lime-background)}
 @container pw-root (max-width:720px) {.pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -5694,12 +5925,12 @@ body:has(.pwb) {
 .pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-context,.pw-assistant-value),
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-receipt a,
 .pwb .pw-grid-canvas .pw-plan .pw-plan-text,
-.pwb .pw-grid-canvas .pw-news .pw-news-quick a,
+.pwb .pw-grid-canvas .pw-news .pw-news-quick :is(a,button),
 .pwb .pw-grid-canvas .pw-news .pw-brief-read {color:var(--pw-ui-body)}
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-review .pw-assistant-receipt .pw-quiet-link {color:var(--pw-ui-body)}
 .pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-content-link,.pw-assistant-receipt a):is(:hover,:focus-visible),
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-review .pw-assistant-receipt .pw-quiet-link:is(:hover,:focus-visible),
-.pwb .pw-grid-canvas .pw-news :is(.pw-brief-read,.pw-news-quick a):is(:hover,:focus-visible) {color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-news :is(.pw-brief-read,.pw-news-quick :is(a,button)):is(:hover,:focus-visible) {color:var(--pw-ui-accent)}
 .pwb .pw-grid-canvas .pw-project-tiles :is(.pw-project-field-label,.pw-project-version),
 .pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-label,.pw-assistant-next,.pw-assistant-result-time,.pw-assistant-placeholder,.pw-assistant-review-empty),
 .pwb .pw-grid-canvas .pw-plan :is(.pw-group-title,.pw-plan-meta,.pw-plan-time,.pw-plan-note),
@@ -5731,8 +5962,8 @@ body:has(.pwb) {
 .pwb .pw-grid-canvas .pw-project-facts {margin-top:16px;gap:0}
 .pwb .pw-grid-canvas .pw-state {font:400 11px/16px var(--pw-body);padding:2px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.4)}
 .pwb .pw-grid-canvas .pw-news-quick li + li {border-top:1px solid var(--pw-ui-line)}
-.pwb .pw-grid-canvas .pw-news-quick li > a {padding-block:8px;min-height:40px;box-shadow:none}
-.pwb .pw-grid-canvas .pw-news-quick li > a:hover {background:transparent;box-shadow:none;color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-news-quick li > :is(a,button) {padding-block:8px;min-height:40px;box-shadow:none}
+.pwb .pw-grid-canvas .pw-news-quick li > :is(a,button):hover {background:transparent;box-shadow:none;color:var(--pw-ui-accent)}
 .pwb .pw-grid-canvas .pw-brief-copy h3 {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.4}
 .pwb .pw-grid-canvas .pw-brief-copy .pw-news-summary {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;font:400 14px/22px var(--pw-body)}
 .pwb .pw-grid-canvas .pw-brief-copy {display:flex;flex-direction:column;min-width:0;gap:12px}
@@ -5755,12 +5986,6 @@ body:has(.pwb) {
 .pwb .pw-task-form button:active:not(:disabled) {background:var(--pw-ui-primary-down)}
 .pwb .pw-task-form button:disabled {opacity:.45}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {background:radial-gradient(ellipse at 12% 30%,rgba(150,215,220,.20),transparent 65%),radial-gradient(ellipse at 95% 90%,rgba(182,182,218,.12),transparent 60%),rgba(255,255,255,.2)}
-.pwb .pw-welcome {display:flex;gap:16px;align-items:start;padding:16px 20px;margin-bottom:20px;border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-card);background:rgba(255,255,255,.3)}
-.pwb .pw-welcome strong {font:600 14px/22px var(--pw-body)}
-.pwb .pw-welcome p {margin:4px 0 0;font:400 12px/18px var(--pw-body);color:var(--pw-ui-muted)}
-.pwb .pw-welcome > button {flex:none;margin-left:auto;width:32px;height:32px;padding:0;display:grid;place-items:center;background:transparent;border:0;border-radius:10px;color:var(--pw-ui-muted);cursor:pointer;transition:background-color var(--pw-ui-motion)}
-.pwb .pw-welcome > button:hover {background:var(--pw-ui-hover);color:var(--pw-ui-accent)}
-.pwb .pw-credit {gap:0;flex-wrap:wrap}
 /* Assistant is bundled with this public package; it uses the same neutral controls. */
 body:has(.pwb) .pw-assistant-dock .hbc-drawer {background:var(--pw-ui-surface);color:var(--pw-ui-ink);backdrop-filter:var(--pw-ui-blur)}
 body:has(.pwb) .pw-assistant-dock .hbc-settings {background:transparent;color:var(--pw-ui-ink);border-color:var(--pw-ui-line)}
@@ -5769,10 +5994,8 @@ body:has(.pwb) .pw-assistant-dock .hbc-settings textarea {background:var(--pw-ui
 body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button) {color:var(--pw-ui-ink);background:rgba(255,255,255,.34);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-button);transition:background-color var(--pw-ui-motion)}
 body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button):hover {background:var(--pw-ui-hover)}
 body:has(.pwb) .pw-assistant-dock .hbc-drawer-head button:last-child {width:32px;height:32px;padding:0;border-color:transparent;border-radius:10px}
-@container pw-root (max-width:560px) {.pwb .pw-welcome{padding:12px;margin-bottom:16px}.pwb .pw-plan .pw-calendar-grid[data-mode=week]>button{padding-inline:4px}}
+@container pw-root (max-width:560px) {.pwb .pw-plan .pw-calendar-grid[data-mode=week]>button{padding-inline:4px}}
 @media(prefers-reduced-motion:reduce) {.pwb *,body:has(.pwb) .pw-assistant-dock *{scroll-behavior:auto!important;transition-duration:0s!important;animation-duration:0s!important}}
-.pwb .pw-credit-help {padding:2px 6px;margin-left:10px;background:transparent;border:0;border-radius:6px;color:inherit;font:inherit;cursor:pointer;transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion)}
-.pwb .pw-credit-help:is(:hover,:focus-visible) {background:var(--pw-ui-hover);color:var(--pw-ui-accent)}
 /* Week dates share one calendar board. Only the hovered column receives a wash. */
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period] {background:transparent;border:0;box-shadow:none;transform:none}
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period]:is(:hover,:focus-visible) {background:var(--pw-ui-hover-white-layer);border:0;box-shadow:none;transform:none}
@@ -5786,17 +6009,12 @@ body:has(.pwb) dialog.pw-public-profile {
 .pwb .pw-plan-source:hover {text-decoration:underline}
 .pwb .pw-connection-entry {align-self:flex-start;min-height:28px}
 .pwb .pw-project-dialog.pw-plan-connection {display:flex;flex-direction:column;width:min(460px,100%);max-height:100%;min-height:0;overflow:hidden;padding:0}
-.pwb .pw-plan-connection .pw-dialog-body {overflow-wrap:anywhere}
-.pwb .pw-plan-connection label {display:block;margin:16px 0 0;color:var(--pw-ui-ink);font:600 13px/20px var(--pw-body)}
-.pwb .pw-plan-connection :is(input,select) {width:100%;min-width:0;font:400 14px/20px var(--pw-body)}
-.pwb .pw-connection-location {display:flex;align-items:center;gap:8px;margin-top:6px}
-.pwb .pw-plan-connection .pw-connection-location input {flex:1 1 0;margin:0}
-.pwb .pw-connection-location button {flex:none}
-.pwb .pw-plan-connection .pw-connection-hint {display:block;margin:6px 0 0;font:400 12px/18px var(--pw-body);color:var(--pw-ui-muted)}
-.pwb .pw-plan-connection details {margin-top:16px}
-.pwb .pw-plan-connection summary {width:fit-content;cursor:pointer;font:400 13px/20px var(--pw-body);color:var(--pw-ui-body)}
-.pwb .pw-plan-connection summary:hover {color:var(--pw-ui-accent)}
-.pwb .pw-plan-connection pre {margin:6px 0 0;white-space:pre-wrap}
+.pwb .pw-project-dialog.pw-plan-connection > .pw-dialog-body {display:grid;align-content:start;gap:var(--pw-ui-space-field);overflow-wrap:anywhere;scrollbar-gutter:auto}
+.pwb .pw-project-dialog.pw-plan-connection > .pw-dialog-body > p {margin:0;color:var(--pw-ui-body)}
+.pwb .pw-plan-connection label {display:grid;gap:6px;margin:0;color:var(--pw-ui-ink);font:600 13px/20px var(--pw-body)}
+.pwb .pw-plan-connection label :is(input,select) {box-sizing:border-box;width:100%;min-width:0;margin:0;font:400 14px/20px var(--pw-body)}
+.pwb .pw-plan-connection .pw-connection-prompt {margin:0;padding:12px 14px;border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-field);background:var(--pw-ui-inner);color:var(--pw-ui-body);white-space:pre-wrap;overflow-wrap:anywhere;font:400 13px/1.6 ui-monospace,monospace;user-select:text}
+.pwb .pw-plan-connection > footer {display:flex;align-items:center;justify-content:flex-end;gap:8px}
 .pwb .pw-connection-summary {display:flex;align-items:flex-start;gap:8px;padding:14px;background:var(--pw-ui-inner);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field)}
 .pwb .pw-connection-summary svg {flex:none;margin-top:2px;color:var(--pw-ui-accent)}
 .pwb .pw-connection-summary p {margin:4px 0 0;color:var(--pw-ui-muted)}
@@ -5822,8 +6040,6 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  .pw-public-profile .pw-pet-preview-art {display:none}
 }
 
-.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-card .pw-spend-heading {padding-inline-end:0;flex-wrap:wrap;gap:2px 8px;min-width:0}
-.pwb .pw-finance-cards .pw-quota-card .pw-quota-connect {color:var(--pw-ui-accent);font-size:11px;line-height:16px}
 .pwb .pw-quota-card .pw-quota-other-list {display:none}
 .pwb .pw-quota-other-count,.pwb .pw-quota-other-list {font-size:12px;color:var(--pw-ui-body)}
 @container pw-finance (min-width:300px) {
@@ -5842,6 +6058,25 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  .pwb .pw-brief-source-full {display:none}
  .pwb .pw-brief-source-short {display:inline}
 }
+
+.pwb .pw-project-dialog.pw-example-dialog {width:min(460px,100%)}
+.pwb :where(.pw-brief-layout button,.pw-brief-folded-headline button) {
+  appearance:none;background:transparent;border:0;margin:0;padding:0;
+  color:inherit;font:inherit;text-align:start;cursor:pointer;
+}
+.pwb .pw-brief-layout .pw-news-quick button {width:100%}
+
+.pwb .pw-plan-prompt {display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:4px var(--pw-ui-panel-inset-x) 8px;color:var(--pw-ui-muted);font:var(--pw-ui-meta-font)}
+.pwb .pw-plan-prompt button {font:inherit}
+.pwb .pw-assistant-sources {margin-block:12px 0;font:var(--pw-ui-meta-font);color:var(--pw-ui-body)}
+.pwb .pw-assistant-sources summary {width:fit-content;cursor:pointer;color:var(--pw-ui-accent)}
+.pwb .pw-assistant-sources > div {display:grid;justify-items:start;gap:8px;margin-block-start:10px}
+.pwb .pw-assistant-sources label {display:flex;align-items:center;gap:8px;overflow-wrap:anywhere}
+
+.hbc-drawer .pw-chat-launch {display:grid;justify-items:start;gap:var(--pw-ui-space-field,12px)}
+.hbc-drawer .pw-chat-launch p {margin:0}
+.hbc-drawer .pw-chat-launch a {display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:var(--pw-ui-radius-button,10px);background:var(--pw-ui-accent,#076567);color:white;text-decoration:none}
+.hbc-drawer .pw-chat-launch a:hover {background:var(--pw-ui-primary-hover,#084c4e)}
 
 /* END SHARED DESIGN SYSTEM */
 `;
@@ -6072,8 +6307,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
       return()=>{delete el.__pwSelectedBackdrop;el.removeAttribute('data-orange-background');el.removeAttribute('data-lime-background');el.removeAttribute('data-still-background');el.removeAttribute('data-custom-background');el.style.removeProperty('background-image');el.style.removeProperty('background-size');el.style.removeProperty('background-position');};
     }
     /* END PET BACKDROP TONE */
-    function WorkbenchIdentity({root,assistantDock,assistantOpen,onChat}) {
-      const [open,setOpen]=React.useState(false),[ready,setReady]=React.useState(false),[busy,setBusy]=React.useState(false),[error,setError]=React.useState(''),[notice,setNotice]=React.useState('');
+    function WorkbenchIdentity({root,assistantDock,assistantOpen,onChat,open,onOpenChange:setOpen}) {
+      const [ready,setReady]=React.useState(false),[busy,setBusy]=React.useState(false),[error,setError]=React.useState(''),[notice,setNotice]=React.useState('');
       const [value,setValue]=React.useState({avatar:null,backgroundId:null,backgrounds:[]});
       const [assets,setAssets]=React.useState({avatar:WORKBENCH_PORTRAIT,backgrounds:[]});
       const committed=React.useRef(null),avatarPreview=React.useRef(null);
@@ -6101,11 +6336,11 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
       },[assets,value.backgroundId,root]);
       React.useEffect(()=>{
         if(!open)return;
-        const shell=root.current?.querySelector('.pw-shell'),wasInert=shell?.inert,dockWasInert=assistantDock?.inert;
-        if(shell)shell.inert=true;if(assistantDock)assistantDock.inert=true;
+        const dockWasInert=assistantDock?.inert;
+        if(assistantDock)assistantDock.inert=true;
         dialog.current?.querySelector('button')?.focus({preventScroll:true});
         document.addEventListener('keydown',dialogKey,true);
-        return()=>{document.removeEventListener('keydown',dialogKey,true);if(shell)shell.inert=wasInert;if(assistantDock)assistantDock.inert=dockWasInert;trigger.current?.focus({preventScroll:true});};
+        return()=>{document.removeEventListener('keydown',dialogKey,true);if(assistantDock)assistantDock.inert=dockWasInert;trigger.current?.focus({preventScroll:true});};
       },[open,assistantDock,root]);
       async function previewAppearance(next){
         if(mounted.current){setValue(next);setNotice('');}
@@ -6150,23 +6385,24 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         h('div',{className:'pw-modal-backdrop pw-appearance-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
           h('section',{ref:dialog,className:'pw-project-dialog pw-appearance-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-appearance-title','aria-busy':busy},
             h('header',null,h('h2',{id:'pw-appearance-title'},'工作台设置'),h('button',{type:'button',className:'pw-dialog-close','aria-label':'关闭设置',disabled:busy,onClick:close},h(Icon,{name:'dismiss',size:18}))),
-            h('section',{'aria-labelledby':'pw-avatar-title'},h('h3',{id:'pw-avatar-title'},'头像'),
-              h('div',{className:'pw-avatar-settings'},h('button',{type:'button',className:'pw-avatar-preview-trigger','aria-label':'查看头像大图','aria-haspopup':'dialog',title:'查看大图',onClick:()=>avatarPreview.current?.showModal()},h('img',{src:assets.avatar,alt:'当前头像',className:'pw-settings-avatar'})),
-                h('div',{className:'pw-appearance-actions'},h('button',{type:'button',disabled:!ready||busy,onClick:()=>avatarInput.current?.click()},'更换头像'),h('button',{type:'button',disabled:!ready||busy||!value.avatar,onClick:()=>void change(()=>previewAppearance({...value,avatar:null}))},'恢复默认'))),
-              h('input',{ref:avatarInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择头像图片',onChange:event=>upload(event,'avatar')})),
-            h('section',{'aria-labelledby':'pw-background-title'},h('div',{className:'pw-appearance-section-head'},h('h3',{id:'pw-background-title'},'背景'),h('button',{type:'button',disabled:!ready||busy,onClick:()=>backgroundInput.current?.click()},'添加背景')),
-              h('p',{className:'pw-appearance-hint'},'可选流光玻璃、静态浅青、晨曦柔光、青柠绿和橙光波场，也可以使用自己的图片。'),
-              h('input',{ref:backgroundInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择背景图片',onChange:event=>upload(event,'background')}),
-              h('div',{className:'pw-background-options'},
-                h('button',{type:'button',className:'pw-background-choice','aria-pressed':!value.backgroundId,disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:null}))},h('span',{className:'pw-background-thumb is-flow'}),h('span',null,'柔和流动玻璃'),!value.backgroundId&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__still__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__still__'}))},h('span',{className:'pw-background-thumb is-default'}),h('span',null,'静态浅青'),value.backgroundId==='__still__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__morning_silk__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__morning_silk__'}))},h('img',{className:'pw-background-thumb',src:MORNING_SILK_BACKGROUND,alt:''}),h('span',null,'晨曦柔光'),value.backgroundId==='__morning_silk__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__lime__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__lime__'}))},h('span',{className:'pw-background-thumb is-lime'}),h('span',null,'青柠绿'),value.backgroundId==='__lime__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__orange_wave__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__orange_wave__'}))},h('span',{className:'pw-background-thumb is-orange-wave'}),h('span',null,'橙光波场'),value.backgroundId==='__orange_wave__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                ...assets.backgrounds.map(item=>h('div',{className:'pw-background-item',key:item.id},
-                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId===item.id,disabled:!ready||busy,title:item.name,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:item.id}))},h('img',{className:'pw-background-thumb',src:item.url,alt:''}),h('span',null,item.name),value.backgroundId===item.id&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
-                  h('button',{type:'button',className:'pw-background-remove','aria-label':'删除背景 '+item.name,title:'删除这张背景',disabled:busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:value.backgroundId===item.id?null:value.backgroundId,backgrounds:value.backgrounds.filter(bg=>bg.id!==item.id)}))},h(Icon,{name:'dismiss',size:14}))))),
-              h('p',{className:'pw-appearance-hint'},'支持 PNG、JPG、WebP，单张不超过 8 MB。')),
+            h('div',{className:'pw-dialog-body'},
+              h('section',{'aria-labelledby':'pw-avatar-title'},h('h3',{id:'pw-avatar-title'},'头像'),
+                h('div',{className:'pw-avatar-settings'},h('button',{type:'button',className:'pw-avatar-preview-trigger','aria-label':'查看头像大图','aria-haspopup':'dialog',title:'查看大图',onClick:()=>avatarPreview.current?.showModal()},h('img',{src:assets.avatar,alt:'当前头像',className:'pw-settings-avatar'})),
+                  h('div',{className:'pw-appearance-actions'},h('button',{type:'button',disabled:!ready||busy,onClick:()=>avatarInput.current?.click()},'更换头像'),h('button',{type:'button',disabled:!ready||busy||!value.avatar,onClick:()=>void change(()=>previewAppearance({...value,avatar:null}))},'恢复默认'))),
+                h('input',{ref:avatarInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择头像图片',onChange:event=>upload(event,'avatar')})),
+              h('section',{'aria-labelledby':'pw-background-title'},h('div',{className:'pw-appearance-section-head'},h('h3',{id:'pw-background-title'},'背景'),h('button',{type:'button',disabled:!ready||busy,onClick:()=>backgroundInput.current?.click()},'添加背景')),
+                h('p',{className:'pw-appearance-hint'},'可选流光玻璃、静态浅青、晨曦柔光、青柠绿和橙光波场，也可以使用自己的图片。'),
+                h('input',{ref:backgroundInput,type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'选择背景图片',onChange:event=>upload(event,'background')}),
+                h('div',{className:'pw-background-options'},
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':!value.backgroundId,disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:null}))},h('span',{className:'pw-background-thumb is-flow'}),h('span',null,'柔和流动玻璃'),!value.backgroundId&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__still__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__still__'}))},h('span',{className:'pw-background-thumb is-default'}),h('span',null,'静态浅青'),value.backgroundId==='__still__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__morning_silk__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__morning_silk__'}))},h('img',{className:'pw-background-thumb',src:MORNING_SILK_BACKGROUND,alt:''}),h('span',null,'晨曦柔光'),value.backgroundId==='__morning_silk__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__lime__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__lime__'}))},h('span',{className:'pw-background-thumb is-lime'}),h('span',null,'青柠绿'),value.backgroundId==='__lime__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId==='__orange_wave__',disabled:!ready||busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:'__orange_wave__'}))},h('span',{className:'pw-background-thumb is-orange-wave'}),h('span',null,'橙光波场'),value.backgroundId==='__orange_wave__'&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                  ...assets.backgrounds.map(item=>h('div',{className:'pw-background-item',key:item.id},
+                    h('button',{type:'button',className:'pw-background-choice','aria-pressed':value.backgroundId===item.id,disabled:!ready||busy,title:item.name,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:item.id}))},h('img',{className:'pw-background-thumb',src:item.url,alt:''}),h('span',null,item.name),value.backgroundId===item.id&&h('span',{className:'pw-background-selected','aria-hidden':true},'✓')),
+                    h('button',{type:'button',className:'pw-background-remove','aria-label':'删除背景 '+item.name,title:'删除这张背景',disabled:busy,onClick:()=>void change(()=>previewAppearance({...value,backgroundId:value.backgroundId===item.id?null:value.backgroundId,backgrounds:value.backgrounds.filter(bg=>bg.id!==item.id)}))},h(Icon,{name:'dismiss',size:14}))))),
+                h('p',{className:'pw-appearance-hint'},'支持 PNG、JPG、WebP，单张不超过 8 MB。'))),
             h('footer',null,h('p',{className:'pw-appearance-hint'},'保存后应用到当前设备'),(error||!ready||busy)&&h('p',{className:error?'pw-appearance-error':'pw-appearance-status',role:error?'alert':'status'},error||(!ready?'正在读取…':'正在处理…')),!ready&&error&&h('button',{type:'button',onClick:()=>void load()},'重试'),h('div',{className:'pw-appearance-footer-actions'},h('button',{type:'button',disabled:busy,onClick:close},'取消'),h('button',{type:'button',className:'pw-appearance-save',disabled:!ready||busy,onClick:()=>void commitAppearance()},'保存'))))),root.current):null;
       return h(React.Fragment,null,
         h('div',{className:'pw-personal-tools',role:'group','aria-label':workbenchName},
@@ -6467,6 +6703,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         const zh={pet:'摸摸小猫；按住可拖动',small:'收起',restore:'叫出小黑猫',home:'归位',hello:'喵，我在这里陪你。',purr:'呼噜呼噜…',one:'你忙你的，我陪着。',two:'再摸一下嘛。',three:'今天也有好好陪你。'};
         Object.assign(en,{title:'Your Data',open:'Open your Data assistant',close:'Close assistant',subtitle:'A separate conversation · Harness permissions apply',loading:'Opening your conversation…',failed:'Could not open the assistant.',retry:'Retry'});
         Object.assign(zh,{title:'你的 Data',open:'打开你的 Data 助手',close:'关闭助手',subtitle:'独立对话 · 沿用 Harness 权限确认',loading:'正在打开助手对话…',failed:'暂时无法打开助手。',retry:'重试'});
+        Object.assign(zh,{desktopChat:'在桌面端对话',desktopChatHint:'打开 DeepSeek Harness，在「个人 AI 工作台」点「AI个人助手」，即可使用已配置的模型聊天。',openHarness:'打开 DeepSeek Harness'});
+        Object.assign(en,{desktopChat:'Chat in the desktop app',desktopChatHint:'Open DeepSeek Harness and choose AI Assistant in your Personal AI Workspace to chat using your configured model.',openHarness:'Open DeepSeek Harness'});
         Object.assign(en,{home:'Home',away:'Out and about',showActions:'Show companion actions',petActions:'Companion actions',viewPending:'View what needs your attention',dropHome:'Release to go home',dragPet:'Drag your companion; click to pet'});
         Object.assign(zh,{home:'回家',away:'出门啦',showActions:'展开桌宠操作',petActions:'桌宠操作',viewPending:'查看待处理事项',dropHome:'松手回家',dragPet:'按住拖动桌宠，点击摸摸'});
         Object.assign(en,{idle:'Here with you',thinking:'Thinking…',replying:'Replying…',busy:'Working…',waiting:'Needs your confirmation',done:'This turn finished',error:'Something needs attention',sleep:'Taking a nap',pat:'Pet',chat:'Chat'});
@@ -6528,7 +6766,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         function Embedded({renderFactorySlot}) {
           return h('div',{className:'hbc-conversation-fill'},renderFactorySlot('conversation.content',{}));
         }
-        function Assistant({renderSlot,SessionProvider,useSessionStatus,dockTarget,onOpenChange}) {
+        function Assistant({renderSlot,SessionProvider,useSessionStatus,dockTarget,onOpenChange,standalonePreview=false}) {
           React.useSyncExternalStore(fn=>ctx.locale.subscribe(fn),()=>ctx.locale.getSnapshot());
           const [open,setOpen]=React.useState(()=>{try{return sessionStorage.getItem(ns+'.assistantOpen')==='true';}catch{return false;}}),[reference,setReference]=React.useState(null),[error,setError]=React.useState(''),[attempt,setAttempt]=React.useState(0);
           const [activated,setActivated]=React.useState(false);
@@ -6793,7 +7031,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             };
           },[]);
           React.useEffect(()=>{
-            if(!activated)return;
+            if(!activated||standalonePreview)return;
             const abort=new AbortController();
             let disposed=false,ref,timeout;
             setError('');setReference(null);
@@ -6825,7 +7063,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               if(!disposed)setError(err.message||t('failed'));
             }).finally(()=>clearTimeout(timeout));
             return()=>{disposed=true;clearTimeout(timeout);abort.abort();ref?.release();ref=null;};
-          },[activated,attempt]);
+          },[activated,attempt,standalonePreview]);
           React.useEffect(()=>{onOpenChange?.(open);return()=>{onOpenChange?.(false);};},[open,onOpenChange]);
           React.useEffect(()=>{if(open)closeButton.current?.focus();},[open]);
           function close(){setOpen(false);launcher.current?.focus();}
@@ -6864,9 +7102,10 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             h('span',{className:'hbc-state-label',role:'status','data-quiet':outside},status),h('div',{className:'hbc-pet-actions hbc-dock-actions','data-quiet':outside},h('button',{onClick:pet,'aria-label':t('pat')},t('pat')),h('button',{onClick:()=>{wake();if(open)close();else{wake();setOpen(true);}}},t('chat'))),
             outside&&createPortal(h('div',{ref:walkRef,className:'hbc-walk','data-returning':returning,style:{left:position.x,top:position.y,'--hbc-float-size':petSize+'px','--hbc-tilt':(dragPose==='carried'?position.tilt:0)+'deg'}},h(FloatingPetControls,{disabled:controlsDisabled,width:trayWidth,offset:trayOffset,t,notice:actionNotice,onNotice:()=>{wake();if(awaitingInput)openPending();else setOpen(true);},onHome:()=>goHome(),onChat:()=>{wake();if(open)close();else setOpen(true);}},h('button',{...dragProps,className:'hbc-walk-cat','aria-label':t('dragPet'),onClick:()=>{if(suppressClick.current){suppressClick.current=false;return;}pet();}},h(CatArt,{skin,mood,loved,dragPose:returning?'outside':dragPose,outside:true,nestScale:true,pausingWork})),h('span',{className:'hbc-state-label',role:'status','data-quiet':!nearHome && (mood==='idle'||mood==='sleep')},nearHome?t('dropHome'):status))),document.body),
             activated&&dockTarget&&createPortal(h('aside',{id:'hbc-assistant-drawer',className:'hbc-drawer','data-open':String(open),inert:open?undefined:'','aria-hidden':!open,role:'region','aria-label':t('title'),onKeyDown:e=>{if(e.key==='Escape'&&e.target===closeButton.current){e.preventDefault();close();}}},
-              h('header',{className:'hbc-drawer-head'},skin==='cat'&&profile?.avatar?h('img',{src:profile.avatar,alt:'',className:'hbc-custom-avatar'}):h(CatArt,{skin,mood,loved,pausingWork}),h('div',{className:'hbc-header-copy'},h('strong',null,assistantName),h('p',{role:'status'},error?t('failed'):!reference?t('loading'):status)),h('button',{className:'hbc-header-settings',type:'button',onClick:()=>setSettings(v=>!v),'aria-expanded':settings,'aria-label':t('settings'),title:t('settings')},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.5,'aria-hidden':true},h('path',{d:'m9 3-1 3-3 1-2 5 2 5 3 1 1 3h6l1-3 3-1 2-5-2-5-3-1-1-3Z',strokeLinejoin:'round'}),h('circle',{cx:12,cy:12,r:3}))),h('button',{ref:closeButton,type:'button',onClick:close,'aria-label':'收起助手侧栏',title:'收起助手侧栏（保留对话）',style:{display:'inline-flex',alignItems:'center',justifyContent:'center',padding:6}},h('svg',{viewBox:'0 0 24 24',width:18,height:18,fill:'none',stroke:'currentColor',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true,focusable:'false',style:{width:18,height:18}},h('rect',{x:3,y:4,width:18,height:16,rx:2}),h('path',{d:'M16 4v16M9 9l3 3-3 3'})))),
+              h('header',{className:'hbc-drawer-head'},skin==='cat'&&profile?.avatar?h('img',{src:profile.avatar,alt:'',className:'hbc-custom-avatar'}):h(CatArt,{skin,mood,loved,pausingWork}),h('div',{className:'hbc-header-copy'},h('strong',null,assistantName),h('p',{role:'status'},standalonePreview?t('desktopChat'):error?t('failed'):!reference?t('loading'):status)),h('button',{className:'hbc-header-settings',type:'button',onClick:()=>setSettings(v=>!v),'aria-expanded':settings,'aria-label':t('settings'),title:t('settings')},h('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.5,'aria-hidden':true},h('path',{d:'m9 3-1 3-3 1-2 5 2 5 3 1 1 3h6l1-3 3-1 2-5-2-5-3-1-1-3Z',strokeLinejoin:'round'}),h('circle',{cx:12,cy:12,r:3}))),h('button',{ref:closeButton,type:'button',onClick:close,'aria-label':'收起助手侧栏',title:'收起助手侧栏（保留对话）',style:{display:'inline-flex',alignItems:'center',justifyContent:'center',padding:6}},h('svg',{viewBox:'0 0 24 24',width:18,height:18,fill:'none',stroke:'currentColor',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round','aria-hidden':true,focusable:'false',style:{width:18,height:18}},h('rect',{x:3,y:4,width:18,height:16,rx:2}),h('path',{d:'M16 4v16M9 9l3 3-3 3'})))),
               settings&&h(Settings,{profile,onSave:setProfile,onClose:()=>setSettings(false)}),
-              h('div',{className:'hbc-drawer-body'},error?h('div',{className:'hbc-notice',role:'alert'},error,h('button',{className:'hbc-retry',onClick:()=>setAttempt(v=>v+1)},t('retry'))):reference?h(SessionProvider,{session:reference},renderSlot('dsh.personalWorkbenchCat.conversation',{})):h('p',{className:'hbc-notice',role:'status'},t('loading')))),dockTarget));
+              h('div',{className:'hbc-drawer-body'},standalonePreview?h('div',{className:'hbc-notice pw-chat-launch'},
+                h('p',null,t('desktopChatHint')),h('a',{href:'dsh://open'},t('openHarness'))):error?h('div',{className:'hbc-notice',role:'alert'},error,h('button',{className:'hbc-retry',onClick:()=>setAttempt(v=>v+1)},t('retry'))):reference?h(SessionProvider,{session:reference},renderSlot('dsh.personalWorkbenchCat.conversation',{})):h('p',{className:'hbc-notice',role:'status'},t('loading')))),dockTarget));
         }
         ctx.slots.registerFactory({name:'dsh.personalWorkbenchCat.assistant',scope:'root',children:{'dsh.personalWorkbenchCat.conversation':{kind:'single',scope:'session'}}},Assistant);
         ctx.slots.inject('dsh.personalWorkbenchCat.conversation',()=>ctx.slots.register({name:'dsh.personalWorkbenchCat.conversation'},Embedded));
@@ -6875,25 +7114,28 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
       const uiUpdates=installWorkbenchUpdates(ctx,{moduleId:"dsh-personal-workbench",endpoint:"/api/dsh-personal-workbench?action=uiRelease",petNamespace:"dsh-personal-workbench-cat",build:WORKBENCH_UI_BUILD});
       let sessionNav;
       ctx.inject?.(['uiWorkspace','sessions','workspaces'],nav=>{sessionNav=nav;nav.effect(()=>()=>{if(sessionNav===nav)sessionNav=undefined;});});
-      const planSources={
-        notion:{name:'Notion',field:'任务数据库链接',placeholder:'粘贴数据库链接或 ID',hint:'打开每行一项待办的数据库，复制它的链接。每项待办需要有日期。'},
-        feishu:{name:'飞书',field:'多维表格链接',placeholder:'粘贴选中数据表后的链接',hint:'在多维表格里点开存放待办的数据表，再复制地址栏中带 table= 的链接。每项待办需要有日期。'},
-        obsidian:{name:'Obsidian',field:'日记文件夹',placeholder:'粘贴日记文件夹的完整路径',hint:'选择存放每日笔记的文件夹。工作台会按日期打开 YYYY-MM-DD.md，把里面的待办列到对应日期。'},
-        file:{name:'其他文件',field:'计划文件',placeholder:'粘贴文件的完整路径',hint:'选择 Markdown 待办清单或 JSON 计划文件。'}
+      const planSources={notion:'Notion',feishu:'飞书',obsidian:'Obsidian',file:'其他文件'};
+      const planPrompts={
+        feishu:'请把我的飞书多维表格接到工作台的「今日计划」，按日期显示待办。请告诉我该从哪里复制数据表链接。',
+        notion:'请把我的 Notion 任务数据库接到工作台的「今日计划」，按日期显示待办。请告诉我该从哪里复制数据库链接。',
+        obsidian:'请把我的 Obsidian 每日笔记接到工作台的「今日计划」，显示每天笔记里的待办。请帮我确认日记文件夹的位置。',
+        file:'请把我的计划文件接到工作台的「今日计划」，按日期显示待办。请帮我确认要使用的文件。'
       };
+      const briefPrompt='请把我现有的日报任务接到个人 AI 工作台。先把最近一期已完成的日报放进「AI每日精选」，保留原刊日期、原文链接和已有配图。以后每次任务完成时也同步一份，沿用现在的执行时间。';
       function SourceConnectionDialog({kind,connection,readError,retry,onSaved,onClose}){
         const brief=kind==='brief',noun=brief?'日报':'计划';
-        const connect=brief?'connectBrief':'connectPlan',disconnect=brief?'disconnectBrief':'disconnectPlan';
-        const [provider,setProvider]=React.useState(brief?'brief':'notion'),[editing,setEditing]=React.useState(false);
-        const [location,setLocation]=React.useState(''),[token,setToken]=React.useState(''),[dateField,setDateField]=React.useState('');
-        const [busy,setBusy]=React.useState(''),[error,setError]=React.useState('');
+        const [provider,setProvider]=React.useState(connection?.provider||'notion'),[editing,setEditing]=React.useState(false);
+        const [location,setLocation]=React.useState(''),[folder,setFolder]=React.useState(false);
+        const [busy,setBusy]=React.useState(''),[error,setError]=React.useState(''),[copied,setCopied]=React.useState('');
         const dialog=React.useRef(null),lock=React.useRef(false);
         const current=Boolean(connection?.provider)&&!editing;
-        const source=brief?{field:'日报归档文件夹',placeholder:'选择文件夹或粘贴完整路径',hint:'支持按日期保存的工作台日报 JSON 归档。也可以连接空文件夹，等待助手写入。'}:planSources[provider];
-        const file=brief||provider==='file'||provider==='obsidian';
+        const prompt=brief?briefPrompt:planPrompts[provider];
         React.useEffect(()=>{dialog.current?.querySelector('.pw-dialog-close')?.focus();},[]);
         React.useEffect(()=>{document.addEventListener('keydown',keyDown);return()=>document.removeEventListener('keydown',keyDown);},[onClose]);
-        function selectSource(value){setProvider(value);setLocation('');setToken('');setDateField('');setError('');}
+        async function copy(){
+          try{await navigator.clipboard.writeText(prompt);setCopied(prompt);}
+          catch{setError('请选中提示词并复制。');}
+        }
         function close(){if(!lock.current)onClose();}
         function keyDown(event){
           if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close();return;}
@@ -6909,50 +7151,52 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           lock.current=true;setBusy(action);setError('');
           try{
             if(action==='pickPlanLocation'){
-              const picked=await api(action,undefined,{provider});
+              const picked=await api(action,undefined,{provider:'brief'});
               if(picked?.location)setLocation(picked.location);
             }else{
-              const input=action===disconnect?{}:brief?{location:location.trim()}:{provider,location:location.trim(),...(!file&&dateField.trim()?{dateField:dateField.trim()}:{}),...(provider==='notion'&&token.trim()?{token:token.trim()}:{})};
-              const result=await api(action,undefined,input);
+              const result=await api(action,undefined,action==='connectBrief'?{location:location.trim()}:{});
               onSaved(result?.connection||result);
-              setToken('');setEditing(false);
-              if(action===disconnect)onClose();
+              setEditing(false);setFolder(false);
+              if(action.startsWith('disconnect'))onClose();
             }
           }catch(err){setError(text(err.message)||'读取失败，请检查来源后重试。');}
           finally{lock.current=false;setBusy('');}
         }
         const lastRead=connection?.lastReadAt&&new Date(connection.lastReadAt);
         const lastReadText=lastRead&&Number.isFinite(lastRead.getTime())?lastRead.toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}):'';
-        const formReady=connection&&!readError&&!current;
+        const disconnect=brief?'disconnectBrief':'disconnectPlan';
+        const button=(label,onClick,primary=false,disabled=false)=>h('button',{type:'button',className:'pw-layout-button'+(primary?' is-primary':''),disabled:disabled||Boolean(busy),onClick},label);
         return h('div',{className:'pw-modal-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
-          h('form',{ref:dialog,className:'pw-project-dialog pw-plan-connection',role:'dialog','aria-modal':true,'aria-labelledby':'pw-connect-title',onSubmit:event=>{event.preventDefault();if(formReady&&location.trim())void act(connect);}},
-            h('header',null,h('h2',{id:'pw-connect-title'},current?'我的'+noun+'来源':'连接我的'+noun),h('button',{className:'pw-dialog-close',type:'button',onClick:close,'aria-label':'关闭'+noun+'来源设置','aria-disabled':Boolean(busy)},h(Icon,{name:'dismiss',size:16}))),
+          h('section',{ref:dialog,className:'pw-project-dialog pw-plan-connection',role:'dialog','aria-modal':true,'aria-labelledby':'pw-connect-title'},
+            h('header',null,h('h2',{id:'pw-connect-title'},current?'我的'+noun+'来源':'连接我的'+noun),
+              h('button',{className:'pw-dialog-close',type:'button',onClick:close,'aria-label':'关闭'+noun+'来源设置','aria-disabled':Boolean(busy)},h(Icon,{name:'dismiss',size:16}))),
             h('div',{className:'pw-dialog-body','aria-busy':Boolean(busy)},
-              readError?h('div',{role:'alert'},h('p',null,readError),h('button',{type:'button',onClick:retry},'重新读取')):!connection?h('p',{role:'status'},'正在读取'+noun+'来源…'):current?h(React.Fragment,null,
-                h('div',{className:'pw-connection-summary',role:'status'},h(Icon,{name:'check',size:18}),h('div',null,h('strong',null,'已连接 '+(brief?'日报归档':planSources[connection.provider]?.name||'计划来源')),
-                  connection.detail&&h('p',null,connection.detail))),
+              current?h(React.Fragment,null,
+                h('div',{className:'pw-connection-summary'},h(Icon,{name:'check',size:18}),h('div',null,h('strong',null,'已连接 '+(brief?'日报归档':planSources[connection.provider]||'计划来源')),connection.detail&&h('p',null,connection.detail))),
                 lastReadText&&h('p',null,'连接时读取 · '+lastReadText),
-                Number.isInteger(connection.itemCount)&&h('p',null,connection.itemCount===0?'连接成功，试读范围内暂无待办。':'连接时读到了 '+connection.itemCount+' 项待办。'),
-                h('p',null,brief?(connection.managed?'此目录由 Harness 配置管理。新刊发布后会自动显示。':'新刊发布后会自动显示，原文件保存在这个文件夹。'):'完成状态请在来源中修改。断开后，原来的计划仍保存在那里。')):h(React.Fragment,null,
-                h('p',null,brief?'选择助手保存日报的文件夹。发布后，「AI每日精选」和「日报助手」会一起更新。':'把已有待办带进「今日计划」。在原来的工具里更新，日、周、月视图会自动跟进。'),
-                !brief&&h('label',null,'计划存在哪里？',h('select',{value:provider,disabled:Boolean(busy),onChange:event=>selectSource(event.target.value)},Object.entries(planSources).map(([key,item])=>h('option',{key,value:key},item.name)))),
-                h('label',{htmlFor:'pw-connection-location'},source.field),h('div',{className:'pw-connection-location'},h('input',{id:'pw-connection-location',value:location,disabled:Boolean(busy),required:true,placeholder:source.placeholder,autoComplete:'off',spellCheck:false,onChange:event=>setLocation(event.target.value)}),
-                  file&&connection.canPick&&h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act('pickPlanLocation')},busy==='pickPlanLocation'?'选择中…':provider==='file'?'选择文件':'选择文件夹')),
-                h('p',{className:'pw-connection-hint'},source.hint),
-                provider==='notion'&&h(React.Fragment,null,
-                  h('label',null,'Notion 集成密钥',h('input',{type:'password',value:token,disabled:Boolean(busy),required:!connection.hasNotionToken,placeholder:connection.hasNotionToken?'已配置，可留空':'粘贴有权读取这张表的密钥',autoComplete:'off',spellCheck:false,onChange:event=>setToken(event.target.value)})),
-                  h('p',{className:'pw-connection-hint'},'密钥只需在这里填写，试读成功后保存在本机插件配置中。'),
-                  h('p',{className:'pw-connection-hint'},'创建只读集成，再到数据库的「连接」中添加它。',h('a',{href:'https://www.notion.so/developers/connections',target:'_blank',rel:'noopener noreferrer'},'打开 Notion 集成管理'))),
-                provider==='feishu'&&h('p',{className:'pw-connection-hint'},'首次使用请先安装飞书 CLI，并用自己的飞书账号授权读取多维表格。',h('a',{href:'https://github.com/larksuite/cli/blob/main/README.zh.md#安装与快速开始',target:'_blank',rel:'noopener noreferrer'},'查看飞书官方安装与登录指南')),
-                !file&&h('details',{key:provider},h('summary',null,'表里有多个日期列？'),h('label',null,'按哪一列安排日期',h('input',{value:dateField,disabled:Boolean(busy),placeholder:'填写表里的列名，例如「到期日期」',onChange:event=>setDateField(event.target.value)}))),
-                !brief&&file&&h('details',{key:provider},h('summary',null,'支持的待办格式'),h('p',{className:'pw-connection-hint'},provider==='file'?'Markdown 可在日期标题下写待办。JSON 支持 tasks 数组，每项填写 title 和 dueDate。':'在每天的笔记中，用 Markdown 复选框记录待办。'),h('pre',null,provider==='file'?'# 2026-11-19\n- [ ] 整理会议笔记':'- [ ] 整理会议笔记\n- [x] 确认会议时间'))),
+                Number.isInteger(connection.itemCount)&&h('p',null,'连接时读到了 '+connection.itemCount+' 项待办。'),
+                h('p',null,brief?'新刊发布后会自动显示。':'在来源中更新待办后，工作台会同步显示。')):
+              folder?h(React.Fragment,null,h('label',null,'日报归档文件夹',h('input',{value:location,placeholder:'选择文件夹或粘贴完整路径',disabled:Boolean(busy),onChange:e=>setLocation(e.target.value)})),
+                connection?.canPick&&button('选择文件夹',()=>void act('pickPlanLocation'))):
+              h(React.Fragment,null,
+                h('p',null,brief?'把下面这段话发给正在生成日报的助手。':'选择存放计划的工具，把下面这段话发给工作台的 AI 个人助手。'),
+                !brief&&h('label',null,h('span',{id:'pw-plan-provider-label'},'计划来源'),h('select',{'aria-labelledby':'pw-plan-provider-label',value:provider,onChange:e=>{setProvider(e.target.value);setCopied('');setError('');}},
+                  Object.entries(planSources).map(([key,name])=>h('option',{key,value:key},name)))),
+                h('pre',{className:'pw-connection-prompt'},h('code',null,prompt)),
+                brief&&button('手动连接归档文件夹',()=>{setFolder(true);setError('');})),
+              readError&&h('div',{role:'alert'},h('p',null,readError),button('重新读取',retry)),
               error&&h('p',{role:'alert',className:'pw-connection-error'},error)),
-            h('footer',null,current&&connection.managed?h('button',{type:'button',onClick:close},'完成'):current?h(React.Fragment,null,
-              h('button',{type:'button',disabled:Boolean(busy),onClick:()=>void act(disconnect)},busy?'断开中…':'断开连接'),
-              h('button',{type:'button',className:'is-primary',disabled:Boolean(busy),onClick:()=>{selectSource(connection.provider);setEditing(true);}},'更换来源')):
-              formReady?h(React.Fragment,null,h('button',{type:'button',disabled:Boolean(busy),onClick:close},'取消'),h('button',{type:'submit',className:'is-primary',disabled:Boolean(busy)||!location.trim()},busy===connect?'正在读取…':'读取并连接')):null)));
+            h('footer',null,current?h(React.Fragment,null,
+              !connection.managed&&button('断开连接',()=>void act(disconnect)),
+              connection.managed?button('完成',close,true):button('更换来源',()=>{setProvider(connection.provider);setEditing(true);setCopied('');setFolder(false);},true)):
+              folder?h(React.Fragment,null,button('返回',()=>setFolder(false)),button('读取并连接',()=>void act('connectBrief'),true,!location.trim())):
+              h('button',{type:'button',className:'pw-layout-button is-primary',onClick:copy,'aria-live':'polite'},copied===prompt?'已复制':'复制提示词'))));
       }
       function Panel({renderFactorySlot}={}) {
+        const [data,setData]=React.useState(null),[monitor,setMonitor]=React.useState(null),[loading,setLoading]=React.useState(true),[tick,setTick]=React.useState(0),[error,setError]=React.useState(''),[readError,setReadError]=React.useState('');
+        const [exampleView,setExampleView]=React.useState(null);
+        const previewing=Boolean(exampleView);
+        const showExamples=previewing||data?.onboarding?.showExamples===true;
         const [connectionOpen,setConnectionOpen]=React.useState(false),[connection,setConnection]=React.useState(null),[connectionError,setConnectionError]=React.useState('');
         const [connectionRetry,setConnectionRetry]=React.useState(0),connectionTrigger=React.useRef(null);
         const [briefConnection,setBriefConnection]=React.useState(null);
@@ -6966,10 +7210,10 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           if(connectionOpen!=='plan')void load('brief',setBriefConnection);
           return()=>abort.abort();
         },[connectionOpen,connectionRetry]);
-        function openPlanConnection(event){connectionTrigger.current=event.currentTarget;setConnectionOpen('plan');}
         function openBriefConnection(event){connectionTrigger.current=event.currentTarget;setConnectionOpen('brief');}
         function closePlanConnection(){setConnectionOpen(false);requestAnimationFrame(()=>connectionTrigger.current?.focus());}
-        const [usage,setUsage]=React.useState(null),[usageOpen,setUsageOpen]=React.useState(false),[usageView,setUsageView]=React.useState('models');
+        const [liveUsage,setUsage]=React.useState(null),[usageOpen,setUsageOpen]=React.useState(false),[usageView,setUsageView]=React.useState('models');
+        const usage=React.useMemo(()=>showExamples?firstRunUsage(liveUsage):liveUsage,[showExamples,liveUsage]);
         const [quotaData,setQuotaData]=React.useState(null),[quotaError,setQuotaError]=React.useState('');
         const [quotaBusy,setQuotaBusy]=React.useState(false);
         const quotaSerial=React.useRef(0),quotaSaving=React.useRef(false);
@@ -6998,6 +7242,9 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         }
         const codexQuota=list(usage?.quotas).find(row=>row.provider==='Codex');
         const harnessWallet=list(quotaData?.accounts).find(row=>row.provider==='harness'&&row.id==='harness');
+        const quotaExample=showExamples&&(previewing||(!codexQuota&&!harnessWallet));
+        // Historical example, displayed in Shanghai time, independently of the live account clock.
+        const sampleWindow={remaining:85,reset:'11/23 15:58'};
         function walletAmount(entry){
           if(entry?.value==null)return '—';
           if(entry.unit==='CNY')return '¥'+entry.value;
@@ -7005,6 +7252,11 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           return '—';
         }
         function quotaManager(){
+          if(quotaExample)return h('section',{className:'pw-quota-account'},
+            h('strong',null,'Codex 套餐额度'),
+            h('div',{className:'pw-usage-window'},usageRing(sampleWindow.remaining),
+              h('div',null,h('span',null,'每周额度'),h('strong',null,sampleWindow.remaining+'% 剩余'),
+                h('small',null,sampleWindow.reset+' 重置（北京时间）'))));
           let codexText='在这台电脑使用 Codex 后，套餐有额度记录时会自动显示。';
           if(codexQuota)codexText='最近记录 · '+usageTime(codexQuota.observedAt);
           else if(usage?.state==='unavailable')codexText='暂时无法读取本机的 Codex 额度记录。';
@@ -7151,28 +7403,28 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const selected=selectedTrend();
           const trend=Number.isFinite(selected?.total)?selected:list(usage?.day?.sources).find(row=>Number.isFinite(row.total))||selected;
           return h('button',{type:'button',className:'pw-spend-card pw-daily-card','aria-label':'今日用量，打开模型和项目明细','aria-haspopup':'dialog',onClick:e=>{if(trend?.source)setUsageSource(trend.source);openUsageAt(e);}},
-            h('span',{className:'pw-daily-summary'},h('span',{className:'pw-spend-heading'},'今日用量',h('span',{className:'pw-usage-more','aria-hidden':true,title:'查看用量明细'},'···')) ,
+            h('span',{className:'pw-daily-summary'},h('span',{className:'pw-spend-heading'},'今日用量',h(FinanceMore,{title:'查看用量明细'})) ,
               h('strong',{className:'pw-spend-value'},usageNumber(trend?.total))),usageMiniBars(trend));
         }
         function financeCards(){
           const windows=list(codexQuota?.windows).filter(w=>!w.expired&&Date.parse(w.resetAt)>Date.now());
-          const w=windows.find(w=>w.minutes===300)||windows[0];
+          const w=quotaExample?sampleWindow:windows.find(w=>w.minutes===300)||windows[0];
           const stale=codexQuota&&(codexQuota.stale||Date.now()-Date.parse(codexQuota.observedAt)>600000);
-          const walletEntry=harnessWallet?.entries?.[0];
+          const walletEntry=quotaExample?null:harnessWallet?.entries?.[0];
           const walletLabel=walletEntry?'DeepSeek Harness · '+walletEntry.label:'';
           const multi=Boolean(w&&walletEntry);
           const value=w?w.remaining+'%':walletAmount(walletEntry);
           const label=w?'Codex':walletLabel;
-          const action=harnessWallet?'管理来源':quotaData?.canConnectHarness===false?'查看额度':'连接额度';
+          const action=quotaExample?'查看额度':harnessWallet?'管理来源':quotaData?.canConnectHarness===false?'查看额度':'连接额度';
           const fallback=quotaData?.canConnectHarness===false?'暂无可用额度记录':'选择你的额度来源';
-          const reset=w?new Date(w.resetAt).toLocaleString('zh-CN',{timeZone:usageZone,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):'';
+          const reset=quotaExample?sampleWindow.reset:w?new Date(w.resetAt).toLocaleString('zh-CN',{timeZone:usageZone,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):'';
           return h('div',{className:'pw-finance-cards','aria-label':'今日用量与剩余额度'},
             h('section',{...grid.card('usage'),className:'pw-finance-module','aria-label':'今日用量'},grid.handles('usage','今日用量'),h('div',contentProps,usageOverview())),
             h('section',{...grid.card('quota'),className:'pw-finance-module','aria-label':'剩余额度'},grid.handles('quota','剩余额度'),h('div',contentProps,
             h('button',{type:'button',className:'pw-spend-card pw-quota-card'+(multi?' has-sources':''),'aria-label':'剩余额度，'+(label?label+' '+value+'，':'')+action,'aria-haspopup':'dialog',onClick:e=>openUsageAt(e,'quota')},
-              h('span',{className:'pw-spend-heading'},'剩余额度',h('span',{className:'pw-quota-connect'},action)),
+              h('span',{className:'pw-spend-heading'},'剩余额度',h(FinanceMore,{title:'查看额度明细'})),
               h('span',{className:'pw-quota-summary'},h('span',{className:'pw-quota-copy'},h('strong',{className:'pw-spend-value'},value),
-              h('span',{className:'pw-spend-caption pw-quota-reset',title:usageZone+(stale?' · 上次记录':'')},h('span',null,w?'Codex · 重置时间':walletLabel||harnessWallet?.detail||fallback),h('span',null,w?reset:''))),w&&h('span',{className:'pw-quota-ring-space'},usageRing(w.remaining,true,'Codex'))),
+              h('span',{className:'pw-spend-caption pw-quota-reset',title:quotaExample?'北京时间':usageZone+(stale?' · 上次记录':'')},h('span',null,w||!harnessWallet?'重置时间':walletLabel||harnessWallet.detail||fallback),h('span',null,w?reset:harnessWallet?'':'暂未获取'))),(!harnessWallet||w)&&h('span',{className:'pw-quota-ring-space'},usageRing(w?.remaining,true,'Codex'))),
               multi&&h('span',{className:'pw-quota-other-count'},'共 2 个来源'),
               multi&&h('span',{className:'pw-quota-other-list'},walletLabel+' · '+walletAmount(walletEntry))))));
         }
@@ -7260,6 +7512,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
 
         const [assistantOpen,setAssistantOpen]=React.useState(false);
         const [assistantDock,setAssistantDock]=React.useState(null);
+        const [appearanceOpen,setAppearanceOpen]=React.useState(false);
         React.useEffect(()=>{
           const frame=root.current?.parentElement,header=root.current?.querySelector('.pw-head');
           if(!frame||!header)return;
@@ -7278,26 +7531,78 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           root.current?.querySelector('.pw-pet .hbc-dock-actions button:last-child')?.click();
         }
         function personalTools() {
-          return h(WorkbenchIdentity,{root,assistantDock,assistantOpen,onChat:openAssistantShortcut});
+          return h(WorkbenchIdentity,{root,assistantDock,assistantOpen,onChat:openAssistantShortcut,open:appearanceOpen,onOpenChange:setAppearanceOpen});
         }
 
-        const [showWelcome,setShowWelcome]=React.useState(()=>!storedValue('dsh-personal-workbench:welcome-dismissed',false));
-        function closeWelcome(){setShowWelcome(false);try{localStorage.setItem('dsh-personal-workbench:welcome-dismissed','true');}catch{}}
         const [taskTitle,setTaskTitle]=React.useState('');
+        const followedKey='dsh-personal-workbench:followed-sessions';
+        const [followed,setFollowed]=React.useState(()=>list(storedValue(followedKey,[])));
+        function followSession(id,checked){
+          const next=checked?[...new Set([...followed,id])]:followed.filter(item=>item!==id);
+          setFollowed(next);
+          try{localStorage.setItem(followedKey,JSON.stringify(next));}catch{setError('本次选择仅在当前页面生效。');}
+        }
         const [savingTask,setSavingTask]=React.useState(false);
         const [checks,setChecks]=React.useState(new Map()),pendingChecks=React.useRef(new Map()),planVersion=React.useRef(0);
         const [feedURL,setFeedURL]=React.useState(()=>safeReadingLink(storedValue('dsh-personal-workbench:reading-link',''))||'');
         const [editingFeed,setEditingFeed]=React.useState(false);
         const [feedDraft,setFeedDraft]=React.useState('');
         React.useSyncExternalStore(fn=>ctx.locale.subscribe(fn),()=>ctx.locale.getSnapshot());
-        const [briefDay,setBriefDay]=React.useState(()=>restoredUI('briefDay','')),[briefArchive,setBriefArchive]=React.useState(null),[briefReadError,setBriefReadError]=React.useState(null);
-        const [foldedDay,setFoldedDay]=React.useState(()=>storedValue('dsh-personal-workbench:brief-folded-day',''));
+        const [ownBriefDay,setOwnBriefDay]=React.useState(()=>restoredUI('briefDay','')),[briefArchive,setBriefArchive]=React.useState(null),[briefReadError,setBriefReadError]=React.useState(null);
+        const [ownFoldedDay,setOwnFoldedDay]=React.useState(()=>storedValue('dsh-personal-workbench:brief-folded-day',''));
         const [lastRefreshedAt,setLastRefreshedAt]=React.useState(null);
         const refreshTime=lastRefreshedAt?new Date(lastRefreshedAt).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false}):'未同步';
         const refreshDescription=lastRefreshedAt?'最近刷新成功：'+new Date(lastRefreshedAt).toLocaleString('zh-CN',{hour12:false}):'尚未成功刷新';
-        const [data,setData]=React.useState(null),[monitor,setMonitor]=React.useState(null),[loading,setLoading]=React.useState(true),[tick,setTick]=React.useState(0),[error,setError]=React.useState(''),[readError,setReadError]=React.useState('');
-        const [selectedDate,setSelectedDate]=React.useState(()=>restoredUI('selectedDate','')),[calendarMode,setCalendarMode]=React.useState(()=>restoredUI('calendarMode','day')),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
+        const [ownSelectedDate,setOwnSelectedDate]=React.useState(()=>restoredUI('selectedDate','')),[ownCalendarMode,setOwnCalendarMode]=React.useState(()=>restoredUI('calendarMode','day')),[dayPlan,setDayPlan]=React.useState(null),[planPending,setPlanPending]=React.useState(false),[calendarData,setCalendarData]=React.useState(null),[customProjects,setCustomProjects]=React.useState(()=>projectShortcuts(storedValue(PROJECT_SHORTCUTS_KEY,[]))),[addingProject,setAddingProject]=React.useState(false),[projectForm,setProjectForm]=React.useState({title:'',version:'',progress:'',target:'',icon:'app'}),[projectError,setProjectError]=React.useState('');
+        // The preview keeps separate dates so exiting restores the personal view.
+        function viewField(key,own,setOwn) {
+          return previewing?[exampleView[key],value=>setExampleView(view=>view&&({...view,[key]:value}))]:[own,setOwn];
+        }
+        const [briefDay,setBriefDay]=viewField('briefDay',ownBriefDay,setOwnBriefDay);
+        const [foldedDay,setFoldedDay]=viewField('foldedDay',ownFoldedDay,setOwnFoldedDay);
+        const [selectedDate,setSelectedDate]=viewField('selectedDate',ownSelectedDate,setOwnSelectedDate);
+        const [calendarMode,setCalendarMode]=viewField('calendarMode',ownCalendarMode,setOwnCalendarMode);
         const today=data?.today||localDay(),viewDate=selectedDate||today,monthKey=viewDate.slice(0,7),newsFolded=foldedDay===today;
+        const exampleChange=React.useRef(0);
+        const [clearingExamples,setClearingExamples]=React.useState(false),[exampleDetail,setExampleDetail]=React.useState(null);
+        const [exampleChecks,setExampleChecks]=React.useState(()=>new Map());
+        const sampleDates=React.useMemo(()=>showExamples?exampleCalendar(today,exampleChecks):{},[showExamples,today,exampleChecks]);
+        const exampleFocus=React.useRef(null),exampleTrigger=React.useRef(null);
+        React.useEffect(()=>{
+          if(!exampleDetail)return;
+          exampleFocus.current?.focus({preventScroll:true});
+          return()=>exampleTrigger.current?.focus?.({preventScroll:true});
+        },[exampleDetail]);
+        function toggleExamples() {
+          if(previewing){setExampleDetail(null);setExampleView(null);return;}
+          if(showExamples){void clearExamples();return;}
+          setExampleView({briefDay:'',foldedDay:'',selectedDate:'',calendarMode:ownCalendarMode});
+        }
+        async function clearExamples(){
+          if(clearingExamples)return;
+          setClearingExamples(true);setError('');
+          try{const onboarding=await api('dismissExamples');exampleChange.current++;setData(previous=>previous?{...previous,onboarding}:previous);setExampleDetail(null);}
+          catch{setError('暂时无法退出，请重试。');}
+          finally{setClearingExamples(false);}
+        }
+        function openExample(title,body,event) {
+          exampleTrigger.current=event?.currentTarget||document.activeElement;
+          setExampleDetail({title,body});
+        }
+        function exampleDialog() {
+          if(!exampleDetail)return null;
+          const close=()=>setExampleDetail(null);
+          function onKeyDown(event) {
+            if(event.key==='Escape')close();
+            if(event.key==='Tab'){event.preventDefault();exampleFocus.current?.focus();}
+          }
+          return h('div',{className:'pw-modal-backdrop',onClick:event=>{if(event.target===event.currentTarget)close();}},
+            h('section',{className:'pw-project-dialog pw-project-detail pw-example-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-example-title',onKeyDown},
+              h('header',null,h('h2',{id:'pw-example-title'},exampleDetail.title),
+                h('button',{type:'button',ref:exampleFocus,className:'pw-dialog-close','aria-label':'关闭详情',onClick:close},h(Icon,{name:'dismiss',size:18}))),
+              h('div',{className:'pw-dialog-body'},...exampleDetail.body.split('\n\n').map((paragraph,index)=>h('p',{key:index},paragraph)))));
+        }
+
         React.useEffect(()=>{
           const abort=new AbortController();
           let readingArchive=false;
@@ -7364,7 +7669,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           return()=>{observer.disconnect();delete pet.dataset.compact;pet.style.removeProperty('--pw-news-peer-height');news.style.removeProperty('min-height');};
         },[grid.editing,grid.profile.key,grid.petPlacement,newsFolded]);
         React.useLayoutEffect(()=>{
-          uiUpdates.capture=()=>({selectedDate,calendarMode,briefDay,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
+          uiUpdates.capture=()=>({selectedDate:ownSelectedDate,calendarMode:ownCalendarMode,briefDay:ownBriefDay,editing:grid.editing,pending:pendingChecks.current.size>0,dialog:!!document.querySelector('.pw-project-dialog,.pw-attention[open],.hbc-profile-modal,.hbc-settings'),boardScroll:grid.viewport.current?.scrollTop||0});
           return()=>{uiUpdates.capture=null;};
         });
         const updateScrollRestored=React.useRef(false);
@@ -7394,7 +7699,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         const weekStart=calendarMode==='week'?calendarDates(viewDate,'week')[0]:'';
         const calendarKey=weekStart||monthKey;
         const [weeklyPlan,setWeeklyPlan]=React.useState(null),[hoverWeekDay,setHoverWeekDay]=React.useState(-1);
-        const weekSource=weeklyPlan?.[weekStart];
+        const weekSource=previewing?{availability:'connected',days:{},dayPlanFallback:true}:weeklyPlan?.[weekStart];
         const useWeekPlan=calendarMode==='week'&&weekSource?.dayPlanFallback!==true;
         const plannedWeeks=weekStart||[...new Set((calendarMode==='day'?[viewDate]:calendarDates(viewDate,calendarMode)).filter(d=>d>today&&(calendarMode!=='month'||d.startsWith(monthKey))).map(d=>calendarDates(d,'week')[0]))].join(',');
         React.useEffect(()=>{
@@ -7407,7 +7712,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           }
           return()=>abort.abort();
         },[plannedWeeks,tick]);
-        const futureSource=d=>weeklyPlan?.[calendarDates(d,'week')[0]];
+        const futureSource=d=>previewing?null:weeklyPlan?.[calendarDates(d,'week')[0]];
         React.useEffect(()=>{if(useWeekPlan||viewDate===today){setPlanPending(false);return;}const abort=new AbortController();setPlanPending(true);const version=planVersion.current;api('plan',abort.signal,{date:viewDate}).then(value=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan(value);}).catch(()=>{if(!abort.signal.aborted&&version===planVersion.current)setDayPlan({date:viewDate,availability:'unavailable'});}).finally(()=>{if(!abort.signal.aborted)setPlanPending(false);});return()=>abort.abort();},[viewDate,today,tick,useWeekPlan]);
         React.useEffect(()=>{
           if(calendarMode==='day'||useWeekPlan)return;
@@ -7451,7 +7756,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         },[]);
         React.useEffect(()=>{
           const abort=new AbortController(),version=planVersion.current;reading.current=true;setLoading(true);
-          Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(previous=>version!==planVersion.current&&previous?.plan&&previous.plan.date===next.plan?.date?{...next,plan:previous.plan}:next);setMonitor(previous=>business.availability==='unavailable'?{...previous,availability:'unavailable'}:business);setLastRefreshedAt(Date.now());setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
+          const exampleGeneration=exampleChange.current;
+          Promise.all([api('dashboard',abort.signal),production(abort.signal)]).then(([next,business])=>{if(abort.signal.aborted)return;if(!next?.tasks || !Array.isArray(next.tasks.items))throw new Error('首页暂时无法更新，请稍后刷新。');setData(previous=>({...next,...(version!==planVersion.current&&previous?.plan&&previous.plan.date===next.plan?.date?{plan:previous.plan}:{}),...(exampleGeneration!==exampleChange.current&&previous?.onboarding?{onboarding:previous.onboarding}:{})}));setMonitor(previous=>business.availability==='unavailable'?{...previous,availability:'unavailable'}:business);setLastRefreshedAt(Date.now());setReadError('');}).catch(err=>{if(!abort.signal.aborted)setReadError('更新暂时失败，当前显示上次内容');}).finally(()=>{if(!abort.signal.aborted){reading.current=false;setLoading(false);}});
           return()=>{abort.abort();};
         },[tick]);
         async function saveTask(action,input) {
@@ -7459,7 +7765,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           openingLock.current=true;setSavingTask(true);setError('');
           try {
             await api(action,undefined,input);
-            if(alive.current&&action==='addPlanTask')setTaskTitle('');
+            if(alive.current&&action==='addPlanTask')setTaskTitle(draft=>draft===input.title?'':draft);
           } catch(error) {
             if(alive.current)setError(text(error.message)||'无法保存，请刷新查看。');
           } finally {
@@ -7499,23 +7805,30 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         }
         const mergedData={...data,codexThreads,trackedProjects:customProjects};
         const checkedFor=task=>checks.get(task.id)??Boolean(task.checked);
-        const plan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null,planItems=list(plan?.items),done=planItems.filter(checkedFor).length,attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor);
+        const savedPlan=viewDate===today?data?.plan:dayPlan?.date===viewDate?dayPlan:null;
+        const plan=previewing?(sampleDates[viewDate]||{date:viewDate,availability:'empty',items:[]}):planWithExamples(savedPlan,sampleDates[viewDate]);
+        const planItems=list(plan?.items),done=planItems.filter(checkedFor).length;
+        const attention=attentionItems(mergedData,monitor),attentionKeys=new Set(attention.map(row=>row.key)),rows=activityItems(mergedData,monitor).filter(row=>!attentionKeys.has(row.key)),completed=completedItems(monitor);
         const currentArchive=briefArchive?.selection===briefDay?briefArchive:null;
-        const edition=selectBriefEdition(briefDay,currentArchive?.edition,data?.brief),news=list(edition?.items),reader=safeHTTPS(edition?.url)||(!briefDay?feedURL:null);
+        const edition=previewing?null:selectBriefEdition(briefDay,currentArchive?.edition,data?.brief);
+        const reader=previewing?null:safeHTTPS(edition?.url)||(!briefDay?feedURL:null);
+        const exampleBrief=showExamples&&!list(edition?.items).length&&!reader?exampleEditions[briefDay||exampleIssueDate]:null;
+        const news=exampleBrief?exampleBrief.stories:list(edition?.items);
+        const canReadBrief=Boolean(reader||exampleBrief);
         const briefToday=briefArchive?.today||today;
-        const shownBriefDate=briefDay||edition?.date||briefToday;
+        const shownBriefDate=briefDay||(exampleBrief?exampleIssueDate:edition?.date)||briefToday;
         const briefDates=list(briefArchive?.dates);
         const selectBriefDay=date=>{setBriefReadError(null);setBriefDay(date);};
         const shiftBrief=offset=>selectBriefDay(new Date(Date.parse(shownBriefDate+'T12:00:00Z')+offset*86400000).toISOString().slice(0,10));
         const briefEdition=h('div',{className:'pw-date-nav',role:'group','aria-label':'日报日期'},
-          h('button',{type:'button',onClick:()=>shiftBrief(-1),'aria-label':'前一天日报'},h(Icon,{name:'left',size:14})),
-          h('span',{'aria-live':'polite',title:briefDay?'正在查看所选刊期':'自动跟随最新发布的日报'},briefDateLabel(shownBriefDate,briefToday)),
-          h('button',{type:'button',onClick:()=>shiftBrief(1),'aria-label':'后一天日报'},h(Icon,{name:'chevron',size:14})),
-          h('button',{type:'button',className:'pw-today',onClick:()=>selectBriefDay(''),disabled:!briefDay,'aria-label':'回到最新日报'},briefDates[0]>shownBriefDate?'查看新日报':'最新'),
-          h('button',{type:'button',className:'pw-today',onClick:openBriefConnection,'aria-haspopup':'dialog','aria-label':briefConnection?.provider?'管理日报来源':'连接我的日报',title:briefConnection?.provider?'管理日报来源':'连接我的日报'},
+          h('button',{type:'button',onClick:()=>shiftBrief(-1),disabled:Boolean(exampleBrief)&&shownBriefDate===exampleDates.at(-1),'aria-label':'前一天日报'},h(Icon,{name:'left',size:14})),
+          h('span',{'aria-live':'polite',title:briefDay?'正在查看所选刊期':'自动跟随最新发布的日报'},exampleBrief?shownBriefDate.slice(0,4)+'年'+Number(shownBriefDate.slice(5,7))+'月'+Number(shownBriefDate.slice(8))+'日':briefDateLabel(shownBriefDate,briefToday)),
+          h('button',{type:'button',onClick:()=>shiftBrief(1),disabled:Boolean(exampleBrief)&&shownBriefDate===exampleIssueDate,'aria-label':'后一天日报'},h(Icon,{name:'chevron',size:14})),
+          h('button',{type:'button',className:'pw-today',onClick:()=>selectBriefDay(''),disabled:!briefDay||(Boolean(exampleBrief)&&shownBriefDate===exampleIssueDate),'aria-label':'回到最新日报'},briefDates[0]>shownBriefDate?'查看新日报':'最新'),
+          !previewing&&h('button',{type:'button',className:'pw-today',onClick:openBriefConnection,'aria-haspopup':'dialog','aria-label':briefConnection?.provider?'管理日报来源':'连接我的日报',title:briefConnection?.provider?'管理日报来源':'连接我的日报'},
             h('span',{className:'pw-brief-source-full'},briefConnection?.provider?'管理来源':'连接我的日报'),h('span',{className:'pw-brief-source-short'},briefConnection?.provider?'来源':'连接')));
         const remoteLeadImage=safeHTTPS(edition?.imageUrl);
-        const leadImage=/^[a-f0-9]{16}$/.test(edition?.leadImage?.revision||'')&&/^\d{4}-\d{2}-\d{2}$/.test(edition.date)?'/api/dsh-personal-workbench?'+new URLSearchParams({action:'briefImage',date:edition.date,v:edition.leadImage.revision,archive:edition.leadImage.archive?'1':'0'}):remoteLeadImage;
+        const leadImage=exampleBrief?exampleBrief.cover:/^[a-f0-9]{16}$/.test(edition?.leadImage?.revision||'')&&/^\d{4}-\d{2}-\d{2}$/.test(edition.date)?'/api/dsh-personal-workbench?'+new URLSearchParams({action:'briefImage',date:edition.date,v:edition.leadImage.revision,archive:edition.leadImage.archive?'1':'0'}):remoteLeadImage;
 
         const assistants=assistantOverview(data,monitor),allProjects=customProjects,threadOptions=[...list(data?.threads).filter(item=>sessionId.test(item.id||'')).map(item=>({...item,source:'harness'})),...codexThreads];
         const operationReviews=useAssistantReviews(monitor?.accountId?'operations:'+monitor.accountId:null,
@@ -7551,6 +7864,14 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         const notionTask=task=>task.source==='notion'||(!task.source&&plan?.source==='notion');
         const canCheckTask=task=>task.source!=='connection'&&!String(task.source||'').startsWith('external-')&&task.canCheck!==false&&(!notionTask(task)||plan?.canCheck===true);
         async function checkTask(task) {
+          if(task.source==='example'){
+            setExampleChecks(previous=>{
+              const next=new Map(previous);
+              next.set(task.id,!task.checked);
+              return next;
+            });
+            return;
+          }
           if(pendingChecks.current.has(task.id)||!canCheckTask(task))return;
           const checked=!task.checked;
           pendingChecks.current.set(task.id,checked);
@@ -7621,19 +7942,19 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
             return h(React.Fragment,{key},planNodes(node.children,depth+1));
           });
         }
-        const selectedWeekItems=list(weekSource?.days?.[viewDate]);
+        const selectedWeekItems=[...list(weekSource?.days?.[viewDate]),...list(sampleDates[viewDate]?.items)];
         const sourceURL=safeHTTPS(useWeekPlan?weekSource?.sourceURL:plan?.source!=='connection'&&plan?.url);
         function planBody() {
           if(useWeekPlan){
             if(!weekSource)return skeleton();
             if(!selectedWeekItems.length)return weekSource.availability==='connected'?empty(viewDate===today?'今天还没有安排':'这天还没有安排','可以在卡片下方添加待办。','calendar'):null;
             return selectedWeekItems.map(task=>{
-              if(task.source==='profile')return planRow(task,task.id);
+              if(task.source==='profile'||task.source==='example')return planRow(task,task.id);
               const url=safeHTTPS(task.url);
               return h('p',{key:task.id,className:'pw-plan-note'},url?h('a',{className:'pw-quiet-link',href:url,target:'_blank',rel:'noopener noreferrer'},task.title,h(Icon,{name:'arrow',size:12})):task.title);
             });
           }
-          if((!data&&loading)||planPending)return skeleton();
+          if(!previewing&&((!data&&loading)||planPending))return skeleton();
           const extra=viewDate>today?list(futureSource(viewDate)?.days?.[viewDate]).filter(item=>!planItems.some(task=>task.id===item.id)):[];
           if(!planConnected&&!planEmpty&&!extra.length)return empty('计划暂时没有同步过来',plan?.reason||'请稍后点击右上角刷新，已有待办不会被清空。','calendar');
           const futureRows=extra.map(item=>h('p',{className:'pw-plan-note',key:item.id},safeHTTPS(item.url)?h('a',{className:'pw-quiet-link',href:safeHTTPS(item.url),target:'_blank',rel:'noopener noreferrer'},item.title,h(Icon,{name:'arrow',size:12})):item.title));
@@ -7642,29 +7963,33 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const local=groups.length?groups.map((group,i)=>h('div',{className:'pw-plan-group',key:i},group.title&&group.title!==plan.title&&h('h3',{className:'pw-group-title'},group.title),planNodes(list(group.items).length?group.items:list(group.tasks).map(task=>({type:'task',task}))))):planItems.map((task,i)=>planRow(task,task.id||i));
           return [connection?.provider&&plan?.reason&&h('p',{key:'plan-source-issue',className:'pw-plan-note',role:'status'},plan.reason),...local,...futureRows];
         }
+        function storyAction(item,url,props,...children) {
+          if(exampleBrief)url=item.url;
+          return url?h('a',{...props,href:url,target:'_blank',rel:'noopener noreferrer'},...children):h('span',props,...children);
+        }
         function newsBody() {
-          if(!edition&&briefReadError===briefDay)return empty('日报暂未同步',null,'news');
-          if(!edition&&!currentArchive)return skeleton();
+          if(previewing&&!exampleBrief)return empty('这天暂无日报',null,'news');
+          if(!exampleBrief&&!edition&&briefReadError===briefDay)return empty('日报暂未同步',null,'news');
+          if(!exampleBrief&&!edition&&!currentArchive)return skeleton();
           if(!news.length&&reader)return h('div',{className:'pw-brief-layout'},h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer'},'打开已保存的日报',h(Icon,{name:'arrow',size:12})));
           if(!news.length)return empty(briefDay===briefToday?'今日尚未发布':briefDay>briefToday?'这天尚未到来':briefDay?'这天没有已发布的日报':'暂无已发布日报',briefConnection?.provider?(briefDay&&briefDay!==briefToday?null:'已连接日报归档，新刊发布后会自动显示。'):'可以连接已有日报，或跟助手说“把今天的日报放到'+t('title')+'”。','news');
           const [lead,...quick]=news;
           function storyTitle(item) {
             const title=item.title||'今日资讯',url=safeURL(item.url);
-            return url?h('a',{className:'pw-news-title',href:url,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读：'+title},title)
-              :h('span',{className:'pw-news-title'},title);
+            return storyAction(item,url,{className:'pw-news-title','aria-label':'阅读：'+title},title);
           }
           return h('div',{className:'pw-brief-layout','data-quick':String(quick.length>0)},
             h('article',{className:'pw-brief-lead is-lead'},
               h('div',{className:'pw-brief-copy'},h('h3',null,storyTitle(lead)),
                 lead.summary&&h('p',{className:'pw-news-summary',title:lead.summary},lead.summary),
-                reader&&h('a',{className:'pw-brief-read',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},'阅读全文',h(Icon,{name:'arrow',size:12}))),
-              leadImage&&h('div',{className:'pw-brief-media',key:leadImage},h('img',{className:'pw-news-image',src:leadImage,alt:text(edition?.leadImage?.alt)||news[0]?.title||'日报配图',decoding:'async',
+                canReadBrief&&storyAction(lead,reader,{className:'pw-brief-read','aria-label':'阅读原文'},exampleBrief?'查看原文':'阅读全文',h(Icon,{name:'arrow',size:12}))),
+              leadImage&&h('div',{className:'pw-brief-media',key:leadImage},h('img',{className:'pw-news-image',src:leadImage,alt:exampleBrief?exampleBrief.alt:text(edition?.leadImage?.alt)||news[0]?.title||'日报配图',decoding:'async',
                 referrerPolicy:'no-referrer',onLoad:event=>{const img=event.currentTarget;if(img.naturalWidth&&img.naturalHeight)img.parentElement.style.setProperty('--pw-brief-image-ratio',String(img.naturalWidth/img.naturalHeight));},onError:event=>{const img=event.currentTarget;if(remoteLeadImage&&img.getAttribute('src')!==remoteLeadImage){img.src=remoteLeadImage;return;}img.parentElement.hidden=true;}}))),
             quick.length>0&&h('ol',{className:'pw-news-quick','aria-label':'简讯'},
               quick.map((item,index)=>{
                 const title=item.title||'今日资讯',url=safeURL(item.url)||reader;
-                const row=[h('span',{className:'pw-news-number','aria-hidden':true},index+1),h('span',{className:'pw-news-title',title},title),url&&h(Icon,{name:'arrow',size:12})];
-                return h('li',{key:item.url||index},url?h('a',{href:url,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读第 '+(index+1)+' 条简讯：'+title},...row):h('span',null,...row));
+                const row=[h('span',{className:'pw-news-number','aria-hidden':true},index+1),h('span',{className:'pw-news-title',title},title),(url||exampleBrief)&&h(Icon,{name:'arrow',size:12})];
+                return h('li',{key:item.url||index},storyAction(item,url,{'aria-label':'阅读第 '+(index+1)+' 条简讯：'+title},...row));
               })));
         }
         function petMeetingReminder(todayPlan,now){
@@ -7682,7 +8007,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           return {...meeting,message:meeting.start<=now?'你的会议正在进行，点击这里入会。':'你'+(meeting.startLabel.split(':')[0]>=18?'今晚':'今天')+' '+meeting.startLabel+' 有会议，'+(minutes>=60?'还有 '+Math.floor(minutes/60)+' 小时'+(minutes%60?' '+minutes%60+' 分钟':''):'还有 '+minutes+' 分钟')+'，留意一下时间。'};
         }
         function todayOverview() {
-          const todayPlan = dayPlan?.date === today ? dayPlan : data?.plan?.date === today ? data.plan : null;
+          const ownToday=dayPlan?.date===today?dayPlan:data?.plan;
+          const todayPlan=previewing?sampleDates[today]:list(ownToday?.items).length?ownToday:planWithExamples(ownToday,sampleDates[today]);
           const known = ['connected','empty'].includes(todayPlan?.availability);
           const items = list(todayPlan?.items);
           const remaining = items.filter(item => !checkedFor(item));
@@ -7721,7 +8047,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const emptyNotice=readError?'暂时无法读取待处理事项，请稍后刷新。':!data?'正在读取待处理事项…':'暂时没有需要你处理的事项。';
           return h('details',{className:'pw-attention',ref:attentionRef,onKeyDown:event=>{if(event.key==='Escape'){event.currentTarget.open=false;event.currentTarget.querySelector('summary')?.focus();}}},h('summary',{'aria-label':'需要你处理'+(data&&!readError?'，'+attention.length+' 件事':'')},h('span',{className:'pw-attention-label'},'需要你处理'+(data&&!readError?' · '+attention.length:'')),h(Icon,{name:'chevron',size:12})),h('div',{className:'pw-attention-popover'},!attention.length&&h('p',{className:'pw-attention-empty',role:'status'},emptyNotice),attention.map(row=>h('article',{className:'pw-attention-item',key:row.key},h('div',{className:'pw-attention-item-top'},h('strong',null,row.title),h('span',{className:'pw-attention-tag','data-tone':statusTone(/失败|未完成|需要检查/.test(row.status)?'failed':'attention',row.status)},row.status)),row.note&&h('p',null,row.note),row.destination?h('button',{className:'pw-quiet-link',onClick:event=>{event.currentTarget.closest('details').open=false;navigate(row.destination);}},row.action,h(Icon,{name:'arrow',size:11})):row.url?h('a',{className:'pw-quiet-link',href:row.url,target:'_blank',rel:'noopener noreferrer'},row.action,h(Icon,{name:'arrow',size:11})):null))));
         }
-        function toggleBrief(){const next=newsFolded?'':today;setFoldedDay(next);try{localStorage.setItem('dsh-personal-workbench:brief-folded-day',JSON.stringify(next));}catch{setError('收起状态仅在本次打开时保留');}}
+        function toggleBrief(){const next=newsFolded?'':today;setFoldedDay(next);if(previewing)return;try{localStorage.setItem('dsh-personal-workbench:brief-folded-day',JSON.stringify(next));}catch{setError('收起状态仅在本次打开时保留');}}
         function planViewSelector() {
           return h('div',{className:'pw-segmented',role:'group','aria-label':'计划视图',style:{'--pw-view-index':{day:0,week:1,month:2}[calendarMode]}},
             [['day','日'],['week','周'],['month','月']].map(([value,label])=>h('button',{
@@ -7758,17 +8084,21 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         }
         function weeklyBody(){
           const dates=calendarDates(viewDate,'week');
-          const months=calendarData?.key===calendarKey?calendarData.months:{};
+          const months=previewing?{[monthKey]:{availability:'connected',days:{}}}:calendarData?.key===calendarKey?calendarData.months:{};
           const connected=['connected','partial'].includes(weekSource?.availability);
           const days={...weekSource?.days},counts={};
           if(!useWeekPlan){
             for(const date of dates){
               const record=months?.[date.slice(0,7)]?.days?.[date];
-              const live=date===viewDate&&(planConnected||planEmpty)?planItems:null;
+              const live=date===viewDate&&(planConnected||planEmpty)?planItems.filter(item=>item.source!=='example'):null;
               const items=live||record?.items||(record?.first?[record.first]:null);
               if(items)days[date]=items.map((task,index)=>({...task,id:date+':'+index}));
               counts[date]=live?live.length:record?.count;
             }
+          }
+          for(const date of dates){
+            const examples=sampleDates[date]?.items;if(!examples)continue;
+            const real=list(days[date]);counts[date]=(counts[date]??real.length)+examples.length;days[date]=[...real,...examples];
           }
           const taskLink=(item,date)=>{
             const url=safeHTTPS(item.url);
@@ -7793,7 +8123,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           if(calendarMode==='day')return null;
           if(calendarMode==='week')return weeklyBody();
           const days=calendarDates(viewDate,calendarMode),monthView=calendarMode==='month';
-          const months=calendarData?.key===calendarKey?calendarData.months:{};
+          const months=previewing?{[monthKey]:{availability:'connected',days:{}}}:calendarData?.key===calendarKey?calendarData.months:{};
           const activeMonth=months[monthKey];
           return h('div',{className:'pw-calendar'},
             h('div',{className:'pw-calendar-grid','data-mode':calendarMode,role:'group','aria-label':monthView?'月历':'本周日期'},
@@ -7805,11 +8135,13 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 if(!outside&&date>today&&['connected','partial'].includes(futureSource(date)?.availability)){
                   const items=list(futureSource(date)?.days?.[date]);record={count:items.length,done:items.filter(item=>item.checked||item.status==='已完成').length,items,first:items[0]};
                 }else if(selected&&(planConnected||planEmpty)&&!plan?.coverage?.truncated){
-                  record={count:planItems.length,done,items:planItems.slice(0,2).map(item=>({...item,checked:checkedFor(item)})),first:planItems[0]&&{title:planItems[0].title,checked:checkedFor(planItems[0])}};
-                }else if(isToday&&['connected','empty'].includes(data?.plan?.availability)&&!data.plan.coverage?.truncated){
+                  const own=planItems.filter(item=>item.source!=='example').map(item=>({...item,checked:checkedFor(item)}));
+                  record={count:own.length,done:own.filter(item=>item.checked).length,items:own.slice(0,2),first:own[0]};
+                }else if(!previewing&&isToday&&['connected','empty'].includes(data?.plan?.availability)&&!data.plan.coverage?.truncated){
                   const items=list(data.plan.items);
                   record={count:items.length,done:items.filter(item=>item.checked).length,items:items.slice(0,2),first:items[0]};
                 }
+                if(!outside)record=calendarWithExamples(record,sampleDates[date]);
                 const counted=Number.isInteger(record?.count);
                 const knownEmpty=counted?record.count===0:!record&&month?.availability==='connected';
                 const number=Number(date.slice(8));
@@ -7846,15 +8178,15 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           return h('span',{className:'pw-state','data-state':state,'data-tone':statusTone(state,label),title},label);
         }
         function assistantBody() {
+          if(!data)return readError?empty('助手进展暂时无法读取','请稍后刷新。','activity'):skeleton();
           const operations=assistants.operation;
           const openOperations=()=>navigate({panel:'redflow-workbench'});
           function receipt(row) {
-            const {title,url,key}=row, when=row.deliveredAt||row.updatedAt;
-            const date=assistantDate(when||row.date,assistants.today,Boolean(when));
-            return h('div',{className:'pw-assistant-receipt',key},
-
-              h(row.sessionId||!safeHTTPS(url)?'button':'a',{type:row.sessionId||!safeHTTPS(url)?'button':undefined,onClick:row.sessionId?()=>navigate({session:row.sessionId}):!safeHTTPS(url)&&row.date?()=>navigate({briefDate:row.date}):undefined,className:'pw-quiet-link',href:row.sessionId?undefined:safeHTTPS(url),target:row.sessionId?undefined:'_blank',rel:'noopener noreferrer',title,
-                'aria-label':'查看结果：'+title},h('span',{className:'pw-assistant-result-name'},title),h(Icon,{name:'arrow',size:11}))); 
+            const href=row.sessionId||row.open?null:safeHTTPS(row.url);
+            const open=row.open||(row.sessionId?()=>navigate({session:row.sessionId}):!href&&row.date?()=>navigate({briefDate:row.date}):undefined);
+            return h('div',{className:'pw-assistant-receipt',key:row.key},
+              h(href?'a':'button',{...(href?{href,target:'_blank',rel:'noopener noreferrer'}:{type:'button',onClick:open}),className:'pw-quiet-link',title:row.title,
+                'aria-label':'查看结果：'+row.title},h('span',{className:'pw-assistant-result-name'},row.title),h(Icon,{name:'arrow',size:11})));
           }
           function assistantCard({name,icon,status,detail,next,reviews,open,currentEmpty='暂无进行中的任务',action='打开'}) {
             const result=reviews.latest,when=result&&(result.deliveredAt||result.updatedAt||result.date);
@@ -7867,6 +8199,23 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 h('div',{className:'pw-assistant-field'},h('dt',{className:'pw-assistant-label'},h('span',null,'上次成果'),when&&h('span',{className:'pw-assistant-result-time'},assistantDate(when,assistants.today,true))),h('dd',{className:'pw-assistant-value'},result?receipt(result):h('span',null,reviews.unavailable?'成果待同步':'暂无成果')))),
               open&&h('button',{className:'pw-dashboard-action pw-assistant-open',type:'button','aria-label':action+name,title:action+name,onClick:open},h(Icon,{name:'arrow',size:16})));
           }
+          function exampleAgentCards(){
+            const previousDay=new Date(Date.parse(today+'T12:00:00Z')-86400000).toISOString().slice(0,10);
+            const rows=[
+              {name:'运营助手',icon:h('img',{className:'pw-operations-icon',src:operationsIcon,alt:''}),state:'done',label:'已完成',
+                progress:'本周选题已经整理好，可用于下一轮内容排期。',next:'明天 09:00',result:'本周三个内容选题',date:previousDay+'T16:20:00',
+                body:'从反馈记录中选出三个题目：新人第一次设置、跨页面找回任务，以及把访谈原话放回需求卡。先写新人设置，素材和配图已准备好。'},
+              {name:'日报助手',icon:h(Icon,{name:'news',size:22}),state:'done',label:'已更新',
+                progress:exampleStories[0].title,result:exampleStories[0].title,date:exampleIssueDate,
+                body:exampleStories[0].summary}
+            ];
+            return rows.map(row=>{
+              const open=event=>openExample(row.result,row.body,event);
+              return h(React.Fragment,{key:row.name},assistantCard({name:row.name,icon:row.icon,status:badge(row.state,row.label),
+                detail:{text:row.progress},next:row.next?'下次执行 · '+row.next:undefined,reviews:{latest:{key:row.name,title:row.result,date:row.date,open}},open}));
+            });
+          }
+          if(previewing)return h('div',{className:'pw-assistant-list pw-assistant-feed'},exampleAgentCards());
           const timeline=assistantTimeline(operations,operationReviews,assistants.synced);
           const primary=timeline.current;
           const operation=assistantCard({
@@ -7884,7 +8233,7 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const previous=previousAssistantResult(dailyReviews.results,{contentKey:'brief:'+currentDate,date:currentDate});
           const destination=dailyDestination(dailyJob,brief);
           const dailyCard=assistantCard({
-            name:'日报助手',icon:h(Icon,{name:'news',size:22}),status:badge(daily.state,daily.label,daily.warning),
+            name:dailyJob?.name||'日报助手',icon:h(Icon,{name:'news',size:22}),status:badge(daily.state,daily.label,daily.warning),
             detail:daily.warning?{label:'原因',text:daily.warning}:currentResult?{label:'本次成果',text:currentResult.title,url:currentResult.url,briefDate:currentResult.date}:daily.state==='active'?{text:'正在制作本次日报'}:null,
             next:daily.next?'下次执行 · '+daily.next:undefined,reviews:{latest:previous},
             currentEmpty:brief?.date===assistants.today&&list(brief.items).length?brief.items[0].title:'暂无进行中的任务',
@@ -7893,8 +8242,8 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
           const jobs=list(data?.automations?.items);
           const seen=new Set(jobs.map(job=>job.sessionId));
           const agents=jobs.filter(job=>job!==dailyJob).map(job=>({id:job.id,name:job.name,sessionId:job.sessionId,execution:job.execution,schedule:job.status==='paused'?'已暂停':job.scheduleLabel,result:job.result,lastRun:job.lastRun}));
-          for(const session of list(data?.ai?.items))if(!seen.has(session.id)&&(session.running===true||pending(session.pendingInput)||queued(session.queue)))agents.push({id:session.id,name:session.title,sessionId:session.id,execution:session});
-          const cards=agents.slice(0,6).map(agent=>{
+          for(const session of list(data?.ai?.items))if(!seen.has(session.id)&&(session.followed||followed.includes(session.id)||session.running===true||pending(session.pendingInput)||queued(session.queue)))agents.push({id:session.id,name:session.title,sessionId:session.id,execution:session,followed:session.followed});
+          const cards=agents.filter((agent,index)=>index<6||agent.followed||followed.includes(agent.sessionId)).map(agent=>{
             const state=agent.execution,waiting=pending(state?.pendingInput),running=state?.running===true;
             const label=waiting?inputLabel(state.pendingInput):running?'进行中':queued(state?.queue)?'排队中':state?.running===false?'等待开始':'状态待同步';
             return h(React.Fragment,{key:agent.id},assistantCard({name:agent.name,icon:h(Icon,{name:'activity',size:22}),status:badge(running?'active':waiting?'attention':'unknown',label),
@@ -7902,7 +8251,26 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
               reviews:{latest:agent.result?{title:text(agent.result.text).split('\n').find(Boolean)||'本次执行结果',date:agent.result.createdAt||agent.lastRun,key:agent.id,sessionId:agent.sessionId}:null},
               open:agent.sessionId?()=>navigate({session:agent.sessionId}):null}));
           });
-          return h('div',{className:'pw-assistant-list pw-assistant-feed'},operation,dailyCard,cards);
+          const hasOperations=monitor?.availability==='connected'||Boolean(primary);
+          const hasDaily=Boolean(dailyJob||briefConnection?.provider||list(brief?.items).length);
+          const hasCards=hasOperations||hasDaily||cards.length>0||showExamples;
+          const sessions=list(data?.ai?.items).filter(session=>!seen.has(session.id));
+          const sources=!showExamples&&h('details',{className:'pw-assistant-sources'},
+            h('summary',null,'管理助手来源'),
+            h('div',null,sessions.length?sessions.map(session=>h('label',{key:session.id},h('input',{type:'checkbox',checked:session.followed||followed.includes(session.id),onChange:async event=>{
+                const checked=event.target.checked;
+                if(session.followed&&!checked){
+                  try{await api('unfollowAssistant',undefined,{id:session.id});setTick(value=>value+1);}
+                  catch{setError('暂时无法移除助手，请重试。');return;}
+                }
+                followSession(session.id,checked);
+              }}),session.title)):
+              h('p',null,'还没有可选会话。先在 DeepSeek 打开「新会话」，给助手发一条消息，再回到这里刷新。'),
+              h('button',{type:'button',className:'pw-quiet-link',onClick:openBriefConnection},'接入已有日报任务')));
+          if(!hasCards)return empty('把助手进展放在手边','在 DeepSeek 和想收录的助手说“把这个助手加入个人 AI 工作台”，就能在这里查看它的进展。','activity');
+          return h(React.Fragment,null,h('div',{className:'pw-assistant-list pw-assistant-feed'},
+            hasOperations&&operation,hasDaily&&dailyCard,cards,showExamples&&exampleAgentCards()),sources);
+
         }
 
         const activeProject=allProjects.find(project=>project.id===activeProjectId);
@@ -8018,24 +8386,26 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 pending.length>0&&h('button',{type:'button',className:'pw-layout-button is-primary',disabled:handingOff,onClick:()=>void handoff(activeProject,pending)},h('span',{className:'pw-action-label'},'复制待办并打开对话')))));
         }
         function projectBody() {
-          if(!allProjects.length)return empty('把项目放在手边','在聊天中说“把这个项目加入'+t('title')+'”，之后可直接回到开发对话。','grid');
+          const projectsToShow=previewing?exampleProjectCards:showExamples?[...allProjects,...exampleProjectCards]:allProjects;
+          if(!projectsToShow.length)return empty('把项目放在手边','在聊天中说“把这个项目加入'+t('title')+'”，之后可直接回到开发对话。','grid');
           const field=(key,label,value)=>h('div',{className:'pw-project-field','data-field':key},
             h('dt',{className:'pw-project-field-label'},label),
             h('dd',{className:'pw-project-field-value',title:value||undefined},value||'—'));
-          return h('div',{className:'pw-project-list pw-project-tiles'},allProjects.map(project=>{
+          return h('div',{className:'pw-project-list pw-project-tiles'},projectsToShow.map(project=>{
+            const showingExamples=exampleProjectCards.includes(project);
             const event=list(project.github?.value?.history)[0],pull=project.github?.value?.pull;
             const progress=event?.label||pull?.label||projectProgress(project),version=project.version?['v'+project.version]:[];
             const store=project.store?.value;
-            const phase=store?.label||pull?.state||event?.state||(project.repositoryState==='ambiguous'?'待确认仓库':'进展待同步');
-            const status=['REJECTED','TAKEN_DOWN','UPLOAD_FAILED'].includes(store?.stage)?'failed':store?.attention?'attention':phase.includes('发布')?'done':store?.stage||pull?'active':'unknown';
+            const phase=showingExamples?project.phase:store?.label||pull?.state||event?.state||(project.repositoryState==='ambiguous'?'待确认仓库':'进展待同步');
+            const status=showingExamples?project.tone:['REJECTED','TAKEN_DOWN','UPLOAD_FAILED'].includes(store?.stage)?'failed':store?.attention?'attention':phase.includes('发布')?'done':store?.stage||pull?'active':'unknown';
             const storeNext={PENDING_REVIEW:'等待商店审核',STAGED:'到商店后台发布',REJECTED:'查看退回原因',UPLOAD_FAILED:'检查上传失败原因',TAKEN_DOWN:'查看下架原因',UPLOADED:'前往商店送审'}[store?.stage];
-            const next=storeNext||(pull?'查看待合并 PR':event?.url?'查看本次更新':list(notes[project.id]?.requirements).find(row=>!row.done)?.title);
+            const next=showingExamples?project.next:storeNext||(pull?'查看待合并 PR':event?.url?'查看本次更新':list(notes[project.id]?.requirements).find(row=>!row.done)?.title);
             return h('article',{className:'pw-project-row',key:project.id,'data-card-action':'true',onClick:activateCard},
               h('div',{className:'pw-project-heading'},
                 project.icon?.startsWith('data:image/png;base64,')?h('img',{className:'pw-project-icon',src:project.icon,alt:''}):h('span',{className:'pw-project-icon is-placeholder'},h(Icon,{name:project.icon==='writing'?'news':project.id==='today-plan'?'calendar':'grid',size:21})),
                 h('div',null,h('h3',{title:project.title},project.title),version.length>0&&h('p',{className:'pw-project-version',title:version.join(' · ')},version[0])),
                 h('div',{className:'pw-project-meta'},badge(status,phase))),
-              h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>openProject(project,event),
+              h('button',{className:'pw-dashboard-action pw-project-enter',type:'button',onClick:event=>showingExamples?openExample(project.title,progress+'\n\n下一步：'+next,event):openProject(project,event),
                 'aria-label':'进入项目：'+project.title,title:'进入项目：'+project.title},h(Icon,{name:'arrow',size:17})),
               h('dl',{className:'pw-project-facts'},
                 field('progress','最新进展',progress||'尚未同步开发进展'),next&&field('next','下一步',next)),
@@ -8051,9 +8421,9 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
         }
         function projectDialog(){if(!addingProject)return null;return h('div',{className:'pw-modal-backdrop'},h('form',{className:'pw-project-dialog',role:'dialog','aria-modal':true,'aria-labelledby':'pw-add-title',onSubmit:saveProject,onKeyDown:event=>{if(event.key==='Escape')setAddingProject(false);}},h('h2',{id:'pw-add-title'},'添加项目'),h('p',null,'给已有对话留一个入口，下次直接接着做。'),h('label',null,'项目名称',h('input',{autoFocus:true,maxLength:50,required:true,value:projectForm.title,onChange:e=>setProjectForm(value=>({...value,title:e.target.value}))})),h('label',null,'关联对话',h('select',{required:true,value:projectForm.target,onChange:e=>{const selected=threadOptions.find(item=>item.source+':'+item.id===e.target.value);setProjectForm(value=>({...value,target:e.target.value,title:value.title||selected?.title||''}));}},h('option',{value:''},threadOptions.length?'选择一个已有对话':'请先在 Harness 或 Codex 创建对话'),threadOptions.map(item=>h('option',{key:item.source+':'+item.id,value:item.source+':'+item.id},item.title+' · '+(item.source==='codex'?'Codex':'Harness'))))),h('label',null,'当前版本（选填）',h('input',{maxLength:40,value:projectForm.version,placeholder:'例如 0.1.0',onChange:e=>setProjectForm(value=>({...value,version:e.target.value.replace(/^v/,'' )}))})),h('label',null,'当前进展（选填）',h('input',{maxLength:120,value:projectForm.progress,onChange:e=>setProjectForm(value=>({...value,progress:e.target.value}))})),h('label',null,'图标',h('select',{value:projectForm.icon,onChange:e=>setProjectForm(value=>({...value,icon:e.target.value}))},h('option',{value:'app'},'应用'),h('option',{value:'writing'},'内容'))),projectError&&h('p',{role:'alert',className:'pw-footer-message'},projectError),h('footer',null,h('button',{type:'button',className:'pw-layout-button',onClick:()=>setAddingProject(false)},'取消'),h('button',{type:'submit',className:'pw-layout-button is-primary',disabled:!threadOptions.length},'添加'))));}
         const contentProps={className:'pw-card-content',ref:node=>{if(node)node.toggleAttribute('inert',grid.editing);}};
-        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden',position:'relative',containerType:'inline-size',containerName:'pw-frame'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h(FlowBackground,{root}),h(OrangeWaveBackground,{root}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject||usageOpen||connectionOpen||!!node.closest('.pwb')?.querySelector('.pw-appearance-dialog'));}},
-          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,t('title'))),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},'完成'))):h(React.Fragment,null,attentionSummary(),h('button',{className:'pw-layout-button',onClick:grid.edit},h(Icon,{name:'grid',size:13}),'编辑布局'),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))),personalTools())),
-          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},showWelcome&&h('aside',{className:'pw-welcome','aria-label':'开始使用'},h('div',null,h('strong',null,'从今天的一件事开始'),h('p',null,'可以直接添加待办，也可以在「今日计划」点「连接我的计划」，导入已有安排。想用 AI？先在 DeepSeek 中配置模型，再点击「AI个人助手」。日报和项目会在你添加内容后出现。')),h('button',{type:'button',className:'pw-dialog-close','aria-label':'收起使用提示',onClick:closeWelcome},h(Icon,{name:'dismiss',size:16}))),h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,'data-grid-profile':grid.profile.key,'data-pet-placement':grid.petPlacement,style:grid.canvasStyle},
+        return h('div',{className:'pw-assistant-frame',style:{display:'flex',flex:1,minWidth:0,minHeight:0,height:'100%',overflow:'hidden',position:'relative',containerType:'inline-size',containerName:'pw-frame'}},h('div',{className:'pwb','data-ui-build':WORKBENCH_UI_BUILD,ref:root,'data-editing':String(grid.editing),style:{flex:'1 1 0',minWidth:0}},h(FlowBackground,{root}),h(OrangeWaveBackground,{root}),h('style',null,css),h('div',{className:'pw-shell',ref:node=>{if(node)node.toggleAttribute('inert',addingProject||!!activeProject||usageOpen||connectionOpen||!!exampleDetail||appearanceOpen);}},
+          h('header',{className:'pw-head'},h('p',{className:'pw-plugin-name',title:'dsh-personal-workbench'},'dsh-personal-workbench'),h('div',{className:'pw-head-title'},h('h1',null,t('title'))),h('div',{className:'pw-head-actions'},grid.editing?h('div',{className:'pw-layout-edit-controls'},h('p',{className:'pw-layout-help',id:'pw-layout-help'},'拖动顶部换位置，拉动右下角调整大小'),h('div',{className:'pw-layout-edit-buttons'},h('button',{className:'pw-layout-button is-quiet',onClick:grid.reset},'恢复默认'),h('button',{className:'pw-layout-button',onClick:grid.cancel},'取消'),h('button',{className:'pw-layout-button is-primary',onClick:grid.finish},h('span',{className:'pw-action-label'},'完成')))):h(React.Fragment,null,attentionSummary(),h('button',{type:'button',className:'pw-layout-button pw-example-toggle','aria-pressed':showExamples,disabled:!data||clearingExamples,onClick:toggleExamples},clearingExamples?'清除中…':previewing?'退出示例':showExamples?'清除示例':'查看示例'),h('button',{className:'pw-layout-button',onClick:grid.edit},h('span',{className:'pw-action-label'},h(Icon,{name:'grid',size:16}),'编辑布局')),h('button',{className:'pw-refresh',title:refreshDescription,'aria-label':'刷新首页，'+refreshDescription,'aria-busy':loading,disabled:loading,onClick:()=>setTick(v=>v+1)},h(Icon,{name:'refresh',size:16}),h('span',{className:'pw-refresh-time'},lastRefreshedAt?refreshTime:loading?'同步中':'未同步'))),personalTools())),
+          h('main',{className:'pw-homeboard',ref:grid.viewport,'aria-label':'每日概览'},h('div',{className:'pw-grid-canvas','data-fit-content':grid.fitContent,'data-grid-profile':grid.profile.key,'data-pet-placement':grid.petPlacement,style:grid.canvasStyle},
             h('div',{className:'pw-overview-column pw-overview-left'},
             h('section',{...grid.card('news'),className:'pw-card pw-news pw-news-banner','data-folded':String(newsFolded&&!grid.editing),'aria-label':'AI每日精选'},grid.handles('news','AI每日精选'),h('div',contentProps,
               h('header',{className:'pw-card-head'},
@@ -8063,11 +8433,11 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                   h(Icon,{name:newsFolded?'down':'up',size:16})),
                 newsFolded&&!grid.editing&&(news[0]?.title||reader)&&h('div',{className:'pw-brief-folded-headline'},
                   news[0]?.title&&h('span',{title:news[0].title},news[0].title),
-                  reader&&h('a',{className:'pw-card-link',href:reader,target:'_blank',rel:'noopener noreferrer','aria-label':'阅读原文'},
+                  canReadBrief&&storyAction(news[0],reader,{className:'pw-card-link','aria-label':'阅读原文'},
                     '阅读原文',h(Icon,{name:'arrow',size:11})))),
               !newsFolded||grid.editing?h('div',{className:'pw-card-body'},newsBody()):null)),
             h('section',{...grid.card('activity'),className:'pw-card pw-activity pw-assistants','aria-label':'AI 助手任务进展'},grid.handles('activity','AI 助手任务进展'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'AI 助手任务进展'))),h('div',{className:'pw-card-body'},assistantBody()))),
-            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'项目进展'},grid.handles('projects','项目进展'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'项目进展')),h('button',{type:'button',className:'pw-head-action','aria-label':'添加项目',title:'添加项目',onClick:()=>{setProjectError('');setAddingProject(true);}},'+')),h('div',{className:'pw-card-body'},projectBody())))),
+            h('section',{...grid.card('projects'),className:'pw-card pw-projects','aria-label':'项目进展'},grid.handles('projects','项目进展'),h('div',contentProps,h('header',{className:'pw-card-head'},h('div',{className:'pw-card-title'},h('h2',null,'项目进展')),!previewing&&h('button',{type:'button',className:'pw-head-action','aria-label':'添加项目',title:'添加项目',onClick:()=>{setProjectError('');setAddingProject(true);}},'+')),h('div',{className:'pw-card-body'},projectBody())))),
             h('div',{className:'pw-overview-column pw-overview-right'},
             h('div',{className:'pw-companion-stack'},
             h('section',{...grid.card('pet'),className:'pw-card pw-pet pw-overview-pet','aria-label':'猫咪个人助手'},grid.handles('pet','Data 助手'),h('div',{...contentProps,className:'pw-pet-content',ref:node=>{if(node){contentProps.ref(node);paintPetBackdrop(root.current,node);}}},h('div',{className:'pw-pet-art'},typeof renderFactorySlot==='function'?renderFactorySlot('dsh.personalWorkbenchCat.assistant',{dockTarget:assistantDock,onOpenChange:setAssistantOpen}):h('span',null,'助手连接中')),todayOverview())),financeCards()),
@@ -8079,12 +8449,12 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
                 h('div',{className:'pw-card-body'},planBody())),
               data?.organization?.canOpenTodayPlan&&(useWeekPlan?selectedWeekItems.some(item=>item.source==='local'):plan?.source==='local'||planItems.some(item=>item.source==='local'))&&h('button',{type:'button',className:'pw-plan-source',onClick:()=>api('openTodayPlan',undefined,{}).catch(()=>setError('暂时无法打开今日计划。'))},'在今日计划中打开',h(Icon,{name:'arrow',size:11})),
               sourceURL&&h('a',{className:'pw-plan-source',href:sourceURL,target:'_blank',rel:'noopener noreferrer'},h(Icon,{name:'check',size:13}),'已同步到 Notion',h(Icon,{name:'arrow',size:11})),
-              h('button',{type:'button',className:'pw-plan-source pw-connection-entry','aria-haspopup':'dialog',onClick:openPlanConnection},h(Icon,{name:'calendar',size:14}),connection?.provider?'管理计划来源':'连接我的计划'),
-              h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
+              !previewing&&connection?.provider&&h('div',{className:'pw-plan-prompt'},h('button',{type:'button',className:'pw-quiet-link','aria-haspopup':'dialog',onClick:event=>{connectionTrigger.current=event.currentTarget;setConnectionOpen('plan');}},'管理计划来源')),
+              !previewing&&h('form',{className:'pw-card-foot pw-task-form',onSubmit:event=>{event.preventDefault();if(taskTitle.trim())void saveTask('addPlanTask',{title:taskTitle,date:viewDate});}},
                 h('input',{'aria-label':'新待办',placeholder:'添加这天的待办…',value:taskTitle,maxLength:200,onChange:event=>setTaskTitle(event.target.value)}),
                 h('button',{type:'submit',disabled:savingTask||!taskTitle.trim()},'添加')))))),
-          h('footer',{className:'pw-credit','aria-label':'DSH · Designed by XUANQING'},h('span',null,'DSH'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'XUANQING'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'),h('button',{type:'button',className:'pw-credit-help',onClick:()=>{setShowWelcome(true);grid.viewport.current?.scrollTo({top:0,behavior:'smooth'});}},'使用帮助'))),
-          h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),projectDialog(),projectDetail(),usageDetail(),connectionOpen&&h(SourceConnectionDialog,{kind:connectionOpen,connection:connectionOpen==='brief'?briefConnection:connection,readError:connectionError,retry:()=>setConnectionRetry(value=>value+1),onSaved:next=>{if(connectionOpen==='brief'){setBriefConnection(next);setBriefDay('');}else setConnection(next);setTick(value=>value+1);},onClose:closePlanConnection})),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
+          h('footer',{className:'pw-credit','aria-label':'设计署名'},h('span',null,'Designed by '),h('span',{className:'pw-credit-name'},'玄清'),h('span',{className:'pw-credit-separator','aria-hidden':true},' · '),h('span',null,'© 2026'))),
+          h('div',{className:readError||error||grid.notice.includes('无法保存')?'pw-footer pw-footer-message':'pw-layout-live',role:'status'},readError || error || grid.notice)),exampleDialog(),projectDialog(),projectDetail(),usageDetail(),connectionOpen&&h(SourceConnectionDialog,{kind:connectionOpen,connection:connectionOpen==='brief'?briefConnection:connection,readError:connectionError,retry:()=>setConnectionRetry(value=>value+1),onSaved:next=>{if(connectionOpen==='brief'){setBriefConnection(next);setBriefDay('');}else setConnection(next);setTick(value=>value+1);},onClose:closePlanConnection})),h('div',{ref:setAssistantDock,className:'pw-assistant-dock',style:{display:assistantOpen?'flex':'none',flex:assistantOpen?'0 1 480px':'0 0 0',width:assistantOpen?'42%':0,minWidth:0,minHeight:0,overflow:'hidden'}}));
       }
       ctx.slots.inject('sidebar.panellist',()=>ctx.slots.register({name:'sidebar.panellist',id:'personal-workbench',order:-10,label:()=>t('title')},()=>h(SidebarAvatar)));
       ctx.slots.inject('main',()=>ctx.slots.register({name:'main',key:'personal-workbench'},Panel));

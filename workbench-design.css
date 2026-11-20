@@ -263,40 +263,36 @@ body:has(.pwb) .hbc-profile-simple .hbc-profile-save:active:not(:disabled) {
  transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion),border-color var(--pw-ui-motion);
 }
 
-/* Task hover accents text and the existing left rule, gently brightening glass.
-   Keep geometry and the other three edges unchanged. */
-.pwb .pw-plan .pw-week-planner a.pw-week-task,
-.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event {
- transition:background-color var(--pw-ui-motion),border-left-color var(--pw-ui-motion),color var(--pw-ui-motion);
-}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible),
-.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span[href]:is(:hover,:focus-visible),
-.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:hover {
- background:var(--pw-ui-item-hover);color:var(--pw-ui-accent);
- border-left-color:var(--pw-ui-accent);box-shadow:none;
-}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible) .pw-week-task-title {color:inherit}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible) small {color:var(--pw-muted)}
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:active,
-.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:active {background:rgba(255,255,255,.38)}
-
-/* Weekly labels remain visible at rest, including the complete multi-day span.
-   Header copy and task copy share an 8 px text inset (2 px rule + 6 px padding). */
+/* Task previews keep the same shape for external links, local date buttons
+   and unscheduled text. Their semantics and click actions remain independent. */
 .pwb .pw-plan .pw-week-planner {--pw-week-label:rgba(255,255,255,.56);--pw-week-label-hover:rgba(255,255,255,.74);--pw-week-text-inset:8px}
 .pwb .pw-plan .pw-week-tasks {gap:4px}
 .pwb .pw-plan .pw-week-spans {row-gap:4px;padding:0 0 4px}
-.pwb .pw-plan .pw-week-planner a.pw-week-task,
-.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span {
- min-height:22px;padding:4px 6px;border:0;border-left:2px solid rgba(84,92,96,.22);
- border-radius:5px;background:var(--pw-week-label);color:var(--pw-ui-ink);
- box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);font:400 10px/14px var(--pw-body);
+.pwb .pw-plan .pw-week-planner :is(a,button,span).pw-week-task,
+.pwb .pw-plan .pw-week-planner .pw-week-spans .pw-week-task.pw-week-span {
+ display:block;box-sizing:border-box;min-width:0;min-height:22px;padding:4px 6px;
+ border:0;border-left:2px solid rgba(84,92,96,.22);border-radius:5px;
+ background:var(--pw-week-label);color:var(--pw-ui-ink);
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);
+ font:400 10px/14px var(--pw-body);text-align:left;text-decoration:none;
 }
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:is(:hover,:focus-visible),
-.pwb .pw-plan .pw-week-planner .pw-week-spans a.pw-week-span[href]:is(:hover,:focus-visible) {
+.pwb .pw-plan .pw-week-unscheduled .pw-week-task {margin-top:5px}
+.pwb .pw-plan .pw-week-planner .pw-week-task,
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event {
+ transition:background-color var(--pw-ui-motion),border-left-color var(--pw-ui-motion),color var(--pw-ui-motion);
+}
+.pwb .pw-plan .pw-week-planner :is(a,button,span).pw-week-task:is(:hover,:focus-visible),
+.pwb .pw-plan .pw-week-planner .pw-week-spans .pw-week-task.pw-week-span:is(:hover,:focus-visible) {
  background:var(--pw-week-label-hover);border-left-color:var(--pw-ui-accent);
  box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);color:var(--pw-ui-accent);
 }
-.pwb .pw-plan .pw-week-planner a.pw-week-task[href]:active {background:rgba(255,255,255,.84)}
+.pwb .pw-plan .pw-week-planner .pw-week-task:is(:hover,:focus-visible) .pw-week-task-title {color:inherit}
+.pwb .pw-plan .pw-week-planner .pw-week-task:is(:hover,:focus-visible) small {color:var(--pw-muted)}
+.pwb .pw-plan .pw-week-planner :is(a[href],button).pw-week-task:active {background:rgba(255,255,255,.84)}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:hover {
+ background:var(--pw-ui-item-hover);color:var(--pw-ui-accent);border-left-color:var(--pw-ui-accent);box-shadow:none;
+}
+.pwb .pw-plan .pw-calendar-grid[data-mode=month] .pw-calendar-event:active {background:rgba(255,255,255,.38)}
 
 /* The card is one action. Only hovering its ellipsis highlights that local
    target; keyboard focus remains on the card, with its existing focus ring. */
@@ -491,6 +487,7 @@ body:has(.pwb) {
 }
 /* Appearance choices share the same neutral glass surface; four columns on desktop. */
 .pwb .pw-project-dialog.pw-appearance-dialog {width:min(680px,100%)}
+.pwb .pw-appearance-dialog > .pw-dialog-body {scrollbar-gutter:auto}
 .pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(4,minmax(0,1fr))}
 .pwb[data-lime-background],.pwb .pw-background-thumb.is-lime {background:var(--pw-ui-lime-background)}
 @container pw-root (max-width:720px) {.pwb .pw-appearance-dialog .pw-background-options {grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -798,12 +795,12 @@ body:has(.pwb) {
 .pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-context,.pw-assistant-value),
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-receipt a,
 .pwb .pw-grid-canvas .pw-plan .pw-plan-text,
-.pwb .pw-grid-canvas .pw-news .pw-news-quick a,
+.pwb .pw-grid-canvas .pw-news .pw-news-quick :is(a,button),
 .pwb .pw-grid-canvas .pw-news .pw-brief-read {color:var(--pw-ui-body)}
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-review .pw-assistant-receipt .pw-quiet-link {color:var(--pw-ui-body)}
 .pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-content-link,.pw-assistant-receipt a):is(:hover,:focus-visible),
 .pwb .pw-grid-canvas .pw-assistant-feed .pw-assistant-review .pw-assistant-receipt .pw-quiet-link:is(:hover,:focus-visible),
-.pwb .pw-grid-canvas .pw-news :is(.pw-brief-read,.pw-news-quick a):is(:hover,:focus-visible) {color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-news :is(.pw-brief-read,.pw-news-quick :is(a,button)):is(:hover,:focus-visible) {color:var(--pw-ui-accent)}
 .pwb .pw-grid-canvas .pw-project-tiles :is(.pw-project-field-label,.pw-project-version),
 .pwb .pw-grid-canvas .pw-assistant-feed :is(.pw-assistant-label,.pw-assistant-next,.pw-assistant-result-time,.pw-assistant-placeholder,.pw-assistant-review-empty),
 .pwb .pw-grid-canvas .pw-plan :is(.pw-group-title,.pw-plan-meta,.pw-plan-time,.pw-plan-note),
@@ -835,8 +832,8 @@ body:has(.pwb) {
 .pwb .pw-grid-canvas .pw-project-facts {margin-top:16px;gap:0}
 .pwb .pw-grid-canvas .pw-state {font:400 11px/16px var(--pw-body);padding:2px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.4)}
 .pwb .pw-grid-canvas .pw-news-quick li + li {border-top:1px solid var(--pw-ui-line)}
-.pwb .pw-grid-canvas .pw-news-quick li > a {padding-block:8px;min-height:40px;box-shadow:none}
-.pwb .pw-grid-canvas .pw-news-quick li > a:hover {background:transparent;box-shadow:none;color:var(--pw-ui-accent)}
+.pwb .pw-grid-canvas .pw-news-quick li > :is(a,button) {padding-block:8px;min-height:40px;box-shadow:none}
+.pwb .pw-grid-canvas .pw-news-quick li > :is(a,button):hover {background:transparent;box-shadow:none;color:var(--pw-ui-accent)}
 .pwb .pw-grid-canvas .pw-brief-copy h3 {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.4}
 .pwb .pw-grid-canvas .pw-brief-copy .pw-news-summary {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;font:400 14px/22px var(--pw-body)}
 .pwb .pw-grid-canvas .pw-brief-copy {display:flex;flex-direction:column;min-width:0;gap:12px}
@@ -859,12 +856,6 @@ body:has(.pwb) {
 .pwb .pw-task-form button:active:not(:disabled) {background:var(--pw-ui-primary-down)}
 .pwb .pw-task-form button:disabled {opacity:.45}
 .pwb .pw-grid-canvas .pw-pet.pw-overview-pet .pw-pet-content {background:radial-gradient(ellipse at 12% 30%,rgba(150,215,220,.20),transparent 65%),radial-gradient(ellipse at 95% 90%,rgba(182,182,218,.12),transparent 60%),rgba(255,255,255,.2)}
-.pwb .pw-welcome {display:flex;gap:16px;align-items:start;padding:16px 20px;margin-bottom:20px;border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-card);background:rgba(255,255,255,.3)}
-.pwb .pw-welcome strong {font:600 14px/22px var(--pw-body)}
-.pwb .pw-welcome p {margin:4px 0 0;font:400 12px/18px var(--pw-body);color:var(--pw-ui-muted)}
-.pwb .pw-welcome > button {flex:none;margin-left:auto;width:32px;height:32px;padding:0;display:grid;place-items:center;background:transparent;border:0;border-radius:10px;color:var(--pw-ui-muted);cursor:pointer;transition:background-color var(--pw-ui-motion)}
-.pwb .pw-welcome > button:hover {background:var(--pw-ui-hover);color:var(--pw-ui-accent)}
-.pwb .pw-credit {gap:0;flex-wrap:wrap}
 /* Assistant is bundled with this public package; it uses the same neutral controls. */
 body:has(.pwb) .pw-assistant-dock .hbc-drawer {background:var(--pw-ui-surface);color:var(--pw-ui-ink);backdrop-filter:var(--pw-ui-blur)}
 body:has(.pwb) .pw-assistant-dock .hbc-settings {background:transparent;color:var(--pw-ui-ink);border-color:var(--pw-ui-line)}
@@ -873,10 +864,8 @@ body:has(.pwb) .pw-assistant-dock .hbc-settings textarea {background:var(--pw-ui
 body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button) {color:var(--pw-ui-ink);background:rgba(255,255,255,.34);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-button);transition:background-color var(--pw-ui-motion)}
 body:has(.pwb) .pw-assistant-dock :is(.hbc-drawer-head button,.hbc-settings button):hover {background:var(--pw-ui-hover)}
 body:has(.pwb) .pw-assistant-dock .hbc-drawer-head button:last-child {width:32px;height:32px;padding:0;border-color:transparent;border-radius:10px}
-@container pw-root (max-width:560px) {.pwb .pw-welcome{padding:12px;margin-bottom:16px}.pwb .pw-plan .pw-calendar-grid[data-mode=week]>button{padding-inline:4px}}
+@container pw-root (max-width:560px) {.pwb .pw-plan .pw-calendar-grid[data-mode=week]>button{padding-inline:4px}}
 @media(prefers-reduced-motion:reduce) {.pwb *,body:has(.pwb) .pw-assistant-dock *{scroll-behavior:auto!important;transition-duration:0s!important;animation-duration:0s!important}}
-.pwb .pw-credit-help {padding:2px 6px;margin-left:10px;background:transparent;border:0;border-radius:6px;color:inherit;font:inherit;cursor:pointer;transition:background-color var(--pw-ui-motion),color var(--pw-ui-motion)}
-.pwb .pw-credit-help:is(:hover,:focus-visible) {background:var(--pw-ui-hover);color:var(--pw-ui-accent)}
 /* Week dates share one calendar board. Only the hovered column receives a wash. */
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period] {background:transparent;border:0;box-shadow:none;transform:none}
 .pwb .pw-grid-canvas .pw-plan .pw-calendar-grid[data-mode=week] > button[data-period]:is(:hover,:focus-visible) {background:var(--pw-ui-hover-white-layer);border:0;box-shadow:none;transform:none}
@@ -890,17 +879,12 @@ body:has(.pwb) dialog.pw-public-profile {
 .pwb .pw-plan-source:hover {text-decoration:underline}
 .pwb .pw-connection-entry {align-self:flex-start;min-height:28px}
 .pwb .pw-project-dialog.pw-plan-connection {display:flex;flex-direction:column;width:min(460px,100%);max-height:100%;min-height:0;overflow:hidden;padding:0}
-.pwb .pw-plan-connection .pw-dialog-body {overflow-wrap:anywhere}
-.pwb .pw-plan-connection label {display:block;margin:16px 0 0;color:var(--pw-ui-ink);font:600 13px/20px var(--pw-body)}
-.pwb .pw-plan-connection :is(input,select) {width:100%;min-width:0;font:400 14px/20px var(--pw-body)}
-.pwb .pw-connection-location {display:flex;align-items:center;gap:8px;margin-top:6px}
-.pwb .pw-plan-connection .pw-connection-location input {flex:1 1 0;margin:0}
-.pwb .pw-connection-location button {flex:none}
-.pwb .pw-plan-connection .pw-connection-hint {display:block;margin:6px 0 0;font:400 12px/18px var(--pw-body);color:var(--pw-ui-muted)}
-.pwb .pw-plan-connection details {margin-top:16px}
-.pwb .pw-plan-connection summary {width:fit-content;cursor:pointer;font:400 13px/20px var(--pw-body);color:var(--pw-ui-body)}
-.pwb .pw-plan-connection summary:hover {color:var(--pw-ui-accent)}
-.pwb .pw-plan-connection pre {margin:6px 0 0;white-space:pre-wrap}
+.pwb .pw-project-dialog.pw-plan-connection > .pw-dialog-body {display:grid;align-content:start;gap:var(--pw-ui-space-field);overflow-wrap:anywhere;scrollbar-gutter:auto}
+.pwb .pw-project-dialog.pw-plan-connection > .pw-dialog-body > p {margin:0;color:var(--pw-ui-body)}
+.pwb .pw-plan-connection label {display:grid;gap:6px;margin:0;color:var(--pw-ui-ink);font:600 13px/20px var(--pw-body)}
+.pwb .pw-plan-connection label :is(input,select) {box-sizing:border-box;width:100%;min-width:0;margin:0;font:400 14px/20px var(--pw-body)}
+.pwb .pw-plan-connection .pw-connection-prompt {margin:0;padding:12px 14px;border:1px solid var(--pw-ui-edge);border-radius:var(--pw-ui-radius-field);background:var(--pw-ui-inner);color:var(--pw-ui-body);white-space:pre-wrap;overflow-wrap:anywhere;font:400 13px/1.6 ui-monospace,monospace;user-select:text}
+.pwb .pw-plan-connection > footer {display:flex;align-items:center;justify-content:flex-end;gap:8px}
 .pwb .pw-connection-summary {display:flex;align-items:flex-start;gap:8px;padding:14px;background:var(--pw-ui-inner);border:1px solid var(--pw-ui-line);border-radius:var(--pw-ui-radius-field)}
 .pwb .pw-connection-summary svg {flex:none;margin-top:2px;color:var(--pw-ui-accent)}
 .pwb .pw-connection-summary p {margin:4px 0 0;color:var(--pw-ui-muted)}
@@ -926,8 +910,6 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  .pw-public-profile .pw-pet-preview-art {display:none}
 }
 
-.pwb .pw-grid-canvas .pw-finance-cards .pw-quota-card .pw-spend-heading {padding-inline-end:0;flex-wrap:wrap;gap:2px 8px;min-width:0}
-.pwb .pw-finance-cards .pw-quota-card .pw-quota-connect {color:var(--pw-ui-accent);font-size:11px;line-height:16px}
 .pwb .pw-quota-card .pw-quota-other-list {display:none}
 .pwb .pw-quota-other-count,.pwb .pw-quota-other-list {font-size:12px;color:var(--pw-ui-body)}
 @container pw-finance (min-width:300px) {
@@ -946,3 +928,22 @@ body:has(.pwb) .pw-public-profile .pw-profile-save:hover:not(:disabled) {backgro
  .pwb .pw-brief-source-full {display:none}
  .pwb .pw-brief-source-short {display:inline}
 }
+
+.pwb .pw-project-dialog.pw-example-dialog {width:min(460px,100%)}
+.pwb :where(.pw-brief-layout button,.pw-brief-folded-headline button) {
+  appearance:none;background:transparent;border:0;margin:0;padding:0;
+  color:inherit;font:inherit;text-align:start;cursor:pointer;
+}
+.pwb .pw-brief-layout .pw-news-quick button {width:100%}
+
+.pwb .pw-plan-prompt {display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;margin:4px var(--pw-ui-panel-inset-x) 8px;color:var(--pw-ui-muted);font:var(--pw-ui-meta-font)}
+.pwb .pw-plan-prompt button {font:inherit}
+.pwb .pw-assistant-sources {margin-block:12px 0;font:var(--pw-ui-meta-font);color:var(--pw-ui-body)}
+.pwb .pw-assistant-sources summary {width:fit-content;cursor:pointer;color:var(--pw-ui-accent)}
+.pwb .pw-assistant-sources > div {display:grid;justify-items:start;gap:8px;margin-block-start:10px}
+.pwb .pw-assistant-sources label {display:flex;align-items:center;gap:8px;overflow-wrap:anywhere}
+
+.hbc-drawer .pw-chat-launch {display:grid;justify-items:start;gap:var(--pw-ui-space-field,12px)}
+.hbc-drawer .pw-chat-launch p {margin:0}
+.hbc-drawer .pw-chat-launch a {display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:var(--pw-ui-radius-button,10px);background:var(--pw-ui-accent,#076567);color:white;text-decoration:none}
+.hbc-drawer .pw-chat-launch a:hover {background:var(--pw-ui-primary-hover,#084c4e)}

@@ -9,10 +9,10 @@
 3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.12/dsh-personal-workbench-0.8.0-beta.12.tgz
+https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz
 ```
 
-如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载 0.8.0-beta.12](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.12/dsh-personal-workbench-0.8.0-beta.12.tgz)
+如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
 
 ## 先加一条待办
 
@@ -20,14 +20,14 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 
 ## 让已有的计划出现在工作台
 
-在「今日计划」点「连接我的计划」，选择你平时使用的工具，然后点「读取并连接」。连接窗口会显示试读结果。以后从同一个入口可以更换来源或断开。
+在聊天中告诉 AI 个人助手“把我的 Notion 计划接到今日计划”，把 Notion 换成自己使用的工具，再按提示提供链接或文件位置。
 
-| 你的计划在哪里 | 需要选择什么 |
+| 你的计划在哪里 | 可以发给助手什么 |
 | --- | --- |
-| Obsidian | 选择保存日记的文件夹，例如每天一篇 `YYYY-MM-DD.md`。工作台读取日期范围内笔记中的 `- [ ]` 和 `- [x]` 待办。 |
-| Notion | 复制一行一件事的数据库链接。数据库需要标题和日期列。首次使用时在 Notion 把数据库共享给自己的集成，在连接窗口填写集成密钥。本机已配置该令牌时可留空。 |
+| Obsidian | 提供保存日记的文件夹路径，例如每天一篇 `YYYY-MM-DD.md`。工作台读取日期范围内笔记中的 `- [ ]` 和 `- [x]` 待办。 |
+| Notion | 复制一行一件事的数据库链接。数据库需要标题和日期列。首次使用时在 Notion 把数据库共享给自己的集成，在本机配置集成凭证。 |
 | 飞书 | 打开多维表格的具体数据表或视图，复制链接。电脑需要安装官方飞书 CLI 并以有权查看该表的个人账号登录。 |
-| 其他工具 | 选择一个带日期的 Markdown 或 JSON 计划文件。可以先导出一次试用；工作台会重新读取原文件中的更新。 |
+| 其他工具 | 提供一个带日期的 Markdown 或 JSON 计划文件。可以先导出一次试用；工作台会重新读取原文件中的更新。 |
 
 外部计划在原工具中编辑。工作台保持打开时会定期重读，切回工作台时也会检查更新。工作台自己添加的待办也能继续使用。
 
@@ -39,13 +39,13 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 
 ## 和你的 Data 聊天
 
-在 Data 旁点「聊聊」，或点顶部「AI个人助手」。如果 Harness 请你选择工作区，就选平时使用的那个。首次使用 AI 须先在 Harness 配好自己的模型。
+如果你已经能在 DeepSeek Harness 里聊天，装好插件后点右上角「AI个人助手」即可开始。第一次打开会自动创建 Data 的专属对话，再次打开会接着聊。如果是第一次使用 Harness，请先在宿主里登录或配置自己的模型。
 
-可以试着说「把明天准备演示加入计划」，或「把这份已完成的日报放到工作台，第一条是头条」。回到工作台即可核对保存结果。自己的日报出现在「AI每日精选」，助手的任务进度出现在「AI 助手任务进展」。
+可以试着说「把明天准备演示加入计划」，或「把这份已完成的日报放到工作台，第一条是头条」。回到工作台即可核对保存结果。自己的日报出现在「AI每日精选」。想持续查看某个 DeepSeek 助手的进展，在它的会话里说“把这个助手加入个人 AI 工作台”。
 
 ## 调整布局和外观
 
-「编辑布局」可移动和缩放各张卡片。用量和额度可以分开调。右上角头像打开「工作台设置」，切换背景或头像时可先预览，点「保存」应用，点「取消」回到上次的设置。页底的「使用帮助」可以重新打开入门提示。
+「编辑布局」可移动和缩放各张卡片。用量和额度可以分开调。右上角头像打开「工作台设置」，切换背景或头像时可先预览，点「保存」应用，点「取消」回到上次的设置。右上角的「查看示例」可体验示例日报、项目和计划。点「退出示例」回到自己的工作台。
 
 ## 按需连接自己的工具
 
@@ -54,7 +54,7 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 | 想查看什么 | 准备什么 |
 | --- | --- |
 | 本机用量和 Codex 额度 | 使用支持的 Harness、Codex、Hermes 客户端后，工作台会读取它们在本机已有的用量记录。自定义数据目录可用 `DSH_HOME`、`CODEX_HOME`、`HERMES_HOME` 指定。今日和七日用量按运行 Harness 的电脑所在时区计算；Hermes 只有累计账本，显示在累计明细中。剩余额度取自 Codex 最近返回的限额窗口。 |
-| 自己归档的日报 | 在「AI每日精选」点「连接我的日报」，选择已有日报的归档文件夹，或粘贴文件夹路径。也可以连接空文件夹，等日报生成流程写入。已有配置仍可用 `DSH_WORKBENCH_BRIEF_DIR` 指定归档目录。工作台按刊期读取 `YYYY-MM-DD.json` 与 `YYYY-MM-DD.status.json`，分别用于内容和发布结果。归档中的头图也可随刊期保存在同一归档根目录的 `assets/YYYY-MM-DD/` 中，并由该期头图的 `local_image` 或 `local_path` 引用。 |
+| 自己归档的日报 | 在「AI每日精选」点「连接我的日报」，复制提示词给现有日报任务的助手。已有兼容归档时，点「手动连接归档文件夹」选择文件夹或粘贴路径。也可以连接空文件夹，等日报生成流程写入。已有配置仍可用 `DSH_WORKBENCH_BRIEF_DIR` 指定归档目录。工作台按刊期读取 `YYYY-MM-DD.json` 与 `YYYY-MM-DD.status.json`，分别用于内容和发布结果。归档中的头图也可随刊期保存在同一归档根目录的 `assets/YYYY-MM-DD/` 中，并由该期头图的 `local_image` 或 `local_path` 引用。 |
 | Hermes 日报任务 | 读取自己 Hermes 中已有的定时任务。多个配置可用 `DSH_WORKBENCH_HERMES_PROFILE` 指定，多个日报任务可用 `DSH_WORKBENCH_HERMES_JOB_ID` 指定。macOS 的对话跳转需要本机 Hermes 应用及对应会话。 |
 | 独立「今日计划」应用 | 将 `DSH_WORKBENCH_LOCAL_PLAN_FILE` 指向自己的 `local-plans.json`（今日计划 v1）。工作台读取待办、分组、备注及完成状态。编辑这些记录请回到原应用，工作台新建的待办仍可在本页勾选。 |
 | Notion 日计划 | 在 Notion 将自己的数据源共享给自己的集成。设置 `DSH_WORKBENCH_NOTION_TOKEN` 与 `DSH_WORKBENCH_NOTION_DAILY_SOURCE_ID`。每个日期对应一页，工作台读取「今日计划」标题下的待办。如果有多个日期字段，设置 `DSH_WORKBENCH_NOTION_DAILY_DATE_PROPERTY`；标题不同可设 `DSH_WORKBENCH_NOTION_DAILY_SECTION`。 |
@@ -72,4 +72,4 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 - **看得到计划却不能勾选**。工作台自己的待办可以直接勾选。Notion 需要写入授权，独立「今日计划」的数据请在原应用编辑。
 - **需要报告问题**。提供系统、Harness 和插件版本，加一张遮挡私人信息的截图即可。[提交反馈](https://github.com/xuanqing-95/dsh-personal-workbench/issues)
 
-DSH · Designed by XUANQING · © 2026
+Designed by 玄清 · © 2026

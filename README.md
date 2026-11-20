@@ -20,22 +20,22 @@
 
 ## 安装并记下第一条待办
 
-适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。当前插件版本为 **0.8.0-beta.12**。
+适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。
 
 1. 在 Harness 左侧打开 **插件 → 添加插件**。
 2. 把下面整行地址粘贴到安装框，点击「安装」并按提示启用。
 3. 从侧栏打开「个人 AI 工作台」，在「今日计划」选一个日期，写下要跟进的事，点击「添加」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.12/dsh-personal-workbench-0.8.0-beta.12.tgz
+https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz
 ```
 
-也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-beta.12/dsh-personal-workbench-0.8.0-beta.12.tgz)
+也可以先下载同一安装包，将文件的完整路径粘贴到「添加插件」。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
 
 ## 接上你正在用的工具
 
-- **连接自己的计划**。在「今日计划」点「连接我的计划」，选择 Notion、飞书多维表格、Obsidian 日记或本地计划文件。连接一次，之后在原工具里改计划，工作台会重新读取。点日、周、月即可查看自己的安排。
-- **连接自己的日报**。在「AI每日精选」点「连接我的日报」，选择兼容的日报归档文件夹。以后新刊写入同一文件夹，工作台会读取最新一期。
+- **添加自己的计划**。在聊天中告诉 AI 个人助手“把我的飞书计划接到今日计划”，再按提示提供链接。Notion、Obsidian 或计划文件也可以这样接入。
+- **连接自己的日报**。在「AI每日精选」点「连接我的日报」，将提示词交给已有的日报助手。也可以手动连接兼容的归档文件夹。
 - **和 Data 聊天**。在 Harness 配好自己的模型后，点击「聊聊」，试试“把明天准备演示加入计划”。回到工作台就能核对保存结果。
 - **查看已有项目和自动化**。关联自己的项目后可回到原对话，连接 GitHub 后可查看提交、PR 和版本。已有的 Notion 计划、Hermes 日报任务，以及兼容内容工作台的任务与成果也可按需接入。[连接指南](./START-HERE.md#按需连接自己的工具)
 - **了解数据如何使用**。待办保存在当前 Harness 配置中。模型和第三方服务沿用你自己的账号、权限和额度。[隐私与权限](./PRIVACY.md)
@@ -46,4 +46,4 @@ https://github.com/xuanqing-95/dsh-personal-workbench/releases/download/v0.8.0-b
 
 如需升级，建议等当前聊天完成后再操作。反馈时请注明 Harness 版本、插件版本和操作系统，并遮挡截图中的私人信息。[版本记录](./CHANGELOG.md) · [反馈问题](https://github.com/xuanqing-95/dsh-personal-workbench/issues)
 
-DSH · Designed by XUANQING · © 2026
+Designed by 玄清 · © 2026

@@ -11,13 +11,13 @@ const headers={'content-type':'application/json','x-personal-ui':'1','sec-fetch-
 const uuid='00000000-0000-4000-8000-000000000007';
 const other='00000000-0000-4000-8000-000000000008';
 
-function harness(data=new Map()){
+function harness(data=new Map(),sessions=[]){
   const tools=new Map(),routes=new Map(),cleanups=[];
   const ctx={
     effect(fn){const dispose=fn();if(typeof dispose==='function')cleanups.push(dispose);},
     inject(names,fn){if(names.every(name=>name in ctx))fn(ctx);},
     on(){return ()=>{};},
-    agents:{list:()=>[]},sessionController:{list:async()=>({items:[]})},
+    agents:{list:()=>[]},sessionController:{list:async()=>({items:sessions})},
     schedule:{catalog:async()=>[
       {id:'daily-local',kind:'daily',time:'09:00',timeZone:'UTC',title:'日报',status:'active',scheduledAt:'2026-11-15T09:00:00Z',prompt:'DO_NOT_EXPOSE_SCHEDULE_PROMPT'},
       {id:'ended-once',kind:'at',title:'已结束',status:'ended',scheduledAt:'2026-11-14T09:00:00Z'},
@@ -107,6 +107,10 @@ test('beta.7 profile data, links, notes and task revisions survive an HTTP upgra
   let app=harness(stored);
   try{
     const before=await app.get('dashboard');
+    assert.equal(before.onboarding.showExamples,false,'upgrading an existing profile never inserts examples');
+    const personalBefore=new Map([...stored].filter(([key])=>!key.endsWith('_first_run')).map(([key,value])=>[key,structuredClone(value)]));
+    await app.post('dismissExamples');
+    for(const [key,value] of personalBefore)assert.deepEqual(stored.get(key),value,'clearing examples preserves '+key);
     assert.equal(before.plan.items[0].title,'旧版待办');
     assert.equal(before.brief.deliveryScope,'workbench');assert.equal(before.brief.publicationComplete,false);
     assert.equal((await app.post('checkPlanTask',{id:uuid,date:day,revision:1,checked:true})).status,'done');
@@ -227,5 +231,81 @@ test('existing Harness-configured daily report folders retain precedence',async 
     assert.equal((await app.get('briefConnection')).managed,true);
     assert.equal((await app.request({},{action:'disconnectBrief',input:{}})).status,400);
     assert.equal((await app.request({},{action:'connectBrief',input:{location:os.homedir()}})).status,400);
+  }finally{await app.close();}
+});
+
+test('first-install examples are isolated and clearing persists across reloads',async t=>{
+  await isolate(t);
+  const stored=new Map();let app=harness(stored);
+  try{
+    const dashboard=await app.get('dashboard');
+    assert.equal(dashboard.onboarding.showExamples,true);
+    assert.deepEqual(dashboard.tasks.items,[]);
+    assert.deepEqual((await app.get('projects')).shortcuts,[]);
+    assert.deepEqual((await app.get('briefArchive')).dates,[]);
+    const before=new Map([...stored].filter(([key])=>!key.endsWith('_first_run')).map(([key,value])=>[key,structuredClone(value)]));
+    assert.deepEqual(await app.post('dismissExamples'),{showExamples:false});
+    assert.deepEqual(await app.post('dismissExamples'),{showExamples:false});
+    for(const [key,value] of before)assert.deepEqual(stored.get(key),value,'clear only changes onboarding state');
+    await app.close();app=harness(stored);
+    assert.equal((await app.get('dashboard')).onboarding.showExamples,false);
+    assert.deepEqual((await app.get('dashboard')).tasks.items,[]);
+  }finally{await app.close();}
+});
+
+test('a real task added during the example experience survives clearing',async t=>{
+  await isolate(t);
+  const stored=new Map();let app=harness(stored);
+  try{
+    const first=await app.get('dashboard');
+    assert.equal(first.onboarding.showExamples,true);
+    await app.post('addPlanTask',{title:'我的真实计划',date:first.today});
+    const saved=structuredClone(stored.get('dsh_personal_workbench_tasks'));
+    assert.equal((await app.get('dashboard')).onboarding.showExamples,true,'saving a personal task keeps the examples active');
+    await app.close();app=harness(stored);
+    assert.equal((await app.get('dashboard')).onboarding.showExamples,true,'reopening a mixed workspace keeps the examples');
+    await app.post('dismissExamples');
+    assert.deepEqual(stored.get('dsh_personal_workbench_tasks'),saved);
+    assert.equal((await app.get('plan',{date:first.today})).items[0].title,'我的真实计划');
+    assert.equal((await app.get('dashboard')).onboarding.showExamples,false);
+  }finally{await app.close();}
+});
+
+test('the assistant adds a personal plan and connects a user-supplied source alongside the examples',async t=>{
+  await isolate(t);
+  const app=harness(),folder=os.homedir();
+  try{
+    const {today}=await app.get('dashboard');
+    const plan=app.tools.get('personal_plan'),source=app.tools.get('personal_plan_source');
+    await plan.execute({action:'create',input:{title:'确认访谈时间',priority:'normal',dueDate:today}});
+    await writeFile(path.join(folder,today+'.md'),'- [ ] 检查外部清单');
+    assert.equal((await source.execute({action:'status'})).provider,null);
+    await source.execute({action:'connect',provider:'obsidian',location:folder});
+    const dashboard=await app.get('dashboard');
+    assert.equal(dashboard.onboarding.showExamples,true);
+    for(const title of ['确认访谈时间','检查外部清单'])assert.ok(dashboard.plan.items.some(item=>item.title===title));
+    await app.post('dismissExamples');
+    assert.equal((await source.execute({action:'status'})).provider,'obsidian');
+    assert.equal((await app.get('dashboard')).plan.items.length,2);
+  }finally{await app.close();}
+});
+
+
+test('a chat can follow only its own session and it stays visible outside the recent window',async t=>{
+  await isolate(t);
+  const stored=new Map();
+  const sessions=Array.from({length:20},(_,i)=>({sessionId:'recent-'+i,title:'会话 '+i})).concat({sessionId:uuid,title:'排版助手'});
+  let app=harness(stored,sessions);
+  try{
+    const tool=app.tools.get('personal_workbench_assistant');
+    assert.throws(()=>tool.execute({action:'follow'},{}),/会话/);
+    const exec={agent:{session:{id:uuid}}};
+    await Promise.all([tool.execute({action:'follow'},exec),tool.execute({action:'follow'},exec)]);
+    await app.close();app=harness(stored,sessions);
+    const followed=(await app.get('assistants')).ai.items.filter(s=>s.followed);
+    assert.deepEqual(followed.map(s=>s.title),['排版助手']);
+    assert.equal((await app.get('dashboard')).ai.items[0].id,uuid);
+    await app.post('unfollowAssistant',{id:uuid});
+    assert.ok(!(await app.get('assistants')).ai.items.some(s=>s.followed));
   }finally{await app.close();}
 });

@@ -48,7 +48,8 @@ if(action==='seal'){
     name:pkg.name,title:titles,description:descriptions,author,icon:'icons/workbench.svg',homepage:pkg.homepage,repository:{url:repository},metadata:{keywords:pkg.keywords},
     versions:[{version:pkg.version,publishTimestamp:Math.floor(Date.parse(release.publishedAt)/1000),source:{type:'git',url:repository,commit},engines:{dsh:pkg.engines.dsh}}]
   }]};
-  const fields={titleZh:titles.zh,titleEn:titles.en,descriptionZh:descriptions.zh,author,version:pkg.version,repository,packageUrl,releaseUrl,indexUrl,engines:pkg.engines.dsh};
+  const installUrl=pkg.version.includes('-')?packageUrl:repository+'/releases/latest/download/'+pkg.name+'.tgz';
+  const fields={installUrl,titleZh:titles.zh,titleEn:titles.en,descriptionZh:descriptions.zh,author,version:pkg.version,repository,packageUrl,releaseUrl,indexUrl,engines:pkg.engines.dsh};
   const entities={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
   const template=await readFile('site/index.html','utf8');
   const html=template.replace(/\{\{(\w+)\}\}/g,(_,key)=>{

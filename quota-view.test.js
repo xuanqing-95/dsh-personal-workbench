@@ -10,12 +10,13 @@ function section(start, end) {
   assert.ok(left >= 0 && right > left);
   return source.slice(left, right);
 }
-const quotaView = section('const codexQuota=list(usage?.quotas)', 'const usageTrigger=')
+const quotaView = section('function FinanceMore(', 'function Icon(')
+  + section('const codexQuota=list(usage?.quotas)', 'const usageTrigger=')
   + section('function financeCards(){', 'function usageRing(');
 
-function render(quotas, accounts, canConnectHarness = true) {
+function render(quotas, accounts, canConnectHarness = true, previewing = false) {
   const context = {
-    usage: {quotas}, quotaData: {accounts, canConnectHarness}, quotaError: '', quotaBusy: false,
+    showExamples:previewing, previewing, usage: {quotas}, quotaData: {accounts, canConnectHarness}, quotaError: '', quotaBusy: false,
     list: value => Array.isArray(value) ? value : [],
     h: (type, props, ...children) => ({type, props, children}),
     grid: {card: () => ({}), handles: () => null}, contentProps: {},
@@ -39,7 +40,9 @@ function codex(resetAt) {
 
 test('a client receiving legacy manual accounts still shows the first-run quota card and genuine connection choices', () => {
   const {card, dialog} = render([], [legacyManual]);
-  assert.match(card, /连接额度/);
+  assert.match(card, /剩余额度/);
+  assert.doesNotMatch(card, /···/);
+  assert.doesNotMatch(card, /连接额度|查看额度|管理来源/);
   assert.match(card, /—/);
   assert.match(dialog, /Codex 套餐额度/);
   assert.match(dialog, /连接当前账号/);
@@ -61,4 +64,16 @@ test('both genuine sources keep their own units and expired records never supply
   assert.match(expired.card, /¥16\.80/);
   assert.match(expired.dialog, /等待更新/);
   assert.doesNotMatch(expired.card + expired.dialog, /73%|共 2 个来源/);
+});
+
+test('quota preview uses the normal card and detail labels with an isolated snapshot',()=>{
+  const {card,dialog}=render([], [wallet],true,true);
+  assert.match(card,/剩余额度/);
+  assert.doesNotMatch(card+dialog,/示例/);
+  for(const area of [card,dialog]){
+    assert.match(area,/85%/);
+    assert.match(area,/11\/23 15:58/);
+    assert.doesNotMatch(area,/16\.80|断开连接|连接当前账号/);
+  }
+  assert.doesNotMatch(render([],[]).card,/示例|85%/);
 });
