@@ -924,3 +924,5 @@ body:has(.pwb) dialog.pw-public-profile {
 .hbc-drawer .pw-chat-launch p {margin:0}
 .hbc-drawer .pw-chat-launch a {display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border-radius:var(--pw-ui-radius-button,10px);background:var(--pw-ui-accent,#076567);color:white;text-decoration:none}
 .hbc-drawer .pw-chat-launch a:hover {background:var(--pw-ui-primary-hover,#084c4e)}
+
+.pwb .pw-update-notice {margin-inline-start:12px;color:var(--pw-ui-accent);letter-spacing:normal;text-transform:none;pointer-events:auto;text-decoration:underline;text-underline-offset:3px}

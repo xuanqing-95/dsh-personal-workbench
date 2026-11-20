@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   package:
+    outputs:
+      stable: ${{ steps.version.outputs.stable }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +33,7 @@ jobs:
         run: |
           version=$(node -p 'require("./package.json").version')
           echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if [[ "$version" != *-* ]]; then echo "stable=true" >> "$GITHUB_OUTPUT"; fi
           if [[ "$GITHUB_EVENT_NAME" == push ]]; then
             previous=$(git show "$BEFORE:package.json" | node -p 'JSON.parse(require("fs").readFileSync(0)).version')
             if [[ "$version" != "$previous" ]]; then
@@ -62,6 +65,7 @@ jobs:
             gh release create "$TAG" dist/*.tgz dist/SHA256SUMS --verify-tag --title "$title" --notes-file RELEASE-NOTES.md "${options[@]}"
           fi
       - name: Build installation page for the published plugin
+        if: steps.version.outputs.stable == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -69,11 +73,14 @@ jobs:
           gh release view "$tag" --json isDraft --jq '.isDraft' | grep -Fx false
           node scripts/release.mjs site "$(git rev-parse "${tag}^{commit}")"
       - uses: actions/configure-pages@v5
+        if: steps.version.outputs.stable == 'true'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.version.outputs.stable == 'true'
         with:
           path: dist/site
   pages:
     needs: package
+    if: needs.package.outputs.stable == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -1,6 +1,6 @@
 {
   "name": "dsh-personal-workbench",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "type": "module",
   "description": "一眼查看今日计划、每日 AI 资讯与正在进行的事，点击进入对应页面或对话。",
   "exports": {
@@ -31,6 +31,7 @@
     "project-service.js",
     "project-navigation.js",
     "ui-update-host.js",
+    "release-status.js",
     "ui-release.json",
     "ui-update-client.js",
     "publish-ui.mjs",

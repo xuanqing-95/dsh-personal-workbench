@@ -1,3 +1,4 @@
+import {createReleaseCheck} from './release-status.js';
 import {createUIReleaseReader} from './ui-update-host.js';
 import {attachContent} from './content.js';
 import {planTool} from './plan-tools.js';
@@ -28,6 +29,7 @@ export function apply(ctx) {
   let uiModules;
   ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
   const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
+  const checkRelease=createReleaseCheck();
   const projects=attachProjects(ctx);
   const firstRun=attachFirstRun(ctx);
   const following=attachAssistantFollowing(ctx);
@@ -158,6 +160,7 @@ export function apply(ctx) {
           case 'quotaConnections': return reply({value:await quotas.status()});
           case 'planConnection': return reply({value:await connection.status()});
           case 'briefConnection': return reply({value:await briefs.status()});
+          case 'releaseStatus': return reply({value:await checkRelease()});
           case 'uiRelease': return reply({value:await readUIRelease()});
           case 'usage': return reply({value:await readUsage()});
           case 'projectNotes': return reply({value:await content.changeProjectNotes({action:'list'})});

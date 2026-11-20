@@ -7,8 +7,9 @@ GitHub 是版本记录的主仓。本机只保留开发副本和一次受控回�
 1. 修改源码与 DESIGN.md；公共样式只改 workbench-design.css，执行 npm run sync:design 嵌入客户端，npm run check:design 核对。在全新 Harness profile 试装，验证布局、聊天入口、计划、日报和项目。不要用个人的生产数据测试写入。
 2. 更新 package.json 版本、README、CHANGELOG、RELEASE-NOTES 。安装包只允许 files 白名单。
 3. 执行 `npm ci --ignore-scripts`、`npm test`、`node --check client.js`，再 `npm run release:seal`、`npm run release:verify`。提交 client.js 与 ui-release.json 同一批；禁止只复制 client.js 到已安装工作台。
-4. 将已封装且通过测试的新版提交推送到公开仓库 main。工作流检测 package.json 的版本变化，自动创建对应标签、GitHub Release、安装包和 SHA256SUMS，并更新插件索引。正式版共用固定安装地址，带预发布后缀的版本保留独立下载地址。
-5. 匿名下载 Release 包并核对 SHA256；匿名请求 Pages 索引必须为 2xx 且无重定向；使用实际 Harness 的索引解析与安装路径再验证一次。CI 成功不等于新用户安装成功。
+4. 个人版中已验收的通用改动，在本次迭代中一并移植、测试并提交至公开版；私人集成、凭据和本地数据留在个人版。将已封装且通过测试的新版提交推送到公开仓库 main。工作流检测 package.json 的版本变化，自动创建对应标签、GitHub Release、安装包和 SHA256SUMS，并更新插件索引。正式版共用固定安装地址，带预发布后缀的版本保留独立下载地址。
+5. 稳定索引只指向已发布正式版。0.8.3 起，工作台打开时检查索引；保持打开期间每小时复查。验收时分别确认旧版显示可点击的提醒、最新版隐藏提醒。
+6. 匿名下载 Release 包并核对 SHA256；匿名请求 Pages 索引必须为 2xx 且无重定向；使用实际 Harness 的索引解析与安装路径再验证一次。验收后清理临时测试配置与本地打包产物，历史版本使用 GitHub Releases。
 
 首次需要把仓库设为公开，并在 GitHub Pages 选择 GitHub Actions 来源。后续更新不需要用户重新填写索引地址；宿主是否自动安装由 Harness 控制，不能承诺无确认更新整个插件。
 
