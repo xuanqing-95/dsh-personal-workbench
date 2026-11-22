@@ -15,6 +15,8 @@ jobs:
   package:
     outputs:
       stable: ${{ steps.version.outputs.stable }}
+      publish: ${{ steps.version.outputs.publish }}
+      tag: ${{ steps.version.outputs.tag }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -89,3 +91,42 @@ jobs:
       - name: Publish installation page and index
         id: deployment
         uses: actions/deploy-pages@v4
+
+  npm:
+    needs: package
+    if: needs.package.outputs.stable == 'true' && needs.package.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Publish the verified GitHub Release archive to npm
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.package.outputs.tag }}
+        run: |
+          name=dsh-personal-workbench
+          archive="$name-${TAG#v}.tgz"
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "$archive" --pattern SHA256SUMS
+          awk -v file="$archive" '$2 == file' SHA256SUMS | sha256sum --check --strict
+          expected="sha512-$(openssl dgst -sha512 -binary "$archive" | openssl base64 -A)"
+          metadata="https://registry.npmjs.org/$name/${TAG#v}"
+          status=$(curl --silent --show-error --retry 3 --output metadata.json --write-out '%{http_code}' "$metadata")
+          case "$status" in
+            200) test "$(jq -r '.dist.integrity' metadata.json)" = "$expected" ;;
+            404) npm publish "./$archive" --ignore-scripts --access public --registry=https://registry.npmjs.org/ ;;
+            *) echo "Registry lookup returned HTTP $status"; exit 1 ;;
+          esac
+          # npm may acknowledge an upload before the package is available to users.
+          for attempt in {1..40}; do
+            if curl --fail --silent --show-error --max-time 15 "$metadata" -o metadata.json; then
+              test "$(jq -r '.dist.integrity' metadata.json)" = "$expected"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "The release is still unavailable on npm."
+          exit 1

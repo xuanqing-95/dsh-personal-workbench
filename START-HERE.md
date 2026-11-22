@@ -5,14 +5,14 @@
 ## 安装
 
 1. 在 DeepSeek Harness 左侧点击「插件」，打开「添加插件」。
-2. 将下面的地址整行复制到安装框。
+2. 输入下面的插件包名。
 3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
 
 ```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz
+dsh-personal-workbench
 ```
 
-如果安装框无法从 GitHub 下载，请先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
+如果提示找不到包，可以先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
 
 ## 先加一条待办
 
