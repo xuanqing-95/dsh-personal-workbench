@@ -1,5 +1,9 @@
 # 更新记录
 
+## 0.8.6（2026-11-23）
+
+- GitHub 和 npm 统一分发 GitHub 自动构建的同一份安装包。
+
 ## 0.8.5（2026-11-23）
 
 - 正式安装名调整为 `dsh-personal-workbench-xuanqing`，在 Harness 的「添加插件」输入包名即可安装。
