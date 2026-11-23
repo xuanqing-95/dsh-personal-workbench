@@ -3,7 +3,7 @@ import pkg from './package.json' with {type:'json'};
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 
-const endpoint='https://xuanqing-lab.github.io/dsh-personal-workbench/index.json';
+const endpoint='https://xuanqing-lab.github.io/dsh-personal-workbench-xuanqing/index.json';
 const hour=3600_000;
 const run=promisify(execFile);
 

@@ -69,7 +69,7 @@ dsh-personal-workbench-xuanqing
 - **侧栏没有工作台**。去「插件」核对是否已启用、宿主是否在支持的版本范围。升级或重载整个插件请等当前聊天结束后再做。
 - **卡片为空或显示暂无数据**。先确认自己是否已经保存过待办、日报或项目；额度需要 Codex 实际返回过限额信息。未连接服务时可以继续使用本机功能。
 - **看得到计划却不能勾选**。工作台自己的待办可以直接勾选。Notion 需要写入授权，独立「今日计划」的数据请在原应用编辑。
-- **需要报告问题**。提供系统、Harness 和插件版本，加一张遮挡私人信息的截图即可。[提交反馈](https://github.com/xuanqing-lab/dsh-personal-workbench/issues)
+- **需要报告问题**。提供系统、Harness 和插件版本，加一张遮挡私人信息的截图即可。[提交反馈](https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing/issues)
 
 Designed by 玄清 · © 2026
 

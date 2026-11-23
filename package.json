@@ -1,6 +1,6 @@
 {
   "name": "dsh-personal-workbench-xuanqing",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "type": "module",
   "description": "一眼查看今日计划、每日 AI 资讯与正在进行的事，点击进入对应页面或对话。",
   "exports": {
@@ -112,13 +112,13 @@
     "check:design": "node sync-design.mjs --check"
   },
   "author": "XUANQING（玄清）",
-  "homepage": "https://github.com/xuanqing-lab/dsh-personal-workbench",
+  "homepage": "https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xuanqing-lab/dsh-personal-workbench.git"
+    "url": "git+https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing.git"
   },
   "bugs": {
-    "url": "https://github.com/xuanqing-lab/dsh-personal-workbench/issues"
+    "url": "https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing/issues"
   },
   "license": "SEE LICENSE IN LICENSE"
 }

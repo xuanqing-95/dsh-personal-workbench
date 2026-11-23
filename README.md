@@ -15,7 +15,7 @@ dsh-personal-workbench-xuanqing
 
 安装完成后点「立即启用」，就能从左侧打开「个人 AI 工作台」。
 
-[![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://github.com/xuanqing-lab/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)](https://github.com/xuanqing-lab/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)
+[![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing/raw/refs/heads/main/site/preview.png)](https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing/raw/refs/heads/main/site/preview.png)
 
 *图中使用示例数据。首次打开即可添加自己的待办，接入的项目、日报和用量记录会显示在相应卡片。*
 
@@ -45,6 +45,6 @@ dsh-personal-workbench-xuanqing
 
 可免费安装、使用并原样分享官方安装包，分享时请保留署名、许可、隐私说明和官方来源。修改后再发布须另获授权。[使用许可](./LICENSE) · [第三方声明](./THIRD_PARTY_NOTICES.md)
 
-如需升级，建议等当前聊天完成后再操作。反馈时请注明 Harness 版本、插件版本和操作系统，并遮挡截图中的私人信息。[版本记录](./CHANGELOG.md) · [反馈问题](https://github.com/xuanqing-lab/dsh-personal-workbench/issues)
+如需升级，建议等当前聊天完成后再操作。反馈时请注明 Harness 版本、插件版本和操作系统，并遮挡截图中的私人信息。[版本记录](./CHANGELOG.md) · [反馈问题](https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing/issues)
 
 Designed by 玄清 · © 2026

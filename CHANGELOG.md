@@ -1,5 +1,9 @@
 # 更新记录
 
+## 0.8.7（2026-11-23）
+
+- GitHub 仓库名与安装名统一为 `dsh-personal-workbench-xuanqing`，更新和反馈入口已使用新地址。
+
 ## 0.8.6（2026-11-23）
 
 - GitHub 和 npm 统一分发 GitHub 自动构建的同一份安装包。

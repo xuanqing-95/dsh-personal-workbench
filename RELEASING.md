@@ -21,4 +21,4 @@ GitHub 是版本记录的主仓。本机只保留开发副本和一次受控回�
 
 发布验收包含宿主启用和打开侧栏工作台。使用独立配置分别检查单装与个人版共存，核对公开 API、创建并读回临时待办，确认宿主没有组件启用错误后再宣布可用。GitHub README 是统一分享入口，Pages 兼容旧链接并继续托管索引。
 
-按包名安装使用 npm 公共包 `dsh-personal-workbench-xuanqing`。首次由维护者登录 npm，核对 GitHub Release 的 SHA256 后发布同一个版本化 tgz，再在 npm 为该包绑定可信发布者 `xuanqing-lab/dsh-personal-workbench` 的 `release.yml` 工作流（GitHub Actions，允许 publish）。后续 main 升正式版本时，工作流直接使用同一 GitHub Release 安装包同步到 npm。重跑时核对已发布版本的完整性。发布后检查官方源与中国大陆镜像，并在空白 Harness 中仅输入包名完成安装和启用。
+按包名安装使用 npm 公共包 `dsh-personal-workbench-xuanqing`。首次由维护者登录 npm，核对 GitHub Release 的 SHA256 后发布同一个版本化 tgz，再在 npm 为该包绑定可信发布者 `xuanqing-lab/dsh-personal-workbench-xuanqing` 的 `release.yml` 工作流（GitHub Actions，允许 publish）。后续 main 升正式版本时，工作流直接使用同一 GitHub Release 安装包同步到 npm。重跑时核对已发布版本的完整性。发布后检查官方源与中国大陆镜像，并在空白 Harness 中仅输入包名完成安装和启用。
