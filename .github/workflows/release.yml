@@ -56,6 +56,11 @@ jobs:
           else
             cp "dist/$archive" "dist/$(node -p 'require("./package.json").name').tgz"
           fi
+          if [[ "$TAG" != *-* ]]; then
+            # Keep the original shared download link serving the original package.
+            gh release download v0.8.3 --pattern dsh-personal-workbench.tgz --dir dist
+            (cd dist && echo '3eb491854f87975e6eb3556b40653b1cbbcf33413c1a974b8784336a9064e3cc  dsh-personal-workbench.tgz' | sha256sum --check --strict)
+          fi
           (cd dist && sha256sum *.tgz > SHA256SUMS)
           if ! git show-ref --quiet --verify "refs/tags/$TAG"; then
             git tag "$TAG" "$GITHUB_SHA"
@@ -108,7 +113,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ needs.package.outputs.tag }}
         run: |
-          name=dsh-personal-workbench
+          name=dsh-xuanqing-personal-workbench
           archive="$name-${TAG#v}.tgz"
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "$archive" --pattern SHA256SUMS
           awk -v file="$archive" '$2 == file' SHA256SUMS | sha256sum --check --strict

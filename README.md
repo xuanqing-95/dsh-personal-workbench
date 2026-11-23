@@ -11,12 +11,14 @@
 3. 从侧栏打开「个人 AI 工作台」，在「今日计划」选一个日期，写下要跟进的事，点击「添加」。
 
 ```text
-dsh-personal-workbench
+dsh-xuanqing-personal-workbench
 ```
 
-如果提示找不到包，可将[GitHub 仓库地址](https://github.com/xuanqing-95/dsh-personal-workbench)粘贴到同一个安装框，也可以下载后填写安装包的完整路径。[下载安装包](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
+已安装旧包 `dsh-personal-workbench` 的用户可以继续使用 0.8.3。要迁移，请等聊天结束，在「插件」中卸载旧包，再在同一份 Harness 配置中安装并启用上面的新包。
 
-[![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://github.com/xuanqing-95/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)](https://github.com/xuanqing-95/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)
+如果提示找不到包，可将[GitHub 仓库地址](https://github.com/xuanqing-lab/dsh-personal-workbench)粘贴到同一个安装框，也可以下载后填写安装包的完整路径。[下载安装包](https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz)
+
+[![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://github.com/xuanqing-lab/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)](https://github.com/xuanqing-lab/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)
 
 *图中使用示例数据。首次打开即可添加自己的待办，接入的项目、日报和用量记录会显示在相应卡片。*
 
@@ -40,14 +42,12 @@ dsh-personal-workbench
 
 ## 更新插件
 
-从 0.8.3 起，打开工作台后会检查 GitHub 正式版。出现「有新版本」时，点开可查看该版的改动和安装地址。保持工作台打开时每小时检查一次。0.8.2 及更早的用户可用本页顶部的固定地址升级一次，以后就会看到提醒。
-
-先等当前聊天完成，在 Harness 的「插件」中卸载旧插件，再用顶部的固定地址添加并启用新版。
+从 0.8.4 起，工作台在打开时和使用期间每小时检查新地址。有正式新版时，点页首「有新版本」即可查看改动和升级说明。旧包 0.8.3 的更新地址已经失效，需要按本页上方的步骤手动迁移一次。
 
 ## 分享与反馈
 
 可免费安装、使用并原样分享官方安装包，分享时请保留署名、许可、隐私说明和官方来源。修改后再发布须另获授权。[使用许可](./LICENSE) · [第三方声明](./THIRD_PARTY_NOTICES.md)
 
-如需升级，建议等当前聊天完成后再操作。反馈时请注明 Harness 版本、插件版本和操作系统，并遮挡截图中的私人信息。[版本记录](./CHANGELOG.md) · [反馈问题](https://github.com/xuanqing-95/dsh-personal-workbench/issues)
+如需升级，建议等当前聊天完成后再操作。反馈时请注明 Harness 版本、插件版本和操作系统，并遮挡截图中的私人信息。[版本记录](./CHANGELOG.md) · [反馈问题](https://github.com/xuanqing-lab/dsh-personal-workbench/issues)
 
 Designed by 玄清 · © 2026

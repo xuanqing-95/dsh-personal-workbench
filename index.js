@@ -28,7 +28,7 @@ export function apply(ctx) {
 
   let uiModules;
   ctx.inject?.(['clientModules'],child=>{uiModules=child.clientModules;child.effect(()=>()=>{uiModules=undefined;});});
-  const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-personal-workbench",modules:()=>uiModules});
+  const readUIRelease=createUIReleaseReader({directory:new URL('./',import.meta.url),moduleId:"dsh-xuanqing-personal-workbench",modules:()=>uiModules});
   const checkRelease=createReleaseCheck();
   const projects=attachProjects(ctx);
   const firstRun=attachFirstRun(ctx);

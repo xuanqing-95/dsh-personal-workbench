@@ -1,11 +1,7 @@
-# 0.8.3 · 个人 AI 工作台
+# 0.8.4 · 个人 AI 工作台
 
-从这一版开始，后续有新正式版时，工作台页首会显示「有新版本」。点击提醒即可查看改动和安装说明。
+在 DeepSeek Harness 打开「插件 → 添加插件」，输入 `dsh-xuanqing-personal-workbench`，安装并启用后从侧栏打开「个人 AI 工作台」。更新提醒已改用新仓库账号的索引。
 
-等当前聊天完成后，在 DeepSeek Harness 的「插件」中卸载旧版。点击「添加插件」，粘贴以下地址，安装并启用。
+旧包 `dsh-personal-workbench` 的 0.8.3 可继续使用。迁移时请等聊天结束，再在同一个 Harness 配置中卸载旧包、安装新包。
 
-```text
-https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz
-```
-
-[项目介绍与安装说明](https://github.com/xuanqing-95/dsh-personal-workbench)
+[安装与迁移说明](https://github.com/xuanqing-lab/dsh-personal-workbench)

@@ -9,10 +9,12 @@
 3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
 
 ```text
-dsh-personal-workbench
+dsh-xuanqing-personal-workbench
 ```
 
-如果提示找不到包，可以先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-95/dsh-personal-workbench/releases/latest/download/dsh-personal-workbench.tgz)
+已安装旧包 `dsh-personal-workbench` 的用户可以继续使用 0.8.3。要迁移，请等聊天结束，在「插件」中卸载旧包，再在同一份 Harness 配置中安装并启用上面的新包。
+
+如果提示找不到包，可以先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz)
 
 ## 先加一条待办
 
@@ -70,6 +72,6 @@ dsh-personal-workbench
 - **侧栏没有工作台**。去「插件」核对是否已启用、宿主是否在支持的版本范围。升级或重载整个插件请等当前聊天结束后再做。
 - **卡片为空或显示暂无数据**。先确认自己是否已经保存过待办、日报或项目；额度需要 Codex 实际返回过限额信息。未连接服务时可以继续使用本机功能。
 - **看得到计划却不能勾选**。工作台自己的待办可以直接勾选。Notion 需要写入授权，独立「今日计划」的数据请在原应用编辑。
-- **需要报告问题**。提供系统、Harness 和插件版本，加一张遮挡私人信息的截图即可。[提交反馈](https://github.com/xuanqing-95/dsh-personal-workbench/issues)
+- **需要报告问题**。提供系统、Harness 和插件版本，加一张遮挡私人信息的截图即可。[提交反馈](https://github.com/xuanqing-lab/dsh-personal-workbench/issues)
 
 Designed by 玄清 · © 2026
