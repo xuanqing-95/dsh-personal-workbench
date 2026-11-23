@@ -1,5 +1,9 @@
 # 更新记录
 
+## 0.8.5（2026-11-23）
+
+- 正式安装名调整为 `dsh-personal-workbench-xuanqing`，在 Harness 的「添加插件」输入包名即可安装。
+
 ## 0.8.4（2026-11-23）
 
 - 新安装包名为 `dsh-xuanqing-personal-workbench`，更新索引和反馈链接已迁移到 xuanqing-lab。旧包 0.8.3 保留。

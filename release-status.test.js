@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createReleaseCheck} from './release-status.js';
 
-const index=version=>({plugins:[{name:'dsh-xuanqing-personal-workbench',versions:[{version}]}]});
+const index=version=>({plugins:[{name:'dsh-personal-workbench-xuanqing',versions:[{version}]}]});
 test('update notice compares the installed version to the published stable index',async()=>{
   for(const [version,latest,expected] of [
     ['0.9.9','0.10.0','0.10.0'],['0.10.0-beta.2','0.10.0','0.10.0'],

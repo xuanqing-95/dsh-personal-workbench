@@ -8,7 +8,7 @@
 2. 复制下面这行，粘贴进去，点「安装」。
 
 ```text
-https://github.com/xuanqing-lab/dsh-personal-workbench
+dsh-personal-workbench-xuanqing
 ```
 
 安装完成后点「立即启用」，就能从左侧打开「个人 AI 工作台」。
@@ -73,6 +73,6 @@ https://github.com/xuanqing-lab/dsh-personal-workbench
 
 Designed by 玄清 · © 2026
 
-## 如果已安装 0.8.3 旧版
+## 如果已安装 0.8.3 或 0.8.4
 
 你可以继续使用旧版。想升级时，等聊天结束，在同一份 Harness 配置的「插件」中卸载旧版，再按本页开头的步骤安装新版。
