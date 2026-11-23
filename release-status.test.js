@@ -23,3 +23,19 @@ test('concurrent opens share a check; a network failure can recover',async()=>{
   time+=3600_000;assert.equal((await check()).available,'0.10.0');
   assert.equal((await check()).available,'0.10.0');assert.equal(calls,2);
 });
+
+test('only the canonical newer release supplies a pinned Git update',async()=>{
+  const commit='a'.repeat(40);
+  const canonical='https://github.com/xuanqing-lab/dsh-personal-workbench-xuanqing';
+  for(const [version,url,hash,expected] of [
+    ['0.8.5',canonical,commit,{available:'0.8.8',commit}],
+    ['0.8.8',canonical,commit,{available:null}],
+    ['0.8.5',canonical,'main',{available:'0.8.8'}],
+    ['0.8.5','https://example.org/fork',commit,{available:'0.8.8'}],
+  ]){
+    const catalog=index('0.8.8');
+    catalog.plugins[0].versions[0].source={type:'git',url,commit:hash};
+    const check=createReleaseCheck({version,request:async()=>catalog});
+    assert.deepEqual(await check(),expected);
+  }
+});

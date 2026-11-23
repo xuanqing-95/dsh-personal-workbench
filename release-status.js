@@ -32,19 +32,20 @@ function newerStableVersion(installed,tag){
 }
 
 export function createReleaseCheck({version=pkg.version,request=readIndex,now=Date.now}={}){
-  let nextCheck=0,pending,available=null;
+  let nextCheck=0,pending,status={available:null};
   async function refresh(){
     try{
       const index=await request();
       const entry=index.plugins.find(plugin=>plugin.name===pkg.name);
-      const latest=entry.versions[0].version;
-      available=newerStableVersion(version,'v'+latest)?latest:null;
+      const {version:latest,source}=entry.versions[0];
+      status={available:newerStableVersion(version,'v'+latest)?latest:null};
+      if(status.available&&source?.type==='git'&&source.url===pkg.homepage&&/^[a-f0-9]{40}$/.test(source.commit))status.commit=source.commit;
       nextCheck=now()+hour;
     }catch{nextCheck=now()+5*60_000;}
-    return {available};
+    return status;
   }
   return function check(){
-    if(now()<nextCheck)return Promise.resolve({available});
+    if(now()<nextCheck)return Promise.resolve(status);
     return pending??=refresh().finally(()=>{pending=undefined;});
   };
 }
