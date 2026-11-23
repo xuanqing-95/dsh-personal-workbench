@@ -5,16 +5,18 @@
 ## 安装
 
 1. 在 DeepSeek Harness 左侧点击「插件」，打开「添加插件」。
-2. 输入下面的插件包名。
+2. 将下方新版安装地址粘贴到安装框。
 3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
 
 ```text
-dsh-xuanqing-personal-workbench
+https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz
 ```
 
-已安装旧包 `dsh-personal-workbench` 的用户可以继续使用 0.8.3。要迁移，请等聊天结束，在「插件」中卸载旧包，再在同一份 Harness 配置中安装并启用上面的新包。
+新版包名为 `dsh-xuanqing-personal-workbench`。npm 按名安装尚待开通，当前请使用上方 GitHub 安装地址。
 
-如果提示找不到包，可以先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz)
+已安装旧包 `dsh-personal-workbench` 的用户可以继续使用 0.8.3。要迁移，请等聊天结束，在「插件」中卸载旧包，再在同一份 Harness 配置中使用上方链接安装并启用新版。
+
+如果下载失败，可以先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz)
 
 ## 先加一条待办
 
