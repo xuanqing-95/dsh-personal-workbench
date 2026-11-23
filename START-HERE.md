@@ -4,19 +4,14 @@
 
 ## 安装
 
-1. 在 DeepSeek Harness 左侧点击「插件」，打开「添加插件」。
-2. 将下方新版安装地址粘贴到安装框。
-3. 点击「安装」，按提示启用。再点左侧「个人 AI 工作台」。
+1. 打开 DeepSeek Harness，点左侧「插件」→「添加插件」。
+2. 复制下面这行，粘贴进去，点「安装」。
 
 ```text
-https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz
+https://github.com/xuanqing-lab/dsh-personal-workbench
 ```
 
-新版包名为 `dsh-xuanqing-personal-workbench`。npm 按名安装尚待开通，当前请使用上方 GitHub 安装地址。
-
-已安装旧包 `dsh-personal-workbench` 的用户可以继续使用 0.8.3。要迁移，请等聊天结束，在「插件」中卸载旧包，再在同一份 Harness 配置中使用上方链接安装并启用新版。
-
-如果下载失败，可以先下载官方安装包，再把下载文件的完整路径粘贴到同一个安装框。macOS 访达中按住 Option 右键点击文件，可选「拷贝为路径名称」。使用扩展名为 `.tgz` 的文件即可，直接保留压缩状态。[下载最新正式版](https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz)
+安装完成后点「立即启用」，就能从左侧打开「个人 AI 工作台」。
 
 ## 先加一条待办
 
@@ -77,3 +72,7 @@ https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/
 - **需要报告问题**。提供系统、Harness 和插件版本，加一张遮挡私人信息的截图即可。[提交反馈](https://github.com/xuanqing-lab/dsh-personal-workbench/issues)
 
 Designed by 玄清 · © 2026
+
+## 如果已安装 0.8.3 旧版
+
+你可以继续使用旧版。想升级时，等聊天结束，在同一份 Harness 配置的「插件」中卸载旧版，再按本页开头的步骤安装新版。

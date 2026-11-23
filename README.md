@@ -6,19 +6,14 @@
 
 适用于已经安装 **DeepSeek Harness 0.2.2（从 rc.1 起）** 的用户。
 
-1. 在 Harness 左侧打开 **插件 → 添加插件**。
-2. 将下方新版安装地址粘贴到安装框，点击「安装」，再按提示启用。
-3. 从侧栏打开「个人 AI 工作台」，在「今日计划」选一个日期，写下要跟进的事，点击「添加」。
+1. 打开 DeepSeek Harness，点左侧「插件」→「添加插件」。
+2. 复制下面这行，粘贴进去，点「安装」。
 
 ```text
-https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz
+https://github.com/xuanqing-lab/dsh-personal-workbench
 ```
 
-新版包名为 `dsh-xuanqing-personal-workbench`。npm 按名安装尚待开通，当前请使用上方 GitHub 安装地址。
-
-已安装旧包 `dsh-personal-workbench` 的用户可以继续使用 0.8.3。要迁移，请等聊天结束，在「插件」中卸载旧包，再在同一份 Harness 配置中使用上方链接安装并启用新版。
-
-如果下载失败，可将[GitHub 仓库地址](https://github.com/xuanqing-lab/dsh-personal-workbench)粘贴到同一个安装框，也可以下载后填写安装包的完整路径。[下载安装包](https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/dsh-xuanqing-personal-workbench.tgz)
+安装完成后点「立即启用」，就能从左侧打开「个人 AI 工作台」。
 
 [![工作台实际界面：左侧是每日精选、助手任务和项目进展，右侧是 Data、用量与今日计划。](https://github.com/xuanqing-lab/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)](https://github.com/xuanqing-lab/dsh-personal-workbench/raw/refs/heads/main/site/preview.png)
 
@@ -44,7 +39,7 @@ https://github.com/xuanqing-lab/dsh-personal-workbench/releases/latest/download/
 
 ## 更新插件
 
-从 0.8.4 起，工作台在打开时和使用期间每小时检查新地址。有正式新版时，点页首「有新版本」即可查看改动和升级说明。旧包 0.8.3 的更新地址已经失效，需要按本页上方的步骤手动迁移一次。
+从 0.8.4 起，工作台在打开时和使用期间每小时检查新地址。有正式新版时，点页首「有新版本」即可查看改动和升级说明。旧包 0.8.3 的更新地址已经失效，需要手动迁移一次。可以继续使用旧版；想升级时，请等当前聊天结束，在「插件」里卸载旧版，再用本页上方的链接安装新版。
 
 ## 分享与反馈
 
